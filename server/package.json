@@ -1,8 +1,8 @@
 {
-  "name": "mna-template-app-server",
+  "name": "prise-de-rdv-app-server",
   "version": "0.0.1",
-  "description": "[MNA] App Template",
-  "repository": "https://github.com/mission-apprentissage/template-apprentissage.git",
+  "description": "[MNA] App prise de rdv",
+  "repository": "https://github.com/mission-apprentissage/prise-de-rdv.git",
   "private": false,
   "author": "MNA",
   "license": "MIT",

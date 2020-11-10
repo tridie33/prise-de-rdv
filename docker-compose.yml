@@ -1,8 +1,8 @@
 version: "2.4"
 services:
   reverse_proxy:
-    image: template_app_reverse_proxy
-    container_name: template_app_reverse_proxy
+    image: prise_de_rdv_reverse_proxy
+    container_name: prise_de_rdv_reverse_proxy
     build:
       context: reverse_proxy
     mem_limit: 256m
@@ -10,64 +10,64 @@ services:
     ports:
       - 80:80
     networks:
-      - template_app_network
+      - prise_de_rdv_network
     depends_on:
       - server
       - ui
 
   ui:
-    image: template_app_ui
-    container_name: template_app_ui
+    image: prise_de_rdv_ui
+    container_name: prise_de_rdv_ui
     build:
       context: ui
     mem_limit: 256m
     networks:
-      - template_app_network
+      - prise_de_rdv_network
     depends_on:
       - server
 
   server:
-    image: template_app_server
-    container_name: template_app_server
+    image: prise_de_rdv_server
+    container_name: prise_de_rdv_server
     build:
       context: server
     mem_limit: 1g
     restart: unless-stopped
     networks:
-      - template_app_network
+      - prise_de_rdv_network
     depends_on:
       - mongodb
     environment:
-      - TEMPLATE_APP_MONGODB_URI=mongodb://mongodb:27017/template-app?retryWrites=true&w=majority
+      - PRISE_DE_RDV_MONGODB_URI=mongodb://mongodb:27017/prise-de-rdv?retryWrites=true&w=majority
 
   mongodb:
     image: mongo:4.2.6-bionic
-    container_name: template_app_mongodb
+    container_name: prise_de_rdv_mongodb
     mem_limit: 1g
     restart: unless-stopped
     networks:
-      - template_app_network
+      - prise_de_rdv_network
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.1.1
-    container_name: template_app_elasticsearch
+    container_name: prise_de_rdv_elasticsearch
     environment:
       - ES_JAVA_OPTS=-Xmx512m -Xms512m
       - discovery.type=single-node
     mem_limit: 1g
     networks:
-      - template_app_network
+      - prise_de_rdv_network
 
   kibana:
     image: docker.elastic.co/kibana/kibana-oss:7.1.1
-    container_name: template_app_kibana
+    container_name: prise_de_rdv_kibana
     depends_on:
       - elasticsearch
     networks:
-      - template_app_network
+      - prise_de_rdv_network
     environment:
       - SERVER_BASEPATH=/kibana
 
 networks:
-  template_app_network:
-    name: template_app_network
+  prise_de_rdv_network:
+    name: prise_de_rdv_network

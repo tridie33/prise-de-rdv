@@ -6,10 +6,10 @@ export default function useAuth() {
 
   let setAuthFromToken = (token) => {
     if (!token) {
-      sessionStorage.removeItem("template_app:token");
+      sessionStorage.removeItem("prise_de_rdv:token");
       setAuth(anonymous);
     } else {
-      sessionStorage.setItem("template_app:token", token);
+      sessionStorage.setItem("prise_de_rdv:token", token);
       setAuth(decodeJWT(token));
     }
   };
