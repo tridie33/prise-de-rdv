@@ -1,19 +1,81 @@
-import React from "react";
-import { Page, Grid, Alert, Header } from "tabler-react";
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
+import { Button, Form, Page } from "tabler-react";
+import { _post } from "../common/httpClient";
 
-export default () => {
+export const HomePage = () => {
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [phone, setPhone] = useState("");
+  const { cfaId } = useParams();
+
+  const handleEventForm = (event, field) => {
+    event.preventDefault();
+    switch (field) {
+      case "firstname":
+        setFirstname(event.target.value);
+        break;
+      case "lastname":
+        setLastname(event.target.value);
+        break;
+      case "phone":
+        setPhone(event.target.value);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const sendNewUser = async (values) => {
+    try {
+      let { newUser } = await _post("/api/users", values);
+      console.log(`new add user success ${newUser}`);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log("submit");
+    const values = {
+      firstname,
+      lastname,
+      phone,
+    };
+    sendNewUser(values);
+  };
+
   return (
     <Page>
       <Page.Main>
         <Page.Content>
-          <Grid.Row>
-            <Grid.Col width={12}>
-              <Alert type="warning">
-                <Header.H1>Accueil</Header.H1>
-                <p>Page d'accueil utilisateur.</p>
-              </Alert>
-            </Grid.Col>
-          </Grid.Row>
+          <div>
+            {cfaId && <h1>Prendre rendez-vous avec CFA #{cfaId}</h1>}
+            <Form>
+              <Form.Input
+                icon="user"
+                label="Prénom"
+                placeholder="John"
+                onChange={(event) => handleEventForm(event, "firstname")}
+              />
+              <Form.Input
+                icon="user"
+                label="Nom"
+                placeholder="Doe"
+                onChange={(event) => handleEventForm(event, "lastname")}
+              />
+              <Form.Input
+                icon="phone"
+                label="Téléphone"
+                placeholder="0612345678"
+                onChange={(event) => handleEventForm(event, "phone")}
+              />
+              <Button type="button" onClick={handleSubmit}>
+                Valider
+              </Button>
+            </Form>
+          </div>
         </Page.Content>
       </Page.Main>
     </Page>
