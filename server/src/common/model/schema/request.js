@@ -53,6 +53,6 @@ const requestsSchema = {
     type: Boolean,
     default: null,
     description: "Le centre a t'il ouvert son mail de demande de contact du candidat ?",
-  }
+  },
 };
 module.exports = requestsSchema;
