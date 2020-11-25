@@ -3,10 +3,17 @@ $( document ).ready(function() {
         var urlHost = window.location.href;
         var valueCfaId = null;
         if (urlHost === 'http://localhost/fakeHost/ps') {
-            valueCfaId = document.getElementById('domPSCfaId').textContent;
+            var getElementByIdForPs = document.getElementById('domPSCfaId');
+            if (getElementByIdForPs !== null) {
+                valueCfaId = getElementByIdForPs.textContent;
+            }
         }
+
         if (urlHost === 'http://localhost/fakeHost/lba') {
-            valueCfaId = document.getElementById('domLBACfaId').textContent;
+            var getElementByIdForLBA = document.getElementById('domLBACfaId');
+            if (getElementByIdForLBA !== null) {
+                valueCfaId = getElementByIdForLBA.textContent;
+            }
         }
 
         var a = document.createElement('a');

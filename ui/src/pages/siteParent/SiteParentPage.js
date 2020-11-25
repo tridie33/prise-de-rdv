@@ -4,17 +4,17 @@ import { Page, Site } from "tabler-react";
 
 export const SiteParentPage = () => {
   const { hostname } = useParams();
-  const [domPSCfaId, setDomPSCfaId] = useState("");
-  const [domPSCfaIdValue, setDomPSCfaIdValue] = useState("");
+  const [domCfaId, setDomCfaId] = useState("");
+  const [domCfaIdValue, setDomCfaIdValue] = useState("");
 
   useEffect(() => {
     if (hostname === "ps") {
-      setDomPSCfaId("domPSCfaId");
-      setDomPSCfaIdValue("12345");
+      setDomCfaId("domPSCfaId");
+      setDomCfaIdValue("12345");
     }
     if (hostname === "lba") {
-      setDomPSCfaId("domLBACfaId");
-      setDomPSCfaIdValue("67890");
+      setDomCfaId("domLBACfaId");
+      setDomCfaIdValue("67890");
     }
   }, [hostname]);
 
@@ -24,9 +24,9 @@ export const SiteParentPage = () => {
       <Page>
         <Page.Main>
           <Page.Content>
-            <h1>Fiche de formation du CFA ID {domPSCfaIdValue}</h1>
-            <span id={domPSCfaId} style={{ display: "none" }}>
-              {domPSCfaIdValue}
+            <h1>Fiche de formation du CFA ID {domCfaIdValue}</h1>
+            <span id={domCfaId} style={{ display: "none" }}>
+              {domCfaIdValue}
             </span>
             <div id={"prdv-button"} />
           </Page.Content>
