@@ -30,14 +30,14 @@ export default () => {
     <div className="App">
       <Router>
         <Switch>
-          <Route exact path="/" component={SiteParentPage} />
+          <Route exact path="/fakeHost/:hostname" component={SiteParentPage} />
           <PrivateRoute exact path="/admin">
             <Layout>{auth && auth.permissions.isAdmin ? <DashboardPage /> : <LoginPage />}</Layout>
           </PrivateRoute>
           <Route exact path="/login" component={LoginPage} />
           <Route exact path="/reset-password" component={ResetPasswordPage} />
           <Route exact path="/forgotten-password" component={ForgottenPasswordPage} />
-          <Route exact path="/form/:cfaId" component={HomePage} />
+          <Route exact path="/form" component={HomePage} />
         </Switch>
       </Router>
     </div>

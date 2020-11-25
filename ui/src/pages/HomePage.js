@@ -1,13 +1,22 @@
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { Button, Form, Page } from "tabler-react";
 import { _post } from "../common/httpClient";
+const queryString = require("query-string");
 
-export const HomePage = () => {
+export const HomePage = (props) => {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [phone, setPhone] = useState("");
-  const { cfaId } = useParams();
+  const urlParamCfaId = queryString.parse(props.location.search).paramCfaId;
+  //const [centreDataFromApiCatalog, setCentreDataFromApiCatalog] = useState("");
+  //const siteParent = document.host;
+
+  useEffect(() => {
+    // TODO fetch API Catalogue for getEtablissement(id) pour remplir centreRefererIsTheSame;
+    /* TODO Ensuite check if centreRefererIsTheSame.enseigne === siteParent.name
+        si different que faire ? si pareil alors utiliser centreRefererIsTheSame dans le JSX
+     */
+  }, []);
 
   const handleEventForm = (event, field) => {
     event.preventDefault();
@@ -51,7 +60,7 @@ export const HomePage = () => {
       <Page.Main>
         <Page.Content>
           <div>
-            {cfaId && <h1>Prendre rendez-vous avec CFA #{cfaId}</h1>}
+            {urlParamCfaId && <h1>Prendre rendez-vous avec CFA #{urlParamCfaId}</h1>}
             <Form>
               <Form.Input
                 icon="user"
