@@ -1,18 +1,27 @@
 $( document ).ready(function() {
     if (document.getElementById("prdv-button") !== null) {
         var urlHost = window.location.href;
-        var valueCfaId = null;
+        var valueCentreId = null;
+        var valueTrainingId = null;
         if (urlHost === 'http://localhost/fakeHost/ps') {
-            var getElementByIdForPs = document.getElementById('domPSCfaId');
+            var getElementByIdForPs = document.getElementById('domPSCentreId');
             if (getElementByIdForPs !== null) {
-                valueCfaId = getElementByIdForPs.textContent;
+                valueCentreId = getElementByIdForPs.textContent;
+            }
+            var getElementByTrainingIdForPs = document.getElementById('domPSTrainingId');
+            if (getElementByTrainingIdForPs !== null) {
+                valueTrainingId = getElementByTrainingIdForPs.textContent;
             }
         }
 
         if (urlHost === 'http://localhost/fakeHost/lba') {
-            var getElementByIdForLBA = document.getElementById('domLBACfaId');
+            var getElementByIdForLBA = document.getElementById('domLBACentreId');
             if (getElementByIdForLBA !== null) {
-                valueCfaId = getElementByIdForLBA.textContent;
+                valueCentreId = getElementByIdForLBA.textContent;
+            }
+            var getElementByTrainingIdForLBA = document.getElementById('domLBATrainingId');
+            if (getElementByTrainingIdForLBA !== null) {
+                valueTrainingId = getElementByTrainingIdForLBA.textContent;
             }
         }
 
@@ -20,7 +29,7 @@ $( document ).ready(function() {
         var link = document.createTextNode("Prendre rendez-vous");
         a.appendChild(link);
         a.title = "Prendre rendez-vous";
-        a.href = `http://localhost/form?paramCfaId=${valueCfaId}`;
+        a.href = `http://localhost/form?centreId=${valueCentreId}&trainingId=${valueTrainingId}`;
 
         var button = document.createElement('button');
         button.appendChild(a);

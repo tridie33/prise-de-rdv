@@ -1,22 +1,37 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Button, Form, Page } from "tabler-react";
-import { _post } from "../common/httpClient";
+import { _get, _post } from "../common/httpClient";
 const queryString = require("query-string");
 
 export const HomePage = (props) => {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [phone, setPhone] = useState("");
-  const urlParamCfaId = queryString.parse(props.location.search).paramCfaId;
-  //const [centreDataFromApiCatalog, setCentreDataFromApiCatalog] = useState("");
-  //const siteParent = document.host;
+  const urlParamCentreId = queryString.parse(props.location.search).centreId;
+  const urlParamTrainingId = queryString.parse(props.location.search).trainingId;
+  const [centreDataFromApiCatalog, setCentreDataFromApiCatalog] = useState(null);
+  const [trainingDataFromApiCatalog, setTrainingDataFromApiCatalog] = useState(null);
+
+  const fetchCentre = useCallback(() => {
+    const getCentre = async () => {
+      const response = await _get(`/api/centre?centreId=${urlParamCentreId}`);
+      setCentreDataFromApiCatalog(response);
+    };
+    return getCentre();
+  }, [urlParamCentreId]);
+
+  const fetchTraining = useCallback(() => {
+    const getTraining = async () => {
+      const response = await _get(`/api/training?trainingId=${urlParamTrainingId}`);
+      setTrainingDataFromApiCatalog(response);
+    };
+    return getTraining();
+  }, [urlParamTrainingId]);
 
   useEffect(() => {
-    // TODO fetch API Catalogue for getEtablissement(id) pour remplir centreRefererIsTheSame;
-    /* TODO Ensuite check if centreRefererIsTheSame.enseigne === siteParent.name
-        si different que faire ? si pareil alors utiliser centreRefererIsTheSame dans le JSX
-     */
-  }, []);
+    fetchCentre();
+    fetchTraining();
+  }, [fetchCentre, fetchTraining]);
 
   const handleEventForm = (event, field) => {
     event.preventDefault();
@@ -60,7 +75,13 @@ export const HomePage = (props) => {
       <Page.Main>
         <Page.Content>
           <div>
-            {urlParamCfaId && <h1>Prendre rendez-vous avec CFA #{urlParamCfaId}</h1>}
+            <h1>Prendre rendez-vous</h1>
+            {centreDataFromApiCatalog && trainingDataFromApiCatalog && (
+              <h4>
+                Etablissement : {centreDataFromApiCatalog.entreprise_raison_sociale} <br />
+                Formation : {trainingDataFromApiCatalog.intitule}
+              </h4>
+            )}
             <Form>
               <Form.Input
                 icon="user"

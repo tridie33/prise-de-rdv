@@ -18,6 +18,8 @@ const authentified = require("./routes/authentified");
 const admin = require("./routes/admin");
 const password = require("./routes/password");
 const stats = require("./routes/stats");
+const centre = require("./routes/centre");
+const training = require("./routes/training");
 
 module.exports = async (components) => {
   const { db } = components;
@@ -29,6 +31,8 @@ module.exports = async (components) => {
   app.use(corsMiddleware());
   app.use(logMiddleware());
 
+  app.use("/api/centre", centre());
+  app.use("/api/training", training());
   app.use("/api/helloRoute", hello());
   app.use("/api/entity", entity());
   app.use("/api/secured", apiKeyAuthMiddleware, secured());

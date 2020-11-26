@@ -1,6 +1,7 @@
 const { connectToMongo } = require("../mongodb");
 const createUsers = require("./users");
 
+//commun express et jobs
 module.exports = async (options = {}) => {
   const users = options.users || (await createUsers());
 
