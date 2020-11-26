@@ -14,7 +14,6 @@ const userRequestSchema = Joi.object({
   phone: Joi.string().required(),
   email: Joi.string().required(),
 
-  requestFoncId: Joi.string(),
   motivations: Joi.string().default(""),
   centreId: Joi.string().required(),
   trainingId: Joi.string().required(),
