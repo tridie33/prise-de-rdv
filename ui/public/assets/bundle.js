@@ -1,6 +1,6 @@
 'use strict';
 
-$(document).ready(function () {
+document.addEventListener("DOMContentLoaded", function () {
   if (document.getElementById("prdv-button") !== null) {
     var urlHost = window.location.href;
     var valueCentreId = null;
