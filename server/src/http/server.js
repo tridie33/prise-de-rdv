@@ -20,6 +20,7 @@ const password = require("./routes/password");
 const stats = require("./routes/stats");
 const centre = require("./routes/centre");
 const training = require("./routes/training");
+const request = require("./routes/request");
 
 module.exports = async (components) => {
   const { db } = components;
@@ -31,6 +32,7 @@ module.exports = async (components) => {
   app.use(corsMiddleware());
   app.use(logMiddleware());
 
+  app.use("/api/request", request());
   app.use("/api/centre", centre());
   app.use("/api/training", training());
   app.use("/api/helloRoute", hello());

@@ -11,7 +11,7 @@ Demande :
 - jeune ->
 - date de création -> createdAt
 - motivations -> motivations
-- Date de réponse CFA -> responseCentreAt
+- Date de réponse CFA -> answerCentreAt
 - jeune_contacter_par_cfa: false | true -> statusCandidatIsContactedByCentre
 - Etat de la demande: text -> statusRequest
 - bonne_reception_mail_cfa: false | true (suite au succès / erreur suite à l’envoie de mails) -> statusMailIsReceivedByCentre

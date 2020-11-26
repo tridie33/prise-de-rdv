@@ -1,9 +1,30 @@
-const candidatReference = require("./candidat");
-
 const requestsSchema = {
-  ...candidatReference,
-
-  referer: {
+  candidatId: {
+    type: Object,
+    default: null,
+    description: "Le numéro de la demande",
+  },
+  requestFoncId: {
+    type: String,
+    default: null,
+    description: "Le numéro de la demande",
+  },
+  motivations: {
+    type: String,
+    default: null,
+    description: "Les motivations du candidat",
+  },
+  centreId: {
+    type: String,
+    default: null,
+    description: "L'identifiant de l'établissement'",
+  },
+  trainingId: {
+    type: String,
+    default: null,
+    description: "L'identifiant de la formation'",
+  },
+  referrer: {
     type: String,
     default: null,
     description: "L'url du site parent ou simplement le nom",
@@ -14,12 +35,7 @@ const requestsSchema = {
     description: "La date création de la demande",
     unique: true,
   },
-  motivations: {
-    type: String,
-    default: null,
-    description: "Les motivations du candidat",
-  },
-  responseCentreAt: {
+  answerCentreAt: {
     type: Date,
     default: null,
     description: "La date de réponse du centre au candidat",
@@ -27,7 +43,7 @@ const requestsSchema = {
   statusRequest: {
     type: String,
     default: null,
-    description: "Description plus général sur l'etat de la demande'",
+    description: "Description plus générale sur l'état de la demande'",
   },
   statusCandidatIsContactedByCentre: {
     type: Boolean,
@@ -49,7 +65,7 @@ const requestsSchema = {
     default: null,
     description: "Le candidat a t'il ouvert son mail de confirmation ?",
   },
-  statusMailIsOpenedBCentre: {
+  statusMailIsOpenedByCentre: {
     type: Boolean,
     default: null,
     description: "Le centre a t'il ouvert son mail de demande de contact du candidat ?",

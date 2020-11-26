@@ -1,14 +1,14 @@
 const candidatsSchema = {
-  lastname: {
-    type: String,
-    default: null,
-    description: "Le nom du candidat",
-    unique: true,
-  },
   firstname: {
     type: String,
     default: null,
     description: "Le prénom du candidat",
+    unique: true,
+  },
+  lastname: {
+    type: String,
+    default: null,
+    description: "Le nom du candidat",
     unique: true,
   },
   phone: {
