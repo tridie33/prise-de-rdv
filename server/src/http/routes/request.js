@@ -60,11 +60,14 @@ module.exports = () => {
         await requestToAdd.save();
 
         // return updated list
-        res.json(candidatIsAdded, requestToAdd);
+        res.json({
+          candidatIsAdded,
+          requestToAdd,
+        });
       }
 
       // return updated list
-      res.json("error");
+      res.json("never reach because intercept by tryCatch middleware");
     })
   );
   return router;
