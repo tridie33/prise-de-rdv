@@ -7,7 +7,8 @@ export const SiteParentPage = () => {
   const [domCentreId, setDomCentreId] = useState("");
   const [domCentreIdValue, setDomCentreIdValue] = useState("");
   const [domTrainingId, setDomTrainingId] = useState("");
-  const [domTraininIdValue, setDomTrainingIdValue] = useState("");
+  const [domTrainingIdValue, setDomTrainingIdValue] = useState("");
+  const [siteName, setSiteName] = useState("");
 
   useEffect(() => {
     if (hostname === "ps") {
@@ -15,18 +16,20 @@ export const SiteParentPage = () => {
       setDomCentreIdValue("0831760M");
       setDomTrainingId("domPSTrainingId");
       setDomTrainingIdValue("13531545");
+      setSiteName("Parcoursup");
     }
     if (hostname === "lba") {
       setDomCentreId("domLBACentreId");
       setDomCentreIdValue("0831760M");
       setDomTrainingId("domLBATrainingId");
       setDomTrainingIdValue("13531545");
+      setSiteName("La Bonne Alternance");
     }
   }, [hostname]);
 
   return (
     <Site>
-      <Site.Header>La Bonne Alternance / Parcoursup</Site.Header>
+      <Site.Header>Bienvenue sur {siteName}</Site.Header>
       <Page>
         <Page.Main>
           <Page.Content>
@@ -35,7 +38,7 @@ export const SiteParentPage = () => {
               {domCentreIdValue}
             </span>
             <span id={domTrainingId} style={{ display: "none" }}>
-              {domTraininIdValue}
+              {domTrainingIdValue}
             </span>
             <div id={"prdv-button"} />
           </Page.Content>

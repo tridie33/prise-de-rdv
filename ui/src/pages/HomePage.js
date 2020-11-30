@@ -1,46 +1,26 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import { Button, Form as TablerForm, Page } from "tabler-react";
-import { _get, _post } from "../common/httpClient";
+import { _post } from "../common/httpClient";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import FormError from "../common/components/FormError";
-const queryString = require("query-string");
+import { useCustomHook } from "./utils/useCustomHook";
 
 export const HomePage = (props) => {
-  const urlParamCentreId = queryString.parse(props.location.search).centreId;
-  const urlParamTrainingId = queryString.parse(props.location.search).trainingId;
-  const urlParamFromWhom = queryString.parse(props.location.search).fromWhom;
-
-  const [centreDataFromApiCatalog, setCentreDataFromApiCatalog] = useState(null);
-  const [trainingDataFromApiCatalog, setTrainingDataFromApiCatalog] = useState(null);
-
-  const fetchCentre = useCallback(() => {
-    const getCentre = async () => {
-      const response = await _get(`/api/centre?centreId=${urlParamCentreId}`);
-      setCentreDataFromApiCatalog(response);
-    };
-    return getCentre();
-  }, [urlParamCentreId]);
-
-  const fetchTraining = useCallback(() => {
-    const getTraining = async () => {
-      const response = await _get(`/api/training?trainingId=${urlParamTrainingId}`);
-      setTrainingDataFromApiCatalog(response);
-    };
-    return getTraining();
-  }, [urlParamTrainingId]);
-
-  useEffect(() => {
-    fetchCentre();
-    fetchTraining();
-  }, [fetchCentre, fetchTraining]);
+  const [
+    urlParamCentreId,
+    urlParamTrainingId,
+    urlParamFromWhom,
+    centreDataFromApiCatalog,
+    trainingDataFromApiCatalog,
+  ] = useCustomHook(props);
 
   const sendNewRequest = async (values, { setStatus }) => {
     try {
       values = {
         ...values,
-        centreId: "0831760M",
-        trainingId: "13531545",
+        centreId: urlParamCentreId,
+        trainingId: urlParamTrainingId,
         referrer: urlParamFromWhom,
       };
       let { newRequest } = await _post("/api/request", values);
