@@ -1,9 +1,8 @@
-const requestsSchema = {
-  candidatId: {
-    type: Object,
-    default: null,
-    description: "Le numéro de la demande",
-  },
+const mongoose = require("mongoose");
+const { Schema } = mongoose;
+
+const requestSchema = new Schema({
+  candidatId: mongoose.Types.ObjectId,
   requestFoncId: {
     type: String,
     default: null,
@@ -12,6 +11,7 @@ const requestsSchema = {
   motivations: {
     type: String,
     default: null,
+    required: false,
     description: "Les motivations du candidat",
   },
   centreId: {
@@ -33,7 +33,6 @@ const requestsSchema = {
     type: Date,
     default: null,
     description: "La date création de la demande",
-    unique: true,
   },
   answerCentreAt: {
     type: Date,
@@ -70,5 +69,6 @@ const requestsSchema = {
     default: null,
     description: "Le centre a t'il ouvert son mail de demande de contact du candidat ?",
   },
-};
-module.exports = requestsSchema;
+});
+
+module.exports = requestSchema;

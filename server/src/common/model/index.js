@@ -12,11 +12,13 @@ const getMongoostaticModel = (modelName, schema, instanceMongoose = mongooseInst
 
 const getMongooseModel = (modelName, callback = () => ({})) => {
   const modelSchema = new mongoose.Schema(require(`./schema/${modelName}`));
+  // A quoi sert ce callback ? Il n'est jamais appelé.
   callback(modelSchema);
   return mongoose.model(modelName, modelSchema, modelName);
 };
 
 const getModel = (modelName, schema, instanceMongoose = mongooseInstance) => {
+  // Késako instanceMongoose ?
   if (instanceMongoose) return getMongoostaticModel(modelName, schema);
   return getMongooseModel(modelName);
 };
@@ -33,12 +35,12 @@ if (!userModel) {
 
 let requestModel = null;
 if (!requestModel) {
-  requestModel = getModel("request", requestSchema);
+  requestModel = new mongoose.model("request", requestSchema);
 }
 
 let candidatModel = null;
 if (!candidatModel) {
-  candidatModel = getModel("candidat", candidatSchema);
+  candidatModel = new mongoose.model("candidat", candidatSchema);
 }
 
 let logModel = null;
