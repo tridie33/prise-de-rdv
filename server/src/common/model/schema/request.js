@@ -53,22 +53,22 @@ const requestSchema = {
 
   email_premiere_demande_candidat_recu: {
     type: Boolean,
-    default: null,
+    default: false,
     description: "Le candidat a t'il bien reçu un mail de confirmation suite à sa demande de rappel ?",
   },
   email_premiere_demande_candidat_ouvert: {
     type: Boolean,
-    default: null,
+    default: false,
     description: "Le candidat a t'il ouvert son mail de confirmation ?",
   },
   email_premiere_demande_cfa_recu: {
     type: Boolean,
-    default: null,
+    default: false,
     description: "Le centre a t'il bien reçu le mail de demande de rappel du candidat ?",
   },
   email_premiere_demande_cfa_ouvert: {
     type: Boolean,
-    default: null,
+    default: false,
     description: "Le centre a t'il ouvert son mail de demande de contact du candidat ?",
   },
 
