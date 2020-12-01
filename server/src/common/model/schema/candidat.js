@@ -1,7 +1,4 @@
-const mongoose = require("mongoose");
-const { Schema } = mongoose;
-
-const candidatsSchema = new Schema({
+const candidatsSchema = {
   firstname: {
     type: String,
     default: null,
@@ -22,6 +19,6 @@ const candidatsSchema = new Schema({
     default: null,
     description: "L'email du candidat",
   },
-});
+};
 
 module.exports = candidatsSchema;

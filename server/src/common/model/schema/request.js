@@ -1,9 +1,10 @@
-const mongoose = require("mongoose");
-const { Schema } = mongoose;
-
-const requestSchema = new Schema({
-  candidatId: mongoose.Types.ObjectId,
-  requestFoncId: {
+const requestSchema = {
+  candidat_id: {
+    type: String,
+    default: null,
+    description: "Id candidat",
+  },
+  numero_de_la_demande: {
     type: String,
     default: null,
     description: "Le numéro de la demande",
@@ -14,61 +15,73 @@ const requestSchema = new Schema({
     required: false,
     description: "Les motivations du candidat",
   },
-  centreId: {
+  etablissement_id: {
     type: String,
     default: null,
-    description: "L'identifiant de l'établissement'",
+    description: "L'identifiant de l'établissement",
   },
-  trainingId: {
+  formation_id: {
     type: String,
     default: null,
-    description: "L'identifiant de la formation'",
+    description: "L'identifiant de la formation",
   },
   referrer: {
     type: String,
     default: null,
     description: "L'url du site parent ou simplement le nom",
   },
-  createdAt: {
+  date_de_reponse_cfa: {
     type: Date,
     default: null,
-    description: "La date création de la demande",
+    description: "La date de réponse du cfa au candidat",
   },
-  answerCentreAt: {
-    type: Date,
-    default: null,
-    description: "La date de réponse du centre au candidat",
-  },
-  statusRequest: {
+  statut_general: {
     type: String,
     default: null,
-    description: "Description plus générale sur l'état de la demande'",
+    description: "Description plus générale sur l'état de la demande (en cours, fini, probleme)",
   },
-  statusCandidatIsContactedByCentre: {
+  cfa_pris_contact_candidat: {
     type: Boolean,
     default: false,
     description: "Le candidat a t'il été rappelé par le centre ?",
   },
-  statusMailIsReceivedByCentre: {
-    type: Boolean,
+  cfa_pris_contact_candidat_date: {
+    type: Date,
     default: null,
-    description: "Le centre a t'il bien reçu le mail de demande de rappel du candidat ?",
+    description: "Le candidat a t'il été rappelé par le centre ? date",
   },
-  statusMailIsReceivedByCandidat: {
+
+  email_premiere_demande_candidat_recu: {
     type: Boolean,
     default: null,
     description: "Le candidat a t'il bien reçu un mail de confirmation suite à sa demande de rappel ?",
   },
-  statusMailIsOpenedByCandidat: {
+  email_premiere_demande_candidat_ouvert: {
     type: Boolean,
     default: null,
     description: "Le candidat a t'il ouvert son mail de confirmation ?",
   },
-  statusMailIsOpenedByCentre: {
+  email_premiere_demande_cfa_recu: {
+    type: Boolean,
+    default: null,
+    description: "Le centre a t'il bien reçu le mail de demande de rappel du candidat ?",
+  },
+  email_premiere_demande_cfa_ouvert: {
     type: Boolean,
     default: null,
     description: "Le centre a t'il ouvert son mail de demande de contact du candidat ?",
   },
-});
+
+  created_at: {
+    type: Date,
+    default: Date.now,
+    description: "La date création de la demande",
+  },
+  last_update_at: {
+    type: Date,
+    default: Date.now,
+    description: "Date de dernières mise à jour",
+  },
+};
 
 module.exports = requestSchema;
