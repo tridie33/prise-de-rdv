@@ -12,13 +12,11 @@ const getMongoostaticModel = (modelName, schema, instanceMongoose = mongooseInst
 
 const getMongooseModel = (modelName, callback = () => ({})) => {
   const modelSchema = new mongoose.Schema(require(`./schema/${modelName}`));
-  // A quoi sert ce callback ? Il n'est jamais appelé.
   callback(modelSchema);
   return mongoose.model(modelName, modelSchema, modelName);
 };
 
 const getModel = (modelName, schema, instanceMongoose = mongooseInstance) => {
-  // Késako instanceMongoose ?
   if (instanceMongoose) return getMongoostaticModel(modelName, schema);
   return getMongooseModel(modelName);
 };

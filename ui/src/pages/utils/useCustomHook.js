@@ -3,7 +3,9 @@ import { _get } from "../../common/httpClient";
 const queryString = require("query-string");
 
 export const useCustomHook = (props) => {
-  const {centreId: urlCentreId, trainingId: urlTrainingId, fromWhom: urlFromWhom} = queryString.parse(props.location.search);
+  const { centreId: urlCentreId, trainingId: urlTrainingId, fromWhom: urlFromWhom } = queryString.parse(
+    props.location.search
+  );
 
   const [centreDataFromApiCatalog, setCentreDataFromApiCatalog] = useState(null);
   const [trainingDataFromApiCatalog, setTrainingDataFromApiCatalog] = useState(null);

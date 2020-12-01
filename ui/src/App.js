@@ -36,14 +36,9 @@ export default () => {
             <Layout>{auth && auth.permissions.isAdmin ? <DashboardPage /> : <LoginPage />}</Layout>
           </PrivateRoute>
           <Route exact path="/">
-            <Layout>
-              {auth && auth.permissions.isAdmin ? <Redirect to="/admin" /> : <HomePage />}
-            </Layout>
+            <Layout>{auth && auth.permissions.isAdmin ? <Redirect to="/admin" /> : <HomePage />}</Layout>
           </Route>
-          
-
           <Route exact path="/form" component={FormCandidat} />
-
           <Route exact path="/login" component={LoginPage} />
           <Route exact path="/reset-password" component={ResetPasswordPage} />
           <Route exact path="/forgotten-password" component={ForgottenPasswordPage} />

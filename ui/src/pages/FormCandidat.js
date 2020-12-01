@@ -22,7 +22,7 @@ export const FormCandidat = (props) => {
         centreId: urlParamCentreId,
         trainingId: urlParamTrainingId,
         referrer: urlParamFromWhom,
-        role: "candidat"
+        role: "candidat",
       };
       let { newRequest } = await _post("/api/demande", values);
       console.log(`new add request success ${newRequest}`);
