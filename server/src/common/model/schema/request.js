@@ -37,7 +37,7 @@ const requestSchema = {
   },
   statut_general: {
     type: String,
-    default: null,
+    default: "ouverte",
     description: "Description plus générale sur l'état de la demande (en cours, fini, probleme)",
   },
   cfa_pris_contact_candidat: {

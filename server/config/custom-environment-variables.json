@@ -23,5 +23,13 @@
     "level": "PRISE_DE_RDV_LOG_LEVEL"
   },
   "slackWebhookUrl": "PRISE_DE_RDV_SLACK_WEBHOOK_URL",
-  "outputDir": "PRISE_DE_RDV_OUTPUT_DIR"
+  "outputDir": "PRISE_DE_RDV_OUTPUT_DIR",
+  "smtp": {
+    "host": "PRISE_DE_RDV_SMTP_HOST",
+    "port": "PRISE_DE_RDV_SMTP_PORT",
+    "auth": {
+      "user": "PRISE_DE_RDV_SMTP_AUTH_USER",
+      "pass": "PRISE_DE_RDV_SMTP_AUTH_PASS"
+    }
+  }
 }

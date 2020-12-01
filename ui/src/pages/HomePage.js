@@ -22,8 +22,9 @@ export const HomePage = (props) => {
         centreId: urlParamCentreId,
         trainingId: urlParamTrainingId,
         referrer: urlParamFromWhom,
+        role: "candidat"
       };
-      let { newRequest } = await _post("/api/request", values);
+      let { newRequest } = await _post("/api/demande", values);
       console.log(`new add request success ${newRequest}`);
     } catch (e) {
       console.error(e);

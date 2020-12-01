@@ -10,7 +10,6 @@ const corsMiddleware = require("./middlewares/corsMiddleware");
 const authMiddleware = require("./middlewares/authMiddleware");
 const permissionsMiddleware = require("./middlewares/permissionsMiddleware");
 const packageJson = require("../../package.json");
-const hello = require("./routes/hello");
 const entity = require("./routes/entity");
 const secured = require("./routes/secured");
 const login = require("./routes/login");
@@ -20,6 +19,7 @@ const password = require("./routes/password");
 const stats = require("./routes/stats");
 const centre = require("./routes/centre");
 const training = require("./routes/training");
+const demande = require("./routes/demande");
 const request = require("./routes/request");
 
 module.exports = async (components) => {
@@ -32,10 +32,10 @@ module.exports = async (components) => {
   app.use(corsMiddleware());
   app.use(logMiddleware());
 
-  app.use("/api/request", request());
+  app.use("/api/demande", demande(components));
   app.use("/api/centre", centre());
   app.use("/api/training", training());
-  app.use("/api/helloRoute", hello());
+  app.use("/api/entity", request());
   app.use("/api/entity", entity());
   app.use("/api/secured", apiKeyAuthMiddleware, secured());
   app.use("/api/login", login(components));

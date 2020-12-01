@@ -26,5 +26,13 @@
     "level": "info"
   },
   "slackWebhookUrl": null,
-  "outputDir": ".local/output"
+  "outputDir": ".local/output",
+  "smtp": {
+    "host": "PRISE_DE_RDV_SMTP_HOST",
+    "port": "PRISE_DE_RDV_SMTP_PORT",
+    "auth": {
+      "user": "PRISE_DE_RDV_SMTP_AUTH_USER",
+      "pass": "PRISE_DE_RDV_SMTP_AUTH_PASS"
+    }
+  }
 }
