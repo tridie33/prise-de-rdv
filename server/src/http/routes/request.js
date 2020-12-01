@@ -22,7 +22,7 @@ module.exports = () => {
 
       const allData = await Request.paginate(query, { page, limit });
       return res.json({
-        formations: allData.docs,
+        requests: allData.docs,
         pagination: {
           page: allData.page,
           resultats_par_page: limit,

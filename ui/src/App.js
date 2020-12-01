@@ -7,7 +7,8 @@ import DashboardPage from "./pages/admin/DashboardPage";
 import useAuth from "./common/hooks/useAuth";
 import ResetPasswordPage from "./pages/password/ResetPasswordPage";
 import ForgottenPasswordPage from "./pages/password/ForgottenPasswordPage";
-import { HomePage } from "./pages/HomePage";
+import { FormCandidat } from "./pages/FormCandidat";
+import HomePage from "./pages/HomePage";
 import { SiteParentPage } from "./pages/siteParent/SiteParentPage";
 
 function PrivateRoute({ children, ...rest }) {
@@ -34,10 +35,18 @@ export default () => {
           <PrivateRoute exact path="/admin">
             <Layout>{auth && auth.permissions.isAdmin ? <DashboardPage /> : <LoginPage />}</Layout>
           </PrivateRoute>
+          <Route exact path="/">
+            <Layout>
+              {auth && auth.permissions.isAdmin ? <Redirect to="/admin" /> : <HomePage />}
+            </Layout>
+          </Route>
+          
+
+          <Route exact path="/form" component={FormCandidat} />
+
           <Route exact path="/login" component={LoginPage} />
           <Route exact path="/reset-password" component={ResetPasswordPage} />
           <Route exact path="/forgotten-password" component={ForgottenPasswordPage} />
-          <Route exact path="/form" component={HomePage} />
         </Switch>
       </Router>
     </div>

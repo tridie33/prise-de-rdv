@@ -4,6 +4,8 @@ const Joi = require("joi");
 const { Request } = require("../../common/model/index");
 const logger = require("../../common/logger");
 const Boom = require("boom");
+const config = require("config");
+const path = require("path");
 
 /**
  * Schema for validation
@@ -21,7 +23,11 @@ const userRequestSchema = Joi.object({
   referrer: Joi.string().required(),
 });
 
-module.exports = ({ users }) => {
+const getEmailTemplate = (type = "mail-candiat") => {
+  return path.join(__dirname, `../../assets/templates/${type}.mjml.ejs`);
+};
+
+module.exports = ({ users, mailer }) => {
   const router = express.Router();
 
   router.post(
@@ -56,6 +62,13 @@ module.exports = ({ users }) => {
         referrer,
       });
       await request.save();
+
+      await mailer.sendEmail(
+        user.email,
+        `[${config.env} Prise de rendez-vous] Demande de prise de rendez-vous`,
+        getEmailTemplate("mail-candiat"),
+        {} // Payload
+      );
 
       res.json({
         ...user._doc,
