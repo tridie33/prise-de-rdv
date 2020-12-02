@@ -9,7 +9,7 @@ export default () => {
           <Grid.Row>
             <Grid.Col width={12}>
               <Alert type="warning">
-                <Header.H1>Accueil</Header.H1>
+                <Header.H1>Apprentissage - Prise de rendez-vous CFA</Header.H1>
                 <p>Page d'accueil utilisateur.</p>
               </Alert>
             </Grid.Col>

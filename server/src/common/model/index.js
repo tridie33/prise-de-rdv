@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { mongooseInstance } = require("../mongodb");
 const { mongoosastic, getElasticInstance } = require("../esClient");
-const { sampleSchema, userSchema } = require("../model/schema");
+const { userSchema, requestSchema } = require("../model/schema");
 
 const getMongoostaticModel = (modelName, schema, instanceMongoose = mongooseInstance) => {
   const Schema = new instanceMongoose.Schema(schema);
@@ -21,23 +21,23 @@ const getModel = (modelName, schema, instanceMongoose = mongooseInstance) => {
   return getMongooseModel(modelName);
 };
 
-let s = null;
-if (!s) {
-  s = getModel("sample", sampleSchema);
+let userModel = null;
+if (!userModel) {
+  userModel = getModel("user", userSchema);
 }
 
-let u = null;
-if (!u) {
-  u = getModel("user", userSchema);
+let requestModel = null;
+if (!requestModel) {
+  requestModel = getModel("request", requestSchema);
 }
 
-let l = null;
-if (!l) {
-  l = getMongooseModel("log");
+let logModel = null;
+if (!logModel) {
+  logModel = getMongooseModel("log");
 }
 
 module.exports = {
-  Sample: s,
-  User: u,
-  Log: l,
+  User: userModel,
+  Log: logModel,
+  Request: requestModel,
 };

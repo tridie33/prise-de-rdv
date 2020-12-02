@@ -1,0 +1,46 @@
+<mjml>
+    <mj-head>
+        <mj-title>Prise de rendez-vous - Votre demande a bien été prise en compte</mj-title>
+        <mj-font name="Public Sans"
+                 href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,600;0,900;1,400"/>
+        <mj-style inline="inline">
+            a:link,a:visited, a:hover, a:active  {color: #ffffff;}
+            .link-nostyle { color: inherit;}
+            .table th, .table td { border: 1px solid white; }
+            .green { background-color:#8BC34A; }
+            .red { background-color:#F44336; }
+            .orange { background-color:#FF9800; }
+        </mj-style>
+        <mj-attributes>
+            <mj-text
+                    color="#ffffff"
+                    font-family="Public Sans,sans-serif"
+                    font-size="16px"
+                    line-height="23px"
+            />
+        </mj-attributes>
+    </mj-head>
+
+    <mj-body background-color="#e5e5e5" width="100%">
+
+        <mj-section background-color="#F3F6F7">
+            <mj-column padding-right="0" width="20%">
+                <mj-image align="left" src="<%= `http://localhost/api/demande/${data.demandeId}/cfa` %>" />
+            </mj-column>
+               <mj-column padding-right="0">
+                <mj-text align="left" padding="10px 0 25px 25px" font-size="22px" font-weight="900" line-height="26px"
+                         color="#5222D0">
+                        Le candidat <%= data.user.firstname %> <%= data.user.lastname %>, est intéressé par la formation <%= data.nomFormation %>
+                        et souhaite être recontacté. <br>
+                        Il est passé par la plateforme <%= data.referrer %>. <br>
+                </mj-text>
+            </mj-column>
+        </mj-section>
+
+        <mj-section background-color="#5222d0">
+            <mj-column>
+                <mj-divider border-width="2px" border-color="lightgrey"/>
+            </mj-column>
+        </mj-section>
+    </mj-body>
+</mjml>

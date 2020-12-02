@@ -43,6 +43,10 @@ services:
     volumes:
       - ./elasticsearch/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
 
+  mailhog:
+    ports:
+      - "127.0.0.1:8025:8025"
+
 volumes:
   prise_de_rdv_data_elasticsearch:
     driver: local

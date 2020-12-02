@@ -1,7 +1,7 @@
 const assert = require("assert");
 const integrationTests = require("../../utils/integrationTests");
 const { Sample } = require("../../../src/common/model");
-const seed = require("../../../src/jobs/seed/seed");
+const seed = require("../../../src/jobs/seed");
 
 integrationTests(__filename, ({ getContext }) => {
   it("Vérifie la création d'entité depuis le job", async () => {
