@@ -25,37 +25,21 @@
 
         <mj-section background-color="#F3F6F7">
             <mj-column padding-right="0" width="20%">
-                <mj-image align="left" alt="Logo de la République Française"
-                  src="https://upload.wikimedia.org/wikipedia/fr/thumb/3/38/Logo_de_la_R%C3%A9publique_fran%C3%A7aise_%281999%29.svg/800px-Logo_de_la_R%C3%A9publique_fran%C3%A7aise_%281999%29.svg.png"/>
+                <mj-image align="left" src="<%= `http://localhost/api/demande/${data.demandeId}/cfa` %>" />
             </mj-column>
                <mj-column padding-right="0">
                 <mj-text align="left" padding="10px 0 25px 25px" font-size="22px" font-weight="900" line-height="26px"
                          color="#5222D0">
-                        Votre demande a été prise en compte<br>
+                        Le candidat <%= data.user.firstname %> <%= data.user.lastname %>, est intéressé par la formation <%= data.nomFormation %>
+                        et souhaite être recontacté. <br>
+                        Il est passé par la plateforme <%= data.referrer %>. <br>
                 </mj-text>
             </mj-column>
         </mj-section>
-
-        
 
         <mj-section background-color="#5222d0">
             <mj-column>
                 <mj-divider border-width="2px" border-color="lightgrey"/>
-            </mj-column>
-        </mj-section>
-
-        <mj-section background-color="#5222d0" padding-bottom="0">
-            <mj-column padding-top="0">
-                <mj-text align="left" font-size="14px" line-height="20px" color="#ffffff">
-                    Vous avez reçu cet email car une demande de prise de rendez-vous a été faite sur https://cfa-rdv.apprentissage.beta.gouv.fr/.
-                </mj-text>
-            </mj-column>
-        </mj-section>
-
-        <mj-section background-color="#5222d0" padding-top="0">
-            <mj-column>
-                <mj-image align="center" width="100px" alt="Logo République Française Marianne"
-                          src="https://upload.wikimedia.org/wikipedia/fr/thumb/3/38/Logo_de_la_R%C3%A9publique_fran%C3%A7aise_%281999%29.svg/800px-Logo_de_la_R%C3%A9publique_fran%C3%A7aise_%281999%29.svg.png"/>
             </mj-column>
         </mj-section>
     </mj-body>
