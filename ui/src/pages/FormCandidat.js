@@ -15,6 +15,16 @@ export const FormCandidat = (props) => {
     trainingDataFromApiCatalog,
   ] = useCustomHook(props);
 
+  function validateEmail(value) {
+    let error;
+    if (!value) {
+      error = "Required";
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
+      error = "Invalid email address";
+    }
+    return error;
+  }
+
   const sendNewRequest = async (values, { setStatus }) => {
     try {
       values = {
@@ -64,7 +74,7 @@ export const FormCandidat = (props) => {
               validationSchema={Yup.object().shape({
                 firstname: Yup.string().required("Requis"),
                 lastname: Yup.string().required("Requis"),
-                phone: Yup.string().required("Requis"),
+                phone: Yup.number().required("Requis"),
                 email: Yup.string().required("Requis"),
                 motivations: Yup.string(),
               })}
@@ -103,7 +113,7 @@ export const FormCandidat = (props) => {
                       </Field>
                     </TablerForm.Group>
                     <TablerForm.Group label="Email">
-                      <Field name="email">
+                      <Field name="email" validate={validateEmail}>
                         {({ field, meta }) => {
                           return (
                             <TablerForm.Input
