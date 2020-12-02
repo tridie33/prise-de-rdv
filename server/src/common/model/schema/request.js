@@ -38,19 +38,18 @@ const requestSchema = {
   statut_general: {
     type: String,
     default: "ouverte",
-    description: "Description plus générale sur l'état de la demande (en cours, fini, probleme)",
+    description: "Description plus générale sur l'état de la demande (ouverte, finie, probleme)",
   },
   cfa_pris_contact_candidat: {
     type: Boolean,
     default: false,
-    description: "Le candidat a t'il été rappelé par le centre ?",
+    description: "Le cfa a t'il pris contact avec le candidat ?",
   },
   cfa_pris_contact_candidat_date: {
     type: Date,
     default: null,
-    description: "Le candidat a t'il été rappelé par le centre ? date",
+    description: "La date de la première prise de contact du cfa vers le candidat",
   },
-
   email_premiere_demande_candidat_recu: {
     type: Boolean,
     default: false,
@@ -71,7 +70,6 @@ const requestSchema = {
     default: false,
     description: "Le centre a t'il ouvert son mail de demande de contact du candidat ?",
   },
-
   created_at: {
     type: Date,
     default: Date.now,
