@@ -134,5 +134,4 @@ setEnv.sh
 **/node_modules/
 yarn-error.log
 
-server/config/default.json
 sandbox/

@@ -1,0 +1,38 @@
+{
+  "appName": "Prise de rdv App",
+  "env": "local",
+  "publicUrl": "http://localhost",
+  "mongodb": {
+    "uri": "mongodb://127.0.0.1:27017/prise-de-rdv?retryWrites=true&w=majority"
+  },
+  "apiKey": "12345",
+  "auth": {
+    "passwordHashRounds": 1001,
+    "user": {
+      "jwtSecret": "1234",
+      "expiresIn": "24h"
+    },
+    "activation": {
+      "jwtSecret": "45678",
+      "expiresIn": "96h"
+    },
+    "password": {
+      "jwtSecret": "91011",
+      "expiresIn": "1h"
+    }
+  },
+  "log": {
+    "type": "console",
+    "level": "info"
+  },
+  "slackWebhookUrl": null,
+  "outputDir": ".local/output",
+  "smtp": {
+    "host": "PRISE_DE_RDV_SMTP_HOST",
+    "port": "PRISE_DE_RDV_SMTP_PORT",
+    "auth": {
+      "user": "PRISE_DE_RDV_SMTP_AUTH_USER",
+      "pass": "PRISE_DE_RDV_SMTP_AUTH_PASS"
+    }
+  }
+}
