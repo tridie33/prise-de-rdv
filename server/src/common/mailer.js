@@ -28,7 +28,7 @@ module.exports = (config, transporter = createTransporter(config.smtp)) => {
     renderEmail,
     sendEmail: async (to, subject, template, data) => {
       return transporter.sendMail({
-        from: "toto@gmail.com",
+        from: "no-reply@apprentissage.beta.gouv.fr",
         to,
         subject,
         html: await renderEmail(template, data),
