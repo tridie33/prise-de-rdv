@@ -20,15 +20,15 @@ module.exports = (config, transporter = createTransporter(config.smtp)) => {
       data,
     });
     let { html } = mjml(buffer.toString(), { minify: true });
+
     return html;
   };
 
   return {
     renderEmail,
     sendEmail: async (to, subject, template, data) => {
-      console.log(data.addedMjmlTable);
       return transporter.sendMail({
-        from: "no-reply@apprentissage.beta.gouv.fr",
+        from: "toto@gmail.com",
         to,
         subject,
         html: await renderEmail(template, data),

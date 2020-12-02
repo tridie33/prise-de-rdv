@@ -51,7 +51,7 @@ module.exports = () => {
   );
 
   /**
-   * Get formation getRequest /request GET
+   * Get request getRequest /request GET
    */
   router.get(
     "/request",

@@ -23,12 +23,30 @@ const userRequestSchema = Joi.object({
   referrer: Joi.string().required(),
 });
 
-const getEmailTemplate = (type = "mail-candiat") => {
+const getEmailTemplate = (type = "mail-candidat") => {
   return path.join(__dirname, `../../assets/templates/${type}.mjml.ejs`);
 };
 
 module.exports = ({ users, mailer }) => {
   const router = express.Router();
+
+  router.get(
+    "/:id/candidat",
+    tryCatch(async (req, res) => {
+      const itemId = req.params.id;
+      await updateRequestCandidatOpened(itemId);
+      res.json("OK");
+    })
+  );
+
+  router.get(
+    "/:id/cfa",
+    tryCatch(async (req, res) => {
+      const itemId = req.params.id;
+      await updateRequestCfaOpened(itemId);
+      res.json("OK");
+    })
+  );
 
   router.post(
     "/",
@@ -47,7 +65,6 @@ module.exports = ({ users, mailer }) => {
         email,
         role,
       });
-
       if (!user) {
         throw Boom.badRequest("something went wrong during db operation");
       }
@@ -65,10 +82,29 @@ module.exports = ({ users, mailer }) => {
 
       await mailer.sendEmail(
         user.email,
-        `[${config.env} Prise de rendez-vous] Demande de prise de rendez-vous`,
-        getEmailTemplate("mail-candiat"),
-        {} // Payload
+        `[Mail Candidat ${config.env} Prise de rendez-vous] Demande de prise de rendez-vous`,
+        getEmailTemplate("mail-candidat"),
+        {
+          demandeId: request._id.toString(),
+          user,
+          nomFormation: "CAP Cuisine",
+          nomCFA: "CEPROC",
+        }
       );
+
+      //TODO: Récupérer email du cfa depuis Api Catalogue ou flux S.
+      await mailer.sendEmail(
+        user.email,
+        `[Mail CFA ${config.env} Prise de rendez-vous] Demande de prise de rendez-vous`,
+        getEmailTemplate("mail-cfa"),
+        {
+          demandeId: request._id.toString(),
+          user,
+          nomFormation: "CAP Cuisine",
+          referrer: "Parcoursup",
+        }
+      );
+      await updateRequestCfaAndCandidatReceived(request._id);
 
       res.json({
         ...user._doc,
@@ -77,4 +113,26 @@ module.exports = ({ users, mailer }) => {
     })
   );
   return router;
+};
+
+const updateRequestCandidatOpened = async (requestId) => {
+  const retrievedData = await Request.findById(requestId);
+  retrievedData.email_premiere_demande_candidat_ouvert = true;
+  const result = await Request.findOneAndUpdate({ _id: requestId }, retrievedData);
+  return result;
+};
+
+const updateRequestCfaOpened = async (requestId) => {
+  const retrievedData = await Request.findById(requestId);
+  retrievedData.email_premiere_demande_cfa_ouvert = true;
+  const result = await Request.findOneAndUpdate({ _id: requestId }, retrievedData);
+  return result;
+};
+
+const updateRequestCfaAndCandidatReceived = async (requestId) => {
+  const retrievedData = await Request.findById(requestId);
+  retrievedData.email_premiere_demande_candidat_recu = true;
+  retrievedData.email_premiere_demande_cfa_recu = true;
+  const result = await Request.findOneAndUpdate({ _id: requestId }, retrievedData, { new: true });
+  return result;
 };
