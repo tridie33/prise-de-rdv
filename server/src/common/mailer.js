@@ -7,7 +7,7 @@ const ejs = require("ejs");
 const renderFile = promisify(ejs.renderFile);
 
 const createTransporter = (smtp) => {
-  let needsAuthentication = !!smtp.auth.user;
+  let needsAuthentication = smtp.auth !== undefined ? !!smtp.auth.user : undefined;
 
   let transporter = nodemailer.createTransport(needsAuthentication ? smtp : omit(smtp, ["auth"]));
   transporter.use("compile", htmlToText({ ignoreImage: true }));
