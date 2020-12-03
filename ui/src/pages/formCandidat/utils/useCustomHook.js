@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { _get } from "../../common/httpClient";
+import { _get } from "../../../common/httpClient";
 const queryString = require("query-string");
 
 export const useCustomHook = (props) => {

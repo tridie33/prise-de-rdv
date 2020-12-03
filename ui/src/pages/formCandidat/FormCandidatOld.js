@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import FormError from "../common/components/FormError";
 import { useCustomHook } from "./utils/useCustomHook";
 
-export const FormCandidat = (props) => {
+export const FormCandidatOld = (props) => {
   const [
     urlParamCentreId,
     urlParamTrainingId,
@@ -76,7 +76,7 @@ export const FormCandidat = (props) => {
                 lastname: Yup.string().required("Requis"),
                 phone: Yup.number().required("Requis"),
                 email: Yup.string().required("Requis"),
-                motivations: Yup.string(),
+                motivations: Yup.string().required("Requis"),
               })}
               onSubmit={sendNewRequest}
             >

@@ -7,9 +7,9 @@ import DashboardPage from "./pages/admin/DashboardPage";
 import useAuth from "./common/hooks/useAuth";
 import ResetPasswordPage from "./pages/password/ResetPasswordPage";
 import ForgottenPasswordPage from "./pages/password/ForgottenPasswordPage";
-import { FormCandidat } from "./pages/FormCandidat";
 import HomePage from "./pages/HomePage";
 import { SiteParentPage } from "./pages/siteParent/SiteParentPage";
+import { FormCandidat } from "./pages/formCandidat/FormCandidat";
 
 function PrivateRoute({ children, ...rest }) {
   let [auth] = useAuth();
