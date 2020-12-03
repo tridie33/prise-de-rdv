@@ -40,6 +40,16 @@ const requestSchema = {
     default: "ouverte",
     description: "Description plus générale sur l'état de la demande (ouverte, finie, probleme)",
   },
+  champs_libre_status: {
+    type: String,
+    default: null,
+    description: "Champs libre qui sert de notes sur le statut",
+  },
+  champs_libre_commentaire: {
+    type: String,
+    default: null,
+    description: "Champs libre qui sert de notes supplémentaires",
+  },
   cfa_pris_contact_candidat: {
     type: Boolean,
     default: false,
