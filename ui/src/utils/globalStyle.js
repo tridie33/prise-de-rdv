@@ -126,7 +126,7 @@ export const bodyStyles = css`
     color: ${color.darkGrey};
     font-family: sans-serif;
     font-weight: ${typography.fontWeight.regular};
-    background-color: ${color.white};
+    background-color: ${color.ultraGrey};
   }
 
   h1,

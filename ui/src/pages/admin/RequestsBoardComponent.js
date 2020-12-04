@@ -40,7 +40,8 @@ export const RequestsBoardComponent = (props) => {
               openedCfa={request.email_premiere_demande_cfa_recu}
             />
           ),
-        },{
+        },
+        {
           content: (
             <OpenedStatus
               openedCandidat={request.email_premiere_demande_candidat_ouvert}
@@ -70,7 +71,13 @@ export const RequestsBoardComponent = (props) => {
         { content: <Form.Textarea type="text" disabled /> },
         { content: <Form.Textarea type="text" disabled /> },
         { content: "" },
-        { content: <Button className={"btn btn-primary ml-auto"} disabled>Editer</Button> },
+        {
+          content: (
+            <Button className={"btn btn-primary ml-auto"} disabled>
+              Editer
+            </Button>
+          ),
+        },
       ],
     };
   };
@@ -88,12 +95,12 @@ export const RequestsBoardComponent = (props) => {
               { content: "Candidat" },
               { content: "CFA" },
               { content: "Réception" },
-              { content: "Ouvertures" },
-              { content: "Prise de contact ?" },
+              { content: "Ouverture" },
+              { content: "Prise de contact" },
               { content: "Site de provenance" },
               { content: "Motivations du candidat" },
               { content: "Champs libre statut" },
-              { content: "Commentaires" },
+              { content: "Champs libre commentaires" },
               { content: "" },
               { content: "" },
             ]}

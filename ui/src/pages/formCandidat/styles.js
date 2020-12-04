@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { background, color, spacing, typography } from "../../utils/sharedStyles";
+import { Form as TablerForm } from "tabler-react";
 
 export const Main = styled.main`
   display: grid;
@@ -18,7 +19,55 @@ export const Main = styled.main`
 
 export const ContainerParent = styled.div`
   position: relative;
-`
+`;
+
+export const Vector1 = styled.img`
+  position: absolute;
+  left: -224px;
+  top: 285px;
+  z-index: 9;
+
+  @media (max-width: 1250px) {
+    display: none;
+  }
+
+  @media (max-width: 950px) {
+    display: none;
+  }
+`;
+
+export const Vector2 = styled.img`
+  position: absolute;
+  right: -160px;
+  top: 100px;
+  z-index: 9;
+
+  @media (max-width: 1250px) {
+    display: none;
+  }
+
+  @media (max-width: 950px) {
+    display: none;
+  }
+`;
+
+export const Vector3 = styled.img`
+  position: absolute;
+  right: -224px;
+  top: 460px;
+  z-index: 9;
+
+  //transform: rotate(-42deg);
+  transform: rotate(180deg);
+
+  @media (max-width: 1250px) {
+    display: none;
+  }
+
+  @media (max-width: 950px) {
+    display: none;
+  }
+`;
 
 export const Container = styled.div`
   position: relative;
@@ -41,7 +90,7 @@ export const FormContainer = styled.div`
 export const FormLayout = styled.div``;
 
 export const FormHeaderLayout = styled.div`
-  padding: ${spacing.padding.xlarge} 0 ${spacing.padding.large};
+  padding: ${spacing.padding.xlarge} 0 0;
 `;
 
 export const FormBodyLayout = styled.div``;
@@ -57,8 +106,8 @@ export const ContactCFALayout = styled.div`
   display: grid;
   grid-template-columns: 1fr 8fr;
   grid-gap: ${spacing.padding.small};
-  margin: 0 auto;
-  padding: ${spacing.padding.xsmall};
+  //margin: 0 auto;
+  margin-bottom: ${spacing.padding.large};
 
   background-color: ${background.blueLight};
   box-sizing: border-box;
@@ -83,7 +132,8 @@ export const ContactCFANameAddressLayout = styled.div`
   grid-gap: ${spacing.padding.small};
   margin: ${spacing.padding.xxsmall} 0;
 
-  > span {
+  > p,
+  span {
     margin: auto 0;
     color: ${color.black};
     font-weight: ${typography.fontWeight.xxbold};
@@ -103,7 +153,7 @@ export const FormIllustrationLayout = styled.div`
   }
 `;
 
-export const Input = styled.input`
+export const Input = styled(TablerForm.Input)`
   width: 100%;
   margin: ${spacing.padding.xsmall} 0;
   padding: ${spacing.padding.xxsmall};
@@ -139,7 +189,7 @@ export const Input = styled.input`
   }
 `;
 
-export const Textarea = styled.textarea.attrs(() => ({
+export const Textarea = styled(TablerForm.Textarea).attrs(() => ({
   rows: "4",
   cols: "50",
 }))`
@@ -149,6 +199,9 @@ export const Textarea = styled.textarea.attrs(() => ({
 
   border: 1.25px solid ${color.blue};
   border-radius: 4px;
+  font-size: ${typography.fontSize.s2};
+  font-weight: ${typography.fontWeight.regular};
+  line-height: ${typography.fontSize.m3};
 
   :-webkit-input-placeholder {
     color: ${color.darkGrey};
@@ -200,7 +253,7 @@ export const ButtonLayout = styled.div`
   text-align: center;
 `;
 
-export const FooterContainer = styled.div``;
+export const FooterLayout = styled.div``;
 
 export const MentionsTypography = styled.p`
   padding: ${spacing.padding.xxmedium} ${spacing.padding.xmedium};
@@ -217,29 +270,18 @@ export const MentionsTypography = styled.p`
   }
 `;
 
-export const Vector1 = styled.img`
-  position: absolute;
-  left: -224px;
-  top: 285px;
-  z-index: 9;
-`;
-
-export const Vector2 = styled.img`
-  position: absolute;
-  right: -134px;
-  top: 150px;
-  z-index: 9;
-`;
-
-export const Vector3 = styled.img`
-  position: absolute;
-  right: -224px;
-  top: 478px;
-  z-index: 9;
-
-  transform: rotate(-42deg);
-`;
-
 export const AsterixTypography = styled.span`
   color: red;
+`;
+
+export const InfosLayout = styled.div`
+  p {
+    padding: ${spacing.padding.xxmedium} 0;
+
+    strong {
+      color: ${color.blue};
+      font-size: ${typography.fontSize.s2};
+      line-height: ${typography.fontSize.m3};
+    }
+  }
 `;

@@ -1,12 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { _get } from "../../../common/httpClient";
-const queryString = require("query-string");
 
-export const useCustomHook = (props) => {
-  const { centreId: urlCentreId, trainingId: urlTrainingId, fromWhom: urlFromWhom } = queryString.parse(
-    props.location.search
-  );
-
+export const useCustomHook = (urlCentreId, urlTrainingId) => {
   const [centreDataFromApiCatalog, setCentreDataFromApiCatalog] = useState(null);
   const [trainingDataFromApiCatalog, setTrainingDataFromApiCatalog] = useState(null);
 
@@ -31,5 +26,5 @@ export const useCustomHook = (props) => {
     fetchTraining();
   }, [fetchCentre, fetchTraining]);
 
-  return [urlCentreId, urlTrainingId, urlFromWhom, centreDataFromApiCatalog, trainingDataFromApiCatalog];
+  return [centreDataFromApiCatalog, trainingDataFromApiCatalog];
 };

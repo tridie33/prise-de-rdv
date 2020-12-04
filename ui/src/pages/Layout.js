@@ -16,12 +16,11 @@ export default (props) => {
       <Site.Header>
         Prise de Rdv App
         <div className="d-flex order-lg-2 ml-auto">
-        <Nav.Item value="S'identifier" icon="user" onClick={logout} />
-          {/* <Nav.Item hasSubNav value={auth.sub} icon="user">
-            <a className="dropdown-item" onClick={logout}>
+          <Nav.Item hasSubNav value={auth.sub} icon="user">
+            <button className="dropdown-item" onClick={logout}>
               Déconnexion
-            </a>
-          </Nav.Item> */}
+            </button>
+          </Nav.Item>
         </div>
       </Site.Header>
       {props.children}
