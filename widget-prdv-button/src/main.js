@@ -8,7 +8,7 @@ if( document.readyState !== 'loading' ) {
     });
 }
 
-var prdv_mna_env = process.env.PRDV_MNA_ENV;
+var prdv_mna_env = process.env.PRDV_MNA_ENV; // Used by rollup-plugin-inject-process-env to replace env name
 var prdv_mna_hostname = "https://rdv-cfa.apprentissage.beta.gouv.fr";
 switch (prdv_mna_env) {
     case "production":
