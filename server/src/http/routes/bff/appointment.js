@@ -129,6 +129,37 @@ module.exports = ({ users, appointements, mailer }) => {
   );
 
   router.get(
+    "/context/recap",
+    tryCatch(async (req, res) => {
+      const paramsAppointementId = req.query.appointmentId;
+      const foundAppointement = await appointements.getById(paramsAppointementId);
+      console.log("foundAppointement", foundAppointement);
+
+      //const responseCentreId = await axios.get(`${endpointCentre}`, { params: { query: foundAppointement.uai } });
+      const foundUser = await users.getUserById(foundAppointement.candidat_id);
+      console.log("foundUser", foundUser);
+      console.log("foundUser._doc", foundUser._doc);
+      const responseCentreId = {
+        data: {
+          entreprise_raison_sociale: "CEPROC",
+          address: "45 rue Jean-Baptiste Charcot",
+          postalCode: "92000 Massy",
+          email: "contact@cfa-massy.com",
+        },
+      };
+
+      if (foundUser && responseCentreId.data) {
+        res.json({
+          user: foundUser._doc,
+          centre: responseCentreId.data,
+        });
+      } else {
+        res.json({ message: `no data centre or no data training` });
+      }
+    })
+  );
+
+  router.get(
     "/:id/candidat",
     tryCatch(async (req, res) => {
       const itemId = req.params.id;

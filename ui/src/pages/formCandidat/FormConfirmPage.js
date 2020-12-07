@@ -6,20 +6,8 @@ import { FormLayoutComponent } from "./components/FormLayoutComponent";
 import { useFetch } from "../../common/hooks/useFetch";
 
 export const FormConfirmPage = () => {
-  const { id: requestId } = useParams();
-  //const { id: requestId } = useParams();
-  //const [data, loading] = useFetch(`api/bff/context/formConfirmPage/${requestId}`);
-  const data = {
-    user: {
-      firstname: "Pacey",
-      lastname: "Led",
-      phone: "12345678",
-      email: "pacey@led.com",
-    },
-    centre: {
-      email: "contact@cfa.com",
-    },
-  };
+  const { id: appointmentId } = useParams();
+  const [data, loading] = useFetch(`/api/bff/appointment/context/recap?appointmentId=${appointmentId}`);
 
   return (
     <FormLayoutComponent>
