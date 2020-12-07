@@ -30,7 +30,7 @@ export const RequestsBoardComponent = (props) => {
             </Text>
           ),
         },
-        { content: moment.utc(request.created_at).format("DD/MM/YYYY HH:mm:ss") },
+        { content: moment.parseZone(request.created_at).format("DD/MM/YYYY HH:mm:ss") },
         { content: `${request.candidat_id}` },
         { content: `${request.formation_id}` },
         {

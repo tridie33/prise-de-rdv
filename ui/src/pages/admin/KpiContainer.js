@@ -19,10 +19,6 @@ export const KpisComponent = () => {
       <Grid.Row cards={true}>
         {loading && "Chargement des données..."}
         {data && <KpiNumber total={data.stats.nbItems} label={data.stats.nbItems > 1 ? "Demandes" : "Demande"} />}
-        <KpiNumber total={42} label={"Candidats uniques"} />
-        <KpiNumber total={30} label={"Prises de contact"} />
-        <KpiNumber total={30} label={"Ouvertures Candidat"} />
-        <KpiNumber total={37} label={"Ouvertures CFA"} />
       </Grid.Row>
     </>
   );
