@@ -2,6 +2,7 @@ import json from '@rollup/plugin-json';
 import { terser } from "rollup-plugin-terser";
 import commonjs from 'rollup-plugin-commonjs';
 import babel from 'rollup-plugin-babel';
+import injectProcessEnv from 'rollup-plugin-inject-process-env';
 
 // rollup.config.js
 /*
@@ -12,7 +13,7 @@ export default {
   input: 'src/main.js',
   output: [
     {
-      file: './dist/bundle.js',
+      file: '../ui/public/assets/bundle.js',
       format: 'cjs'
     },
     {
@@ -28,6 +29,8 @@ export default {
       exclude: 'node_modules/**'
     }),
     commonjs(),
-    babel()
+    injectProcessEnv({ 
+      PRDV_MNA_ENV: process.env.BUNDLE_ENV,
+  }),
   ]
 };
