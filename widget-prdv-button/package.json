@@ -22,7 +22,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "if yarn isBranch v0; then yarn build:production; fi"
+      "pre-commit": "./pre-build.sh"
     }
   }
 }
