@@ -23,7 +23,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "./pre-build.sh",
-      "pre-merge-commit": "./pre-build.sh"
+      "post-merge": "./pre-build.sh"
     }
   }
 }
