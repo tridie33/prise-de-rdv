@@ -4,10 +4,10 @@ const Joi = require("joi");
 const config = require("config");
 const passport = require("passport");
 const { Strategy, ExtractJwt } = require("passport-jwt");
-const tryCatch = require("../middlewares/tryCatchMiddleware");
-const { createUserToken } = require("../../common/utils/jwtUtils");
-const validators = require("../utils/validators");
-const { createPasswordToken } = require("../../common/utils/jwtUtils");
+const tryCatch = require("../../middlewares/tryCatchMiddleware");
+const { createUserToken } = require("../../../common/utils/jwtUtils");
+const validators = require("../../utils/validators");
+const { createPasswordToken } = require("../../../common/utils/jwtUtils");
 
 const checkPasswordToken = (users) => {
   passport.use(

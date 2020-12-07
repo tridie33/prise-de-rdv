@@ -1,8 +1,8 @@
 const express = require("express");
-const tryCatch = require("../middlewares/tryCatchMiddleware");
+const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const Joi = require("joi");
-const { Sample } = require("../../common/model");
-const logger = require("../../common/logger");
+const { Sample } = require("../../../common/model");
+const logger = require("../../../common/logger");
 
 /**
  * Schema for validation

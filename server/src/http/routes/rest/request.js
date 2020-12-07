@@ -1,7 +1,7 @@
 const express = require("express");
-const tryCatch = require("../middlewares/tryCatchMiddleware");
-const { Request } = require("../../common/model");
-const logger = require("../../common/logger");
+const tryCatch = require("../../middlewares/tryCatchMiddleware");
+const { Request } = require("../../../common/model");
+const logger = require("../../../common/logger");
 
 /**
  * Sample entity route module for GET
@@ -18,7 +18,7 @@ module.exports = () => {
       let qs = req.query;
       const query = qs && qs.query ? JSON.parse(qs.query) : {};
       const page = qs && qs.page ? qs.page : 1;
-      const limit = qs && qs.limit ? parseInt(qs.limit, 10) : 10;
+      const limit = qs && qs.limit ? parseInt(qs.limit, 50) : 50;
 
       const allData = await Request.paginate(query, { page, limit });
       return res.json({
@@ -34,7 +34,7 @@ module.exports = () => {
   );
 
   /**
-   * Get countTrainings requests/count GET
+   * Get countRequests requests/count GET
    */
   router.get(
     "/requests/count",

@@ -1,9 +1,9 @@
 const express = require("express");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
-const { createUserToken } = require("../../common/utils/jwtUtils");
+const { createUserToken } = require("../../../common/utils/jwtUtils");
 const compose = require("compose-middleware").compose;
-const tryCatch = require("../middlewares/tryCatchMiddleware");
+const tryCatch = require("../../middlewares/tryCatchMiddleware");
 
 module.exports = ({ users }) => {
   const router = express.Router(); // eslint-disable-line new-cap

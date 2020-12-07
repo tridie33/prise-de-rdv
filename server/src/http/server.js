@@ -10,17 +10,15 @@ const corsMiddleware = require("./middlewares/corsMiddleware");
 const authMiddleware = require("./middlewares/authMiddleware");
 const permissionsMiddleware = require("./middlewares/permissionsMiddleware");
 const packageJson = require("../../package.json");
-const entity = require("./routes/entity");
-const secured = require("./routes/secured");
-const login = require("./routes/login");
-const authentified = require("./routes/authentified");
-const admin = require("./routes/admin");
-const password = require("./routes/password");
-const stats = require("./routes/stats");
-const centre = require("./routes/centre");
-const training = require("./routes/training");
-const demande = require("./routes/demande");
-const request = require("./routes/request");
+const secured = require("./routes/auth/secured");
+const login = require("./routes/auth/login");
+const authentified = require("./routes/auth/authentified");
+const admin = require("./routes/auth/admin");
+const password = require("./routes/auth/password");
+const stats = require("./routes/bff/stats");
+const appointment = require("./routes/bff/appointment");
+const entity = require("./routes/rest/entity");
+const request = require("./routes/rest/request");
 
 module.exports = async (components) => {
   const { db } = components;
@@ -32,9 +30,9 @@ module.exports = async (components) => {
   app.use(corsMiddleware());
   app.use(logMiddleware());
 
-  app.use("/api/demande", demande(components));
-  app.use("/api/centre", centre());
-  app.use("/api/training", training());
+  app.use("/api/bff/appointment", appointment(components));
+  app.use("/api/stats", checkJwtToken, adminOnly, stats(components));
+
   app.use("/api/entity", request());
   app.use("/api/entity", entity());
   app.use("/api/secured", apiKeyAuthMiddleware, secured());
@@ -42,7 +40,6 @@ module.exports = async (components) => {
   app.use("/api/authentified", checkJwtToken, authentified());
   app.use("/api/admin", checkJwtToken, adminOnly, admin());
   app.use("/api/password", password(components));
-  app.use("/api/stats", checkJwtToken, adminOnly, stats(components));
 
   app.get(
     "/api",
