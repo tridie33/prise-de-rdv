@@ -102,12 +102,12 @@ export const CallTypography = styled.span`
   line-height: ${typography.fontSize.l2};
 `;
 
-export const ContactCFALayout = styled.div`
+export const ContactCentreTrainingContainer = styled.div`
   display: grid;
-  grid-template-columns: 1fr 8fr;
+  grid-template-rows: 0fr 0fr;
   grid-gap: ${spacing.padding.small};
-  //margin: 0 auto;
   margin-bottom: ${spacing.padding.large};
+  padding: ${spacing.padding.small} ${spacing.padding.xsmall};
 
   background-color: ${background.blueLight};
   box-sizing: border-box;
@@ -115,22 +115,14 @@ export const ContactCFALayout = styled.div`
   border-radius: 4px;
 `;
 
-export const Divider = styled.div`
-  border-bottom: 1px solid ${color.darkGrey};
-`;
-
-export const ContactCFAIconsLayout = styled.div`
+export const ContactCentreTrainingLayout = styled.div`
   display: grid;
-  grid-template-rows: 1fr 1fr;
-  grid-gap: ${spacing.padding.small};
-  margin: ${spacing.padding.xsmall} auto;
-`;
+  grid-template-columns: 1fr 9fr;
+  grid-gap: ${spacing.padding.xxsmall};
 
-export const ContactCFANameAddressLayout = styled.div`
-  display: grid;
-  grid-template-rows: 1fr 0fr;
-  grid-gap: ${spacing.padding.small};
-  margin: ${spacing.padding.xxsmall} 0;
+  img {
+    margin: 0 auto;
+  }
 
   > p,
   span {
@@ -140,6 +132,10 @@ export const ContactCFANameAddressLayout = styled.div`
     font-size: ${typography.fontSize.s1};
     line-height: ${typography.fontSize.s3};
   }
+`;
+
+export const Divider = styled.div`
+  border-bottom: 1px solid ${color.darkGrey};
 `;
 
 export const FormIllustrationLayout = styled.div`
