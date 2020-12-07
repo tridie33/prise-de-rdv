@@ -13,7 +13,7 @@ export default {
   input: 'src/main.js',
   output: [
     {
-      file: './dist/bundle.js',
+      file: '../ui/public/assets/bundle.js',
       format: 'cjs'
     },
     {
