@@ -5,7 +5,7 @@ import { Divider, InfosLayout, Spacer } from "./styles";
 import { FormLayoutComponent } from "./components/FormLayoutComponent";
 import { useFetch } from "../../common/hooks/useFetch";
 
-export const FormConfirmPage = () => {
+export const FormRecapPage = () => {
   const { id: appointmentId } = useParams();
   const [data, loading] = useFetch(`/api/bff/appointment/context/recap?appointmentId=${appointmentId}`);
 

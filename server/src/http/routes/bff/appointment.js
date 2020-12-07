@@ -29,29 +29,15 @@ module.exports = ({ users, appointements, mailer }) => {
     "/context/create",
     tryCatch(async (req, res) => {
       const paramsCentreId = { uai: req.query.centreId };
-      const paramsTrainingId = { uai: req.query.trainingId };
+      const paramsTrainingId = { educ_nat_code: req.query.trainingId };
 
-      //const responseCentreId = await axios.get(`${endpointCentre}`, { params: { query: paramsCentreId } });
-      //const responseTrainingId = await axios.get(`${endpointTraining}`, { params: { query: paramsTrainingId } });
-      const responseCentreId = {
-        data: {
-          entreprise_raison_sociale: "CEPROC",
-          address: "45 rue Jean-Baptiste Charcot",
-          postalCode: "92000 Massy",
-        },
-      };
-      const responseTrainingId = {
-        data: {
-          intitule: "CAP Cuisine",
-        },
-      };
+      const responseCentreId = await axios.get(`${endpointCentre}`, { params: { query: paramsCentreId } });
+      const responseTrainingId = await axios.get(`${endpointTraining}`, { params: { query: paramsTrainingId } });
 
       if (responseCentreId.data && responseTrainingId.data) {
         res.json({
-          data: {
-            centre: responseCentreId.data,
-            training: responseTrainingId.data,
-          },
+          centre: responseCentreId.data,
+          training: responseTrainingId.data,
         });
       } else {
         res.json({ message: `no data centre or no data training` });
@@ -80,7 +66,7 @@ module.exports = ({ users, appointements, mailer }) => {
 
       // Création d'une demande de rendez-vous
       const { centreId, trainingId, motivations, referrer } = paramsAppointement;
-      const createdAppointement = await appointements.create({
+      const createdAppointement = await appointements.createAppointment({
         candidatId: createdUser._id,
         centreId,
         trainingId,
@@ -131,27 +117,22 @@ module.exports = ({ users, appointements, mailer }) => {
   router.get(
     "/context/recap",
     tryCatch(async (req, res) => {
-      const paramsAppointementId = req.query.appointmentId;
-      const foundAppointement = await appointements.getById(paramsAppointementId);
-      console.log("foundAppointement", foundAppointement);
+      const paramsAppointmentId = req.query.appointmentId;
+      const foundAppointment = await appointements.getAppointmentById(paramsAppointmentId);
 
-      //const responseCentreId = await axios.get(`${endpointCentre}`, { params: { query: foundAppointement.uai } });
-      const foundUser = await users.getUserById(foundAppointement.candidat_id);
-      console.log("foundUser", foundUser);
-      console.log("foundUser._doc", foundUser._doc);
-      const responseCentreId = {
-        data: {
-          entreprise_raison_sociale: "CEPROC",
-          address: "45 rue Jean-Baptiste Charcot",
-          postalCode: "92000 Massy",
-          email: "contact@cfa-massy.com",
-        },
-      };
-
-      if (foundUser && responseCentreId.data) {
+      // Récupération des données sur le centre et le candidat pour l'afficher sur l'écran de récapitulation
+      const centreIdFromFoundAppointment = { uai: foundAppointment.etablissement_id };
+      const foundCentre = await axios.get(`${endpointCentre}`, {
+        params: { query: centreIdFromFoundAppointment },
+      });
+      const foundUser = await users.getUserById(foundAppointment.candidat_id);
+      if (foundUser && foundCentre.data) {
         res.json({
           user: foundUser._doc,
-          centre: responseCentreId.data,
+          centre: {
+            ...foundCentre.data,
+            email: foundCentre.data.ds_questions_email,
+          },
         });
       } else {
         res.json({ message: `no data centre or no data training` });

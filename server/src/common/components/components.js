@@ -1,6 +1,6 @@
 const { connectToMongo } = require("../mongodb");
 const createUsers = require("./users");
-const createAppointement = require("./appointements");
+const createAppointement = require("./appointments");
 const createMailer = require("../../common/mailer");
 const config = require("config");
 

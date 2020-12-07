@@ -2,7 +2,7 @@ const { Request } = require("../../common/model/index");
 
 module.exports = async () => {
   return {
-    create: async (options = {}) => {
+    createAppointment: async (options = {}) => {
       const { candidatId, centreId, trainingId, motivations, referrer } = options;
 
       const appointment = new Request({
@@ -24,7 +24,7 @@ module.exports = async () => {
       const updatedAppointement = await Request.findOneAndUpdate({ _id: appointmentId }, appointment, { new: false });
       return updatedAppointement;
     },
-    getById: async (appointmentId) => {
+    getAppointmentById: async (appointmentId) => {
       const appointment = await Request.findById(appointmentId);
       if (!appointment) {
         throw new Error(`Unable to find appointement ${appointmentId}`);

@@ -9,7 +9,7 @@ import ResetPasswordPage from "./pages/password/ResetPasswordPage";
 import ForgottenPasswordPage from "./pages/password/ForgottenPasswordPage";
 import HomePage from "./pages/HomePage";
 import { SiteParentPage } from "./pages/siteParent/SiteParentPage";
-import { FormConfirmPage } from "./pages/formCandidat/FormConfirmPage";
+import { FormRecapPage } from "./pages/formCandidat/FormRecapPage";
 import { FormCreatePage } from "./pages/formCandidat/FormCreatePage";
 
 function PrivateRoute({ children, ...rest }) {
@@ -44,7 +44,7 @@ export default () => {
 
           <Route exact path="/fakeHost/:hostname" component={SiteParentPage} />
           <Route exact path="/form" component={FormCreatePage} />
-          <Route exact path="/form/confirm/:id" component={FormConfirmPage} />
+          <Route exact path="/form/confirm/:id" component={FormRecapPage} />
         </Switch>
       </Router>
     </div>

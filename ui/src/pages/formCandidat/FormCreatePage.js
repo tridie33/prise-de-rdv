@@ -28,18 +28,6 @@ export const FormCreatePage = (props) => {
   const [data, loading] = useFetch(
     `/api/bff/appointment/context/create?centreId=${paramsCentreId}&trainingId=${paramsTrainingId}`
   );
-  /*
-  const data = {
-    centre: {
-      name: "CEPROC",
-      address: "2 Rue du Carbone",
-      postalCode: "45100 Orléans",
-    },
-    training: {
-      name: "CAP Cuisine",
-    },
-  };
-   */
 
   function validateEmail(value) {
     let error;
@@ -60,8 +48,8 @@ export const FormCreatePage = (props) => {
         referrer: paramsReferrer,
         role: "candidat",
       };
-      let data = await _post("/api/bff/appointment/validate", values);
-      history.push(`/form/confirm/${data.appointment._id.toString()}`);
+      let dataReceived = await _post("/api/bff/appointment/validate", values);
+      history.push(`/form/confirm/${dataReceived.appointment._id}`);
     } catch (e) {
       console.error(e);
       setStatus({ error: e.prettyMessage });
@@ -103,14 +91,12 @@ export const FormCreatePage = (props) => {
             {({ status = {} }) => {
               return (
                 <Form>
-                  {data.centre && (
-                    <ContactCentreComponent
-                      urlCentreId={props.urlCentreId}
-                      urlTrainingId={props.urlTrainingId}
-                      centre={data.centre}
-                      training={data.training}
-                    />
-                  )}
+                  <ContactCentreComponent
+                    urlCentreId={props.urlCentreId}
+                    urlTrainingId={props.urlTrainingId}
+                    centre={data.centre}
+                    training={data.training}
+                  />
                   <HelloTypography as={"h2"}>Bonjour !</HelloTypography>
                   <p>
                     Vous êtes <AsterixTypography>*</AsterixTypography> :{" "}

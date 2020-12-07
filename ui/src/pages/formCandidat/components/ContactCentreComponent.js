@@ -16,10 +16,12 @@ export const ContactCentreComponent = (props) => {
           {props.training && <span>Formation : {props.training.intitule}</span>}
           {!props.training && <span>Formation : N.C</span>}
         </p>
-        <span>
-          {props.centre.address} <br />
-          {props.centre.postalCode}
-        </span>
+        {props.centre && (
+          <span>
+            {props.centre.adresse} <br />
+            {props.centre.code_postal}
+          </span>
+        )}
       </ContactCFANameAddressLayout>
     </ContactCFALayout>
   );
