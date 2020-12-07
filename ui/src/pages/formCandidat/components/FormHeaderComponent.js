@@ -1,4 +1,4 @@
-import { CallTypography, FormHeaderLayout, FormIllustrationLayout } from "./styles";
+import { CallTypography, FormHeaderLayout, FormIllustrationLayout } from "../styles";
 import React from "react";
 
 export const FormHeaderComponent = (props) => {

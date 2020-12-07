@@ -1,4 +1,4 @@
-import { ContactCFAIconsLayout, ContactCFALayout, ContactCFANameAddressLayout } from "./styles";
+import { ContactCFAIconsLayout, ContactCFALayout, ContactCFANameAddressLayout } from "../styles";
 import React from "react";
 
 export const ContactCentreComponent = (props) => {
@@ -10,15 +10,15 @@ export const ContactCentreComponent = (props) => {
       </ContactCFAIconsLayout>
       <ContactCFANameAddressLayout>
         <p>
-          {props.centre && <span>Etablissement : {props.centre.name}</span>}
+          {props.centre && <span>Etablissement : {props.centre.entreprise_raison_sociale}</span>}
           {!props.centre && <span>Etablissement : N.C</span>}
           <br />
-          {props.training && <span>Formation : {props.training.name}</span>}
+          {props.training && <span>Formation : {props.training.intitule}</span>}
           {!props.training && <span>Formation : N.C</span>}
         </p>
         <span>
-          2 Rue du Carbone <br />
-          45100 Orléans
+          {props.centre.address} <br />
+          {props.centre.postalCode}
         </span>
       </ContactCFANameAddressLayout>
     </ContactCFALayout>

@@ -11,7 +11,7 @@ const KpiNumber = (props) => {
 };
 
 export const KpisComponent = () => {
-  const [data, loading] = useFetch("api/stats");
+  const [data, loading] = useFetch("api/bff/stats");
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { Divider, FooterLayout, MentionsTypography, Spacer } from "./styles";
+import { Divider, FooterLayout, MentionsTypography, Spacer } from "../styles";
 import React from "react";
 
 export const FooterComponent = () => {

@@ -31,7 +31,7 @@ module.exports = async (components) => {
   app.use(logMiddleware());
 
   app.use("/api/bff/appointment", appointment(components));
-  app.use("/api/stats", checkJwtToken, adminOnly, stats(components));
+  app.use("/api/bff/stats", checkJwtToken, adminOnly, stats(components));
 
   app.use("/api/entity", request());
   app.use("/api/entity", entity());

@@ -9,7 +9,7 @@ import {
   Vector2,
   Vector3,
   ContainerParent,
-} from "./styles";
+} from "../styles";
 import { FooterComponent } from "./FooterComponent";
 
 export const FormLayoutComponent = (props) => {
