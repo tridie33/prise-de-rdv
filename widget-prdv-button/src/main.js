@@ -8,13 +8,33 @@ if( document.readyState !== 'loading' ) {
     });
 }
 
+var prdv_mna_env = process.env.PRDV_MNA_ENV;
+var prdv_mna_hostname = "https://rdv-cfa.apprentissage.beta.gouv.fr";
+switch (prdv_mna_env) {
+    case "production":
+        prdv_mna_hostname = "https://rdv-cfa.apprentissage.beta.gouv.fr"
+    break;
+    case "recette":
+        prdv_mna_hostname = "https://rdv-cfa-recette.apprentissage.beta.gouv.fr"
+    break;
+    case "local":
+        prdv_mna_hostname - "http://localhost"
+    break;
+
+    default:
+        prdv_mna_hostname = "https://rdv-cfa.apprentissage.beta.gouv.fr"
+    break;
+}
+
 function myInitCode() {
     if (document.getElementById("prdv-button") !== null) {
         var urlHost = window.location.href;
         var valueCentreId = null;
         var valueTrainingId = null;
         var fromWhom = null;
-        if (urlHost === 'http://localhost/fakeHost/ps') {
+        
+
+        if (urlHost === prdv_mna_hostname+'/fakeHost/ps') {
             /*
             var getElementByIdForPs = document.getElementById('domPSCentreId');
             if (getElementByIdForPs !== null) {
@@ -30,7 +50,7 @@ function myInitCode() {
             fromWhom = "Parcoursup";
         }
 
-        if (urlHost === 'http://localhost/fakeHost/lba') {
+        if (urlHost === prdv_mna_hostname+'/fakeHost/lba') {
             /*
             var getElementByIdForLBA = document.getElementById('domLBACentreId');
             if (getElementByIdForLBA !== null) {
@@ -50,7 +70,7 @@ function myInitCode() {
         var link = document.createTextNode("Prendre rendez-vous");
         a.appendChild(link);
         a.title = "Prendre rendez-vous";
-        a.href = `http://localhost/form?fromWhom=${fromWhom}&centreId=${valueCentreId}&trainingId=${valueTrainingId}`;
+        a.href = `${prdv_mna_hostname}/form?fromWhom=${fromWhom}&centreId=${valueCentreId}&trainingId=${valueTrainingId}`;
 
         var button = document.createElement('button');
         button.appendChild(a);

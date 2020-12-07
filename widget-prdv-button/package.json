@@ -2,7 +2,9 @@
   "name": "widget-prdv-button",
   "version": "1.0.0",
   "scripts": {
-    "build": "rollup --config"
+    "build": "BUNDLE_ENV=local rollup --config",
+    "build:recette": "BUNDLE_ENV=recette rollup --config",
+    "build:production": "BUNDLE_ENV=production rollup --config"
   },
   "devDependencies": {
     "@babel/core": "^7.12.7",
@@ -11,6 +13,7 @@
     "rollup": "^2.33.3",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-inject-process-env": "^1.3.1",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-terser": "^7.0.2"
   }
