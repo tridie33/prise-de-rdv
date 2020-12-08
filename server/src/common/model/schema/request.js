@@ -28,7 +28,12 @@ const requestSchema = {
   referrer: {
     type: String,
     default: null,
-    description: "L'url du site parent ou simplement le nom",
+    description: "Le nom du site parent",
+  },
+  referrer_link: {
+    type: String,
+    default: null,
+    description: "L'url du site parent",
   },
   date_de_reponse_cfa: {
     type: Date,

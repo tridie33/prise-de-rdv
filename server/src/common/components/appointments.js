@@ -16,8 +16,6 @@ module.exports = async () => {
       return appointment.toObject();
     },
     updateStatusReceived: async (appointmentId) => {
-      console.log("YOUHOU");
-      //TODO refactor remove findById
       const appointment = await Request.findById(appointmentId);
       appointment.email_premiere_demande_candidat_recu = true;
       appointment.email_premiere_demande_cfa_recu = true;
