@@ -1,6 +1,4 @@
 #!/bin/sh
-echo "Current Working Directory: $PWD"
-echo "GIT_DIR=$GIT_DIR"
 # Needed to avoid "not a git repositoty" error
 unset GIT_DIR
 
