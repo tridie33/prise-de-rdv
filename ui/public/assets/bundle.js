@@ -17,7 +17,7 @@ if (document.readyState !== 'loading') {
   myInitCode();
 } else {
   document.addEventListener('DOMContentLoaded', function () {
-    console.log('document was not ready, place code here');
+    console.log('document was not ready, place code here !');
     myInitCode();
   });
 }
