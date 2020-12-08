@@ -31,8 +31,8 @@ function myInitCode() {
         var urlHost = window.location.href;
         var valueCentreId = null;
         var valueTrainingId = null;
-        var fromWhom = null;
-        
+        var fromReferrer = null;
+
 
         if (urlHost === prdv_mna_hostname+'/fakeHost/ps') {
             /*
@@ -47,7 +47,7 @@ function myInitCode() {
              */
             valueCentreId = "0831760M";
             valueTrainingId = "13531545";
-            fromWhom = "Parcoursup";
+            fromReferrer = "Parcoursup";
         }
 
         if (urlHost === prdv_mna_hostname+'/fakeHost/lba') {
@@ -63,14 +63,14 @@ function myInitCode() {
              */
             valueCentreId = "0831760M";
             valueTrainingId = "13531545";
-            fromWhom = "LBA";
+            fromReferrer = "LBA";
         }
 
         var a = document.createElement('a');
         var link = document.createTextNode("Prendre rendez-vous");
         a.appendChild(link);
         a.title = "Prendre rendez-vous";
-        a.href = `${prdv_mna_hostname}/form?fromWhom=${fromWhom}&centreId=${valueCentreId}&trainingId=${valueTrainingId}`;
+        a.href = `${prdv_mna_hostname}/form?fromReferrer=${fromReferrer}&centreId=${valueCentreId}&trainingId=${valueTrainingId}`;
 
         var button = document.createElement('button');
         button.appendChild(a);

@@ -10,7 +10,7 @@ export const FormCandidatOld = (props) => {
   const [
     urlParamCentreId,
     urlParamTrainingId,
-    urlParamFromWhom,
+    urlParamFromReferrer,
     centreDataFromApiCatalog,
     trainingDataFromApiCatalog,
   ] = useCustomHook(props);
@@ -31,7 +31,7 @@ export const FormCandidatOld = (props) => {
         ...values,
         centreId: urlParamCentreId,
         trainingId: urlParamTrainingId,
-        referrer: urlParamFromWhom,
+        referrer: urlParamFromReferrer,
         role: "candidat",
       };
       let { newRequest } = await _post("/api/demande", values);

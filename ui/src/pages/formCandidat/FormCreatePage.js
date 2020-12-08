@@ -22,7 +22,7 @@ const queryString = require("query-string");
 
 export const FormCreatePage = (props) => {
   let history = useHistory();
-  const { centreId: paramsCentreId, trainingId: paramsTrainingId, fromWhom: paramsReferrer } = queryString.parse(
+  const { centreId: paramsCentreId, trainingId: paramsTrainingId, fromReferrer: paramsReferrer } = queryString.parse(
     props.location.search
   );
   const [data, loading] = useFetch(
