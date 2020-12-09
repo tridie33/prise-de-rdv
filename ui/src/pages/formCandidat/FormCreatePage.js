@@ -73,11 +73,11 @@ export const FormCreatePage = (props) => {
         <FormBodyLayout>
           <Formik
             initialValues={{
-              firstname: "Pacey",
-              lastname: "Led",
-              phone: "12345678",
-              email: "pacey@led.com",
-              motivations: "Take it easy",
+              firstname: "",
+              lastname: "",
+              phone: "",
+              email: "",
+              motivations: "",
             }}
             validationSchema={Yup.object().shape({
               firstname: Yup.string().required("Requis"),
