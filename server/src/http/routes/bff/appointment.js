@@ -13,10 +13,17 @@ const userRequestSchema = Joi.object({
   email: Joi.string().required(),
   role: Joi.string().required(),
 
-  motivations: Joi.string().default(""),
+  motivations: Joi.string().required(),
   centreId: Joi.string().required(),
   trainingId: Joi.string().required(),
   referrer: Joi.string().required(),
+});
+
+const appointmentItemSchema = Joi.object({
+  appointmentId: Joi.string().required(),
+  cfaAPrisContact: Joi.boolean().optional(),
+  champsLibreStatut: Joi.string().optional().allow(""),
+  champsLibreCommentaires: Joi.string().optional().allow(""),
 });
 
 module.exports = ({ users, appointements, mailer }) => {
@@ -42,6 +49,17 @@ module.exports = ({ users, appointements, mailer }) => {
       } else {
         res.json({ message: `no data centre or no data training` });
       }
+    })
+  );
+
+  router.post(
+    "/edit",
+    tryCatch(async (req, res) => {
+      await appointmentItemSchema.validateAsync(req.body, { abortEarly: false });
+      const paramsAppointementItem = req.body;
+
+      await appointements.updateAppointment(paramsAppointementItem.appointmentId, paramsAppointementItem);
+      res.json({});
     })
   );
 
@@ -120,6 +138,7 @@ module.exports = ({ users, appointements, mailer }) => {
           },
         }
       );
+
       // Envoi d'un mail au cfa
       //TODO: Récupérer email du cfa depuis Api Catalogue ou flux S.
       await mailer.sendEmail(

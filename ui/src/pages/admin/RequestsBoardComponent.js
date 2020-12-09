@@ -1,111 +1,35 @@
-import { Button, Card, Form, Grid, Icon, Table, Text } from "tabler-react";
+import { Card, Grid, Table } from "tabler-react";
 import React from "react";
-const moment = require("moment");
-
-const OpenedStatus = (props) => {
-  const styleOpenedStatusCandidat = props.openedCandidat ? "bg-success" : "bg-error";
-  const styleOpenedStatusCfa = props.openedCfa ? "bg-success" : "bg-error";
-  return (
-    <div>
-      <React.Fragment>
-        <span className={"status-icon " + styleOpenedStatusCandidat} /> Candidat
-      </React.Fragment>
-      <br />
-      <React.Fragment>
-        <span className={"status-icon " + styleOpenedStatusCfa} /> CFA
-      </React.Fragment>
-    </div>
-  );
-};
+import { AppointmentItemList } from "./AppointmentItemList";
 
 export const RequestsBoardComponent = (props) => {
-  const rowBuilder = (request) => {
-    return {
-      key: request._id,
-      item: [
-        {
-          content: (
-            <Text RootComponent="span" muted>
-              {request._id}
-            </Text>
-          ),
-        },
-        { content: moment.parseZone(request.created_at).format("DD/MM/YYYY HH:mm:ss") },
-        { content: `${request.candidat_id}` },
-        { content: `${request.formation_id}` },
-        {
-          content: (
-            <OpenedStatus
-              openedCandidat={request.email_premiere_demande_candidat_recu}
-              openedCfa={request.email_premiere_demande_cfa_recu}
-            />
-          ),
-        },
-        {
-          content: (
-            <OpenedStatus
-              openedCandidat={request.email_premiere_demande_candidat_ouvert}
-              openedCfa={request.email_premiere_demande_cfa_ouvert}
-            />
-          ),
-        },
-        {
-          content: (
-            <Text RootComponent="span">
-              {request.cfa_pris_contact_candidat ? (
-                <Icon prefix="fe" name="fe fe-thumbs-up" />
-              ) : (
-                <Icon prefix="fe" name="fe fe-thumbs-down" />
-              )}
-            </Text>
-          ),
-        },
-        { content: `${request.referrer}` },
-        {
-          content: (
-            <Form.Textarea type="text" disabled>
-              {request.motivations}
-            </Form.Textarea>
-          ),
-        },
-        { content: <Form.Textarea type="text" disabled /> },
-        { content: <Form.Textarea type="text" disabled /> },
-        { content: "" },
-        {
-          content: (
-            <Button className={"btn btn-primary ml-auto"} disabled>
-              Editer
-            </Button>
-          ),
-        },
-      ],
-    };
-  };
-
   return (
     <Grid.Row>
       <Grid.Col width={12}>
         <Card title="Demandes">
-          <Table
-            responsive
-            className="card-table table-vcenter text-nowrap"
-            headerItems={[
-              { content: "ID", className: "w-1" },
-              { content: "Date" },
-              { content: "Candidat" },
-              { content: "CFA" },
-              { content: "Réception" },
-              { content: "Ouverture" },
-              { content: "Prise de contact" },
-              { content: "Site de provenance" },
-              { content: "Motivations du candidat" },
-              { content: "Champs libre statut" },
-              { content: "Champs libre commentaires" },
-              { content: "" },
-              { content: "" },
-            ]}
-            bodyItems={props.requests.map((request) => rowBuilder(request))}
-          />
+          <Table responsive className="card-table table-vcenter text-nowrap">
+            <Table.Header>
+              <Table.Row>
+                <Table.ColHeader>ID</Table.ColHeader>
+                <Table.ColHeader>Date</Table.ColHeader>
+                <Table.ColHeader>Candidat</Table.ColHeader>
+                <Table.ColHeader>Centre</Table.ColHeader>
+                <Table.ColHeader>Réceptions</Table.ColHeader>
+                <Table.ColHeader>Ouvertures</Table.ColHeader>
+                <Table.ColHeader>Prise de contact</Table.ColHeader>
+                <Table.ColHeader>Site de provenance</Table.ColHeader>
+                <Table.ColHeader>Motivations du candidat</Table.ColHeader>
+                <Table.ColHeader>Champs libre statut</Table.ColHeader>
+                <Table.ColHeader>Champs libre commentaires</Table.ColHeader>
+                <Table.ColHeader>Actions</Table.ColHeader>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {props.requests.map((request, index) => (
+                <AppointmentItemList key={request._id} request={request} index={index} />
+              ))}
+            </Table.Body>
+          </Table>
         </Card>
       </Grid.Col>
     </Grid.Row>

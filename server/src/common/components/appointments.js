@@ -40,6 +40,14 @@ module.exports = async () => {
       retrievedData.email_premiere_demande_cfa_ouvert = true;
       const result = await Request.findOneAndUpdate({ _id: requestId }, retrievedData);
       return result;
+    },
+    updateAppointment: async (requestId, values) => {
+      const retrievedData = await Request.findById(requestId);
+      retrievedData.cfa_pris_contact_candidat = values.cfaAPrisContact;
+      retrievedData.champs_libre_status = values.champsLibreStatut;
+      retrievedData.champs_libre_commentaire = values.champsLibreCommentaires;
+      const result = await Request.findOneAndUpdate({ _id: requestId }, retrievedData);
+      return result;
     }
   };
 };

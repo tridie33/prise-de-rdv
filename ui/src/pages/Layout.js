@@ -14,7 +14,7 @@ export default (props) => {
   return (
     <Site>
       <Site.Header>
-        Prise de Rendez-vous
+        Prise de rendez-vous
         <div className="d-flex order-lg-2 ml-auto">
           <Nav.Item hasSubNav value={auth.sub} icon="user">
             <button className="dropdown-item" onClick={logout}>
