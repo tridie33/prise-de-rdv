@@ -9,7 +9,7 @@ export const FooterComponent = () => {
       <Spacer />
       <Divider />
       <MentionsTypography>
-        Un outil développé par <a href={"beta.gouv.fr"}>beta.gouv.fr</a> - Conditions générales d’utilisation
+        Un outil développé par <a href={"https://beta.gouv.fr/"}>beta.gouv.fr</a> - Conditions générales d’utilisation
       </MentionsTypography>
       <Spacer />
     </FooterLayout>
