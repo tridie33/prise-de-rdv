@@ -59,6 +59,12 @@ export const AppointmentItemList = (props) => {
     await _post("/api/bff/appointment/edit", values);
   };
 
+  const canCelModeEdition = () => {
+    setCfaAPrisContact(props.request.cfa_pris_contact_candidat);
+    setChampsLibreStatut(props.request.champs_libre_status || "");
+    setChampsLibreCommentaires(props.request.champs_libre_commentaire || "");
+  };
+
   const handleOnClick = (event, buttonName) => {
     event.preventDefault();
     switch (buttonName) {
@@ -71,6 +77,7 @@ export const AppointmentItemList = (props) => {
         break;
       case "buttonCancel":
         setShowEditionMode(false);
+        canCelModeEdition();
         break;
       default:
         break;
