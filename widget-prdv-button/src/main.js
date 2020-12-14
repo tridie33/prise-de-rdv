@@ -1,10 +1,10 @@
 if( document.readyState !== 'loading' ) {
     console.log( 'document is already ready, just execute code here' );
-    myInitCode();
+    loaderWidgetPRDV();
 } else {
     document.addEventListener('DOMContentLoaded', function () {
         console.log( 'document was not ready, place code here !' );
-        myInitCode();
+        loaderWidgetPRDV();
     });
 }
 
@@ -12,68 +12,46 @@ var prdv_mna_env = process.env.PRDV_MNA_ENV; // Used by rollup-plugin-inject-pro
 var prdv_mna_hostname = "https://rdv-cfa.apprentissage.beta.gouv.fr";
 switch (prdv_mna_env) {
     case "production":
-        prdv_mna_hostname = "https://rdv-cfa.apprentissage.beta.gouv.fr"
+        prdv_mna_hostname = "https://rdv-cfa.apprentissage.beta.gouv.fr";
     break;
     case "recette":
-        prdv_mna_hostname = "https://rdv-cfa-recette.apprentissage.beta.gouv.fr"
+        prdv_mna_hostname = "https://rdv-cfa-recette.apprentissage.beta.gouv.fr";
     break;
     case "local":
-        prdv_mna_hostname - "http://localhost"
+        prdv_mna_hostname = "http://localhost";
     break;
 
     default:
-        prdv_mna_hostname = "https://rdv-cfa.apprentissage.beta.gouv.fr"
+        prdv_mna_hostname = "https://rdv-cfa.apprentissage.beta.gouv.fr";
     break;
 }
 
-function myInitCode() {
-    if (document.getElementById("prdv-button") !== null) {
-        var urlHost = window.location.href;
-        var valueCentreId = null;
-        var valueTrainingId = null;
-        var fromReferrer = null;
+function loaderWidgetPRDV() {
+    var elements = document.getElementsByClassName('widget-prdv');
+    for(var element of elements ){
+        createWidgetPRDV(element);
+    }
+}
 
-
-        if (urlHost === prdv_mna_hostname+'/fakeHost/ps') {
-            /*
-            var getElementByIdForPs = document.getElementById('domPSCentreId');
-            if (getElementByIdForPs !== null) {
-                valueCentreId = getElementByIdForPs.textContent;
-            }
-            var getElementByTrainingIdForPs = document.getElementById('domPSTrainingId');
-            if (getElementByTrainingIdForPs !== null) {
-                valueTrainingId = getElementByTrainingIdForPs.textContent;
-            }
-             */
-            valueCentreId = "0831760M";
-            valueTrainingId = "13531545";
-            fromReferrer = "Parcoursup";
-        }
-
-        if (urlHost === prdv_mna_hostname+'/fakeHost/lba') {
-            /*
-            var getElementByIdForLBA = document.getElementById('domLBACentreId');
-            if (getElementByIdForLBA !== null) {
-                valueCentreId = getElementByIdForLBA.textContent;
-            }
-            var getElementByTrainingIdForLBA = document.getElementById('domLBATrainingId');
-            if (getElementByTrainingIdForLBA !== null) {
-                valueTrainingId = getElementByTrainingIdForLBA.textContent;
-            }
-             */
-            valueCentreId = "0831760M";
-            valueTrainingId = "13531545";
-            fromReferrer = "LBA";
-        }
+function createWidgetPRDV(element) {
+    if (element !== null) {
+        var fromReferrer = window.location.href;
+        var valueCentreId = element.dataset.prdvCentre !== undefined ? element.dataset.prdvCentre : null;
+        var valueTrainingId = element.dataset.prdvTraining !== undefined ? element.dataset.prdvTraining : null;
+        var valueSiteName = element.dataset.prdvSitename !== undefined ? element.dataset.prdvSitename : window.location.origin;
+        var valueCandidatFirstname = element.dataset.prdvCandidatFirstname !== undefined ? element.dataset.prdvCandidatFirstname : undefined;
+        var valueCandidatLastname = element.dataset.prdvCandidatLastname !== undefined ? element.dataset.prdvCandidatLastname : undefined;
 
         var a = document.createElement('a');
         var link = document.createTextNode("Prendre rendez-vous");
         a.appendChild(link);
         a.title = "Prendre rendez-vous";
-        a.href = `${prdv_mna_hostname}/form?fromReferrer=${fromReferrer}&centreId=${valueCentreId}&trainingId=${valueTrainingId}`;
+        a.href = `${prdv_mna_hostname}/form?fromReferrer=${fromReferrer}&centreId=${valueCentreId}&trainingId=${valueTrainingId}&siteName=${valueSiteName}&candidatFirstname=${valueCandidatFirstname}&candidatLastname=${valueCandidatLastname}`;
 
         var button = document.createElement('button');
         button.appendChild(a);
-        document.getElementById("prdv-button").appendChild(button);
+        element.appendChild(button);
+    } else {
+        console.log("error loading widget PRDV");
     }
-};
+}
