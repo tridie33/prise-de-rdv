@@ -9,9 +9,9 @@ export const FooterComponent = () => {
       <Spacer />
       <Divider />
       <MentionsTypography>
-        Un outil développé par
-        <a href={"http://www.apprentissage.beta.gouv.fr"}>la mission nationale pour l'apprentissage</a> - Conditions
-        générales d’utilisation
+        Un outil développé par{" "}
+        <a href={"https://mission-apprentissage.gitbook.io/general/"}>la mission nationale pour l'apprentissage</a> -
+        Conditions générales d’utilisation
       </MentionsTypography>
       <Spacer />
     </FooterLayout>
