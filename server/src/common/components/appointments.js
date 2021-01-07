@@ -48,6 +48,6 @@ module.exports = async () => {
       retrievedData.champs_libre_commentaire = values.champsLibreCommentaires;
       const result = await Request.findOneAndUpdate({ _id: requestId }, retrievedData);
       return result;
-    }
+    },
   };
 };
