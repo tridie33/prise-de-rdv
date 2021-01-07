@@ -1,9 +1,9 @@
 const express = require("express");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
-const { Request, User } = require("../../../common/model");
+const { Request } = require("../../../common/model");
 const logger = require("../../../common/logger");
 
-module.exports = ({ users }) => {
+module.exports = () => {
   const router = express.Router();
 
   /**
@@ -47,27 +47,6 @@ module.exports = ({ users }) => {
     tryCatch(async ({ body }, res) => {
       const item = body;
       logger.info("Posting new request: ", item);
-
-      // TODO : check user -> if existant get id / if not adding & getting id
-      // Then add Request
-
-      // const
-      // const userFound = User.findOne({ email: body.email });
-      // if(userFound){
-
-      // }
-
-      // Adding or retrieving user
-      const userFound = await users.getUser(body.email);
-      // const userFound = User.findOne({ email: body.email });
-      //   const candidateToAdd = new User({
-      //     email: "j.doe@gmail.com",
-      //     firstname: "John",
-      //     lastname: "Doe",
-      //     phone: "1234567890",
-      //   });
-      //   await candidateToAdd.save();
-      // }
 
       // Adding request
       const request = new Request(body);
