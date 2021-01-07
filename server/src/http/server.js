@@ -15,6 +15,7 @@ const login = require("./routes/auth/login");
 const authentified = require("./routes/auth/authentified");
 const admin = require("./routes/auth/admin");
 const password = require("./routes/auth/password");
+const configRoute = require("./routes/auth/config");
 const stats = require("./routes/bff/stats");
 const appointment = require("./routes/bff/appointment");
 const entity = require("./routes/rest/entity");
@@ -39,6 +40,7 @@ module.exports = async (components) => {
   app.use("/api/login", login(components));
   app.use("/api/authentified", checkJwtToken, authentified());
   app.use("/api/admin", checkJwtToken, adminOnly, admin());
+  app.use("/api/config", checkJwtToken, adminOnly, configRoute());
   app.use("/api/password", password(components));
 
   app.get(
@@ -64,15 +66,6 @@ module.exports = async (components) => {
         healthcheck: {
           mongodb: mongodbStatus,
         },
-      });
-    })
-  );
-
-  app.get(
-    "/api/config",
-    tryCatch(async (req, res) => {
-      return res.json({
-        config: config,
       });
     })
   );
