@@ -1,60 +1,16 @@
 const express = require("express");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
-const { Request } = require("../../../common/model");
+const { Request, User } = require("../../../common/model");
 const logger = require("../../../common/logger");
 
-/**
- * Sample entity route module for GET
- */
-module.exports = () => {
+module.exports = ({ users }) => {
   const router = express.Router();
-
-  /**
-   * Get all formations getRequests /requests GET
-   * */
-  router.get(
-    "/requests",
-    tryCatch(async (req, res) => {
-      let qs = req.query;
-      const query = qs && qs.query ? JSON.parse(qs.query) : {};
-      const page = qs && qs.page ? qs.page : 1;
-      const limit = qs && qs.limit ? parseInt(qs.limit, 50) : 50;
-
-      const allData = await Request.paginate(query, { page, limit });
-      return res.json({
-        requests: allData.docs,
-        pagination: {
-          page: allData.page,
-          resultats_par_page: limit,
-          nombre_de_page: allData.pages,
-          total: allData.total,
-        },
-      });
-    })
-  );
-
-  /**
-   * Get countRequests requests/count GET
-   */
-  router.get(
-    "/requests/count",
-    tryCatch(async (req, res) => {
-      let qs = req.query;
-      const query = qs && qs.query ? JSON.parse(qs.query) : {};
-      const retrievedData = await Request.countDocuments(query);
-      if (retrievedData) {
-        res.json(retrievedData);
-      } else {
-        res.json({ message: `Item doesn't exist` });
-      }
-    })
-  );
 
   /**
    * Get request getRequest /request GET
    */
   router.get(
-    "/request",
+    "/",
     tryCatch(async (req, res) => {
       let qs = req.query;
       const query = qs && qs.query ? JSON.parse(qs.query) : {};
@@ -71,7 +27,7 @@ module.exports = () => {
    * Get request by id getRequestById /request/{id} GET
    */
   router.get(
-    "/request/:id",
+    "/:id",
     tryCatch(async (req, res) => {
       const itemId = req.params.id;
       const retrievedData = await Request.findById(itemId);
@@ -87,13 +43,34 @@ module.exports = () => {
    * Add/Post an item validated by schema createRequest /request POST
    */
   router.post(
-    "/request",
+    "/",
     tryCatch(async ({ body }, res) => {
       const item = body;
-      logger.info("Adding new request: ", item);
+      logger.info("Posting new request: ", item);
 
+      // TODO : check user -> if existant get id / if not adding & getting id
+      // Then add Request
+
+      // const
+      // const userFound = User.findOne({ email: body.email });
+      // if(userFound){
+
+      // }
+
+      // Adding or retrieving user
+      const userFound = await users.getUser(body.email);
+      // const userFound = User.findOne({ email: body.email });
+      //   const candidateToAdd = new User({
+      //     email: "j.doe@gmail.com",
+      //     firstname: "John",
+      //     lastname: "Doe",
+      //     phone: "1234567890",
+      //   });
+      //   await candidateToAdd.save();
+      // }
+
+      // Adding request
       const request = new Request(body);
-
       await request.save();
 
       // return new request
@@ -105,7 +82,7 @@ module.exports = () => {
    * Update an item validated by schema updateRequest request/{id} PUT
    */
   router.put(
-    "/request/:id",
+    "/:id",
     tryCatch(async ({ body, params }, res) => {
       const itemId = params.id;
 
@@ -119,7 +96,7 @@ module.exports = () => {
    * Delete an item by id deleteRequest request/{id} DELETE
    */
   router.delete(
-    "/request/:id",
+    "/:id",
     tryCatch(async ({ params }, res) => {
       const itemId = params.id;
 
