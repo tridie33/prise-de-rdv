@@ -33,7 +33,7 @@ const usersSchema = {
   role: {
     type: String,
     default: null,
-    description: "candidat | cfa | mna",
+    description: "candidat | cfa | administrator",
   },
   isAdmin: {
     type: Boolean,

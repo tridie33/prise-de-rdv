@@ -8,6 +8,8 @@ module.exports = async (users) => {
     email: "h@ack.me",
     role: "candiat",
   });
+  logger.info(`User 'testUser' with password 'password' is successfully created `);
+
   await users.createUser("testAdmin", "password", {
     permissions: { isAdmin: true },
     firstname: "admin",
@@ -16,6 +18,5 @@ module.exports = async (users) => {
     email: "h@ack.me",
     role: "mna",
   });
-  //logger.info(`User 'testUser' with password 'password' is successfully created `);
   logger.info(`User 'testAdmin' with password 'password' and admin is successfully created `);
 };
