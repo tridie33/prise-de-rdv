@@ -18,9 +18,6 @@ const password = require("./routes/auth/password");
 const configRoute = require("./routes/auth/config");
 const stats = require("./routes/bff/stats");
 const appointment = require("./routes/bff/appointment");
-const entity = require("./routes/rest/entity");
-const request = require("./routes/rest/request");
-const requests = require("./routes/rest/requests");
 
 module.exports = async (components) => {
   const { db } = components;
@@ -34,10 +31,6 @@ module.exports = async (components) => {
 
   app.use("/api/bff/appointment", appointment(components));
   app.use("/api/bff/stats", checkJwtToken, adminOnly, stats(components));
-
-  app.use("/api/request", request());
-  app.use("/api/requests", requests());
-  app.use("/api/entity", entity());
 
   app.use("/api/secured", apiKeyAuthMiddleware, secured());
   app.use("/api/login", login(components));
