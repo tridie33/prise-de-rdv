@@ -65,20 +65,20 @@ const requestSchema = {
     default: null,
     description: "La date de la première prise de contact du cfa vers le candidat",
   },
-  email_premiere_demande_candidat_recu: {
+  email_premiere_demande_candidat_envoye: {
     type: Boolean,
     default: false,
-    description: "Le candidat a t'il bien reçu un mail de confirmation suite à sa demande de rappel ?",
+    description: "Envoi du premier mail au candidat",
   },
   email_premiere_demande_candidat_ouvert: {
     type: Boolean,
     default: false,
     description: "Le candidat a t'il ouvert son mail de confirmation ?",
   },
-  email_premiere_demande_cfa_recu: {
+  email_premiere_demande_cfa_envoye: {
     type: Boolean,
     default: false,
-    description: "Le centre a t'il bien reçu le mail de demande de rappel du candidat ?",
+    description: "Envoi du premier mail au cfa",
   },
   email_premiere_demande_cfa_ouvert: {
     type: Boolean,

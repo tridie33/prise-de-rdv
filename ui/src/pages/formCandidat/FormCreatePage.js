@@ -32,9 +32,19 @@ export const FormCreatePage = (props) => {
   function validateEmail(value) {
     let error;
     if (!value) {
-      error = "Required";
+      error = "Adresse email requise";
     } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
       error = "Adresse email invalide";
+    }
+    return error;
+  }
+
+  function validatePhone(value) {
+    let error;
+    if (!value) {
+      error = "Numéro de téléphone requis";
+    } else if (!/^\d{10}$/i.test(value)) {
+      error = "Numéro de téléphone invalide";
     }
     return error;
   }
@@ -46,7 +56,6 @@ export const FormCreatePage = (props) => {
         centreId: paramsCentreId,
         trainingId: paramsTrainingId,
         referrer: paramsReferrer,
-        role: "candidat",
       };
       let dataReceived = await _post("/api/bff/appointment/validate", values);
       history.push(`/form/confirm/${dataReceived.appointment._id}`);
@@ -121,7 +130,7 @@ export const FormCreatePage = (props) => {
                     </p>
                   )}
 
-                  <Field name="phone">
+                  <Field name="phone" validate={validatePhone}>
                     {({ field, meta }) => {
                       return (
                         <Input

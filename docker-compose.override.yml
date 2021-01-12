@@ -23,6 +23,30 @@ services:
     environment:
       - PRISE_DE_RDV_ENV=dev
       - PRISE_DE_RDV_LOG_LEVEL=debug
+      # misc
+      - PRISE_DE_RDV_OUTPUT_DIR=.local/output
+      - PRISE_DE_RDV_PUBLIC_URL=http://localhost
+      - PRISE_DE_RDV_API_KEY=12345
+      # API MNA Catalogue
+      - PRISE_DE_RDV_MNA_CATALOG_ENDPOINT=https://r7mayzn08d.execute-api.eu-west-3.amazonaws.com/dev
+      - PRISE_DE_RDV_MNA_API_TOKEN=1234
+      # auth
+      - PRISE_DE_RDV_AUTH_PASSWORD_HASH_ROUNDS=1001
+      - PRISE_DE_RDV_AUTH_USER_JWT_SECRET=1234
+      - PRISE_DE_RDV_AUTH_ACTIVATION_JWT_SECRET=456
+      - PRISE_DE_RDV_AUTH_PASSWORD_JWT_SECRET=789
+      # user
+        ## admin
+      - PRISE_DE_RDV_USERS_DEFAULT_ADMIN_NAME=mna-admin
+      - PRISE_DE_RDV_USERS_DEFAULT_ADMIN_PASSWORD=password
+      - PRISE_DE_RDV_USERS_DEFAULT_ADMIN_ROLE=administrator
+      # smtp
+      - PRISE_DE_RDV_SMTP_HOST=hostSmtp
+      - PRISE_DE_RDV_SMTP_PORT=587
+      - PRISE_DE_RDV_SMTP_AUTH_USER=xxxxx
+      - PRISE_DE_RDV_SMTP_AUTH_PASS=12345
+
+
 
   mongodb:
     ports:

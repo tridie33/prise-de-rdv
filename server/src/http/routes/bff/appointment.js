@@ -4,14 +4,15 @@ const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const path = require("path");
 const Joi = require("joi");
 const Boom = require("boom");
-const config = require("config");
+const config = require("../../../../config/index");
+const { candidat } = require("../../../common/roles");
+const { logger } = require("../../../common/logger");
 
 const userRequestSchema = Joi.object({
   firstname: Joi.string().required(),
   lastname: Joi.string().required(),
   phone: Joi.string().required(),
   email: Joi.string().required(),
-  role: Joi.string().required(),
 
   motivations: Joi.string().required(),
   centreId: Joi.string().required(),
@@ -53,46 +54,39 @@ module.exports = ({ users, appointements, mailer }) => {
   );
 
   router.post(
-    "/edit",
-    tryCatch(async (req, res) => {
-      await appointmentItemSchema.validateAsync(req.body, { abortEarly: false });
-      const paramsAppointementItem = req.body;
-
-      await appointements.updateAppointment(paramsAppointementItem.appointmentId, paramsAppointementItem);
-      res.json({});
-    })
-  );
-
-  router.post(
     "/validate",
     tryCatch(async (req, res) => {
       await userRequestSchema.validateAsync(req.body, { abortEarly: false });
-      const paramsAppointement = req.body;
+      const { firstname, lastname, phone, email, centreId, trainingId, motivations, referrer } = req.body;
 
-      // Création d'un utilisateur pour le candidat
-      const { firstname, lastname, phone, email, role } = paramsAppointement;
-      const createdUser = await users.createUser(email, "NA", {
-        firstname,
-        lastname,
-        phone,
-        email,
-        role,
-      });
-      if (!createdUser) {
-        throw Boom.badRequest("something went wrong during db operation");
+      let createdOrFoundUser = null;
+      let createdAppointement = null;
+
+      // Création / Récupération candidat
+      try {
+        createdOrFoundUser =
+          (await users.getUser(email)) ??
+          (await users.createUser(email, "NA", {
+            firstname,
+            lastname,
+            phone,
+            email,
+            role: candidat,
+          }));
+      } catch (err) {
+        throw Boom.badRequest("something went wrong during candidat retrieval / creation");
       }
 
       // Création d'une demande de rendez-vous
-      const { centreId, trainingId, motivations, referrer } = paramsAppointement;
-      const createdAppointement = await appointements.createAppointment({
-        candidatId: createdUser._id,
+      createdAppointement = await appointements.createAppointment({
+        candidatId: createdOrFoundUser._id,
         centreId,
         trainingId,
         motivations,
         referrer,
       });
       if (!createdAppointement) {
-        throw Boom.badRequest("something went wrong during db operation");
+        throw Boom.badRequest("something went wrong during appointment creation");
       }
 
       // Récupération des données sur le centre, la formation et le candidat pour l'afficher sur le mail de récapitulation.
@@ -106,81 +100,97 @@ module.exports = ({ users, appointements, mailer }) => {
       });
 
       // Envoi d'un mail au candidat
-      await mailer.sendEmail(
-        createdUser.email,
-        `[Mail Candidat ${config.env} Prise de rendez-vous] Nous allons vous rappeler`,
-        getEmailTemplate("mail-candidat"),
-        {
-          appointmentId: createdAppointement._id,
-          user: {
-            firstname: createdUser.firstname,
-            lastname: createdUser.lastname,
-            phone: createdUser.phone,
-          },
-          centre: {
-            name: foundCentre.data.entreprise_raison_sociale,
-            address: foundCentre.data.adresse,
-            postalCode: foundCentre.data.code_postal,
-            email: foundCentre.data.ds_questions_email,
-          },
-          training: {
-            intitule: foundTraining.data.intitule,
-          },
-          appointment: {
-            referrerLink: createdAppointement.referrer_link,
-            referrer: createdAppointement.referrer === "LBA" ? "La Bonne Alternance" : createdAppointement.referrer,
-          },
-          images: {
-            people: `${config.publicUrl}/assets/people.png?raw=true`,
-            school: `${config.publicUrl}/assets/school.png?raw=true`,
-            map: `${config.publicUrl}/assets/map.png?raw=true`,
-            third: `${config.publicUrl}/api/bff/appointment/${createdAppointement._id}/candidat`,
-          },
-        }
-      );
+      try {
+        await mailer.sendEmail(
+          createdOrFoundUser.email,
+          `[Mail Candidat ${config.env} Prise de rendez-vous] Nous allons vous rappeler`,
+          getEmailTemplate("mail-candidat"),
+          {
+            appointmentId: createdAppointement._id,
+            user: {
+              firstname: createdOrFoundUser.firstname,
+              lastname: createdOrFoundUser.lastname,
+              phone: createdOrFoundUser.phone,
+            },
+            centre: {
+              name: foundCentre.data.entreprise_raison_sociale,
+              address: foundCentre.data.adresse,
+              postalCode: foundCentre.data.code_postal,
+              email: foundCentre.data.ds_questions_email,
+            },
+            training: {
+              intitule: foundTraining.data.intitule,
+            },
+            appointment: {
+              referrerLink: createdAppointement.referrer_link,
+              referrer: createdAppointement.referrer === "LBA" ? "La Bonne Alternance" : createdAppointement.referrer,
+            },
+            images: {
+              people: `${config.publicUrl}/assets/people.png?raw=true`,
+              school: `${config.publicUrl}/assets/school.png?raw=true`,
+              map: `${config.publicUrl}/assets/map.png?raw=true`,
+              third: `${config.publicUrl}/api/bff/appointment/${createdAppointement._id}/candidat`,
+            },
+          }
+        );
+      } catch (err) {
+        logger.error(err);
+        throw Boom.badRequest("something went wrong during mailing");
+      }
 
       // Envoi d'un mail au cfa
-      //TODO: Récupérer email du cfa depuis Api Catalogue ou flux S.
-      await mailer.sendEmail(
-        createdUser.email,
-        `[Mail Centre ${config.env} Prise de rendez-vous] Nous allons vous rappeler`,
-        getEmailTemplate("mail-centre"),
-        {
-          appointmentId: createdAppointement._id,
-          user: {
-            firstname: createdUser.firstname,
-            lastname: createdUser.lastname,
-            phone: createdUser.phone,
-          },
-          centre: {
-            name: foundCentre.data.entreprise_raison_sociale,
-            address: foundCentre.data.adresse,
-            postalCode: foundCentre.data.code_postal,
-            email: foundCentre.data.ds_questions_email,
-          },
-          training: {
-            intitule: foundTraining.data.intitule,
-          },
-          appointment: {
-            referrerLink: createdAppointement.referrer_link,
-            referrer: createdAppointement.referrer === "LBA" ? "La Bonne Alternance" : createdAppointement.referrer,
-          },
-          images: {
-            people: `${config.publicUrl}/assets/people.png?raw=true`,
-            school: `${config.publicUrl}/assets/school.png?raw=true`,
-            map: `${config.publicUrl}/assets/map.png?raw=true`,
-            third: `${config.publicUrl}/api/bff/appointment/${createdAppointement._id}/centre`,
-          },
-        }
-      );
+      // TODO: Récupérer email du cfa depuis Api Catalogue ou flux S.
+      // await mailer.sendEmail(
+      //   createdUser.email,
+      //   `[Mail Centre ${config.env} Prise de rendez-vous] Nous allons vous rappeler`,
+      //   getEmailTemplate("mail-centre"),
+      //   {
+      //     appointmentId: createdAppointement._id,
+      //     user: {
+      //       firstname: createdUser.firstname,
+      //       lastname: createdUser.lastname,
+      //       phone: createdUser.phone,
+      //     },
+      //     centre: {
+      //       name: foundCentre.data.entreprise_raison_sociale,
+      //       address: foundCentre.data.adresse,
+      //       postalCode: foundCentre.data.code_postal,
+      //       email: foundCentre.data.ds_questions_email,
+      //     },
+      //     training: {
+      //       intitule: foundTraining.data.intitule,
+      //     },
+      //     appointment: {
+      //       referrerLink: createdAppointement.referrer_link,
+      //       referrer: createdAppointement.referrer === "LBA" ? "La Bonne Alternance" : createdAppointement.referrer,
+      //     },
+      //     images: {
+      //       people: `${config.publicUrl}/assets/people.png?raw=true`,
+      //       school: `${config.publicUrl}/assets/school.png?raw=true`,
+      //       map: `${config.publicUrl}/assets/map.png?raw=true`,
+      //       third: `${config.publicUrl}/api/bff/appointment/${createdAppointement._id}/centre`,
+      //     },
+      //   }
+      // );
 
       // Mise à jour des statuts de la demande
-      await appointements.updateStatusReceived(createdAppointement._id);
+      await appointements.updateStatusMailsReceived(createdAppointement._id);
 
       res.json({
-        user: createdUser,
+        userId: createdOrFoundUser._id,
         appointment: createdAppointement,
       });
+    })
+  );
+
+  router.post(
+    "/edit",
+    tryCatch(async (req, res) => {
+      await appointmentItemSchema.validateAsync(req.body, { abortEarly: false });
+      const paramsAppointementItem = req.body;
+
+      await appointements.updateAppointment(paramsAppointementItem.appointmentId, paramsAppointementItem);
+      res.json({});
     })
   );
 

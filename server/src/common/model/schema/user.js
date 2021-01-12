@@ -33,12 +33,7 @@ const usersSchema = {
   role: {
     type: String,
     default: null,
-    description: "candidat | cfa | mna",
-  },
-  isAdmin: {
-    type: Boolean,
-    default: false,
-    description: "true si l'utilisateur est administrateur",
+    description: "candidat | cfa | administrator",
   },
 };
 module.exports = usersSchema;

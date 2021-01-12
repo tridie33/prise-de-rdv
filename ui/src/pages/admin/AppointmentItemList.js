@@ -92,8 +92,8 @@ export const AppointmentItemList = (props) => {
       <Table.Col>{props.request.formation_id}</Table.Col>
       <Table.Col>
         <OpenedStatus
-          openedCandidat={props.request.email_premiere_demande_candidat_recu}
-          openedCfa={props.request.email_premiere_demande_cfa_recu}
+          openedCandidat={props.request.email_premiere_demande_candidat_envoye}
+          openedCfa={props.request.email_premiere_demande_cfa_envoye}
         />
       </Table.Col>
       <Table.Col>

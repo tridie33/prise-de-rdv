@@ -1,5 +1,5 @@
 const path = require("path");
-const config = require("config");
+const config = require("../../config/index");
 const { emptyDir } = require("fs-extra");
 const { connectToMongo } = require("../../src/common/mongodb");
 
@@ -15,7 +15,7 @@ const connectToMongoForTests = async () => {
 };
 
 module.exports = {
-  connectToMongoForTests,
+  connectToMongoForTests: mongoHolder || connectToMongoForTests,
   cleanAll: () => {
     const models = require("../../src/common/model");
     return Promise.all([emptyDir(testDataDir), ...Object.values(models).map((m) => m.deleteMany())]);

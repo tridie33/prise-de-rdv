@@ -1,5 +1,5 @@
 const assert = require("assert");
-const config = require("config");
+const config = require("../../../config/index");
 const jwt = require("jsonwebtoken");
 const omit = require("lodash").omit;
 const httpTests = require("../../utils/httpTests");
@@ -23,9 +23,7 @@ httpTests(__filename, ({ startServer }) => {
     assert.deepStrictEqual(omit(decoded, ["iat", "exp"]), {
       sub: "user",
       iss: config.appName,
-      permissions: {
-        isAdmin: false,
-      },
+      role: null,
     });
   });
 
