@@ -36,7 +36,7 @@ export const FormRecapPage = () => {
               {data.centre && (
                 <p>
                   Vous souhaitez modifier ou annuler cette demande ? <br />
-                  Envoyez un email à
+                  Envoyez un email à{" "}
                   <u>
                     <a href={`mailto:${data.centre.email}`}>{data.centre.email}</a>
                   </u>
