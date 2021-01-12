@@ -15,10 +15,10 @@ module.exports = async () => {
       await appointment.save();
       return appointment.toObject();
     },
-    updateStatusReceived: async (appointmentId) => {
+    updateStatusMailsReceived: async (appointmentId) => {
       const appointment = await Request.findById(appointmentId);
-      appointment.email_premiere_demande_candidat_recu = true;
-      appointment.email_premiere_demande_cfa_recu = true;
+      appointment.email_premiere_demande_candidat_envoye = true;
+      appointment.email_premiere_demande_cfa_envoye = true;
       const updatedAppointement = await Request.findOneAndUpdate({ _id: appointmentId }, appointment, { new: false });
       return updatedAppointement;
     },
