@@ -56,7 +56,7 @@ export const AppointmentItemList = (props) => {
       champsLibreStatut,
       champsLibreCommentaires,
     };
-    await _post("/api/bff/appointment/edit", values);
+    await _post("/api/appointment/edit", values);
   };
 
   const canCelModeEdition = () => {

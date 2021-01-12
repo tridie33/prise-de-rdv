@@ -15,11 +15,11 @@ module.exports = async () => {
       await appointment.save();
       return appointment.toObject();
     },
-    updateStatusMailsReceived: async (appointmentId) => {
+    updateStatusMailsSend: async (appointmentId) => {
       const appointment = await Request.findById(appointmentId);
       appointment.email_premiere_demande_candidat_envoye = true;
       appointment.email_premiere_demande_cfa_envoye = true;
-      const updatedAppointement = await Request.findOneAndUpdate({ _id: appointmentId }, appointment, { new: false });
+      const updatedAppointement = await Request.findOneAndUpdate({ _id: appointmentId }, appointment, { new: true });
       return updatedAppointement;
     },
     getAppointmentById: async (appointmentId) => {
@@ -32,21 +32,17 @@ module.exports = async () => {
     updateStatusMailOpenedByCandidat: async (requestId) => {
       const retrievedData = await Request.findById(requestId);
       retrievedData.email_premiere_demande_candidat_ouvert = true;
-      const result = await Request.findOneAndUpdate({ _id: requestId }, retrievedData);
+      const result = await Request.findOneAndUpdate({ _id: requestId }, retrievedData, { new: true });
       return result;
     },
     updateStatusMailOpenedByCentre: async (requestId) => {
       const retrievedData = await Request.findById(requestId);
       retrievedData.email_premiere_demande_cfa_ouvert = true;
-      const result = await Request.findOneAndUpdate({ _id: requestId }, retrievedData);
+      const result = await Request.findOneAndUpdate({ _id: requestId }, retrievedData, { new: true });
       return result;
     },
     updateAppointment: async (requestId, values) => {
-      const retrievedData = await Request.findById(requestId);
-      retrievedData.cfa_pris_contact_candidat = values.cfaAPrisContact;
-      retrievedData.champs_libre_status = values.champsLibreStatut;
-      retrievedData.champs_libre_commentaire = values.champsLibreCommentaires;
-      const result = await Request.findOneAndUpdate({ _id: requestId }, retrievedData);
+      const result = await Request.findOneAndUpdate({ _id: requestId }, values, { new: true });
       return result;
     },
   };

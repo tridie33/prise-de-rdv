@@ -27,7 +27,7 @@ const appointmentItemSchema = Joi.object({
   champsLibreCommentaires: Joi.string().optional().allow(""),
 });
 
-module.exports = ({ users, appointements, mailer }) => {
+module.exports = ({ users, appointments, mailer }) => {
   const router = express.Router();
   const catalogueHost = "https://c7a5ujgw35.execute-api.eu-west-3.amazonaws.com/prod";
   const endpointCentre = `${catalogueHost}/etablissement`;
@@ -78,7 +78,7 @@ module.exports = ({ users, appointements, mailer }) => {
       }
 
       // Création d'une demande de rendez-vous
-      createdAppointement = await appointements.createAppointment({
+      createdAppointement = await appointments.createAppointment({
         candidatId: createdOrFoundUser._id,
         centreId,
         trainingId,
@@ -129,7 +129,7 @@ module.exports = ({ users, appointements, mailer }) => {
               people: `${config.publicUrl}/assets/people.png?raw=true`,
               school: `${config.publicUrl}/assets/school.png?raw=true`,
               map: `${config.publicUrl}/assets/map.png?raw=true`,
-              third: `${config.publicUrl}/api/bff/appointment/${createdAppointement._id}/candidat`,
+              third: `${config.publicUrl}/api/appointment/${createdAppointement._id}/candidat`,
             },
           }
         );
@@ -168,13 +168,13 @@ module.exports = ({ users, appointements, mailer }) => {
       //       people: `${config.publicUrl}/assets/people.png?raw=true`,
       //       school: `${config.publicUrl}/assets/school.png?raw=true`,
       //       map: `${config.publicUrl}/assets/map.png?raw=true`,
-      //       third: `${config.publicUrl}/api/bff/appointment/${createdAppointement._id}/centre`,
+      //       third: `${config.publicUrl}/api/appointment/${createdAppointement._id}/centre`,
       //     },
       //   }
       // );
 
       // Mise à jour des statuts de la demande
-      await appointements.updateStatusMailsReceived(createdAppointement._id);
+      await appointments.updateStatusMailsSend(createdAppointement._id);
 
       res.json({
         userId: createdOrFoundUser._id,
@@ -189,7 +189,7 @@ module.exports = ({ users, appointements, mailer }) => {
       await appointmentItemSchema.validateAsync(req.body, { abortEarly: false });
       const paramsAppointementItem = req.body;
 
-      await appointements.updateAppointment(paramsAppointementItem.appointmentId, paramsAppointementItem);
+      await appointments.updateAppointment(paramsAppointementItem.appointmentId, paramsAppointementItem);
       res.json({});
     })
   );
@@ -198,7 +198,7 @@ module.exports = ({ users, appointements, mailer }) => {
     "/context/recap",
     tryCatch(async (req, res) => {
       const paramsAppointmentId = req.query.appointmentId;
-      const foundAppointment = await appointements.getAppointmentById(paramsAppointmentId);
+      const foundAppointment = await appointments.getAppointmentById(paramsAppointmentId);
 
       // Récupération des données sur le centre et le candidat pour l'afficher sur l'écran de récapitulation
       const centreIdFromFoundAppointment = { uai: foundAppointment.etablissement_id };
@@ -224,7 +224,7 @@ module.exports = ({ users, appointements, mailer }) => {
     "/:id/candidat",
     tryCatch(async (req, res) => {
       const itemId = req.params.id;
-      await appointements.updateStatusMailOpenedByCandidat(itemId);
+      await appointments.updateStatusMailOpenedByCandidat(itemId);
       res.json("OK");
     })
   );
@@ -233,7 +233,7 @@ module.exports = ({ users, appointements, mailer }) => {
     "/:id/centre",
     tryCatch(async (req, res) => {
       const itemId = req.params.id;
-      await appointements.updateStatusMailOpenedByCentre(itemId);
+      await appointments.updateStatusMailOpenedByCentre(itemId);
       res.json("OK");
     })
   );
