@@ -6,7 +6,7 @@ import { KpisComponent } from "./KpiContainer";
 import { RequestsBoardComponent } from "./RequestsBoardComponent";
 
 export default () => {
-  const [data, loading] = useFetch("api/entity/requests");
+  const [data, loading] = useFetch("api/request/requests");
   const requests = data === null ? [] : data.requests;
 
   return (
