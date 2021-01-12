@@ -2,7 +2,7 @@ const { Client } = require("@elastic/elasticsearch");
 const ElasticsearchScrollStream = require("elasticsearch-scroll-stream");
 const { transformObject, mergeStreams } = require("../utils/streamUtils");
 const mongoosastic = require("./mongoosastic");
-const config = require("config");
+const config = require("../../../config/index");
 
 const getClientOptions = () => {
   switch (config.env) {

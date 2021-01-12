@@ -1,4 +1,4 @@
-const config = require("config");
+const config = require("../../../config/index");
 const passport = require("passport");
 const { Strategy, ExtractJwt } = require("passport-jwt");
 const compose = require("compose-middleware").compose;

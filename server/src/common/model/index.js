@@ -26,6 +26,11 @@ if (!userModel) {
   userModel = getModel("user", userSchema);
 }
 
+let userEventModel = null;
+if (!userEventModel) {
+  userEventModel = getModel("userEvents", userSchema);
+}
+
 let requestModel = null;
 if (!requestModel) {
   requestModel = getModel("request", requestSchema);
@@ -38,6 +43,7 @@ if (!logModel) {
 
 module.exports = {
   User: userModel,
+  UserEvent: userEventModel,
   Log: logModel,
   Request: requestModel,
 };

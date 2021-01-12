@@ -2,7 +2,7 @@ import { createGlobalState } from "react-hooks-global-state";
 import { subscribeToHttpEvent } from "./httpClient";
 import decodeJWT from "./utils/decodeJWT";
 
-const anonymous = { sub: "anonymous", permissions: {} };
+const anonymous = { sub: "anonymous", role: {} };
 let token = sessionStorage.getItem("prise_de_rdv:token");
 
 const { useGlobalState, getGlobalState, setGlobalState } = createGlobalState({

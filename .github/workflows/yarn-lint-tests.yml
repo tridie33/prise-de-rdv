@@ -1,5 +1,5 @@
 # Worflow pour IC
-name: Yarn CI Server
+name: Yarn Lint & Tests
 
 on: [push]
 
@@ -34,4 +34,4 @@ jobs:
       - name: Run Tests
         run: |
           cd server
-          yarn test
+          docker exec prise_de_rdv_server bash -c "yarn test"

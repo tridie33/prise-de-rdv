@@ -11,6 +11,7 @@ import HomePage from "./pages/HomePage";
 import { SiteParentPage } from "./pages/siteParent/SiteParentPage";
 import { FormRecapPage } from "./pages/formCandidat/FormRecapPage";
 import { FormCreatePage } from "./pages/formCandidat/FormCreatePage";
+import { isUserAdmin } from "./common/utils/rolesUtils";
 
 function PrivateRoute({ children, ...rest }) {
   let [auth] = useAuth();
@@ -25,18 +26,26 @@ function PrivateRoute({ children, ...rest }) {
   );
 }
 
+const AdminRoute = (routeProps) => {
+  const [auth] = useAuth();
+  const isAdmin = isUserAdmin(auth);
+
+  return <PrivateRoute {...routeProps}>{isAdmin ? null : <Redirect to="/" />}</PrivateRoute>;
+};
+
 export default () => {
   let [auth] = useAuth();
+  const isAdmin = isUserAdmin(auth);
 
   return (
     <div className="App">
       <Router>
         <Switch>
           <PrivateRoute exact path="/admin">
-            <Layout>{auth && auth.permissions.isAdmin ? <DashboardPage /> : <LoginPage />}</Layout>
+            <Layout>{auth && isAdmin ? <DashboardPage /> : <LoginPage />}</Layout>
           </PrivateRoute>
           <Route exact path="/">
-            <Layout>{auth && auth.permissions.isAdmin ? <Redirect to="/admin" /> : <HomePage />}</Layout>
+            <Layout>{auth && isAdmin ? <Redirect to="/admin" /> : <HomePage />}</Layout>
           </Route>
           <Route exact path="/login" component={LoginPage} />
           <Route exact path="/reset-password" component={ResetPasswordPage} />

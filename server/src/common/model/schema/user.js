@@ -35,10 +35,5 @@ const usersSchema = {
     default: null,
     description: "candidat | cfa | administrator",
   },
-  isAdmin: {
-    type: Boolean,
-    default: false,
-    description: "true si l'utilisateur est administrateur",
-  },
 };
 module.exports = usersSchema;

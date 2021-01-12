@@ -27,13 +27,11 @@ module.exports = async () => {
     getUserById: async (userId) => await User.findById(userId),
     createUser: async (username, password, options = {}) => {
       const hash = options.hash || sha512Utils.hash(password);
-      const permissions = options.permissions || {};
       const { firstname, lastname, phone, email, role } = options;
 
       const user = new User({
         username,
         password: hash,
-        isAdmin: !!permissions.isAdmin,
         firstname,
         lastname,
         phone,

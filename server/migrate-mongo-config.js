@@ -1,6 +1,7 @@
 const path = require("path");
 // eslint-disable-next-line node/no-unpublished-require
-const appConfig = require("config");
+require("dotenv").config();
+const appConfig = require("./config");
 
 const config = {
   mongodb: {

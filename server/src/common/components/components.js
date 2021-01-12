@@ -2,7 +2,7 @@ const { connectToMongo } = require("../mongodb");
 const createUsers = require("./users");
 const createAppointement = require("./appointments");
 const createMailer = require("../../common/mailer");
-const config = require("config");
+const config = require("../../../config/index");
 
 //Commun à l'API Express et les jobs
 module.exports = async (options = {}) => {
