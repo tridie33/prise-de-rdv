@@ -56,7 +56,6 @@ export const FormCreatePage = (props) => {
         centreId: paramsCentreId,
         trainingId: paramsTrainingId,
         referrer: paramsReferrer,
-        role: "candidat",
       };
       let dataReceived = await _post("/api/bff/appointment/validate", values);
       history.push(`/form/confirm/${dataReceived.appointment._id}`);
