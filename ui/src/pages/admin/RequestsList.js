@@ -22,9 +22,9 @@ export default () => {
                 <Table.ColHeader>created_at</Table.ColHeader>
                 <Table.ColHeader>date_de_reponse_cfa</Table.ColHeader>
                 <Table.ColHeader>email_premiere_demande_candidat_ouvert</Table.ColHeader>
-                <Table.ColHeader>email_premiere_demande_candidat_recu</Table.ColHeader>
+                <Table.ColHeader>email_premiere_demande_candidat_envoye</Table.ColHeader>
                 <Table.ColHeader>email_premiere_demande_cfa_ouvert</Table.ColHeader>
-                <Table.ColHeader>email_premiere_demande_cfa_recu</Table.ColHeader>
+                <Table.ColHeader>email_premiere_demande_cfa_envoye</Table.ColHeader>
                 <Table.ColHeader>etablissement_id</Table.ColHeader>
                 <Table.ColHeader>formation_id</Table.ColHeader>
                 <Table.ColHeader>last_update_at</Table.ColHeader>
@@ -45,9 +45,9 @@ export default () => {
                     <Table.Col>{request.created_at}</Table.Col>
                     <Table.Col>{request.date_de_reponse_cfa}</Table.Col>
                     <Table.Col>{request.email_premiere_demande_candidat_ouvert.toString()}</Table.Col>
-                    <Table.Col>{request.email_premiere_demande_candidat_recu.toString()}</Table.Col>
+                    <Table.Col>{request.email_premiere_demande_candidat_envoye.toString()}</Table.Col>
                     <Table.Col>{request.email_premiere_demande_cfa_ouvert.toString()}</Table.Col>
-                    <Table.Col>{request.email_premiere_demande_cfa_recu.toString()}</Table.Col>
+                    <Table.Col>{request.email_premiere_demande_cfa_envoye.toString()}</Table.Col>
                     <Table.Col>{request.etablissement_id}</Table.Col>
                     <Table.Col>{request.formation_id}</Table.Col>
                     <Table.Col>{request.last_update_at}</Table.Col>
