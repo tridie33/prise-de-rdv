@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { mongooseInstance } = require("../mongodb");
 const { mongoosastic, getElasticInstance } = require("../esClient");
-const { userSchema, requestSchema } = require("../model/schema");
+const { userSchema, requestSchema, widgetParametersSchema } = require("../model/schema");
 
 const getMongoostaticModel = (modelName, schema, instanceMongoose = mongooseInstance) => {
   const Schema = new instanceMongoose.Schema(schema);
@@ -36,6 +36,11 @@ if (!requestModel) {
   requestModel = getModel("request", requestSchema);
 }
 
+let widgetParametersModel = null;
+if (!widgetParametersModel) {
+  widgetParametersModel = getModel("widgetParameters", widgetParametersSchema);
+}
+
 let logModel = null;
 if (!logModel) {
   logModel = getMongooseModel("log");
@@ -44,6 +49,7 @@ if (!logModel) {
 module.exports = {
   User: userModel,
   UserEvent: userEventModel,
+  WidgetParameters: widgetParametersModel,
   Log: logModel,
   Request: requestModel,
 };
