@@ -25,8 +25,8 @@ export const RequestsBoardComponent = (props) => {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {props.requests.map((request, index) => (
-                <AppointmentItemList key={request._id} request={request} index={index} />
+              {props.appointments.map((appointment, index) => (
+                <AppointmentItemList key={appointment._id} appointment={appointment} index={index} />
               ))}
             </Table.Body>
           </Table>

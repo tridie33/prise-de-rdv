@@ -1,6 +1,6 @@
 const express = require("express");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
-const { WidgetParameters } = require("../../../common/model");
+const { WidgetParameter } = require("../../../common/model");
 const logger = require("../../../common/logger");
 const Joi = require("joi");
 
@@ -30,7 +30,7 @@ module.exports = ({ widgetParameters }) => {
       const page = qs && qs.page ? qs.page : 1;
       const limit = qs && qs.limit ? parseInt(qs.limit, 50) : 50;
 
-      const allData = await WidgetParameters.paginate(query, { page, limit });
+      const allData = await WidgetParameter.paginate(query, { page, limit });
       return res.json({
         parameters: allData.docs,
         pagination: {
@@ -51,7 +51,7 @@ module.exports = ({ widgetParameters }) => {
     tryCatch(async (req, res) => {
       let qs = req.query;
       const query = qs && qs.query ? JSON.parse(qs.query) : {};
-      const retrievedData = await WidgetParameters.countDocuments(query);
+      const retrievedData = await WidgetParameter.countDocuments(query);
       if (retrievedData) {
         res.json(retrievedData);
       } else {
@@ -68,7 +68,7 @@ module.exports = ({ widgetParameters }) => {
     tryCatch(async (req, res) => {
       let qs = req.query;
       const query = qs && qs.query ? JSON.parse(qs.query) : {};
-      const retrievedData = await WidgetParameters.findOne(query);
+      const retrievedData = await WidgetParameter.findOne(query);
       if (retrievedData) {
         res.json(retrievedData);
       } else {
@@ -84,7 +84,7 @@ module.exports = ({ widgetParameters }) => {
     "/:id",
     tryCatch(async (req, res) => {
       const itemId = req.params.id;
-      const retrievedData = await WidgetParameters.findById(itemId);
+      const retrievedData = await WidgetParameter.findById(itemId);
       if (retrievedData) {
         res.json(retrievedData);
       } else {

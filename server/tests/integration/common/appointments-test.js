@@ -2,7 +2,7 @@ const assert = require("assert");
 const integrationTests = require("../../utils/integrationTests");
 const appointments = require("../../../src/common/components/appointments");
 const users = require("../../../src/common/components/users");
-const { Request } = require("../../../src/common/model");
+const { Appointment } = require("../../../src/common/model");
 const { candidat } = require("../../../src/common/roles");
 
 integrationTests(__filename, () => {
@@ -13,10 +13,10 @@ integrationTests(__filename, () => {
     const createdCandidat = await createUser("userCandidat", "password", { role: candidat });
 
     const created = await createAppointment({
-      candidatId: createdCandidat._id,
+      candidat_id: createdCandidat._id,
       motivations: "Test Motivation",
-      centreId: "0751475W",
-      trainingId: "45025516",
+      etablissement_id: "0751475W",
+      formation_id: "45025516",
       referrer: "TEST",
     });
     assert.strictEqual(created.motivations, "Test Motivation");
@@ -24,7 +24,7 @@ integrationTests(__filename, () => {
     assert.strictEqual(created.formation_id, "45025516");
     assert.strictEqual(created.referrer, "TEST");
 
-    const foundAppointment = await Request.findOne({
+    const foundAppointment = await Appointment.findOne({
       etablissement_id: "0751475W",
       formation_id: "45025516",
       referrer: "TEST",
@@ -40,8 +40,8 @@ integrationTests(__filename, () => {
     const created = await createAppointment({
       candidatId: createdCandidat._id,
       motivations: "Test Motivation",
-      centreId: "0751475W",
-      trainingId: "45025516",
+      etablissement_id: "0751475W",
+      formation_id: "45025516",
       referrer: "TEST",
     });
 
@@ -60,8 +60,8 @@ integrationTests(__filename, () => {
     const created = await createAppointment({
       candidatId: createdCandidat._id,
       motivations: "Test Motivation",
-      centreId: "0751475W",
-      trainingId: "45025516",
+      etablissement_id: "0751475W",
+      formation_id: "45025516",
       referrer: "TEST",
     });
 
@@ -86,8 +86,8 @@ integrationTests(__filename, () => {
     const created = await createAppointment({
       candidatId: createdCandidat._id,
       motivations: "Test Motivation",
-      centreId: "0751475W",
-      trainingId: "45025516",
+      etablissement_id: "0751475W",
+      formation_id: "45025516",
       referrer: "TEST",
     });
 
@@ -103,8 +103,8 @@ integrationTests(__filename, () => {
     const created = await createAppointment({
       candidatId: createdCandidat._id,
       motivations: "Test Motivation",
-      centreId: "0751475W",
-      trainingId: "45025516",
+      etablissement_id: "0751475W",
+      formation_id: "45025516",
       referrer: "TEST",
     });
 
@@ -120,8 +120,8 @@ integrationTests(__filename, () => {
     const created = await createAppointment({
       candidatId: createdCandidat._id,
       motivations: "Test Motivation",
-      centreId: "0751475W",
-      trainingId: "45025516",
+      etablissement_id: "0751475W",
+      formation_id: "45025516",
       referrer: "TEST",
     });
 

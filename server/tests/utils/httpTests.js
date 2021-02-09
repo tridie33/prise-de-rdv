@@ -3,6 +3,7 @@ const axiosist = require("axiosist");
 const createComponents = require("../../src/common/components/components");
 const { connectToMongoForTests, cleanAll } = require("./testUtils.js");
 const server = require("../../src/http/server");
+const { nockApis } = require("./nockApis");
 
 const startServer = async () => {
   const { db } = await connectToMongoForTests();
@@ -30,6 +31,9 @@ const startServer = async () => {
 
 module.exports = (desc, cb) => {
   describe(desc, function () {
+    beforeEach(async () => {
+      await nockApis();
+    });
     cb({ startServer });
     afterEach(cleanAll);
   });

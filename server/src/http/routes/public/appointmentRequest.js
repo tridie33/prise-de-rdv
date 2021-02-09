@@ -29,26 +29,33 @@ const appointmentItemSchema = Joi.object({
 
 module.exports = ({ users, appointments, mailer }) => {
   const router = express.Router();
-  const catalogueHost = "https://c7a5ujgw35.execute-api.eu-west-3.amazonaws.com/prod";
-  const endpointCentre = `${catalogueHost}/etablissement`;
-  const endpointTraining = `${catalogueHost}/formation`;
 
+  const catalogueHost = config.mnaCatalog.endpoint;
+  const endpointEtablissements = `${catalogueHost}/etablissement`;
+  const endpointFormations = `${catalogueHost}/formation`;
+
+  /**
+   * Route de récupération du contexte des données de la formation
+   * et de l'établissement passé en paramètre
+   */
   router.get(
     "/context/create",
     tryCatch(async (req, res) => {
-      const paramsCentreId = { uai: req.query.centreId };
-      const paramsTrainingId = { educ_nat_code: req.query.trainingId };
+      const paramsEtablissementUai = { uai: req.query.etablissementUai };
+      const paramsFormationId = { educ_nat_code: req.query.formationId };
 
-      const responseCentre = await axios.get(`${endpointCentre}`, { params: { query: paramsCentreId } });
-      const responseTraining = await axios.get(`${endpointTraining}`, { params: { query: paramsTrainingId } });
+      const responseCentre = await axios.get(`${endpointEtablissements}`, {
+        params: { query: paramsEtablissementUai },
+      });
+      const responseTraining = await axios.get(`${endpointFormations}`, { params: { query: paramsFormationId } });
 
       if (responseCentre.data && responseTraining.data) {
         res.json({
-          centre: responseCentre.data,
-          training: responseTraining.data,
+          etablissement: responseCentre.data,
+          formation: responseTraining.data,
         });
       } else {
-        res.json({ message: `no data centre or no data training` });
+        res.json({ message: `no data etablissement or no data formation` });
       }
     })
   );
@@ -79,9 +86,9 @@ module.exports = ({ users, appointments, mailer }) => {
 
       // Création d'une demande de rendez-vous
       createdAppointement = await appointments.createAppointment({
-        candidatId: createdOrFoundUser._id,
-        centreId,
-        trainingId,
+        candidat_id: createdOrFoundUser._id,
+        etablissement_id: centreId,
+        formation_id: trainingId,
         motivations,
         referrer,
       });
@@ -91,11 +98,11 @@ module.exports = ({ users, appointments, mailer }) => {
 
       // Récupération des données sur le centre, la formation et le candidat pour l'afficher sur le mail de récapitulation.
       const centreIdFromFoundAppointment = { uai: createdAppointement.etablissement_id };
-      const foundCentre = await axios.get(`${endpointCentre}`, {
+      const foundCentre = await axios.get(`${endpointEtablissements}`, {
         params: { query: centreIdFromFoundAppointment },
       });
       const trainingIdFromFoundAppointment = { educ_nat_code: createdAppointement.formation_id };
-      const foundTraining = await axios.get(`${endpointTraining}`, {
+      const foundTraining = await axios.get(`${endpointFormations}`, {
         params: { query: trainingIdFromFoundAppointment },
       });
 
@@ -202,7 +209,7 @@ module.exports = ({ users, appointments, mailer }) => {
 
       // Récupération des données sur le centre et le candidat pour l'afficher sur l'écran de récapitulation
       const centreIdFromFoundAppointment = { uai: foundAppointment.etablissement_id };
-      const foundCentre = await axios.get(`${endpointCentre}`, {
+      const foundCentre = await axios.get(`${endpointEtablissements}`, {
         params: { query: centreIdFromFoundAppointment },
       });
       const foundUser = await users.getUserById(foundAppointment.candidat_id);

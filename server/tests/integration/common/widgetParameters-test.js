@@ -1,8 +1,8 @@
 const assert = require("assert");
 const integrationTests = require("../../utils/integrationTests");
 const widgetParameters = require("../../../src/common/components/widgetParameters");
-const { WidgetParameters } = require("../../../src/common/model");
-const { codesReferrersSites } = require("../../../src/common/model/constants");
+const { WidgetParameter } = require("../../../src/common/model");
+const { referrers } = require("../../../src/common/model/constants/referrers");
 const { sampleParameter, sampleUpdateParameter } = require("../../data/samples");
 
 integrationTests(__filename, () => {
@@ -24,16 +24,16 @@ integrationTests(__filename, () => {
     assert.deepStrictEqual(created.formation_intitule, sampleParameter.formation_intitule);
     assert.deepStrictEqual(created.formation_cfd, sampleParameter.formation_cfd);
     assert.deepStrictEqual(created.email_rdv, sampleParameter.email_rdv);
-    assert.deepStrictEqual(created.referrers.includes(codesReferrersSites.LBA), true);
+    assert.deepStrictEqual(created.referrers.includes(referrers.LBA.code), true);
 
     // Check query db
-    const found = await WidgetParameters.findById(created._id);
+    const found = await WidgetParameter.findById(created._id);
     assert.deepStrictEqual(found.etablissement_siret, sampleParameter.etablissement_siret);
     assert.deepStrictEqual(found.etablissement_raison_sociale, sampleParameter.etablissement_raison_sociale);
     assert.deepStrictEqual(found.formation_intitule, sampleParameter.formation_intitule);
     assert.deepStrictEqual(found.formation_cfd, sampleParameter.formation_cfd);
     assert.deepStrictEqual(found.email_rdv, sampleParameter.email_rdv);
-    assert.deepStrictEqual(found.referrers.includes(codesReferrersSites.LBA), true);
+    assert.deepStrictEqual(found.referrers.includes(referrers.LBA.code), true);
   });
 
   it("Permet de supprimer un paramètres de Widget", async () => {
@@ -54,12 +54,12 @@ integrationTests(__filename, () => {
     assert.deepStrictEqual(created.formation_intitule, sampleParameter.formation_intitule);
     assert.deepStrictEqual(created.formation_cfd, sampleParameter.formation_cfd);
     assert.deepStrictEqual(created.email_rdv, sampleParameter.email_rdv);
-    assert.deepStrictEqual(created.referrers.includes(codesReferrersSites.LBA), true);
+    assert.deepStrictEqual(created.referrers.includes(referrers.LBA.code), true);
 
     await deleteParameter(created._id);
 
     // Check deletion
-    const found = await WidgetParameters.findById(created._id);
+    const found = await WidgetParameter.findById(created._id);
     assert.strictEqual(found, null);
   });
 
@@ -81,18 +81,18 @@ integrationTests(__filename, () => {
     assert.deepStrictEqual(created.formation_intitule, sampleParameter.formation_intitule);
     assert.deepStrictEqual(created.formation_cfd, sampleParameter.formation_cfd);
     assert.deepStrictEqual(created.email_rdv, sampleParameter.email_rdv);
-    assert.deepStrictEqual(created.referrers.includes(codesReferrersSites.LBA), true);
+    assert.deepStrictEqual(created.referrers.includes(referrers.LBA.code), true);
 
     await updateParameter(created._id, sampleUpdateParameter);
 
     // Check update
-    const found = await WidgetParameters.findById(created._id);
+    const found = await WidgetParameter.findById(created._id);
     assert.deepStrictEqual(found.etablissement_siret, sampleUpdateParameter.etablissement_siret);
     assert.deepStrictEqual(found.etablissement_raison_sociale, sampleUpdateParameter.etablissement_raison_sociale);
     assert.deepStrictEqual(found.formation_intitule, sampleUpdateParameter.formation_intitule);
     assert.deepStrictEqual(found.formation_cfd, sampleUpdateParameter.formation_cfd);
     assert.deepStrictEqual(found.email_rdv, sampleUpdateParameter.email_rdv);
-    assert.deepStrictEqual(found.referrers.includes(codesReferrersSites.PARCOURSUP), true);
+    assert.deepStrictEqual(found.referrers.includes(referrers.PARCOURSUP.code), true);
   });
 
   it("Permet de vérifier que le widget doit etre visible pour un paramètre valide", async () => {
@@ -113,13 +113,13 @@ integrationTests(__filename, () => {
     assert.deepStrictEqual(created.formation_intitule, sampleParameter.formation_intitule);
     assert.deepStrictEqual(created.formation_cfd, sampleParameter.formation_cfd);
     assert.deepStrictEqual(created.email_rdv, sampleParameter.email_rdv);
-    assert.deepStrictEqual(created.referrers.includes(codesReferrersSites.LBA), true);
+    assert.deepStrictEqual(created.referrers.includes(referrers.LBA.code), true);
 
     // Check update
     const isVisible = await isWidgetVisible({
       etablissement_siret: sampleParameter.etablissement_siret,
       formation_cfd: sampleParameter.formation_cfd,
-      referrer: codesReferrersSites.LBA,
+      referrer: referrers.LBA.code,
     });
     assert.deepStrictEqual(isVisible, true);
   });
@@ -142,7 +142,7 @@ integrationTests(__filename, () => {
     assert.deepStrictEqual(created.formation_intitule, sampleParameter.formation_intitule);
     assert.deepStrictEqual(created.formation_cfd, sampleParameter.formation_cfd);
     assert.deepStrictEqual(created.email_rdv, sampleParameter.email_rdv);
-    assert.deepStrictEqual(created.referrers.includes(codesReferrersSites.LBA), true);
+    assert.deepStrictEqual(created.referrers.includes(referrers.LBA.code), true);
 
     // Check if widget is visible
     const isVisibleForBadReferrer = await isWidgetVisible({
@@ -153,12 +153,12 @@ integrationTests(__filename, () => {
     const isVisibleForBadSiret = await isWidgetVisible({
       etablissement_siret: "BADSIRET",
       formation_cfd: sampleParameter.formation_cfd,
-      referrer: codesReferrersSites.LBA,
+      referrer: referrers.LBA.code,
     });
     const isVisibleForBadCfd = await isWidgetVisible({
       etablissement_siret: sampleParameter.etablissement_siret,
       formation_cfd: "BADCFD",
-      referrer: codesReferrersSites.LBA,
+      referrer: referrers.LBA.code,
     });
 
     assert.deepStrictEqual(isVisibleForBadReferrer, false);

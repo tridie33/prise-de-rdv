@@ -1,4 +1,4 @@
-const requestSchema = {
+const appointmentSchema = {
   candidat_id: {
     type: String,
     default: null,
@@ -97,4 +97,4 @@ const requestSchema = {
   },
 };
 
-module.exports = requestSchema;
+module.exports = appointmentSchema;

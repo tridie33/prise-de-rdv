@@ -1,4 +1,4 @@
-const widgetParametersSchema = {
+const widgetParameterSchema = {
   etablissement_siret: {
     type: String,
     default: null,
@@ -30,4 +30,4 @@ const widgetParametersSchema = {
     description: "Liste des sites autorisés",
   },
 };
-module.exports = widgetParametersSchema;
+module.exports = widgetParameterSchema;

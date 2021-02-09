@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { mongooseInstance } = require("../mongodb");
 const { mongoosastic, getElasticInstance } = require("../esClient");
-const { userSchema, requestSchema, widgetParametersSchema } = require("../model/schema");
+const { userSchema, appointmentSchema, widgetParameterSchema } = require("../model/schema");
 
 const getMongoostaticModel = (modelName, schema, instanceMongoose = mongooseInstance) => {
   const Schema = new instanceMongoose.Schema(schema);
@@ -31,14 +31,14 @@ if (!userEventModel) {
   userEventModel = getModel("userEvents", userSchema);
 }
 
-let requestModel = null;
-if (!requestModel) {
-  requestModel = getModel("request", requestSchema);
+let appointmentModel = null;
+if (!appointmentModel) {
+  appointmentModel = getModel("appointment", appointmentSchema);
 }
 
-let widgetParametersModel = null;
-if (!widgetParametersModel) {
-  widgetParametersModel = getModel("widgetParameters", widgetParametersSchema);
+let widgetParameterModel = null;
+if (!widgetParameterModel) {
+  widgetParameterModel = getModel("widgetParameter", widgetParameterSchema);
 }
 
 let logModel = null;
@@ -49,7 +49,7 @@ if (!logModel) {
 module.exports = {
   User: userModel,
   UserEvent: userEventModel,
-  WidgetParameters: widgetParametersModel,
+  WidgetParameter: widgetParameterModel,
   Log: logModel,
-  Request: requestModel,
+  Appointment: appointmentModel,
 };

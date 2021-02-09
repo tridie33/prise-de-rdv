@@ -11,14 +11,19 @@ const KpiNumber = (props) => {
 };
 
 export const KpisComponent = () => {
-  const [data, loading] = useFetch("api/bff/stats");
+  const [data, loading] = useFetch("api/stats");
 
   return (
     <>
       <Header.H5>Chiffres clés</Header.H5>
       <Grid.Row cards={true}>
         {loading && "Chargement des données..."}
-        {data && <KpiNumber total={data.stats.nbItems} label={data.stats.nbItems > 1 ? "Demandes" : "Demande"} />}
+        {data && (
+          <KpiNumber
+            total={data.stats.appointmentsCount}
+            label={data.stats.appointmentsCount > 1 ? "Demandes de RDV" : "Demande de RDV"}
+          />
+        )}
       </Grid.Row>
     </>
   );

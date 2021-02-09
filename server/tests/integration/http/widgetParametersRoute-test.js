@@ -2,11 +2,11 @@ const assert = require("assert");
 const httpTests = require("../../utils/httpTests");
 const { administrator } = require("../../../src/common/roles");
 const { sampleParameter, sampleUpdateParameter } = require("../../data/samples");
-const { WidgetParameters } = require("../../../src/common/model");
-const { codesReferrersSites } = require("../../../src/common/model/constants");
+const { WidgetParameter } = require("../../../src/common/model");
+const { referrers } = require("../../../src/common/model/constants/referrers");
 
 httpTests(__filename, ({ startServer }) => {
-  it("Vérifie qu'on peut ajouter un parametres de widget en tant qu'admin via la Route", async () => {
+  it("Vérifie qu'on peut consulter la liste des parametres de widget en tant qu'admin via la Route", async () => {
     const { httpClient, createAndLogUser, components } = await startServer();
 
     // Add parameter
@@ -63,16 +63,16 @@ httpTests(__filename, ({ startServer }) => {
     assert.deepStrictEqual(response.data.formation_intitule, sampleParameter.formation_intitule);
     assert.deepStrictEqual(response.data.formation_cfd, sampleParameter.formation_cfd);
     assert.deepStrictEqual(response.data.email_rdv, sampleParameter.email_rdv);
-    assert.deepStrictEqual(response.data.referrers.includes(codesReferrersSites.LBA), true);
+    assert.deepStrictEqual(response.data.referrers.includes(referrers.LBA.code), true);
 
     // Check query db
-    const found = await WidgetParameters.findById(response.data._id);
+    const found = await WidgetParameter.findById(response.data._id);
     assert.deepStrictEqual(found.etablissement_siret, sampleParameter.etablissement_siret);
     assert.deepStrictEqual(found.etablissement_raison_sociale, sampleParameter.etablissement_raison_sociale);
     assert.deepStrictEqual(found.formation_intitule, sampleParameter.formation_intitule);
     assert.deepStrictEqual(found.formation_cfd, sampleParameter.formation_cfd);
     assert.deepStrictEqual(found.email_rdv, sampleParameter.email_rdv);
-    assert.deepStrictEqual(found.referrers.includes(codesReferrersSites.LBA), true);
+    assert.deepStrictEqual(found.referrers.includes(referrers.LBA.code), true);
   });
 
   it("Vérifie qu'on peut récupérer un parametre de widget avec une requete en tant qu'admin via la Route", async () => {
@@ -103,7 +103,7 @@ httpTests(__filename, ({ startServer }) => {
     assert.deepStrictEqual(response.data.formation_intitule, sampleParameter.formation_intitule);
     assert.deepStrictEqual(response.data.formation_cfd, sampleParameter.formation_cfd);
     assert.deepStrictEqual(response.data.email_rdv, sampleParameter.email_rdv);
-    assert.deepStrictEqual(response.data.referrers.includes(codesReferrersSites.LBA), true);
+    assert.deepStrictEqual(response.data.referrers.includes(referrers.LBA.code), true);
   });
 
   it("Vérifie qu'on peut récupérer un parametre de widget par son id en tant qu'admin via la Route", async () => {
@@ -122,7 +122,7 @@ httpTests(__filename, ({ startServer }) => {
     assert.deepStrictEqual(addedResponse.data.formation_intitule, sampleParameter.formation_intitule);
     assert.deepStrictEqual(addedResponse.data.formation_cfd, sampleParameter.formation_cfd);
     assert.deepStrictEqual(addedResponse.data.email_rdv, sampleParameter.email_rdv);
-    assert.deepStrictEqual(addedResponse.data.referrers.includes(codesReferrersSites.LBA), true);
+    assert.deepStrictEqual(addedResponse.data.referrers.includes(referrers.LBA.code), true);
 
     // Check query db
     const getByIdResponse = await httpClient.get(`/api/widget-parameters/${addedResponse.data._id}`, {
@@ -137,7 +137,7 @@ httpTests(__filename, ({ startServer }) => {
     assert.deepStrictEqual(getByIdResponse.data.formation_intitule, sampleParameter.formation_intitule);
     assert.deepStrictEqual(getByIdResponse.data.formation_cfd, sampleParameter.formation_cfd);
     assert.deepStrictEqual(getByIdResponse.data.email_rdv, sampleParameter.email_rdv);
-    assert.deepStrictEqual(getByIdResponse.data.referrers.includes(codesReferrersSites.LBA), true);
+    assert.deepStrictEqual(getByIdResponse.data.referrers.includes(referrers.LBA.code), true);
   });
 
   it("Vérifie qu'on peut mettre à jour un parametre de widget par son id en tant qu'admin via la Route", async () => {
@@ -156,7 +156,7 @@ httpTests(__filename, ({ startServer }) => {
     assert.deepStrictEqual(addedResponse.data.formation_intitule, sampleParameter.formation_intitule);
     assert.deepStrictEqual(addedResponse.data.formation_cfd, sampleParameter.formation_cfd);
     assert.deepStrictEqual(addedResponse.data.email_rdv, sampleParameter.email_rdv);
-    assert.deepStrictEqual(addedResponse.data.referrers.includes(codesReferrersSites.LBA), true);
+    assert.deepStrictEqual(addedResponse.data.referrers.includes(referrers.LBA.code), true);
 
     // Check query db
     const updateResponse = await httpClient.put(
@@ -175,7 +175,7 @@ httpTests(__filename, ({ startServer }) => {
     assert.deepStrictEqual(updateResponse.data.formation_intitule, sampleUpdateParameter.formation_intitule);
     assert.deepStrictEqual(updateResponse.data.formation_cfd, sampleUpdateParameter.formation_cfd);
     assert.deepStrictEqual(updateResponse.data.email_rdv, sampleUpdateParameter.email_rdv);
-    assert.deepStrictEqual(updateResponse.data.referrers.includes(codesReferrersSites.PARCOURSUP), true);
+    assert.deepStrictEqual(updateResponse.data.referrers.includes(referrers.PARCOURSUP.code), true);
   });
 
   it("Vérifie qu'on peut supprimer un parametre de widget par son id en tant qu'admin via la Route", async () => {
@@ -194,7 +194,7 @@ httpTests(__filename, ({ startServer }) => {
     assert.deepStrictEqual(addedResponse.data.formation_intitule, sampleParameter.formation_intitule);
     assert.deepStrictEqual(addedResponse.data.formation_cfd, sampleParameter.formation_cfd);
     assert.deepStrictEqual(addedResponse.data.email_rdv, sampleParameter.email_rdv);
-    assert.deepStrictEqual(addedResponse.data.referrers.includes(codesReferrersSites.LBA), true);
+    assert.deepStrictEqual(addedResponse.data.referrers.includes(referrers.LBA.code), true);
 
     // Check query db
     const deleteResponse = await httpClient.delete(`/api/widget-parameters/${addedResponse.data._id}`, {
@@ -203,7 +203,7 @@ httpTests(__filename, ({ startServer }) => {
     assert.deepStrictEqual(deleteResponse.status, 200);
 
     // Check deletion
-    const found = await WidgetParameters.findById(addedResponse.data._id);
+    const found = await WidgetParameter.findById(addedResponse.data._id);
     assert.strictEqual(found, null);
   });
 });

@@ -21,14 +21,14 @@ services:
       - ./server/config:/app/config
       - prise_de_rdv_server_data:/data
     environment:
-      - PRISE_DE_RDV_ENV=dev
+      - PRISE_DE_RDV_ENV=local
       - PRISE_DE_RDV_LOG_LEVEL=debug
       # misc
       - PRISE_DE_RDV_OUTPUT_DIR=.local/output
       - PRISE_DE_RDV_PUBLIC_URL=http://localhost
       - PRISE_DE_RDV_API_KEY=12345
       # API MNA Catalogue
-      - PRISE_DE_RDV_MNA_CATALOG_ENDPOINT=https://r7mayzn08d.execute-api.eu-west-3.amazonaws.com/dev
+      - PRISE_DE_RDV_MNA_CATALOG_ENDPOINT=https://c7a5ujgw35.execute-api.eu-west-3.amazonaws.com/prod
       - PRISE_DE_RDV_MNA_API_TOKEN=1234
       # auth
       - PRISE_DE_RDV_AUTH_PASSWORD_HASH_ROUNDS=1001

@@ -26,7 +26,7 @@ export const FormCreatePage = (props) => {
     props.location.search
   );
   const [data, loading] = useFetch(
-    `/api/appointment/context/create?centreId=${paramsCentreId}&trainingId=${paramsTrainingId}`
+    `/api/appointment-request/context/create?centreId=${paramsCentreId}&trainingId=${paramsTrainingId}`
   );
 
   function validateEmail(value) {
@@ -57,7 +57,7 @@ export const FormCreatePage = (props) => {
         trainingId: paramsTrainingId,
         referrer: paramsReferrer,
       };
-      let dataReceived = await _post("/api/appointment/validate", values);
+      let dataReceived = await _post("/api/appointment-request/validate", values);
       history.push(`/form/confirm/${dataReceived.appointment._id}`);
     } catch (e) {
       console.error(e);
