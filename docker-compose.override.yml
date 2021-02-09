@@ -36,7 +36,7 @@ services:
       - PRISE_DE_RDV_AUTH_ACTIVATION_JWT_SECRET=456
       - PRISE_DE_RDV_AUTH_PASSWORD_JWT_SECRET=789
       # user
-        ## admin
+      # admin
       - PRISE_DE_RDV_USERS_DEFAULT_ADMIN_NAME=mna-admin
       - PRISE_DE_RDV_USERS_DEFAULT_ADMIN_PASSWORD=password
       - PRISE_DE_RDV_USERS_DEFAULT_ADMIN_ROLE=administrator
@@ -46,35 +46,17 @@ services:
       - PRISE_DE_RDV_SMTP_AUTH_USER=xxxxx
       - PRISE_DE_RDV_SMTP_AUTH_PASS=12345
 
-
-
   mongodb:
     ports:
       - "127.0.0.1:27017:27017"
     volumes:
       - prise_de_rdv_mongodb_data:/data
 
-  elasticsearch:
-    ports:
-      - "127.0.0.1:9200:9200"
-    volumes:
-      - prise_de_rdv_data_elasticsearch:/usr/share/elasticsearch/data
-      - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
-
-  kibana:
-    ports:
-      - "127.0.0.1:5601:5601"
-    volumes:
-      - ./elasticsearch/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
-
   mailhog:
     ports:
       - "127.0.0.1:8025:8025"
 
 volumes:
-  prise_de_rdv_data_elasticsearch:
-    driver: local
-    name: prise_de_rdv_data_elasticsearch
   prise_de_rdv_mongodb_data:
     driver: local
     name: prise_de_rdv_mongodb_data

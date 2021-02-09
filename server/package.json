@@ -27,7 +27,6 @@
     "migration:down": "migrate-mongo down"
   },
   "dependencies": {
-    "@elastic/elasticsearch": "7.6.1",
     "axios": "0.21.0",
     "body-parser": "1.19.0",
     "boom": "7.3.0",
@@ -39,7 +38,6 @@
     "config": "3.3.1",
     "convert-csv-to-json": "0.0.15",
     "ejs": "3.1.5",
-    "elasticsearch-scroll-stream": "1.2.1",
     "env-var": "7.0.0",
     "express": "4.17.1",
     "fs-extra": "9.0.0",
