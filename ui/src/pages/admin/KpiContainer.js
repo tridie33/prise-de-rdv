@@ -11,18 +11,22 @@ const KpiNumber = (props) => {
 };
 
 export const KpisComponent = () => {
-  const [data, loading] = useFetch("api/stats");
+  const [appointmentsCount, loading] = useFetch("/api/appointment/appointments/count");
+  const [parametersCount] = useFetch("/api/widget-parameters/parameters/count");
 
   return (
     <>
       <Header.H5>Chiffres clés</Header.H5>
       <Grid.Row cards={true}>
         {loading && "Chargement des données..."}
-        {data && (
+        {appointmentsCount && (
           <KpiNumber
-            total={data.stats.appointmentsCount}
-            label={data.stats.appointmentsCount > 1 ? "Demandes de RDV" : "Demande de RDV"}
+            total={appointmentsCount.total}
+            label={appointmentsCount.total > 1 ? "Demandes de RDV" : "Demande de RDV"}
           />
+        )}
+        {parametersCount && (
+          <KpiNumber total={parametersCount.total} label={parametersCount.total > 1 ? "Paramétrages" : "Paramétrage"} />
         )}
       </Grid.Row>
     </>

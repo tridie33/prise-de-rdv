@@ -1,7 +1,4 @@
-import {
-  ContactCentreTrainingContainer,
-  ContactCentreTrainingLayout
-} from "../styles";
+import { ContactCentreTrainingContainer, ContactCentreTrainingLayout } from "../styles";
 import React from "react";
 
 export const ContactCentreComponent = (props) => {

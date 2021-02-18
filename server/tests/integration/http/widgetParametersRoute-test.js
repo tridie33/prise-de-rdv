@@ -47,7 +47,7 @@ httpTests(__filename, ({ startServer }) => {
 
     // Check API response
     assert.deepStrictEqual(response.status, 200);
-    assert.deepStrictEqual(response.data, 1);
+    assert.deepStrictEqual(response.data, { total: 1 });
   });
 
   it("Vérifie qu'on peut ajouter un parametre de widget en tant qu'admin via la Route", async () => {

@@ -21,7 +21,7 @@ module.exports = () => {
       const limit = qs && qs.limit ? parseInt(qs.limit, 50) : 50;
 
       const allData = await Appointment.paginate(query, { page, limit });
-      return res.json({
+      return res.send({
         appointments: allData.docs,
         pagination: {
           page: allData.page,
@@ -41,12 +41,9 @@ module.exports = () => {
     tryCatch(async (req, res) => {
       let qs = req.query;
       const query = qs && qs.query ? JSON.parse(qs.query) : {};
-      const retrievedData = await Appointment.countDocuments(query);
-      if (retrievedData) {
-        res.json(retrievedData);
-      } else {
-        res.json({ message: `Item doesn't exist` });
-      }
+      const total = await Appointment.countDocuments(query);
+
+      res.send({ total });
     })
   );
 
@@ -60,9 +57,9 @@ module.exports = () => {
       const query = qs && qs.query ? JSON.parse(qs.query) : {};
       const retrievedData = await Appointment.findOne(query);
       if (retrievedData) {
-        res.json(retrievedData);
+        res.send(retrievedData);
       } else {
-        res.json({ message: `Item doesn't exist` });
+        res.send({ message: `Item doesn't exist` });
       }
     })
   );
@@ -76,9 +73,9 @@ module.exports = () => {
       const itemId = req.params.id;
       const retrievedData = await Appointment.findById(itemId);
       if (retrievedData) {
-        res.json(retrievedData);
+        res.send(retrievedData);
       } else {
-        res.json({ message: `Item ${itemId} doesn't exist` });
+        res.send({ message: `Item ${itemId} doesn't exist` });
       }
     })
   );
@@ -93,7 +90,7 @@ module.exports = () => {
       logger.info("Adding new request: ", item);
       const request = new Appointment(body);
       await request.save();
-      res.json(request);
+      res.send(request);
     })
   );
 
@@ -106,7 +103,7 @@ module.exports = () => {
       const itemId = params.id;
       logger.info("Updating item: ", body);
       const result = await Appointment.findOneAndUpdate({ _id: itemId }, body, { new: true });
-      res.json(result);
+      res.send(result);
     })
   );
 
@@ -118,7 +115,7 @@ module.exports = () => {
     tryCatch(async ({ params }, res) => {
       const itemId = params.id;
       await Appointment.findByIdAndDelete(itemId);
-      res.json({ message: `Item ${itemId} deleted !` });
+      res.send({ message: `Item ${itemId} deleted !` });
     })
   );
 

@@ -31,7 +31,7 @@ module.exports = ({ widgetParameters }) => {
       const limit = qs && qs.limit ? parseInt(qs.limit, 50) : 50;
 
       const allData = await WidgetParameter.paginate(query, { page, limit });
-      return res.json({
+      return res.send({
         parameters: allData.docs,
         pagination: {
           page: allData.page,
@@ -51,12 +51,9 @@ module.exports = ({ widgetParameters }) => {
     tryCatch(async (req, res) => {
       let qs = req.query;
       const query = qs && qs.query ? JSON.parse(qs.query) : {};
-      const retrievedData = await WidgetParameter.countDocuments(query);
-      if (retrievedData) {
-        res.json(retrievedData);
-      } else {
-        res.json({ message: `Item doesn't exist` });
-      }
+      const total = await WidgetParameter.countDocuments(query);
+
+      res.send({ total });
     })
   );
 
@@ -70,9 +67,9 @@ module.exports = ({ widgetParameters }) => {
       const query = qs && qs.query ? JSON.parse(qs.query) : {};
       const retrievedData = await WidgetParameter.findOne(query);
       if (retrievedData) {
-        res.json(retrievedData);
+        res.send(retrievedData);
       } else {
-        res.json({ message: `Item doesn't exist` });
+        res.send({ message: `Item doesn't exist` });
       }
     })
   );
@@ -86,9 +83,9 @@ module.exports = ({ widgetParameters }) => {
       const itemId = req.params.id;
       const retrievedData = await WidgetParameter.findById(itemId);
       if (retrievedData) {
-        res.json(retrievedData);
+        res.send(retrievedData);
       } else {
-        res.json({ message: `Item ${itemId} doesn't exist` });
+        res.send({ message: `Item ${itemId} doesn't exist` });
       }
     })
   );
@@ -102,7 +99,7 @@ module.exports = ({ widgetParameters }) => {
       await widgetParameterSchema.validateAsync(body, { abortEarly: false });
       logger.info("Adding new ACL Rule : ", body);
       const result = await widgetParameters.createParameter(body);
-      res.json(result);
+      res.send(result);
     })
   );
 
@@ -115,7 +112,7 @@ module.exports = ({ widgetParameters }) => {
       await widgetParameterSchema.validateAsync(body, { abortEarly: false });
       logger.info("Updating new item: ", body);
       const result = await widgetParameters.updateParameter(params.id, body);
-      res.json(result);
+      res.send(result);
     })
   );
 
@@ -127,7 +124,7 @@ module.exports = ({ widgetParameters }) => {
     tryCatch(async ({ params }, res) => {
       logger.info("Deleting new item: ", params.id);
       await widgetParameters.deleteParameter(params.id);
-      res.json({ message: `Item ${params.id} deleted !` });
+      res.send({ message: `Item ${params.id} deleted !` });
     })
   );
 

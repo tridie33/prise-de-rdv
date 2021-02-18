@@ -4,6 +4,9 @@ import LoginPage from "./pages/LoginPage";
 import Layout from "./pages/Layout";
 import "tabler-react/dist/Tabler.css";
 import DashboardPage from "./pages/admin/DashboardPage";
+import WidgetParametersPage from "./pages/admin/widgetParameters/pages/MainPage";
+import WidgetParametersEditPage from "./pages/admin/widgetParameters/pages/EditPage";
+import WidgetParametersSearchPage from "./pages/admin/widgetParameters/pages/SearchPage";
 import useAuth from "./common/hooks/useAuth";
 import ResetPasswordPage from "./pages/password/ResetPasswordPage";
 import ForgottenPasswordPage from "./pages/password/ForgottenPasswordPage";
@@ -43,6 +46,15 @@ export default () => {
         <Switch>
           <PrivateRoute exact path="/admin">
             <Layout>{auth && isAdmin ? <DashboardPage /> : <LoginPage />}</Layout>
+          </PrivateRoute>
+          <PrivateRoute exact path="/admin/widget-parameters">
+            <Layout>{auth && isAdmin ? <WidgetParametersPage /> : <LoginPage />}</Layout>
+          </PrivateRoute>
+          <PrivateRoute exact path="/admin/widget-parameters/search">
+            <Layout>{auth && isAdmin ? <WidgetParametersSearchPage /> : <LoginPage />}</Layout>
+          </PrivateRoute>
+          <PrivateRoute exact path="/admin/widget-parameters/edit/:id">
+            <Layout>{auth && isAdmin ? <WidgetParametersEditPage /> : <LoginPage />}</Layout>
           </PrivateRoute>
           <Route exact path="/">
             <Layout>{auth && isAdmin ? <Redirect to="/admin" /> : <HomePage />}</Layout>
