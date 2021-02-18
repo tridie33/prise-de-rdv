@@ -38,9 +38,11 @@ export const ThumbStatusComponent = (props) => {
 
 export const AppointmentItemList = (props) => {
   const [showEditionMode, setShowEditionMode] = useState(false);
-  const [cfaAPrisContact, setCfaAPrisContact] = useState(props.request.cfa_pris_contact_candidat);
-  const [champsLibreStatut, setChampsLibreStatut] = useState(props.request.champs_libre_status || "");
-  const [champsLibreCommentaires, setChampsLibreCommentaires] = useState(props.request.champs_libre_commentaire || "");
+  const [cfaAPrisContact, setCfaAPrisContact] = useState(props.appointment.cfa_pris_contact_candidat);
+  const [champsLibreStatut, setChampsLibreStatut] = useState(props.appointment.champs_libre_status || "");
+  const [champsLibreCommentaires, setChampsLibreCommentaires] = useState(
+    props.appointment.champs_libre_commentaire || ""
+  );
 
   const onToggleIconThumb = (event) => {
     event.preventDefault();
@@ -56,13 +58,13 @@ export const AppointmentItemList = (props) => {
       champsLibreStatut,
       champsLibreCommentaires,
     };
-    await _post("/api/bff/appointment/edit", values);
+    await _post("/api/appointment/edit", values);
   };
 
   const canCelModeEdition = () => {
-    setCfaAPrisContact(props.request.cfa_pris_contact_candidat);
-    setChampsLibreStatut(props.request.champs_libre_status || "");
-    setChampsLibreCommentaires(props.request.champs_libre_commentaire || "");
+    setCfaAPrisContact(props.appointment.cfa_pris_contact_candidat);
+    setChampsLibreStatut(props.appointment.champs_libre_status || "");
+    setChampsLibreCommentaires(props.appointment.champs_libre_commentaire || "");
   };
 
   const handleOnClick = (event, buttonName) => {
@@ -73,7 +75,7 @@ export const AppointmentItemList = (props) => {
         break;
       case "buttonValidate":
         setShowEditionMode(false);
-        editAppointment(props.request._id);
+        editAppointment(props.appointment._id);
         break;
       case "buttonCancel":
         setShowEditionMode(false);
@@ -86,20 +88,20 @@ export const AppointmentItemList = (props) => {
 
   return (
     <Table.Row>
-      <Table.Col>{props.request._id}</Table.Col>
-      <Table.Col>{moment.parseZone(props.request.created_at).format("DD/MM/YYYY HH:mm:ss")}</Table.Col>
-      <Table.Col>{props.request.candidat_id}</Table.Col>
-      <Table.Col>{props.request.formation_id}</Table.Col>
+      <Table.Col>{props.appointment._id}</Table.Col>
+      <Table.Col>{moment.parseZone(props.appointment.created_at).format("DD/MM/YYYY HH:mm:ss")}</Table.Col>
+      <Table.Col>{props.appointment.candidat_id}</Table.Col>
+      <Table.Col>{props.appointment.formation_id}</Table.Col>
       <Table.Col>
         <OpenedStatus
-          openedCandidat={props.request.email_premiere_demande_candidat_envoye}
-          openedCfa={props.request.email_premiere_demande_cfa_envoye}
+          openedCandidat={props.appointment.email_premiere_demande_candidat_envoye}
+          openedCfa={props.appointment.email_premiere_demande_cfa_envoye}
         />
       </Table.Col>
       <Table.Col>
         <OpenedStatus
-          openedCandidat={props.request.email_premiere_demande_candidat_ouvert}
-          openedCfa={props.request.email_premiere_demande_cfa_ouvert}
+          openedCandidat={props.appointment.email_premiere_demande_candidat_ouvert}
+          openedCfa={props.appointment.email_premiere_demande_cfa_ouvert}
         />
       </Table.Col>
       <Table.Col>
@@ -111,12 +113,12 @@ export const AppointmentItemList = (props) => {
       </Table.Col>
       <Table.Col>
         <ReferrerLayout>
-          <span>{props.request.referrer}</span>
+          <span>{props.appointment.referrer}</span>
         </ReferrerLayout>
       </Table.Col>
       <Table.Col>
         <Textarea type="text" disabled>
-          {props.request.motivations}
+          {props.appointment.motivations}
         </Textarea>
       </Table.Col>
       <Table.Col>

@@ -1,9 +1,11 @@
 const logSchema = require("./log");
 const userSchema = require("./user");
-const requestSchema = require("./request");
+const appointmentSchema = require("./appointment");
+const widgetParameterSchema = require("./widgetParameter");
 
 module.exports = {
   logSchema,
   userSchema,
-  requestSchema,
+  appointmentSchema,
+  widgetParameterSchema,
 };

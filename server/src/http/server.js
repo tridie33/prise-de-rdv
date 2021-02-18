@@ -14,11 +14,12 @@ const secured = require("./routes/auth/secured");
 const login = require("./routes/auth/login");
 const authentified = require("./routes/auth/authentified");
 const admin = require("./routes/admin/admin");
-const requestRoute = require("./routes/admin/request");
+const appointmentRoute = require("./routes/admin/appointment");
+const appointmentRequestRoute = require("./routes/public/appointmentRequest");
 const password = require("./routes/auth/password");
 const configRoute = require("./routes/auth/config");
-const stats = require("./routes/bff/stats");
-const appointment = require("./routes/bff/appointment");
+const widgetParameterRoute = require("./routes/admin/widgetParameter");
+
 const { administrator } = require("./../common/roles");
 
 module.exports = async (components) => {
@@ -31,17 +32,19 @@ module.exports = async (components) => {
   app.use(corsMiddleware());
   app.use(logMiddleware());
 
-  app.use("/api/bff/appointment", appointment(components));
-  app.use("/api/bff/stats", checkJwtToken, adminOnly, stats(components));
-
+  // Auth routes
   app.use("/api/login", login(components));
   app.use("/api/password", password(components));
-
   app.use("/api/authentified", checkJwtToken, authentified());
   app.use("/api/secured", apiKeyAuthMiddleware, secured());
   app.use("/api/admin", checkJwtToken, adminOnly, admin());
-  app.use("/api/request", checkJwtToken, adminOnly, requestRoute());
 
+  // Logic route
+  app.use("/api/appointment", checkJwtToken, adminOnly, appointmentRoute());
+  app.use("/api/appointment-request", appointmentRequestRoute(components));
+  app.use("/api/widget-parameters", checkJwtToken, adminOnly, widgetParameterRoute(components));
+
+  // Config route
   app.use("/api/config", checkJwtToken, adminOnly, configRoute());
 
   app.get(

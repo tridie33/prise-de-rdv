@@ -1,6 +1,6 @@
 const express = require("express");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
-const { Request } = require("../../../common/model");
+const { Appointment } = require("../../../common/model");
 const logger = require("../../../common/logger");
 
 /**
@@ -13,16 +13,16 @@ module.exports = () => {
    * Get all formations getRequests /requests GET
    * */
   router.get(
-    "/requests",
+    "/appointments",
     tryCatch(async (req, res) => {
       let qs = req.query;
       const query = qs && qs.query ? JSON.parse(qs.query) : {};
       const page = qs && qs.page ? qs.page : 1;
       const limit = qs && qs.limit ? parseInt(qs.limit, 50) : 50;
 
-      const allData = await Request.paginate(query, { page, limit });
-      return res.json({
-        requests: allData.docs,
+      const allData = await Appointment.paginate(query, { page, limit });
+      return res.send({
+        appointments: allData.docs,
         pagination: {
           page: allData.page,
           resultats_par_page: limit,
@@ -37,16 +37,13 @@ module.exports = () => {
    * Get countRequests requests/count GET
    */
   router.get(
-    "/requests/count",
+    "/appointments/count",
     tryCatch(async (req, res) => {
       let qs = req.query;
       const query = qs && qs.query ? JSON.parse(qs.query) : {};
-      const retrievedData = await Request.countDocuments(query);
-      if (retrievedData) {
-        res.json(retrievedData);
-      } else {
-        res.json({ message: `Item doesn't exist` });
-      }
+      const total = await Appointment.countDocuments(query);
+
+      res.send({ total });
     })
   );
 
@@ -58,11 +55,11 @@ module.exports = () => {
     tryCatch(async (req, res) => {
       let qs = req.query;
       const query = qs && qs.query ? JSON.parse(qs.query) : {};
-      const retrievedData = await Request.findOne(query);
+      const retrievedData = await Appointment.findOne(query);
       if (retrievedData) {
-        res.json(retrievedData);
+        res.send(retrievedData);
       } else {
-        res.json({ message: `Item doesn't exist` });
+        res.send({ message: `Item doesn't exist` });
       }
     })
   );
@@ -74,11 +71,11 @@ module.exports = () => {
     "/:id",
     tryCatch(async (req, res) => {
       const itemId = req.params.id;
-      const retrievedData = await Request.findById(itemId);
+      const retrievedData = await Appointment.findById(itemId);
       if (retrievedData) {
-        res.json(retrievedData);
+        res.send(retrievedData);
       } else {
-        res.json({ message: `Item ${itemId} doesn't exist` });
+        res.send({ message: `Item ${itemId} doesn't exist` });
       }
     })
   );
@@ -91,13 +88,9 @@ module.exports = () => {
     tryCatch(async ({ body }, res) => {
       const item = body;
       logger.info("Adding new request: ", item);
-
-      const request = new Request(body);
-
+      const request = new Appointment(body);
       await request.save();
-
-      // return new request
-      res.json(request);
+      res.send(request);
     })
   );
 
@@ -108,10 +101,9 @@ module.exports = () => {
     "/:id",
     tryCatch(async ({ body, params }, res) => {
       const itemId = params.id;
-
-      logger.info("Updating new item: ", body);
-      const result = await Request.findOneAndUpdate({ _id: itemId }, body, { new: true });
-      res.json(result);
+      logger.info("Updating item: ", body);
+      const result = await Appointment.findOneAndUpdate({ _id: itemId }, body, { new: true });
+      res.send(result);
     })
   );
 
@@ -122,9 +114,8 @@ module.exports = () => {
     "/:id",
     tryCatch(async ({ params }, res) => {
       const itemId = params.id;
-
-      await Request.deleteOne({ id: itemId });
-      res.json({ message: `Item ${itemId} deleted !` });
+      await Appointment.findByIdAndDelete(itemId);
+      res.send({ message: `Item ${itemId} deleted !` });
     })
   );
 

@@ -7,7 +7,7 @@ import { useFetch } from "../../common/hooks/useFetch";
 
 export const FormRecapPage = () => {
   const { id: appointmentId } = useParams();
-  const [data, loading] = useFetch(`/api/bff/appointment/context/recap?appointmentId=${appointmentId}`);
+  const [data, loading] = useFetch(`/api/appointment-request/context/recap?appointmentId=${appointmentId}`);
 
   return (
     <FormLayoutComponent>
