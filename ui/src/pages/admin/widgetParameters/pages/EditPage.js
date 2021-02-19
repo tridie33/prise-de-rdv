@@ -182,9 +182,7 @@ export default () => {
 
                           return (
                             <TableRowHover key={formation._id}>
-                              <Table.Col>
-                                {formation.etablissement_formateur_type} - {formation.intitule_court}
-                              </Table.Col>
+                              <Table.Col>{formation.intitule_long}</Table.Col>
                               <Table.Col>{formation.cfd}</Table.Col>
                               <Table.Col>{formation.code_postal}</Table.Col>
                               <Table.Col>{formation.localite}</Table.Col>
