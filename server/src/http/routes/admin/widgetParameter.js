@@ -1,8 +1,8 @@
 const express = require("express");
+const Joi = require("joi");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const { WidgetParameter } = require("../../../common/model");
 const logger = require("../../../common/logger");
-const Joi = require("joi");
 
 const widgetParameterSchema = Joi.object({
   etablissement_siret: Joi.string().required(),

@@ -6,6 +6,7 @@ import * as emailValidator from "email-validator";
 import { _get, _post, _put } from "../../../../common/httpClient";
 import { REFERER } from "../constants";
 import EtablissementComponent from "../components/EtablissementComponent";
+import { TableRowHover } from "../../styles";
 
 export default () => {
   const { id } = useParams();
@@ -24,9 +25,9 @@ export default () => {
 
         const [catalogueResponse, parametersResponse] = await Promise.all([
           fetch(
-            `https://catalogue-recette.apprentissage.beta.gouv.fr/api/v1/entity/formations2021?query={"etablissement_formateur_siret":"${id}"}`
+            `https://catalogue-recette.apprentissage.beta.gouv.fr/api/v1/entity/formations2021?query={"etablissement_formateur_siret":"${id}"}&page=1&limit=500`
           ),
-          _get(`/api/widget-parameters/parameters?query={"etablissement_siret":"${id}"}`),
+          getParameters(id),
         ]);
 
         const catalogueResult = await catalogueResponse.json();
@@ -70,6 +71,13 @@ export default () => {
 
     fetchData();
   }, [id]);
+
+  /**
+   * @description Returns all parameters from given sirent.
+   * @param {String} id
+   * @returns {Promise<*>}
+   */
+  const getParameters = (id) => _get(`/api/widget-parameters/parameters?query={"etablissement_siret":"${id}"}`);
 
   /**
    * @description Toggles checkboxes.
@@ -119,7 +127,7 @@ export default () => {
     const body = {
       etablissement_siret: formation.etablissement_formateur_siret,
       etablissement_raison_sociale: formation.etablissement_formateur_entreprise_raison_sociale,
-      formation_intitule: formation.etablissement_formateur_entreprise_raison_sociale,
+      formation_intitule: formation.intitule_long,
       formation_cfd: formation.cfd,
       email_rdv: emailRdv,
       referrers: permissions[formation.cfd].filter((item) => item.checked).map((item) => item.referrerId),
@@ -131,6 +139,10 @@ export default () => {
     } else {
       await _post(`/api/widget-parameters`, body);
     }
+
+    // Refresh data
+    const parametersResponse = await getParameters(id);
+    setParametersResult(parametersResponse);
 
     toast.success("Configuration enregistrée avec succès.");
   };
@@ -169,8 +181,10 @@ export default () => {
                           );
 
                           return (
-                            <Table.Row key={formation._id}>
-                              <Table.Col>{formation.intitule_court}</Table.Col>
+                            <TableRowHover key={formation._id}>
+                              <Table.Col>
+                                {formation.etablissement_formateur_type} - {formation.intitule_court}
+                              </Table.Col>
                               <Table.Col>{formation.cfd}</Table.Col>
                               <Table.Col>{formation.code_postal}</Table.Col>
                               <Table.Col>{formation.localite}</Table.Col>
@@ -207,7 +221,7 @@ export default () => {
                                   <Icon name="save" className="text-white" />
                                 </Button>
                               </Table.Col>
-                            </Table.Row>
+                            </TableRowHover>
                           );
                         })}
                       </Table.Body>

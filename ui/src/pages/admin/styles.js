@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import { Form as BaseForm, Button as BaseButton } from "tabler-react";
+import { Form as BaseForm, Button as BaseButton, Table } from "tabler-react";
 import { color, spacing, typography } from "../../utils/sharedStyles";
 
 export const Textarea = styled(BaseForm.Textarea)`
@@ -31,4 +31,12 @@ export const IconLayout = styled.div`
         font-size: ${typography.fontSize.l1};
       }
     `}
+`;
+
+export const TableRowHover = styled(Table.Row)`
+  cursor: pointer;
+
+  &:hover {
+    background-color: #eeeeee;
+  }
 `;
