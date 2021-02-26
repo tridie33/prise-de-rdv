@@ -168,6 +168,7 @@ function createWidgetPRDV(element) {
         var link = document.createTextNode("Prendre rendez-vous");
         a.appendChild(link);
         a.title = "Prendre rendez-vous";
+        a.target = '_blank';
         a.href = "".concat(prdv_mna_hostname, "/form?referrer=").concat(referrer, "&siret=").concat(siret, "&cfd=").concat(cfd, "&candidatFirstname=").concat(candidatFirstname, "&candidatLastname=").concat(valueCandidatLastname);
         var button = document.createElement("button");
         button.appendChild(a);
