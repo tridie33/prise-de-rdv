@@ -1,25 +1,36 @@
-import { ContactCentreTrainingContainer, ContactCentreTrainingLayout } from "../styles";
 import React from "react";
+import { ContactCentreTrainingContainer, ContactCentreTrainingLayout } from "../styles";
 
+/**
+ * @description Etablissement information.
+ * @param {Object} props
+ * @param {String} props.entreprise_raison_sociale
+ * @param {String} props.intitule
+ * @param {String} props.adresse
+ * @param {String} props.code_postal
+ * @param {String} props.ville
+ * @returns {JSX.Element}
+ */
 export const ContactCentreComponent = (props) => {
+  const { adresse, codePostal, entrepriseRaisonSociale, intitule, ville } = props;
   return (
     <ContactCentreTrainingContainer>
       <ContactCentreTrainingLayout>
         <img src={"../../assets/school.svg"} alt={"school"} />
         <p>
-          {props.centre && <span>Etablissement : {props.centre.entreprise_raison_sociale}</span>}
-          {!props.centre && <span>Etablissement : N.C</span>}
+          <span>Etablissement : {entrepriseRaisonSociale || "N.C"}</span>
           <br />
-          {props.training && <span>Formation : {props.training.intitule}</span>}
-          {!props.training && <span>Formation : N.C</span>}
+          <span>Formation : {intitule || "N.C"}</span>
         </p>
       </ContactCentreTrainingLayout>
       <ContactCentreTrainingLayout>
         <img src={"../../assets/map.svg"} alt={"map"} />
-        {props.centre && (
+        {adresse && codePostal && (
           <p>
-            <span>{props.centre.adresse}</span> <br />
-            <span>{props.centre.code_postal}</span>
+            <span>{adresse}</span> <br />
+            <span>
+              {codePostal} {ville}
+            </span>
           </p>
         )}
       </ContactCentreTrainingLayout>

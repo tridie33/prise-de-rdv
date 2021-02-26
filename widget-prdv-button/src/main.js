@@ -26,6 +26,10 @@ switch (prdv_mna_env) {
     break;
 }
 
+/**
+ * @description Gets all elements an initialize them.
+ * @returns {void}
+ */
 function loaderWidgetPRDV() {
   var elements = document.getElementsByClassName("widget-prdv");
   for (var element of elements) {
@@ -33,40 +37,46 @@ function loaderWidgetPRDV() {
   }
 }
 
+/**
+ * @description Creates button if allowed.
+ * @param {HTMLCollectionOf<Element>} element
+ * @returns {void}
+ */
 function createWidgetPRDV(element) {
   if (element !== null) {
-    var fromReferrer = window.location.href;
-    var valueCentreId =
-      element.dataset.prdvCentre !== undefined
-        ? element.dataset.prdvCentre
-        : null;
-    var valueTrainingId =
-      element.dataset.prdvTraining !== undefined
-        ? element.dataset.prdvTraining
-        : null;
-    var valueSiteName =
-      element.dataset.prdvSitename !== undefined
-        ? element.dataset.prdvSitename
-        : window.location.origin;
-    var valueCandidatFirstname =
-      element.dataset.prdvCandidatFirstname !== undefined
-        ? element.dataset.prdvCandidatFirstname
-        : undefined;
-    var valueCandidatLastname =
-      element.dataset.prdvCandidatLastname !== undefined
-        ? element.dataset.prdvCandidatLastname
-        : undefined;
+    var siret = element.dataset.siret !== undefined ? element.dataset.siret : null;
+    var cfd = element.dataset.cfd !== undefined ? element.dataset.cfd : null;
+    var referrer = element.dataset.referrer !== undefined ? element.dataset.referrer : null;
+    var candidatFirstname = element.dataset.candidatFirstname !== undefined ? element.dataset.candidatFirstname : undefined;
+    var valueCandidatLastname = element.dataset.candidatLastname !== undefined ? element.dataset.candidatLastname : undefined;
 
-    var a = document.createElement("a");
-    var link = document.createTextNode("Prendre rendez-vous");
-    a.appendChild(link);
-    a.title = "Prendre rendez-vous";
-    a.href = `${prdv_mna_hostname}/form?fromReferrer=${fromReferrer}&centreId=${valueCentreId}&trainingId=${valueTrainingId}&siteName=${valueSiteName}&candidatFirstname=${valueCandidatFirstname}&candidatLastname=${valueCandidatLastname}`;
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState === 4 && this.status === 200) {
 
-    var button = document.createElement("button");
-    button.appendChild(a);
-    element.appendChild(button);
+        var data = JSON.parse(this.responseText);
+
+        // Skip if widget isn't allowed
+        if(data && data.error) {
+          return;
+        }
+
+        var a = document.createElement("a");
+        var link = document.createTextNode("Prendre rendez-vous");
+        a.appendChild(link);
+        a.title = "Prendre rendez-vous";
+        a.target = '_blank';
+        a.href = `${prdv_mna_hostname}/form?referrer=${referrer}&siret=${siret}&cfd=${cfd}&candidatFirstname=${candidatFirstname}&candidatLastname=${valueCandidatLastname}`;
+
+        var button = document.createElement("button");
+        button.appendChild(a);
+        element.appendChild(button);
+      }
+    };
+
+    xhttp.open("GET", `${prdv_mna_hostname}/api/appointment-request/context/create?siret=${siret}&cfd=${cfd}&referrer=${referrer}`, true);
+    xhttp.send();
   } else {
-    console.log("error loading widget PRDV");
+    console.log("An error occurred during widget initialization.");
   }
 }

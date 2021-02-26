@@ -8,64 +8,115 @@ import {
   Spacer,
   Textarea,
 } from "./styles";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
+import * as emailValidator from "email-validator";
+import * as qs from "query-string";
 import FormError from "../../common/components/FormError";
 import { ContactCentreComponent } from "./components/ContactCentreComponent";
 import { useHistory } from "react-router-dom";
 import { FormHeaderComponent } from "./components/FormHeaderComponent";
 import { FormLayoutComponent } from "./components/FormLayoutComponent";
-import { _post } from "../../common/httpClient";
-import { useFetch } from "../../common/hooks/useFetch";
-const queryString = require("query-string");
+import { _get, _post } from "../../common/httpClient";
 
+/**
+ * @description Form appointment page.
+ * @param props
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export const FormCreatePage = (props) => {
-  let history = useHistory();
-  const { centreId: paramsCentreId, trainingId: paramsTrainingId, fromReferrer: paramsReferrer } = queryString.parse(
-    props.location.search
-  );
-  const [data, loading] = useFetch(
-    `/api/appointment-request/context/create?centreId=${paramsCentreId}&trainingId=${paramsTrainingId}`
-  );
+  const history = useHistory();
+  const [data, setData] = useState();
+  const [error, setError] = useState();
+  const [loading, setLoading] = useState(false);
 
+  const { siret, cfd, referrer } = qs.parse(props.location.search);
+
+  /**
+   * @description Initialize.
+   */
+  useEffect(() => {
+    async function fetchContext() {
+      try {
+        setLoading(true);
+        const response = await _get(
+          `/api/appointment-request/context/create?siret=${siret}&cfd=${cfd}&referrer=${referrer}`
+        );
+
+        if (response?.error) {
+          throw new Error(response?.error);
+        }
+
+        setData(response);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchContext();
+  }, [cfd, referrer, siret]);
+
+  /**
+   * @description Validate email.
+   * @param {String} value
+   * @returns {string|undefined}
+   */
   function validateEmail(value) {
     let error;
+
     if (!value) {
       error = "Adresse email requise";
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
+    } else if (!emailValidator.validate(value)) {
       error = "Adresse email invalide";
     }
+
     return error;
   }
 
+  /**
+   * @description Validate phone number.
+   * @param {String} value
+   * @returns {string|undefined}
+   */
   function validatePhone(value) {
     let error;
+
     if (!value) {
       error = "Numéro de téléphone requis";
     } else if (!/^\d{10}$/i.test(value)) {
       error = "Numéro de téléphone invalide";
     }
+
     return error;
   }
 
+  /**
+   * @description Sends appointment requesT.
+   * @param {Object} values
+   * @param {Function} setStatus
+   * @returns {Promise<void>}
+   */
   const sendNewRequest = async (values, { setStatus }) => {
     try {
-      values = {
+      const { appointment } = await _post("/api/appointment-request/validate", {
         ...values,
-        centreId: paramsCentreId,
-        trainingId: paramsTrainingId,
-        referrer: paramsReferrer,
-      };
-      let dataReceived = await _post("/api/appointment-request/validate", values);
-      history.push(`/form/confirm/${dataReceived.appointment._id}`);
+        siret,
+        cfd,
+        referrer,
+      });
+
+      history.push(`/form/confirm/${appointment._id}`);
     } catch (e) {
       console.error(e);
       setStatus({ error: e.prettyMessage });
     }
   };
 
-  let feedback = (meta, message) => {
+  const feedback = (meta, message) => {
     return meta.touched && meta.error
       ? {
           feedback: message,
@@ -78,6 +129,7 @@ export const FormCreatePage = (props) => {
     <FormLayoutComponent>
       <FormHeaderComponent title={"On s'appelle ?"} imagePath={"../../assets/people.svg"} imageAlt={"people"} />
       {loading && <span>Chargement des données...</span>}
+      {error && <span> {error} </span>}
       {data && (
         <FormBodyLayout>
           <Formik
@@ -101,24 +153,25 @@ export const FormCreatePage = (props) => {
               return (
                 <Form>
                   <ContactCentreComponent
-                    urlCentreId={props.urlCentreId}
-                    urlTrainingId={props.urlTrainingId}
-                    centre={data.centre}
-                    training={data.training}
+                    entrepriseRaisonSociale={data.etablissement.entreprise_raison_sociale}
+                    intitule={data.formation.intitule}
+                    adresse={data.formation.adresse}
+                    codePostal={data.formation.code_postal}
+                    ville={data.formation.ville}
                   />
                   <HelloTypography as={"h2"}>Bonjour !</HelloTypography>
                   <p>
                     Vous êtes <AsterixTypography>*</AsterixTypography> :{" "}
                   </p>
                   <Field name="firstname">
-                    {({ field, meta }) => {
-                      return <Input placeholder="Votre prénom" {...field} {...feedback(meta, "Prénom invalide")} />;
-                    }}
+                    {({ field, meta }) => (
+                      <Input placeholder="Votre prénom" {...field} {...feedback(meta, "Prénom invalide")} />
+                    )}
                   </Field>
                   <Field name="lastname">
-                    {({ field, meta }) => {
-                      return <Input placeholder="Votre nom" {...field} {...feedback(meta, "Nom invalide")} />;
-                    }}
+                    {({ field, meta }) => (
+                      <Input placeholder="Votre nom" {...field} {...feedback(meta, "Nom invalide")} />
+                    )}
                   </Field>
                   <Spacer />
 

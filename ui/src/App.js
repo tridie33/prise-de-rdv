@@ -29,13 +29,6 @@ function PrivateRoute({ children, ...rest }) {
   );
 }
 
-const AdminRoute = (routeProps) => {
-  const [auth] = useAuth();
-  const isAdmin = isUserAdmin(auth);
-
-  return <PrivateRoute {...routeProps}>{isAdmin ? null : <Redirect to="/" />}</PrivateRoute>;
-};
-
 export default () => {
   let [auth] = useAuth();
   const isAdmin = isUserAdmin(auth);
