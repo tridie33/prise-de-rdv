@@ -2,7 +2,7 @@
     <mj-head>
         <mj-title>Nous allons vous rappeler</mj-title>
         <mj-font name="Public Sans"
-            href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,600;0,900;1,400" />
+                 href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,600;0,900;1,400" />
         <mj-style inline="inline">
             a:link,a:visited, a:hover, a:active {color: #206BC4;}, a {color: #206BC4;}
         </mj-style>
@@ -16,7 +16,7 @@
         <mj-section background-color="#E8F0F9">
             <mj-column padding="0px" vertical-align="middle">
                 <mj-text padding="0px" font-size="24px" color="#206BC4" font-weight="700" line-height="32px"
-                    text-decoration="none">
+                         text-decoration="none">
                     On s'appelle ?
                 </mj-text>
             </mj-column>
@@ -25,21 +25,21 @@
             </mj-column>
             <mj-column>
                 <mj-image width="0px" src="<%=`http://localhost/api/appointment/${data.appointmentId}/candidat` %>"
-                    alt="" />
+                          alt="" />
             </mj-column>
         </mj-section>
         <mj-wrapper padding="0px" padding-bottom="50px">
             <mj-section background-color="#ffffff" border-top="1px solid #dddddd" border-left="1px solid #dddddd"
-                border-right="1px solid #dddddd" padding-top="60px">
+                        border-right="1px solid #dddddd" padding-top="60px">
                 <mj-column width="420px">
                     <mj-text padding-bottom="20px">
                         Bonjour
                         <%= data.user.firstname %>
-                            <%= data.user.lastname %>,
+                        <%= data.user.lastname %>,
                     </mj-text>
                     <mj-text padding-bottom="20px">
                         Merci de votre intérêt pour la formation
-                        <%= data.training.intitule %> de notre établissement.
+                        <%= data.formation.intitule %> de notre établissement.
                     </mj-text>
                     <mj-text padding-bottom="20px">Nous vous rappellerons au
                         <%= data.user.phone %> dans les prochaines 48h.
@@ -56,9 +56,8 @@
                             <mj-image padding="0px" src="<%= data.images.school %>" />
                         </mj-column>
                         <mj-column vertical-align="top" width="340px">
-                            <mj-text font-size="12px" font-weight="600" line-height="16px" padding-bottom="5px"
-                                padding-left="10px">
-                                <%= data.centre.name %>
+                            <mj-text font-size="12px" font-weight="600" line-height="16px" padding-bottom="5px" padding-left="10px">
+                                <%= data.etablissement.name %>
                             </mj-text>
                         </mj-column>
                     </mj-section>
@@ -67,11 +66,10 @@
                             <mj-image padding="0px" src="<%= data.images.map %>" />
                         </mj-column>
                         <mj-column vertical-align="top" width="340px">
-                            <mj-text font-size="12px" font-weight="600" line-height="16px" padding="0px"
-                                padding-left="10px">
-                                <%= data.centre.address %>
-                                    <br>
-                                    <%= data.centre.postalCode %>
+                            <mj-text font-size="12px" font-weight="600" line-height="16px" padding="0px" padding-left="10px">
+                                <%= data.etablissement.address %>
+                                <br>
+                                <%= data.etablissement.postalCode %> <%= data.etablissement.ville %>
                             </mj-text>
                         </mj-column>
                     </mj-section>
@@ -80,19 +78,16 @@
             <mj-section background-color="#ffffff" border-right="1px solid #dddddd">
                 <mj-column width="420px">
                     <mj-divider border-width="0.5px" border-style="solid" border-color="#5B5B5B" padding-top="20px"
-                        padding-bottom="10px" />
+                                padding-bottom="10px" />
                     <mj-text padding="0px" padding-bottom="20px">
-                        Cette demande a été réalisée via
-                        <a href="<%= data.appointment.referrerLink %>">
-                            <%= data.appointment.referrer %>
-                        </a>.
+                        Cette demande a été réalisée via <a href="<%= data.appointment.referrerLink %>"><%= data.appointment.referrer %></a>.
                     </mj-text>
                     <mj-text font-weight="700">
                         Vous souhaitez modifier ou annuler cette demande ?
                     </mj-text>
                     <mj-text padding-bottom="40px">Envoyez un email à
-                        <a href="mailto:<%= data.centre.email %>">
-                            <%= data.centre.email %>
+                        <a href="mailto:<%= data.etablissement.email %>">
+                            <%= data.etablissement.email %>
                         </a>
                     </mj-text>
                 </mj-column>

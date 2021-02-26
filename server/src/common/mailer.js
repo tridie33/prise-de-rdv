@@ -1,25 +1,32 @@
 const nodemailer = require("nodemailer");
-const { omit } = require("lodash");
 const htmlToText = require("nodemailer-html-to-text").htmlToText;
 const mjml = require("mjml");
 const { promisify } = require("util");
 const ejs = require("ejs");
 const renderFile = promisify(ejs.renderFile);
 
+/**
+ * @description Create transporter.
+ * @param {Object} smtp
+ * @param {String} smtp.host
+ * @param {String} smtp.port
+ * @param {Object} smtp.auth
+ * @param {String} smtp.user
+ * @param {String} smtp.pass
+ * @returns {Mail}
+ */
 const createTransporter = (smtp) => {
-  let needsAuthentication = smtp.auth !== undefined ? !!smtp.auth.user : undefined;
+  const transporter = nodemailer.createTransport(smtp);
 
-  let transporter = nodemailer.createTransport(needsAuthentication ? smtp : omit(smtp, ["auth"]));
   transporter.use("compile", htmlToText({ ignoreImage: true }));
+
   return transporter;
 };
 
 module.exports = (config, transporter = createTransporter(config.smtp)) => {
-  let renderEmail = async (template, data = {}) => {
-    let buffer = await renderFile(template, {
-      data,
-    });
-    let { html } = mjml(buffer.toString(), { minify: true });
+  const renderEmail = async (template, data = {}) => {
+    const buffer = await renderFile(template, { data });
+    const { html } = mjml(buffer.toString(), { minify: true });
 
     return html;
   };

@@ -33,12 +33,12 @@ export const FormRecapPage = () => {
               <Spacer />
               <Spacer />
               <Divider />
-              {data.centre && (
+              {data.etablissement && (
                 <p>
                   Vous souhaitez modifier ou annuler cette demande ? <br />
                   Envoyez un email à{" "}
                   <u>
-                    <a href={`mailto:${data.centre.email}`}>{data.centre.email}</a>
+                    <a href={`mailto:${data.etablissement.email}`}>{data.etablissement.email}</a>
                   </u>
                 </p>
               )}

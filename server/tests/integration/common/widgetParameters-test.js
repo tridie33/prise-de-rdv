@@ -117,8 +117,8 @@ integrationTests(__filename, () => {
 
     // Check update
     const isVisible = await isWidgetVisible({
-      etablissement_siret: sampleParameter.etablissement_siret,
-      formation_cfd: sampleParameter.formation_cfd,
+      siret: sampleParameter.etablissement_siret,
+      cfd: sampleParameter.formation_cfd,
       referrer: referrers.LBA.code,
     });
     assert.deepStrictEqual(isVisible, true);
@@ -146,18 +146,18 @@ integrationTests(__filename, () => {
 
     // Check if widget is visible
     const isVisibleForBadReferrer = await isWidgetVisible({
-      etablissement_siret: sampleParameter.etablissement_siret,
-      formation_cfd: sampleParameter.formation_cfd,
+      siret: sampleParameter.etablissement_siret,
+      cfd: sampleParameter.formation_cfd,
       referrer: "KO",
     });
     const isVisibleForBadSiret = await isWidgetVisible({
-      etablissement_siret: "BADSIRET",
-      formation_cfd: sampleParameter.formation_cfd,
+      siret: "BADSIRET",
+      cfd: sampleParameter.formation_cfd,
       referrer: referrers.LBA.code,
     });
     const isVisibleForBadCfd = await isWidgetVisible({
-      etablissement_siret: sampleParameter.etablissement_siret,
-      formation_cfd: "BADCFD",
+      siret: sampleParameter.etablissement_siret,
+      cfd: "BADCFD",
       referrer: referrers.LBA.code,
     });
 

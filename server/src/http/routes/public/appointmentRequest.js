@@ -1,22 +1,21 @@
-const axios = require("axios");
 const express = require("express");
-const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const path = require("path");
 const Joi = require("joi");
 const Boom = require("boom");
-const config = require("../../../../config/index");
+const tryCatch = require("../../middlewares/tryCatchMiddleware");
+const config = require("../../../../config");
+const { getReferrer } = require("../../../common/model/constants/referrers");
+const { getFormationsBySiretCfd } = require("../../utils/catalogue");
 const { candidat } = require("../../../common/roles");
-const { logger } = require("../../../common/logger");
 
 const userRequestSchema = Joi.object({
   firstname: Joi.string().required(),
   lastname: Joi.string().required(),
   phone: Joi.string().required(),
   email: Joi.string().required(),
-
   motivations: Joi.string().required(),
-  centreId: Joi.string().required(),
-  trainingId: Joi.string().required(),
+  siret: Joi.string().required(),
+  cfd: Joi.string().required(),
   referrer: Joi.string().required(),
 });
 
@@ -27,36 +26,45 @@ const appointmentItemSchema = Joi.object({
   champsLibreCommentaires: Joi.string().optional().allow(""),
 });
 
-module.exports = ({ users, appointments, mailer }) => {
+module.exports = ({ users, appointments, mailer, widgetParameters }) => {
   const router = express.Router();
-
-  const catalogueHost = config.mnaCatalog.endpoint;
-  const endpointEtablissements = `${catalogueHost}/etablissement`;
-  const endpointFormations = `${catalogueHost}/formation`;
+  const notAllowedResponse = { error: "Prise de rendez-vous non disponible." };
 
   /**
-   * Route de récupération du contexte des données de la formation
-   * et de l'établissement passé en paramètre
+   * @description Returns all informations needed to initialize front.
+   * @param {Request} req
+   * @param {Response} res
    */
   router.get(
     "/context/create",
     tryCatch(async (req, res) => {
-      const paramsEtablissementUai = { uai: req.query.etablissementUai };
-      const paramsFormationId = { educ_nat_code: req.query.formationId };
+      const { siret, cfd, referrer } = req.query;
+      const referrerObj = getReferrer(referrer);
 
-      const responseCentre = await axios.get(`${endpointEtablissements}`, {
-        params: { query: paramsEtablissementUai },
-      });
-      const responseTraining = await axios.get(`${endpointFormations}`, { params: { query: paramsFormationId } });
+      const widgetVisible = await widgetParameters.isWidgetVisible({ siret, cfd, referrer: referrerObj.code });
 
-      if (responseCentre.data && responseTraining.data) {
-        res.json({
-          etablissement: responseCentre.data,
-          formation: responseTraining.data,
-        });
-      } else {
-        res.json({ message: `no data etablissement or no data formation` });
+      if (!widgetVisible) {
+        return res.send(notAllowedResponse);
       }
+
+      const { formations } = await getFormationsBySiretCfd({ siret, cfd });
+      const [formation] = formations;
+
+      if (!formation) {
+        throw Boom.notFound("Etablissement et formation introuvable.");
+      }
+
+      res.send({
+        etablissement: {
+          entreprise_raison_sociale: formation.etablissement_formateur_entreprise_raison_sociale,
+        },
+        formation: {
+          intitule: formation.intitule_long,
+          adresse: formation.etablissement_formateur_adresse,
+          code_postal: formation.etablissement_formateur_code_postal,
+          ville: formation.etablissement_formateur_nom_departement,
+        },
+      });
     })
   );
 
@@ -64,123 +72,91 @@ module.exports = ({ users, appointments, mailer }) => {
     "/validate",
     tryCatch(async (req, res) => {
       await userRequestSchema.validateAsync(req.body, { abortEarly: false });
-      const { firstname, lastname, phone, email, centreId, trainingId, motivations, referrer } = req.body;
 
-      let createdOrFoundUser = null;
-      let createdAppointement = null;
+      const { firstname, lastname, phone, email, siret, cfd, motivations, referrer } = req.body;
+      const referrerObj = getReferrer(referrer);
 
-      // Création / Récupération candidat
-      try {
-        createdOrFoundUser =
-          (await users.getUser(email)) ??
-          (await users.createUser(email, "NA", {
-            firstname,
-            lastname,
-            phone,
-            email,
-            role: candidat,
-          }));
-      } catch (err) {
-        throw Boom.badRequest("something went wrong during candidat retrieval / creation");
+      const widgetVisible = await widgetParameters.isWidgetVisible({ siret, cfd, referrer: referrerObj.code });
+
+      if (!widgetVisible) {
+        return res.send(notAllowedResponse);
       }
 
-      // Création d'une demande de rendez-vous
-      createdAppointement = await appointments.createAppointment({
+      const createdOrFoundUser =
+        (await users.getUser(email)) ??
+        (await users.createUser(email, "NA", {
+          firstname,
+          lastname,
+          phone,
+          email,
+          role: candidat,
+        }));
+
+      const createdAppointement = await appointments.createAppointment({
         candidat_id: createdOrFoundUser._id,
-        etablissement_id: centreId,
-        formation_id: trainingId,
+        etablissement_id: siret,
+        formation_id: cfd,
         motivations,
         referrer,
       });
-      if (!createdAppointement) {
-        throw Boom.badRequest("something went wrong during appointment creation");
+
+      const [catalogueResponse, widgetParameter] = await Promise.all([
+        getFormationsBySiretCfd({ siret: createdAppointement.etablissement_id, cfd: createdAppointement.formation_id }),
+        widgetParameters.getParameterBySiretCfdReferrer({ siret, cfd, referrer: referrerObj.code }),
+      ]);
+
+      const [formation] = catalogueResponse.formations;
+
+      if (!formation) {
+        throw Boom.badRequest("Etablissement et formation introuvable.");
       }
 
-      // Récupération des données sur le centre, la formation et le candidat pour l'afficher sur le mail de récapitulation.
-      const centreIdFromFoundAppointment = { uai: createdAppointement.etablissement_id };
-      const foundCentre = await axios.get(`${endpointEtablissements}`, {
-        params: { query: centreIdFromFoundAppointment },
-      });
-      const trainingIdFromFoundAppointment = { educ_nat_code: createdAppointement.formation_id };
-      const foundTraining = await axios.get(`${endpointFormations}`, {
-        params: { query: trainingIdFromFoundAppointment },
-      });
+      const mailData = {
+        appointmentId: createdAppointement._id,
+        user: {
+          firstname: createdOrFoundUser.firstname,
+          lastname: createdOrFoundUser.lastname,
+          phone: createdOrFoundUser.phone,
+          motivations: createdAppointement.motivations,
+        },
+        etablissement: {
+          name: formation.etablissement_formateur_entreprise_raison_sociale,
+          address: formation.etablissement_formateur_adresse,
+          postalCode: formation.etablissement_formateur_code_postal,
+          ville: formation.etablissement_formateur_nom_departement,
+          email: widgetParameter.email_rdv,
+        },
+        formation: {
+          intitule: formation.intitule_long,
+        },
+        appointment: {
+          referrerLink: referrerObj.url,
+          referrer: referrerObj.fullName,
+        },
+        images: {
+          people: `${config.publicUrl}/assets/people.png?raw=true`,
+          school: `${config.publicUrl}/assets/school.png?raw=true`,
+          map: `${config.publicUrl}/assets/map.png?raw=true`,
+          third: `${config.publicUrl}/api/appointment/${createdAppointement._id}/candidat`,
+        },
+      };
 
-      // Envoi d'un mail au candidat
-      try {
-        await mailer.sendEmail(
-          createdOrFoundUser.email,
+      // Sends email to "candidate" and "formation"
+      await Promise.all([
+        mailer.sendEmail(
+          widgetParameter.email_rdv,
           `[Mail Candidat ${config.env} Prise de rendez-vous] Nous allons vous rappeler`,
           getEmailTemplate("mail-candidat"),
-          {
-            appointmentId: createdAppointement._id,
-            user: {
-              firstname: createdOrFoundUser.firstname,
-              lastname: createdOrFoundUser.lastname,
-              phone: createdOrFoundUser.phone,
-            },
-            centre: {
-              name: foundCentre.data.entreprise_raison_sociale,
-              address: foundCentre.data.adresse,
-              postalCode: foundCentre.data.code_postal,
-              email: foundCentre.data.ds_questions_email,
-            },
-            training: {
-              intitule: foundTraining.data.intitule,
-            },
-            appointment: {
-              referrerLink: createdAppointement.referrer_link,
-              referrer: createdAppointement.referrer === "LBA" ? "La Bonne Alternance" : createdAppointement.referrer,
-            },
-            images: {
-              people: `${config.publicUrl}/assets/people.png?raw=true`,
-              school: `${config.publicUrl}/assets/school.png?raw=true`,
-              map: `${config.publicUrl}/assets/map.png?raw=true`,
-              third: `${config.publicUrl}/api/appointment/${createdAppointement._id}/candidat`,
-            },
-          }
-        );
-      } catch (err) {
-        logger.error(err);
-        throw Boom.badRequest("something went wrong during mailing");
-      }
+          mailData
+        ),
+        mailer.sendEmail(
+          createdOrFoundUser.email,
+          `[Mail ${config.env} Prise de rendez-vous] Un candidat souhaite être recontacté`,
+          getEmailTemplate("mail-formation"),
+          mailData
+        ),
+      ]);
 
-      // Envoi d'un mail au cfa
-      // TODO: Récupérer email du cfa depuis Api Catalogue ou flux S.
-      // await mailer.sendEmail(
-      //   createdUser.email,
-      //   `[Mail Centre ${config.env} Prise de rendez-vous] Nous allons vous rappeler`,
-      //   getEmailTemplate("mail-centre"),
-      //   {
-      //     appointmentId: createdAppointement._id,
-      //     user: {
-      //       firstname: createdUser.firstname,
-      //       lastname: createdUser.lastname,
-      //       phone: createdUser.phone,
-      //     },
-      //     centre: {
-      //       name: foundCentre.data.entreprise_raison_sociale,
-      //       address: foundCentre.data.adresse,
-      //       postalCode: foundCentre.data.code_postal,
-      //       email: foundCentre.data.ds_questions_email,
-      //     },
-      //     training: {
-      //       intitule: foundTraining.data.intitule,
-      //     },
-      //     appointment: {
-      //       referrerLink: createdAppointement.referrer_link,
-      //       referrer: createdAppointement.referrer === "LBA" ? "La Bonne Alternance" : createdAppointement.referrer,
-      //     },
-      //     images: {
-      //       people: `${config.publicUrl}/assets/people.png?raw=true`,
-      //       school: `${config.publicUrl}/assets/school.png?raw=true`,
-      //       map: `${config.publicUrl}/assets/map.png?raw=true`,
-      //       third: `${config.publicUrl}/api/appointment/${createdAppointement._id}/centre`,
-      //     },
-      //   }
-      // );
-
-      // Mise à jour des statuts de la demande
       await appointments.updateStatusMailsSend(createdAppointement._id);
 
       res.json({
@@ -204,26 +180,24 @@ module.exports = ({ users, appointments, mailer }) => {
   router.get(
     "/context/recap",
     tryCatch(async (req, res) => {
-      const paramsAppointmentId = req.query.appointmentId;
-      const foundAppointment = await appointments.getAppointmentById(paramsAppointmentId);
+      const { appointmentId } = req.query;
 
-      // Récupération des données sur le centre et le candidat pour l'afficher sur l'écran de récapitulation
-      const centreIdFromFoundAppointment = { uai: foundAppointment.etablissement_id };
-      const foundCentre = await axios.get(`${endpointEtablissements}`, {
-        params: { query: centreIdFromFoundAppointment },
+      const appointment = await appointments.getAppointmentById(appointmentId);
+
+      const [widgetParameter, user] = await Promise.all([
+        widgetParameters.getParameterBySiretCfd({
+          siret: appointment.etablissement_id,
+          cfd: appointment.formation_id,
+        }),
+        users.getUserById(appointment.candidat_id),
+      ]);
+
+      res.json({
+        user: user._doc,
+        etablissement: {
+          email: widgetParameter.email_rdv,
+        },
       });
-      const foundUser = await users.getUserById(foundAppointment.candidat_id);
-      if (foundUser && foundCentre.data) {
-        res.json({
-          user: foundUser._doc,
-          centre: {
-            ...foundCentre.data,
-            email: foundCentre.data.ds_questions_email,
-          },
-        });
-      } else {
-        res.json({ message: `no data centre or no data training` });
-      }
     })
   );
 

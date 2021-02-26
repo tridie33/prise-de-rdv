@@ -30,4 +30,5 @@ const widgetParameterSchema = {
     description: "Liste des sites autorisés",
   },
 };
+
 module.exports = widgetParameterSchema;
