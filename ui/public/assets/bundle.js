@@ -1,7 +1,7 @@
 'use strict';
 
 (function() {
-    const env = {"PRDV_MNA_ENV":"local"};
+    const env = {"PRDV_MNA_ENV":"recette"};
     try {
         if (process) {
             process.env = Object.assign({}, process.env);
