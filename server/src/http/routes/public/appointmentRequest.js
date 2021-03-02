@@ -144,13 +144,13 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
       // Sends email to "candidate" and "formation"
       await Promise.all([
         mailer.sendEmail(
-          widgetParameter.email_rdv,
+          createdOrFoundUser.email,
           `[Mail Candidat ${config.env} Prise de rendez-vous] Nous allons vous rappeler`,
           getEmailTemplate("mail-candidat"),
           mailData
         ),
         mailer.sendEmail(
-          createdOrFoundUser.email,
+          widgetParameter.email_rdv,
           `[Mail ${config.env} Prise de rendez-vous] Un candidat souhaite être recontacté`,
           getEmailTemplate("mail-formation"),
           mailData
