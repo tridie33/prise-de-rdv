@@ -1,5 +1,5 @@
 const express = require("express");
-const config = require("config");
+const config = require("../../config/index");
 const logger = require("../common/logger");
 const bodyParser = require("body-parser");
 const logMiddleware = require("./middlewares/logMiddleware");
@@ -10,33 +10,42 @@ const corsMiddleware = require("./middlewares/corsMiddleware");
 const authMiddleware = require("./middlewares/authMiddleware");
 const permissionsMiddleware = require("./middlewares/permissionsMiddleware");
 const packageJson = require("../../package.json");
-const hello = require("./routes/hello");
-const entity = require("./routes/entity");
-const secured = require("./routes/secured");
-const login = require("./routes/login");
-const authentified = require("./routes/authentified");
-const admin = require("./routes/admin");
-const password = require("./routes/password");
-const stats = require("./routes/stats");
+const secured = require("./routes/auth/secured");
+const login = require("./routes/auth/login");
+const authentified = require("./routes/auth/authentified");
+const admin = require("./routes/admin/admin");
+const appointmentRoute = require("./routes/admin/appointment");
+const appointmentRequestRoute = require("./routes/public/appointmentRequest");
+const password = require("./routes/auth/password");
+const configRoute = require("./routes/auth/config");
+const widgetParameterRoute = require("./routes/admin/widgetParameter");
+
+const { administrator } = require("./../common/roles");
 
 module.exports = async (components) => {
   const { db } = components;
   const app = express();
   const checkJwtToken = authMiddleware(components);
-  const adminOnly = permissionsMiddleware({ isAdmin: true });
+  const adminOnly = permissionsMiddleware(administrator);
 
   app.use(bodyParser.json());
   app.use(corsMiddleware());
   app.use(logMiddleware());
 
-  app.use("/api/helloRoute", hello());
-  app.use("/api/entity", entity());
-  app.use("/api/secured", apiKeyAuthMiddleware, secured());
+  // Auth routes
   app.use("/api/login", login(components));
-  app.use("/api/authentified", checkJwtToken, authentified());
-  app.use("/api/admin", checkJwtToken, adminOnly, admin());
   app.use("/api/password", password(components));
-  app.use("/api/stats", checkJwtToken, adminOnly, stats(components));
+  app.use("/api/authentified", checkJwtToken, authentified());
+  app.use("/api/secured", apiKeyAuthMiddleware, secured());
+  app.use("/api/admin", checkJwtToken, adminOnly, admin());
+
+  // Logic route
+  app.use("/api/appointment", checkJwtToken, adminOnly, appointmentRoute());
+  app.use("/api/appointment-request", appointmentRequestRoute(components));
+  app.use("/api/widget-parameters", checkJwtToken, adminOnly, widgetParameterRoute(components));
+
+  // Config route
+  app.use("/api/config", checkJwtToken, adminOnly, configRoute());
 
   app.get(
     "/api",
@@ -44,7 +53,7 @@ module.exports = async (components) => {
       let mongodbStatus;
       logger.info("/api called");
       await db
-        .collection("sample")
+        .collection("user")
         .stats()
         .then(() => {
           mongodbStatus = true;
@@ -61,15 +70,6 @@ module.exports = async (components) => {
         healthcheck: {
           mongodb: mongodbStatus,
         },
-      });
-    })
-  );
-
-  app.get(
-    "/api/config",
-    tryCatch(async (req, res) => {
-      return res.json({
-        config: config,
       });
     })
   );

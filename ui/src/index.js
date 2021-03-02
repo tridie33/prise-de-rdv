@@ -1,12 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
 import App from "./App";
+import { GlobalStyle } from "./utils/globalStyle";
 import * as serviceWorker from "./serviceWorker";
+import { ScrollToTop } from "./ScrollToTop";
+import { BrowserRouter } from "react-router-dom";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <GlobalStyle />
+    <BrowserRouter>
+      <ScrollToTop />
+      <App />
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById("root")
 );

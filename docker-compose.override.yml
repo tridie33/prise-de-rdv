@@ -21,8 +21,30 @@ services:
       - ./server/config:/app/config
       - prise_de_rdv_server_data:/data
     environment:
-      - PRISE_DE_RDV_ENV=dev
+      - PRISE_DE_RDV_ENV=local
       - PRISE_DE_RDV_LOG_LEVEL=debug
+      # misc
+      - PRISE_DE_RDV_OUTPUT_DIR=.local/output
+      - PRISE_DE_RDV_PUBLIC_URL=http://localhost
+      - PRISE_DE_RDV_API_KEY=12345
+      # API MNA Catalogue
+      - PRISE_DE_RDV_MNA_CATALOG_ENDPOINT=https://catalogue-recette.apprentissage.beta.gouv.fr/api
+      - PRISE_DE_RDV_MNA_API_TOKEN=1234
+      # auth
+      - PRISE_DE_RDV_AUTH_PASSWORD_HASH_ROUNDS=1001
+      - PRISE_DE_RDV_AUTH_USER_JWT_SECRET=1234
+      - PRISE_DE_RDV_AUTH_ACTIVATION_JWT_SECRET=456
+      - PRISE_DE_RDV_AUTH_PASSWORD_JWT_SECRET=789
+      # user
+      # admin
+      - PRISE_DE_RDV_USERS_DEFAULT_ADMIN_NAME=mna-admin
+      - PRISE_DE_RDV_USERS_DEFAULT_ADMIN_PASSWORD=password
+      - PRISE_DE_RDV_USERS_DEFAULT_ADMIN_ROLE=administrator
+      # smtp
+      - PRISE_DE_RDV_SMTP_HOST=mailhog
+      - PRISE_DE_RDV_SMTP_PORT=1025
+      - PRISE_DE_RDV_SMTP_AUTH_USER=xxxxx
+      - PRISE_DE_RDV_SMTP_AUTH_PASS=12345
 
   mongodb:
     ports:
@@ -30,23 +52,12 @@ services:
     volumes:
       - prise_de_rdv_mongodb_data:/data
 
-  elasticsearch:
+  mailhog:
     ports:
-      - "127.0.0.1:9200:9200"
-    volumes:
-      - prise_de_rdv_data_elasticsearch:/usr/share/elasticsearch/data
-      - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
-
-  kibana:
-    ports:
-      - "127.0.0.1:5601:5601"
-    volumes:
-      - ./elasticsearch/kibana.yml:/usr/share/kibana/config/kibana.yml:ro
+      - "127.0.0.1:8025:8025"
+      - "127.0.0.1:1025:1025"
 
 volumes:
-  prise_de_rdv_data_elasticsearch:
-    driver: local
-    name: prise_de_rdv_data_elasticsearch
   prise_de_rdv_mongodb_data:
     driver: local
     name: prise_de_rdv_mongodb_data

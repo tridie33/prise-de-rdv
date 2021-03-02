@@ -1,6 +1,6 @@
 const assert = require("assert");
 const httpTests = require("../../utils/httpTests");
-const config = require("config");
+const config = require("../../../config/index");
 
 httpTests(__filename, ({ startServer }) => {
   it("Vérifie que le server fonctionne", async () => {
@@ -9,7 +9,7 @@ httpTests(__filename, ({ startServer }) => {
     const response = await httpClient.get("/api");
 
     assert.strictEqual(response.status, 200);
-    assert.strictEqual(response.data.name, `Serveur MNA - ${config.appName}`);
+    assert.strictEqual(response.data.name, `Serveur express MNA - ${config.appName}`);
     assert.strictEqual(response.data.healthcheck.mongodb, true);
     assert.ok(response.data.env);
     assert.ok(response.data.version);

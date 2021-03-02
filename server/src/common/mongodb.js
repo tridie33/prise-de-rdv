@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const config = require("config");
+const config = require("../../config/index");
 
 let mongooseInstance = mongoose;
 module.exports.connectToMongo = (mongoUri = config.mongodb.uri, mongooseInst = null) => {

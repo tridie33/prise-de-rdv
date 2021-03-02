@@ -1,11 +1,9 @@
 const mongoose = require("mongoose");
 const { mongooseInstance } = require("../mongodb");
-const { mongoosastic, getElasticInstance } = require("../esClient");
-const { sampleSchema, userSchema } = require("../model/schema");
+const { userSchema, appointmentSchema, widgetParameterSchema } = require("../model/schema");
 
 const getMongoostaticModel = (modelName, schema, instanceMongoose = mongooseInstance) => {
   const Schema = new instanceMongoose.Schema(schema);
-  Schema.plugin(mongoosastic, { esClient: getElasticInstance(), index: modelName });
   Schema.plugin(require("mongoose-paginate"));
   return mongooseInstance.model(modelName, Schema);
 };
@@ -21,23 +19,35 @@ const getModel = (modelName, schema, instanceMongoose = mongooseInstance) => {
   return getMongooseModel(modelName);
 };
 
-let s = null;
-if (!s) {
-  s = getModel("sample", sampleSchema);
+let userModel = null;
+if (!userModel) {
+  userModel = getModel("user", userSchema);
 }
 
-let u = null;
-if (!u) {
-  u = getModel("user", userSchema);
+let userEventModel = null;
+if (!userEventModel) {
+  userEventModel = getModel("userEvents", userSchema);
 }
 
-let l = null;
-if (!l) {
-  l = getMongooseModel("log");
+let appointmentModel = null;
+if (!appointmentModel) {
+  appointmentModel = getModel("appointment", appointmentSchema);
+}
+
+let widgetParameterModel = null;
+if (!widgetParameterModel) {
+  widgetParameterModel = getModel("widgetParameter", widgetParameterSchema);
+}
+
+let logModel = null;
+if (!logModel) {
+  logModel = getMongooseModel("log");
 }
 
 module.exports = {
-  Sample: s,
-  User: u,
-  Log: l,
+  User: userModel,
+  UserEvent: userEventModel,
+  WidgetParameter: widgetParameterModel,
+  Log: logModel,
+  Appointment: appointmentModel,
 };
