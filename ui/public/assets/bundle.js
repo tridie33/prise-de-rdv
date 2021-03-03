@@ -1,7 +1,7 @@
 'use strict';
 
 (function() {
-    const env = {"PRDV_MNA_ENV":"local"};
+    const env = {"PRDV_MNA_ENV":"production"};
     try {
         if (process) {
             process.env = Object.assign({}, process.env);
@@ -86,16 +86,6 @@ function _createForOfIteratorHelper(o, allowArrayLike) {
   };
 }
 
-if (document.readyState !== "loading") {
-  console.log("document is already ready, just execute code here");
-  loaderWidgetPRDV();
-} else {
-  document.addEventListener("DOMContentLoaded", function () {
-    console.log("document was not ready, place code here !");
-    loaderWidgetPRDV();
-  });
-}
-
 var prdv_mna_env = process.env.PRDV_MNA_ENV; // Used by rollup-plugin-inject-process-env to replace env name
 
 var prdv_mna_hostname = "https://rdv-cfa.apprentissage.beta.gouv.fr";
@@ -118,12 +108,12 @@ switch (prdv_mna_env) {
     break;
 }
 /**
- * @description Gets all elements an initialize them.
+ * @description Initializes widgets.
  * @returns {void}
  */
 
 
-function loaderWidgetPRDV() {
+window.initPrdvWidget = function () {
   var elements = document.getElementsByClassName("widget-prdv");
 
   var _iterator = _createForOfIteratorHelper(elements),
@@ -139,7 +129,7 @@ function loaderWidgetPRDV() {
   } finally {
     _iterator.f();
   }
-}
+};
 /**
  * @description Creates button if allowed.
  * @param {HTMLCollectionOf<Element>} element
