@@ -1,7 +1,8 @@
 const express = require("express");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
-const { Appointment } = require("../../../common/model");
+const { Appointment, User } = require("../../../common/model");
 const logger = require("../../../common/logger");
+const { getFormationsBySiretCfd } = require("../../utils/catalogue");
 
 /**
  * Sample entity route module for GET
@@ -23,6 +24,69 @@ module.exports = () => {
       const allData = await Appointment.paginate(query, { page, limit });
       return res.send({
         appointments: allData.docs,
+        pagination: {
+          page: allData.page,
+          resultats_par_page: limit,
+          nombre_de_page: allData.pages,
+          total: allData.total,
+        },
+      });
+    })
+  );
+
+  /**
+   * Get all formations getRequests /requests GET
+   * */
+  router.get(
+    "/appointments/details",
+    tryCatch(async (req, res) => {
+      let qs = req.query;
+      const query = qs && qs.query ? JSON.parse(qs.query) : {};
+      const page = qs && qs.page ? qs.page : 1;
+      const limit = qs && qs.limit ? parseInt(qs.limit, 50) : 50;
+
+      const allData = await Appointment.paginate(query, { page, limit, sort: { created_at: -1 } });
+
+      const appointmentsPromises = allData.docs.map(async (document) => {
+        const [user, catalogue] = await Promise.all([
+          User.findById(document.candidat_id),
+          getFormationsBySiretCfd({ siret: document.etablissement_id, cfd: document.formation_id }),
+        ]);
+
+        let formation = [];
+        if (catalogue.formations.length) {
+          const [item] = catalogue.formations;
+
+          formation = {
+            etablissement: {
+              entreprise_raison_sociale: item.etablissement_formateur_entreprise_raison_sociale,
+            },
+            formation: {
+              intitule: item.intitule_long,
+              adresse: item.etablissement_formateur_adresse,
+              code_postal: item.etablissement_formateur_code_postal,
+              ville: item.etablissement_formateur_nom_departement,
+            },
+          };
+        }
+
+        return {
+          ...document._doc,
+          formation,
+          candidat: {
+            _id: user._id,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            email: user.email,
+            phone: user.phone,
+          },
+        };
+      });
+
+      const appointments = await Promise.all(appointmentsPromises);
+
+      return res.send({
+        appointments,
         pagination: {
           page: allData.page,
           resultats_par_page: limit,

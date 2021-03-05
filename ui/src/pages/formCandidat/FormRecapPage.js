@@ -4,6 +4,7 @@ import { FormHeaderComponent } from "./components/FormHeaderComponent";
 import { Divider, InfosLayout, Spacer } from "./styles";
 import { FormLayoutComponent } from "./components/FormLayoutComponent";
 import { useFetch } from "../../common/hooks/useFetch";
+import { REFERER } from "../../common/constants";
 
 export const FormRecapPage = () => {
   const { id: appointmentId } = useParams();
@@ -42,7 +43,9 @@ export const FormRecapPage = () => {
                   </u>
                 </p>
               )}
-              <Spacer />
+              <p align="center">
+                <i>Vous pouvez fermer cette fenêtre pour revenir sur {REFERER[data.appointment.referrer]}</i>
+              </p>
             </InfosLayout>
           )}
         </>

@@ -1,12 +1,13 @@
 import React from "react";
 import { Page } from "tabler-react";
+
 import "./DashboardPage.css";
 import { useFetch } from "../../common/hooks/useFetch";
 import { KpisComponent } from "./KpiContainer";
 import { RequestsBoardComponent } from "./RequestsBoardComponent";
 
 export default () => {
-  const [data, loading] = useFetch("api/appointment/appointments");
+  const [data, loading] = useFetch("api/appointment/appointments/details");
   const appointments = data === null ? [] : data.appointments;
 
   return (
