@@ -3,7 +3,7 @@ import { Button, Card, Grid, Page, Table, Tag } from "tabler-react";
 import { toast } from "react-toastify";
 import { useHistory } from "react-router";
 import { _get } from "../../../../common/httpClient";
-import { REFERER } from "../constants";
+import { REFERER } from "../../../../common/constants";
 import { TableRowHover } from "../../styles";
 
 export default () => {

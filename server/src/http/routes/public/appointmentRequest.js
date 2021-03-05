@@ -97,7 +97,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
         etablissement_id: siret,
         formation_id: cfd,
         motivations,
-        referrer,
+        referrer: referrerObj.code,
       });
 
       const [catalogueResponse, widgetParameter] = await Promise.all([
@@ -193,6 +193,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
       ]);
 
       res.json({
+        appointment,
         user: user._doc,
         etablissement: {
           email: widgetParameter.email_rdv,

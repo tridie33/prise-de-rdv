@@ -4,7 +4,7 @@ import { Button, Card, Grid, Page, Table, Icon, Form as TablerForm } from "table
 import { toast } from "react-toastify";
 import * as emailValidator from "email-validator";
 import { _get, _post, _put } from "../../../../common/httpClient";
-import { REFERER } from "../constants";
+import { REFERER } from "../../../../common/constants";
 import EtablissementComponent from "../components/EtablissementComponent";
 import { TableRowHover } from "../../styles";
 

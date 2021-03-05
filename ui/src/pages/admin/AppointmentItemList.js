@@ -1,40 +1,9 @@
-import { Icon, Table } from "tabler-react";
-import { Button, IconLayout, ReferrerLayout, Textarea } from "./styles";
 import React, { useState } from "react";
-import { _post } from "../../common/httpClient";
-const moment = require("moment");
-
-const OpenedStatus = (props) => {
-  const styleOpenedStatusCandidat = props.openedCandidat ? "bg-success" : "bg-error";
-  const styleOpenedStatusCfa = props.openedCfa ? "bg-success" : "bg-error";
-  return (
-    <div>
-      <React.Fragment>
-        <span className={"status-icon " + styleOpenedStatusCandidat} /> Candidat
-      </React.Fragment>
-      <br />
-      <React.Fragment>
-        <span className={"status-icon " + styleOpenedStatusCfa} /> CFA
-      </React.Fragment>
-    </div>
-  );
-};
-
-export const ThumbStatusComponent = (props) => {
-  return (
-    <IconLayout
-      state={props.cfaAPrisContact ? "up" : "down"}
-      disabled={props.disabled}
-      onClick={(event) => props.onToggle(event)}
-    >
-      {props.cfaAPrisContact ? (
-        <Icon prefix="fe" name="fe fe-thumbs-up" />
-      ) : (
-        <Icon prefix="fe" name="fe fe-thumbs-down" />
-      )}
-    </IconLayout>
-  );
-};
+import { Table } from "tabler-react";
+import * as moment from "moment";
+import { Button, ReferrerLayout, Textarea } from "./styles";
+import { _put } from "../../common/httpClient";
+import { REFERER } from "../../common/constants";
 
 export const AppointmentItemList = (props) => {
   const [showEditionMode, setShowEditionMode] = useState(false);
@@ -44,22 +13,17 @@ export const AppointmentItemList = (props) => {
     props.appointment.champs_libre_commentaire || ""
   );
 
-  const onToggleIconThumb = (event) => {
-    event.preventDefault();
-    if (showEditionMode) {
-      setCfaAPrisContact(!cfaAPrisContact);
-    }
-  };
-
-  const editAppointment = async (appointmentId) => {
-    const values = {
-      appointmentId,
-      cfaAPrisContact,
-      champsLibreStatut,
-      champsLibreCommentaires,
-    };
-    await _post("/api/appointment/edit", values);
-  };
+  /**
+   * @description Updates appointment.
+   * @param appointmentId
+   * @returns {Promise<*>}
+   */
+  const editAppointment = (appointmentId) =>
+    _put(`/api/appointment/${appointmentId}`, {
+      cfa_pris_contact_candidat: cfaAPrisContact,
+      champs_libre_status: champsLibreStatut,
+      champs_libre_commentaire: champsLibreCommentaires,
+    });
 
   const canCelModeEdition = () => {
     setCfaAPrisContact(props.appointment.cfa_pris_contact_candidat);
@@ -88,32 +52,23 @@ export const AppointmentItemList = (props) => {
 
   return (
     <Table.Row>
-      <Table.Col>{props.appointment._id}</Table.Col>
       <Table.Col>{moment.parseZone(props.appointment.created_at).format("DD/MM/YYYY HH:mm:ss")}</Table.Col>
-      <Table.Col>{props.appointment.candidat_id}</Table.Col>
+      <Table.Col>
+        {props.appointment.candidat.firstname} {props.appointment.candidat.lastname}
+      </Table.Col>
+      <Table.Col>
+        <a href={`tel:${props.appointment.candidat.phone}`}>{props.appointment.candidat.phone}</a>
+      </Table.Col>
+      <Table.Col>
+        <a href={`mailto:${props.appointment.candidat.email}`}>{props.appointment.candidat.email}</a>
+      </Table.Col>
+      <Table.Col>{props.appointment.formation.etablissement.entreprise_raison_sociale}</Table.Col>
+      <Table.Col>{props.appointment.etablissement_id}</Table.Col>
+      <Table.Col>{props.appointment.formation.formation.intitule}</Table.Col>
       <Table.Col>{props.appointment.formation_id}</Table.Col>
       <Table.Col>
-        <OpenedStatus
-          openedCandidat={props.appointment.email_premiere_demande_candidat_envoye}
-          openedCfa={props.appointment.email_premiere_demande_cfa_envoye}
-        />
-      </Table.Col>
-      <Table.Col>
-        <OpenedStatus
-          openedCandidat={props.appointment.email_premiere_demande_candidat_ouvert}
-          openedCfa={props.appointment.email_premiere_demande_cfa_ouvert}
-        />
-      </Table.Col>
-      <Table.Col>
-        <ThumbStatusComponent
-          cfaAPrisContact={cfaAPrisContact}
-          disabled={!showEditionMode}
-          onToggle={onToggleIconThumb}
-        />
-      </Table.Col>
-      <Table.Col>
         <ReferrerLayout>
-          <span>{props.appointment.referrer}</span>
+          <span>{REFERER[props.appointment.referrer]}</span>
         </ReferrerLayout>
       </Table.Col>
       <Table.Col>
