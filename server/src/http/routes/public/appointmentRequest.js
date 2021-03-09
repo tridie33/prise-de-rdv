@@ -82,18 +82,23 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
         return res.send(notAllowedResponse);
       }
 
-      const createdOrFoundUser =
-        (await users.getUser(email)) ??
-        (await users.createUser(email, "NA", {
+      let user = await users.getUser(email);
+
+      // Updates firstname and last name if the user already exists
+      if (user) {
+        user = await users.update(user._id, { firstname, lastname, phone });
+      } else {
+        user = await users.createUser(email, "NA", {
           firstname,
           lastname,
           phone,
           email,
           role: candidat,
-        }));
+        });
+      }
 
       const createdAppointement = await appointments.createAppointment({
-        candidat_id: createdOrFoundUser._id,
+        candidat_id: user._id,
         etablissement_id: siret,
         formation_id: cfd,
         motivations,
@@ -114,9 +119,9 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
       const mailData = {
         appointmentId: createdAppointement._id,
         user: {
-          firstname: createdOrFoundUser.firstname,
-          lastname: createdOrFoundUser.lastname,
-          phone: createdOrFoundUser.phone,
+          firstname: user.firstname,
+          lastname: user.lastname,
+          phone: user.phone,
           motivations: createdAppointement.motivations,
         },
         etablissement: {
@@ -144,7 +149,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
       // Sends email to "candidate" and "formation"
       await Promise.all([
         mailer.sendEmail(
-          createdOrFoundUser.email,
+          user.email,
           `[Mail Candidat ${config.env} Prise de rendez-vous] Nous allons vous rappeler`,
           getEmailTemplate("mail-candidat"),
           mailData
@@ -160,7 +165,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
       await appointments.updateStatusMailsSend(createdAppointement._id);
 
       res.json({
-        userId: createdOrFoundUser._id,
+        userId: user._id,
         appointment: createdAppointement,
       });
     })
