@@ -24,9 +24,7 @@ export default () => {
         setLoading(true);
 
         const [catalogueResponse, parametersResponse] = await Promise.all([
-          fetch(
-            `https://catalogue-recette.apprentissage.beta.gouv.fr/api/v1/entity/formations2021?query={"etablissement_formateur_siret":"${id}"}&page=1&limit=500`
-          ),
+          fetch(`/api/catalogue/formations?query={"etablissement_formateur_siret":"${id}"}&page=1&limit=500`),
           getParameters(id),
         ]);
 

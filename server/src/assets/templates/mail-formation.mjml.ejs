@@ -32,7 +32,8 @@
                     </mj-text>
                     <mj-text padding-bottom="20px">
                         Le candidat <%= data.user.firstname %> <%= data.user.lastname %> souhaiterait être contacté au
-                        <a href="tel:<%= data.user.phone %>"><%= data.user.phone %></a> sous 48h concernant:
+                        <a href="tel:<%= data.user.phone %>"><%= data.user.phone %></a> ou par email
+                        <a href="mailto:<%= data.user.email %>"><%= data.user.email %></a> sous 48h concernant:
                     </mj-text>
                     <mj-text padding-bottom="20px">
                         <%= data.user.motivations %>
