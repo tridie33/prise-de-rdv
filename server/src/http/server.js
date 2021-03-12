@@ -16,6 +16,7 @@ const authentified = require("./routes/auth/authentified");
 const admin = require("./routes/admin/admin");
 const appointmentRoute = require("./routes/admin/appointment");
 const appointmentRequestRoute = require("./routes/public/appointmentRequest");
+const catalogueRoute = require("./routes/public/catalogue");
 const password = require("./routes/auth/password");
 const configRoute = require("./routes/auth/config");
 const widgetParameterRoute = require("./routes/admin/widgetParameter");
@@ -42,6 +43,7 @@ module.exports = async (components) => {
   // Logic route
   app.use("/api/appointment", checkJwtToken, adminOnly, appointmentRoute());
   app.use("/api/appointment-request", appointmentRequestRoute(components));
+  app.use("/api/catalogue", catalogueRoute(components));
   app.use("/api/widget-parameters", checkJwtToken, adminOnly, widgetParameterRoute(components));
 
   // Config route

@@ -24,7 +24,7 @@ export default () => {
 
     try {
       const catalogueResponse = await fetch(
-        `https://catalogue-recette.apprentissage.beta.gouv.fr/api/v1/entity/formations2021?query={ "$or": [ { "etablissement_formateur_siret": "${keyword}" }, { "etablissement_formateur_uai": "${keyword}"} ] }`
+        `/api/catalogue/formations?query={ "$or": [ { "etablissement_formateur_siret": "${keyword}" }, { "etablissement_formateur_uai": "${keyword}"} ] }`
       );
 
       const catalogueResult = await catalogueResponse.json();

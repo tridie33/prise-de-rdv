@@ -60,9 +60,9 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
         },
         formation: {
           intitule: formation.intitule_long,
-          adresse: formation.etablissement_formateur_adresse,
-          code_postal: formation.etablissement_formateur_code_postal,
-          ville: formation.etablissement_formateur_nom_departement,
+          adresse: formation.lieu_formation_adresse,
+          code_postal: formation.code_postal,
+          ville: formation.localite,
         },
       });
     })
@@ -122,13 +122,14 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
           firstname: user.firstname,
           lastname: user.lastname,
           phone: user.phone,
+          email: user.email,
           motivations: createdAppointement.motivations,
         },
         etablissement: {
           name: formation.etablissement_formateur_entreprise_raison_sociale,
-          address: formation.etablissement_formateur_adresse,
-          postalCode: formation.etablissement_formateur_code_postal,
-          ville: formation.etablissement_formateur_nom_departement,
+          address: formation.lieu_formation_adresse,
+          postalCode: formation.code_postal,
+          ville: formation.localite,
           email: widgetParameter.email_rdv,
         },
         formation: {
