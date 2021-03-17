@@ -3,8 +3,13 @@ import { Table } from "tabler-react";
 import * as moment from "moment";
 import { Button, ReferrerLayout, Textarea } from "./styles";
 import { _put } from "../../common/httpClient";
-import { REFERER } from "../../common/constants";
 
+/**
+ * @description Row table component.
+ * @param {Object} props
+ * @param {Object} props.appointment
+ * @returns {JSX.Element}
+ */
 export const AppointmentItemList = (props) => {
   const [showEditionMode, setShowEditionMode] = useState(false);
   const [cfaAPrisContact, setCfaAPrisContact] = useState(props.appointment.cfa_pris_contact_candidat);
@@ -68,7 +73,7 @@ export const AppointmentItemList = (props) => {
       <Table.Col>{props.appointment.formation_id}</Table.Col>
       <Table.Col>
         <ReferrerLayout>
-          <span>{REFERER[props.appointment.referrer]}</span>
+          <span>{props.appointment.referrer.fullName}</span>
         </ReferrerLayout>
       </Table.Col>
       <Table.Col>

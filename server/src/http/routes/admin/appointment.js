@@ -2,6 +2,7 @@ const express = require("express");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const { Appointment, User } = require("../../../common/model");
 const logger = require("../../../common/logger");
+const { getReferrerById } = require("../../../common/model/constants/referrers");
 const { getFormationsBySiretCfd } = require("../../utils/catalogue");
 
 /**
@@ -72,6 +73,7 @@ module.exports = () => {
 
         return {
           ...document._doc,
+          referrer: getReferrerById(document.referrer),
           formation,
           candidat: {
             _id: user._id,

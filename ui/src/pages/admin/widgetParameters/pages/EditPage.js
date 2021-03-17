@@ -4,7 +4,6 @@ import { Button, Card, Grid, Page, Table, Icon, Form as TablerForm } from "table
 import { toast } from "react-toastify";
 import * as emailValidator from "email-validator";
 import { _get, _post, _put } from "../../../../common/httpClient";
-import { REFERER } from "../../../../common/constants";
 import EtablissementComponent from "../components/EtablissementComponent";
 import { TableRowHover } from "../../styles";
 
@@ -23,9 +22,10 @@ export default () => {
       try {
         setLoading(true);
 
-        const [catalogueResponse, parametersResponse] = await Promise.all([
+        const [catalogueResponse, parametersResponse, referrers] = await Promise.all([
           fetch(`/api/catalogue/formations?query={"etablissement_formateur_siret":"${id}"}&page=1&limit=500`),
           getParameters(id),
+          getReferrers(),
         ]);
 
         const catalogueResult = await catalogueResponse.json();
@@ -35,16 +35,12 @@ export default () => {
         for (const formation of catalogueResult.formations) {
           const parameter = parametersResponse.parameters.find((item) => item.formation_cfd === formation.cfd);
 
-          permissions[formation.cfd] = Object.entries(REFERER).map(([id, name]) => {
-            const referrerId = parseInt(id, 10);
-
-            return {
-              referrerId,
-              name,
-              cfd: formation.cfd,
-              checked: parameter?.referrers.includes(referrerId) || false,
-            };
-          });
+          permissions[formation.cfd] = referrers.map((referrer) => ({
+            referrerId: referrer.code,
+            name: referrer.fullName,
+            cfd: formation.cfd,
+            checked: !!parameter?.referrers.map((parameterReferrer) => parameterReferrer.code).includes(referrer.code),
+          }));
         }
 
         const formationsUniq = catalogueResult.formations.filter(
@@ -76,6 +72,16 @@ export default () => {
    * @returns {Promise<*>}
    */
   const getParameters = (id) => _get(`/api/widget-parameters/parameters?query={"etablissement_siret":"${id}"}`);
+
+  /**
+   * @description Returns all referrers.
+   * @returns {Promise<{code: {number}, name: {string}, fullName: {string}, url: {string}[]}>}
+   */
+  const getReferrers = async () => {
+    const { referrers } = await _get(`/api/constants`);
+
+    return referrers;
+  };
 
   /**
    * @description Toggles checkboxes.
