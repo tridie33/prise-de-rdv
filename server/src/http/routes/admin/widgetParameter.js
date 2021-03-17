@@ -3,6 +3,7 @@ const Joi = require("joi");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const { WidgetParameter } = require("../../../common/model");
 const logger = require("../../../common/logger");
+const { getReferrerById } = require("../../../common/model/constants/referrers");
 
 const widgetParameterSchema = Joi.object({
   etablissement_siret: Joi.string().required(),
@@ -31,8 +32,14 @@ module.exports = ({ widgetParameters }) => {
       const limit = qs && qs.limit ? parseInt(qs.limit, 50) : 50;
 
       const allData = await WidgetParameter.paginate(query, { page, limit });
+
+      const parameters = allData.docs.map((parameter) => ({
+        ...parameter._doc,
+        referrers: parameter.referrers.map(getReferrerById),
+      }));
+
       return res.send({
-        parameters: allData.docs,
+        parameters,
         pagination: {
           page: allData.page,
           resultats_par_page: limit,

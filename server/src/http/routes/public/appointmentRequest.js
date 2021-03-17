@@ -4,7 +4,7 @@ const Joi = require("joi");
 const Boom = require("boom");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const config = require("../../../../config");
-const { getReferrer } = require("../../../common/model/constants/referrers");
+const { getReferrerById, getReferrerByKeyName } = require("../../../common/model/constants/referrers");
 const { getFormationsBySiretCfd } = require("../../utils/catalogue");
 const { candidat } = require("../../../common/roles");
 
@@ -39,7 +39,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
     "/context/create",
     tryCatch(async (req, res) => {
       const { siret, cfd, referrer } = req.query;
-      const referrerObj = getReferrer(referrer);
+      const referrerObj = getReferrerByKeyName(referrer);
 
       const widgetVisible = await widgetParameters.isWidgetVisible({ siret, cfd, referrer: referrerObj.code });
 
@@ -73,8 +73,11 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
     tryCatch(async (req, res) => {
       await userRequestSchema.validateAsync(req.body, { abortEarly: false });
 
-      const { firstname, lastname, phone, email, siret, cfd, motivations, referrer } = req.body;
-      const referrerObj = getReferrer(referrer);
+      let { firstname, lastname, phone, email, siret, cfd, motivations, referrer } = req.body;
+
+      email = email.toLowerCase();
+
+      const referrerObj = getReferrerByKeyName(referrer);
 
       const widgetVisible = await widgetParameters.isWidgetVisible({ siret, cfd, referrer: referrerObj.code });
 
@@ -199,7 +202,10 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
       ]);
 
       res.json({
-        appointment,
+        appointment: {
+          ...appointment,
+          referrer: getReferrerById(appointment.referrer),
+        },
         user: user._doc,
         etablissement: {
           email: widgetParameter.email_rdv,
