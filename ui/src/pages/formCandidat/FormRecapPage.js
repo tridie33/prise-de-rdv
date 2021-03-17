@@ -42,7 +42,9 @@ export const FormRecapPage = () => {
                   </u>
                 </p>
               )}
-              <Spacer />
+              <p align="center">
+                <i>Vous pouvez fermer cette fenêtre pour revenir sur {data.appointment.referrer.fullName}.</i>
+              </p>
             </InfosLayout>
           )}
         </>

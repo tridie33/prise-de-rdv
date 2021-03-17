@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Button, Card, Grid, Page, Table, Tag } from "tabler-react";
 import { toast } from "react-toastify";
 import { useHistory } from "react-router";
+import { sortBy } from "lodash";
 import { _get } from "../../../../common/httpClient";
-import { REFERER } from "../constants";
 import { TableRowHover } from "../../styles";
 
 export default () => {
@@ -64,9 +64,9 @@ export default () => {
                           <Table.Col>{parameter.email_rdv.toLowerCase()}</Table.Col>
                           <Table.Col>
                             <Tag.List>
-                              {parameter.referrers.sort().map((refererId) => (
-                                <Tag key={refererId} color={"blue"}>
-                                  {REFERER[refererId]}
+                              {sortBy(parameter.referrers, "code").map((referrer) => (
+                                <Tag key={referrer.code} color={"blue"}>
+                                  {referrer.fullName}
                                 </Tag>
                               ))}
                             </Tag.List>

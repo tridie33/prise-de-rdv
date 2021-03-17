@@ -22,9 +22,6 @@
             <mj-column padding="0px" vertical-align="middle">
                 <mj-image padding="0px" width="150px" src="<%= data.images.people %>" alt="" />
             </mj-column>
-            <mj-column>
-                <mj-image width="0px" src="<%=`http://localhost/api/appointment/${data.appointmentId}/candidat` %>" alt="" />
-            </mj-column>
         </mj-section>
         <mj-wrapper padding="0px" padding-bottom="50px">
             <mj-section background-color="#ffffff" border-top="1px solid #dddddd" border-left="1px solid #dddddd"
@@ -35,7 +32,8 @@
                     </mj-text>
                     <mj-text padding-bottom="20px">
                         Le candidat <%= data.user.firstname %> <%= data.user.lastname %> souhaiterait être contacté au
-                        <a href="tel:<%= data.user.phone %>"><%= data.user.phone %></a> sous 48h concernant:
+                        <a href="tel:<%= data.user.phone %>"><%= data.user.phone %></a> ou par email
+                        <a href="mailto:<%= data.user.email %>"><%= data.user.email %></a> sous 48h concernant:
                     </mj-text>
                     <mj-text padding-bottom="20px">
                         <%= data.user.motivations %>
@@ -77,7 +75,7 @@
                     <mj-divider border-width="0.5px" border-style="solid" border-color="#5B5B5B" padding-top="20px"
                                 padding-bottom="10px" />
                     <mj-text padding="0px" padding-bottom="20px">
-                        Cette prise de contact s'est éffectuée via <a href="<%= data.appointment.referrerLink %>"><%= data.appointment.referrer %></a>.
+                        Cette demande a été réalisée via <a href="<%= data.appointment.referrerLink %>"><%= data.appointment.referrer %></a>.
                     </mj-text>
                 </mj-column>
             </mj-section>

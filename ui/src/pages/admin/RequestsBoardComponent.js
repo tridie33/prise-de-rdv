@@ -1,7 +1,12 @@
-import { Card, Grid, Table } from "tabler-react";
 import React from "react";
+import { Card, Grid, Table } from "tabler-react";
 import { AppointmentItemList } from "./AppointmentItemList";
 
+/**
+ * @description Appointments head table.
+ * @param props
+ * @returns {JSX.Element}
+ */
 export const RequestsBoardComponent = (props) => {
   return (
     <Grid.Row>
@@ -10,13 +15,14 @@ export const RequestsBoardComponent = (props) => {
           <Table responsive className="card-table table-vcenter text-nowrap">
             <Table.Header>
               <Table.Row>
-                <Table.ColHeader>ID</Table.ColHeader>
                 <Table.ColHeader>Date</Table.ColHeader>
                 <Table.ColHeader>Candidat</Table.ColHeader>
-                <Table.ColHeader>Centre</Table.ColHeader>
-                <Table.ColHeader>Réceptions</Table.ColHeader>
-                <Table.ColHeader>Ouvertures</Table.ColHeader>
-                <Table.ColHeader>Prise de contact</Table.ColHeader>
+                <Table.ColHeader>Téléphone</Table.ColHeader>
+                <Table.ColHeader>Email</Table.ColHeader>
+                <Table.ColHeader>Etablissement</Table.ColHeader>
+                <Table.ColHeader>Siret</Table.ColHeader>
+                <Table.ColHeader>Formation</Table.ColHeader>
+                <Table.ColHeader>Cfd</Table.ColHeader>
                 <Table.ColHeader>Site de provenance</Table.ColHeader>
                 <Table.ColHeader>Motivations du candidat</Table.ColHeader>
                 <Table.ColHeader>Champs libre statut</Table.ColHeader>

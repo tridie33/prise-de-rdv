@@ -4,7 +4,7 @@ const Joi = require("joi");
 const Boom = require("boom");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const config = require("../../../../config");
-const { getReferrer } = require("../../../common/model/constants/referrers");
+const { getReferrerById, getReferrerByKeyName } = require("../../../common/model/constants/referrers");
 const { getFormationsBySiretCfd } = require("../../utils/catalogue");
 const { candidat } = require("../../../common/roles");
 
@@ -39,7 +39,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
     "/context/create",
     tryCatch(async (req, res) => {
       const { siret, cfd, referrer } = req.query;
-      const referrerObj = getReferrer(referrer);
+      const referrerObj = getReferrerByKeyName(referrer);
 
       const widgetVisible = await widgetParameters.isWidgetVisible({ siret, cfd, referrer: referrerObj.code });
 
@@ -60,9 +60,9 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
         },
         formation: {
           intitule: formation.intitule_long,
-          adresse: formation.etablissement_formateur_adresse,
-          code_postal: formation.etablissement_formateur_code_postal,
-          ville: formation.etablissement_formateur_nom_departement,
+          adresse: formation.lieu_formation_adresse,
+          code_postal: formation.code_postal,
+          ville: formation.localite,
         },
       });
     })
@@ -73,8 +73,11 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
     tryCatch(async (req, res) => {
       await userRequestSchema.validateAsync(req.body, { abortEarly: false });
 
-      const { firstname, lastname, phone, email, siret, cfd, motivations, referrer } = req.body;
-      const referrerObj = getReferrer(referrer);
+      let { firstname, lastname, phone, email, siret, cfd, motivations, referrer } = req.body;
+
+      email = email.toLowerCase();
+
+      const referrerObj = getReferrerByKeyName(referrer);
 
       const widgetVisible = await widgetParameters.isWidgetVisible({ siret, cfd, referrer: referrerObj.code });
 
@@ -82,22 +85,27 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
         return res.send(notAllowedResponse);
       }
 
-      const createdOrFoundUser =
-        (await users.getUser(email)) ??
-        (await users.createUser(email, "NA", {
+      let user = await users.getUser(email);
+
+      // Updates firstname and last name if the user already exists
+      if (user) {
+        user = await users.update(user._id, { firstname, lastname, phone });
+      } else {
+        user = await users.createUser(email, "NA", {
           firstname,
           lastname,
           phone,
           email,
           role: candidat,
-        }));
+        });
+      }
 
       const createdAppointement = await appointments.createAppointment({
-        candidat_id: createdOrFoundUser._id,
+        candidat_id: user._id,
         etablissement_id: siret,
         formation_id: cfd,
         motivations,
-        referrer,
+        referrer: referrerObj.code,
       });
 
       const [catalogueResponse, widgetParameter] = await Promise.all([
@@ -114,16 +122,17 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
       const mailData = {
         appointmentId: createdAppointement._id,
         user: {
-          firstname: createdOrFoundUser.firstname,
-          lastname: createdOrFoundUser.lastname,
-          phone: createdOrFoundUser.phone,
+          firstname: user.firstname,
+          lastname: user.lastname,
+          phone: user.phone,
+          email: user.email,
           motivations: createdAppointement.motivations,
         },
         etablissement: {
           name: formation.etablissement_formateur_entreprise_raison_sociale,
-          address: formation.etablissement_formateur_adresse,
-          postalCode: formation.etablissement_formateur_code_postal,
-          ville: formation.etablissement_formateur_nom_departement,
+          address: formation.lieu_formation_adresse,
+          postalCode: formation.code_postal,
+          ville: formation.localite,
           email: widgetParameter.email_rdv,
         },
         formation: {
@@ -144,7 +153,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
       // Sends email to "candidate" and "formation"
       await Promise.all([
         mailer.sendEmail(
-          createdOrFoundUser.email,
+          user.email,
           `[Mail Candidat ${config.env} Prise de rendez-vous] Nous allons vous rappeler`,
           getEmailTemplate("mail-candidat"),
           mailData
@@ -160,7 +169,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
       await appointments.updateStatusMailsSend(createdAppointement._id);
 
       res.json({
-        userId: createdOrFoundUser._id,
+        userId: user._id,
         appointment: createdAppointement,
       });
     })
@@ -193,6 +202,10 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
       ]);
 
       res.json({
+        appointment: {
+          ...appointment,
+          referrer: getReferrerById(appointment.referrer),
+        },
         user: user._doc,
         etablissement: {
           email: widgetParameter.email_rdv,
