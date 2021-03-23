@@ -145,7 +145,7 @@ export const FormCreatePage = (props) => {
               lastname: Yup.string().required("Requis"),
               phone: Yup.number().required("Requis"),
               email: Yup.string().required("Requis"),
-              motivations: Yup.string().required("Requis"),
+              motivations: Yup.string(),
             })}
             onSubmit={sendNewRequest}
           >
