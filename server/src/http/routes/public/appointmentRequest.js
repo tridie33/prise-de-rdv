@@ -13,7 +13,7 @@ const userRequestSchema = Joi.object({
   lastname: Joi.string().required(),
   phone: Joi.string().required(),
   email: Joi.string().required(),
-  motivations: Joi.string().required(),
+  motivations: Joi.string(),
   siret: Joi.string().required(),
   cfd: Joi.string().required(),
   referrer: Joi.string().required(),
