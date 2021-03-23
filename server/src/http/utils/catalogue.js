@@ -8,7 +8,12 @@ const config = require("../../../config");
  */
 const getFormationsBySiretCfd = async ({ siret, cfd }) =>
   getFormations({
-    $and: [{ etablissement_formateur_siret: siret }, { cfd }],
+    $and: [
+      { etablissement_formateur_siret: siret },
+      { cfd },
+      { published: true },
+      { etablissement_reference_catalogue_published: true },
+    ],
   });
 
 /**

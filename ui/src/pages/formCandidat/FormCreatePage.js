@@ -127,7 +127,7 @@ export const FormCreatePage = (props) => {
 
   return (
     <FormLayoutComponent>
-      <FormHeaderComponent title={"On s'appelle ?"} imagePath={"../../assets/people.svg"} imageAlt={"people"} />
+      <FormHeaderComponent title={"Le CFA vous rappelle !"} imagePath={"../../assets/people.svg"} imageAlt={"people"} />
       {loading && <span>Chargement des données...</span>}
       {error && <span> {error} </span>}
       {data && (
@@ -145,7 +145,7 @@ export const FormCreatePage = (props) => {
               lastname: Yup.string().required("Requis"),
               phone: Yup.number().required("Requis"),
               email: Yup.string().required("Requis"),
-              motivations: Yup.string().required("Requis"),
+              motivations: Yup.string(),
             })}
             onSubmit={sendNewRequest}
           >
