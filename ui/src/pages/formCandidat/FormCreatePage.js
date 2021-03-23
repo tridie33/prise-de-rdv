@@ -127,7 +127,7 @@ export const FormCreatePage = (props) => {
 
   return (
     <FormLayoutComponent>
-      <FormHeaderComponent title={"On s'appelle ?"} imagePath={"../../assets/people.svg"} imageAlt={"people"} />
+      <FormHeaderComponent title={"Le CFA vous rappelle !"} imagePath={"../../assets/people.svg"} imageAlt={"people"} />
       {loading && <span>Chargement des données...</span>}
       {error && <span> {error} </span>}
       {data && (
