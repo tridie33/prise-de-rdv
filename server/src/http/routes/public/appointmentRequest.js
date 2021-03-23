@@ -154,13 +154,13 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
       await Promise.all([
         mailer.sendEmail(
           user.email,
-          `[Mail Candidat ${config.env} Prise de rendez-vous] Nous allons vous rappeler`,
+          `Le CFA a bien reçu votre demande de RDV via ${referrerObj.fullName}`,
           getEmailTemplate("mail-candidat"),
           mailData
         ),
         mailer.sendEmail(
           widgetParameter.email_rdv,
-          `[Mail ${config.env} Prise de rendez-vous] Un candidat souhaite être recontacté`,
+          `[RDV via ${referrerObj.fullName}] Un candidat souhaite être recontacté`,
           getEmailTemplate("mail-formation"),
           mailData
         ),
