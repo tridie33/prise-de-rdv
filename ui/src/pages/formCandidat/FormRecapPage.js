@@ -28,7 +28,7 @@ export const FormRecapPage = () => {
                 Vous allez recevoir un email de confirmation à <strong>{data.user.email}.</strong>
               </p>
               <p>
-                Nous essaierons de vous joindre dans les prochaines 48h au <strong>{data.user.phone}.</strong>
+                Le CFA essaiera de vous joindre dans les prochaines 48h au <strong>{data.user.phone}.</strong>
               </p>
               <Spacer />
               <Spacer />
