@@ -73,7 +73,8 @@ export default () => {
    * @param {String} id
    * @returns {Promise<*>}
    */
-  const getParameters = (id) => _get(`/api/widget-parameters/parameters?query={"etablissement_siret":"${id}"}`);
+  const getParameters = (id) =>
+    _get(`/api/widget-parameters/parameters?query={"etablissement_siret":"${id}"}&limit=1000`);
 
   /**
    * @description Returns all referrers.

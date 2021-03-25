@@ -18,7 +18,7 @@ export default () => {
     async function fetchParameters() {
       try {
         setLoading(true);
-        let response = await _get('/api/widget-parameters/parameters?query={ "referrers": { "$ne": [] } }');
+        let response = await _get('/api/widget-parameters/parameters?query={ "referrers": { "$ne": [] } }&limit=1000');
 
         response.parameters = response.parameters.reverse();
 
