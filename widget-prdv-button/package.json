@@ -2,20 +2,22 @@
   "name": "widget-prdv-button",
   "version": "1.0.0",
   "scripts": {
-    "babel": "babel src/main.js --out-file ../ui/public/assets/bundle.js",
-    "build": "BASE_URL=http://localhost yarn babel",
-    "build:recette": "BASE_URL=https://rdv-cfa-recette.apprentissage.beta.gouv.fr yarn babel",
-    "build:production": "BASE_URL=https://rdv-cfa.apprentissage.beta.gouv.fr yarn babel",
+    "babel:minified": "babel src/main.js --config-file ./babel.production.js -o ../ui/public/assets/widget.min.js",
+    "babel:raw": "babel src/main.js --config-file ./babel.base.js -o ../ui/public/assets/widget.js",
+    "build": "BASE_URL=http://localhost npm-run-all --parallel babel:raw babel:minified",
+    "build:recette": "BASE_URL=https://rdv-cfa-recette.apprentissage.beta.gouv.fr npm-run-all --parallel babel:raw babel:minified",
+    "build:production": "BASE_URL=https://rdv-cfa.apprentissage.beta.gouv.fr npm-run-all --parallel babel:raw babel:minified",
     "isBranch": "node ./node_modules/git-branch-is/bin/git-branch-is.js"
   },
   "devDependencies": {
-    "@babel/cli": "7.13.0",
-    "@babel/core": "7.13.8",
-    "@babel/preset-env": "7.13.9",
-    "@babel/plugin-transform-runtime": "7.13.9",
+    "npm-run-all": "4.1.5",
+    "@babel/cli": "7.13.14",
+    "@babel/core": "7.13.14",
+    "@babel/plugin-transform-runtime": "7.13.10",
+    "@babel/preset-env": "7.13.12",
     "babel-plugin-transform-inline-environment-variables": "0.4.3",
     "git-branch-is": "4.0.0",
-    "husky": "4.3.5"
+    "husky": "6.0.0"
   },
   "husky": {
     "hooks": {
