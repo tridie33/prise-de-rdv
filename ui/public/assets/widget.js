@@ -16,7 +16,7 @@ window.initPrdvWidget = function () {
 
 
 function createWidgetPRDV(element) {
-  var baseUrl = "https://rdv-cfa-recette.apprentissage.beta.gouv.fr";
+  var baseUrl = "https://rdv-cfa.apprentissage.beta.gouv.fr";
   var siret = element.dataset.siret;
   var cfd = element.dataset.cfd;
   var referrer = element.dataset.referrer;
