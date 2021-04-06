@@ -44,8 +44,11 @@ module.exports = () => {
       const criterias2 = ["etablissement_formateur_siret", "etablissement_gestionnaire_siret", "cfd"];
       const arrayFiltered2 = getUniqueArray(response.formations, criterias2);
 
-      const criterias3 = ["etablissement_formateur_siret", "etablissement_gestionnaire_siret", "cfd", "code_postal"];
+      const criterias3 = ["etablissement_formateur_siret", "cfd", "code_postal"];
       const arrayFiltered3 = getUniqueArray(response.formations, criterias3);
+
+      const criterias4 = ["etablissement_formateur_siret", "etablissement_gestionnaire_siret", "cfd", "code_postal"];
+      const arrayFiltered4 = getUniqueArray(response.formations, criterias4);
 
       const mapper = (item) => ({
         intitule_long: item.intitule_long,
@@ -74,6 +77,12 @@ module.exports = () => {
           total_formations_avant_filtrage: totalFormations,
           total_formations_apres_filtrage: arrayFiltered3.length,
           formations: arrayFiltered3.map(mapper),
+        },
+        filtre_4: {
+          criteres_unicite_catalogue: criterias4,
+          total_formations_avant_filtrage: totalFormations,
+          total_formations_apres_filtrage: arrayFiltered4.length,
+          formations: arrayFiltered4.map(mapper),
         },
       });
     })
