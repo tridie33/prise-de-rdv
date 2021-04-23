@@ -1,23 +1,22 @@
 const axios = require("axios");
 const config = require("../../../config");
+
 /**
- * @description Get formations by siret and
- * @param {String} siret
- * @param {String} cfd
+ * @description Get formations by its idRcoFormation.
+ * @param {String} idRcoFormation
  * @returns {Promise<Object>}
  */
-const getFormationsBySiretCfd = async ({ siret, cfd }) =>
+const getFormationsByIdRcoFormation = async ({ idRcoFormation }) =>
   getFormations({
     $and: [
-      { etablissement_formateur_siret: siret },
-      { cfd },
+      { id_rco_formation: idRcoFormation },
       { published: true },
       { etablissement_reference_catalogue_published: true },
     ],
   });
 
 /**
- * @description Get formations by siret and
+ * @description Get formations through the catalogue.
  * @param {Object} query - Mongo query
  * @param {Number} page - For pagination
  * @param {Number} limit - Item limit
@@ -36,6 +35,6 @@ const getFormations = async (query, page = 1, limit = 500) => {
 };
 
 module.exports = {
-  getFormationsBySiretCfd,
+  getFormationsByIdRcoFormation,
   getFormations,
 };

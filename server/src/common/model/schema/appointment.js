@@ -85,6 +85,11 @@ const appointmentSchema = {
     default: false,
     description: "Le centre a t'il ouvert son mail de demande de contact du candidat ?",
   },
+  id_rco_formation: {
+    type: String,
+    default: null,
+    description: "Id RCO formation",
+  },
   created_at: {
     type: Date,
     default: Date.now,

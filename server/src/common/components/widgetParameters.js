@@ -8,7 +8,9 @@ module.exports = async () => ({
    * @param {String} formation_intitule
    * @param {String} formation_cfd
    * @param {String} email_rdv
+   * @param {String} code_postal
    * @param {Number[]} referrers
+   * @param {String} id_rco_formation
    * @returns {Promise<*>}
    */
   createParameter: async ({
@@ -17,78 +19,75 @@ module.exports = async () => ({
     formation_intitule,
     formation_cfd,
     email_rdv,
+    code_postal,
     referrers,
+    id_rco_formation,
   }) => {
-    const toAdd = new WidgetParameter({
+    const widgetParameter = new WidgetParameter({
       etablissement_siret,
       etablissement_raison_sociale,
       formation_intitule,
       formation_cfd,
       email_rdv,
       referrers,
+      code_postal,
+      id_rco_formation,
     });
-    await toAdd.save();
-    return toAdd.toObject();
+    await widgetParameter.save();
+
+    return widgetParameter.toObject();
   },
 
   /**
    * @description Updates item.
-   * @param {String} requestId
+   * @param {String} id
    * @param {WidgetParameter} body
    * @returns {Promise<*>}
    */
-  updateParameter: async (requestId, body) => {
-    return WidgetParameter.findOneAndUpdate({ _id: requestId }, body, { new: true });
+  updateParameter: async (id, body) => {
+    return WidgetParameter.findOneAndUpdate({ _id: id }, body, { new: true });
   },
 
   /**
    * @description Deletes an item.
-   * @param {String} requestId
+   * @param {String} id
    * @returns {Promise<*>}
    */
-  deleteParameter: async (requestId) => {
-    return WidgetParameter.findByIdAndDelete(requestId);
+  deleteParameter: (id) => {
+    return WidgetParameter.findByIdAndDelete(id);
   },
 
   /**
-   * @description Returns item through its: siret, cfd and referrer.
-   * @param {String} siret
-   * @param {String} cfd
+   * @description Returns item through its "id_rco_formation".
+   * @param {String} idRcoFormation
    * @returns {Promise<WidgetParameter>}
    */
-  getParameterBySiretCfd: ({ siret, cfd }) => {
-    return WidgetParameter.findOne({
-      etablissement_siret: siret,
-      formation_cfd: cfd,
-    });
+  getParameterByIdRcoFormation: ({ idRcoFormation }) => {
+    return WidgetParameter.findOne({ id_rco_formation: idRcoFormation });
   },
 
   /**
-   * @description Returns item through its: siret, cfd and referrer.
-   * @param {String} siret
-   * @param {String} cfd
+   * @description Returns item through its "id_rco_formation".
+   * @param {String} idRcoFormation
    * @param {Number} referrer
    * @returns {Promise<WidgetParameter>}
    */
-  getParameterBySiretCfdReferrer: ({ siret, cfd, referrer }) => {
+  getParameterByIdRcoFormationReferrer: ({ idRcoFormation, referrer }) => {
     return WidgetParameter.findOne({
-      etablissement_siret: siret,
-      formation_cfd: cfd,
+      id_rco_formation: idRcoFormation,
       referrers: { $in: [referrer] },
     });
   },
 
   /**
    * @description Checks if widget is enabled or not.
-   * @param {String} siret
-   * @param {String} cfd
+   * @param {String} idRcoFormation
    * @param {Number} referrer
    * @returns {Promise<Boolean>}
    */
-  isWidgetVisible: async ({ siret, cfd, referrer }) => {
-    return await WidgetParameter.exists({
-      etablissement_siret: siret,
-      formation_cfd: cfd,
+  isWidgetVisible: async ({ idRcoFormation, referrer }) => {
+    return WidgetParameter.exists({
+      id_rco_formation: idRcoFormation,
       referrers: { $in: [referrer] },
     });
   },

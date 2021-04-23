@@ -18,7 +18,7 @@ import { ContactCentreComponent } from "./components/ContactCentreComponent";
 import { useHistory } from "react-router-dom";
 import { FormHeaderComponent } from "./components/FormHeaderComponent";
 import { FormLayoutComponent } from "./components/FormLayoutComponent";
-import { _get, _post } from "../../common/httpClient";
+import { _post } from "../../common/httpClient";
 
 /**
  * @description Form appointment page.
@@ -32,7 +32,7 @@ export const FormCreatePage = (props) => {
   const [error, setError] = useState();
   const [loading, setLoading] = useState(false);
 
-  const { siret, cfd, referrer } = qs.parse(props.location.search);
+  const { idRcoFormation, referrer } = qs.parse(props.location.search);
 
   /**
    * @description Initialize.
@@ -41,9 +41,8 @@ export const FormCreatePage = (props) => {
     async function fetchContext() {
       try {
         setLoading(true);
-        const response = await _get(
-          `/api/appointment-request/context/create?siret=${siret}&cfd=${cfd}&referrer=${referrer}`
-        );
+
+        const response = await _post(`/api/appointment-request/context/create`, { idRcoFormation, referrer });
 
         if (response?.error) {
           throw new Error(response?.error);
@@ -58,7 +57,7 @@ export const FormCreatePage = (props) => {
     }
 
     fetchContext();
-  }, [cfd, referrer, siret]);
+  }, [idRcoFormation, referrer]);
 
   /**
    * @description Validate email.
@@ -104,8 +103,7 @@ export const FormCreatePage = (props) => {
     try {
       const { appointment } = await _post("/api/appointment-request/validate", {
         ...values,
-        siret,
-        cfd,
+        idRcoFormation,
         referrer,
       });
 
@@ -153,11 +151,11 @@ export const FormCreatePage = (props) => {
               return (
                 <Form>
                   <ContactCentreComponent
-                    entrepriseRaisonSociale={data.etablissement.entreprise_raison_sociale}
-                    intitule={data.formation.intitule}
-                    adresse={data.formation.adresse}
-                    codePostal={data.formation.code_postal}
-                    ville={data.formation.ville}
+                    entrepriseRaisonSociale={data.etablissement_formateur_entreprise_raison_sociale}
+                    intitule={data.intitule_long}
+                    adresse={data.lieu_formation_adresse}
+                    codePostal={data.code_postal}
+                    ville={data.localite}
                   />
                   <HelloTypography as={"h2"}>Bonjour !</HelloTypography>
                   <p>
@@ -177,9 +175,8 @@ export const FormCreatePage = (props) => {
 
                   {data.training && (
                     <p>
-                      Pour tout savoir de notre formation <u>{data.training.intitule}</u>, laissez-nous{" "}
-                      <strong>48h</strong> et <strong>votre numéro de téléphone</strong>{" "}
-                      <AsterixTypography>*</AsterixTypography> :
+                      Pour tout savoir de notre formation <u>{data.intitule_long}</u>, laissez-nous <strong>48h</strong>{" "}
+                      et <strong>votre numéro de téléphone</strong> <AsterixTypography>*</AsterixTypography> :
                     </p>
                   )}
 

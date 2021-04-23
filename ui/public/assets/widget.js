@@ -16,23 +16,13 @@ window.initPrdvWidget = function () {
 
 
 function createWidgetPRDV(element) {
-  var baseUrl = "https://rdv-cfa-recette.apprentissage.beta.gouv.fr";
-  var siret = element.dataset.siret;
-  var cfd = element.dataset.cfd;
-  var referrer = element.dataset.referrer;
-  var candidatFirstname = element.dataset.candidatFirstname;
-  var candidatLastname = element.dataset.candidatLastname;
-  var url = "".concat(baseUrl, "/form?referrer=").concat(referrer, "&siret=").concat(siret, "&cfd=").concat(cfd);
-
-  if (candidatFirstname) {
-    url = "".concat(url, "&candidatFirstname=").concat(candidatFirstname);
-  }
-
-  if (candidatLastname) {
-    url = "".concat(url, "&candidatLastname=").concat(candidatLastname);
-  }
-
-  return fetch("".concat(baseUrl, "/api/appointment-request/context/create?siret=").concat(siret, "&cfd=").concat(cfd, "&referrer=").concat(referrer)).then(function (response) {
+  return fetch("".concat("https://rdv-cfa.apprentissage.beta.gouv.fr", "/api/appointment-request/context/create"), {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(element.dataset)
+  }).then(function (response) {
     return response.json();
   }).then(function (data) {
     if (data && !data.error) {
@@ -41,15 +31,10 @@ function createWidgetPRDV(element) {
       a.appendChild(link);
       a.title = "Prendre rendez-vous";
       a.target = '_blank';
-      a.href = url;
+      a.href = data.form_url;
       element.appendChild(a);
     }
 
-    return {
-      siret: siret,
-      cfd: cfd,
-      referrer: referrer,
-      data: data
-    };
+    return data;
   })["catch"](console.error);
 }
