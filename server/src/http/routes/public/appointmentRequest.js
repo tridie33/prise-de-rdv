@@ -161,7 +161,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
       await Promise.all([
         mailer.sendEmail(
           user.email,
-          `Le CFA a bien reçu votre demande de RDV via ${referrerObj.fullName}`,
+          `Le CFA a bien reçu votre demande de RDV via ${referrerObj.full_name}`,
           getEmailTemplate("mail-candidat"),
           mailData
         ),
