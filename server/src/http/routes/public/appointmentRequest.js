@@ -5,7 +5,7 @@ const Boom = require("boom");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const config = require("../../../../config");
 const { getReferrerById, getReferrerByKeyName } = require("../../../common/model/constants/referrers");
-const { getFormationsBySiretCfd } = require("../../utils/catalogue");
+const { getFormationsByIdRcoFormation } = require("../../utils/catalogue");
 const { candidat } = require("../../../common/roles");
 
 const userRequestSchema = Joi.object({
@@ -14,8 +14,7 @@ const userRequestSchema = Joi.object({
   phone: Joi.string().required(),
   email: Joi.string().required(),
   motivations: Joi.string().allow(null, ""),
-  siret: Joi.string().required(),
-  cfd: Joi.string().required(),
+  idRcoFormation: Joi.string().required(),
   referrer: Joi.string().required(),
 });
 
@@ -31,39 +30,43 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
   const notAllowedResponse = { error: "Prise de rendez-vous non disponible." };
 
   /**
-   * @description Returns all informations needed to initialize front.
+   * @description Creates and returns formation context.
    * @param {Request} req
    * @param {Response} res
    */
-  router.get(
+  router.post(
     "/context/create",
     tryCatch(async (req, res) => {
-      const { siret, cfd, referrer } = req.query;
+      const { idRcoFormation, referrer } = req.body;
+
       const referrerObj = getReferrerByKeyName(referrer);
 
-      const widgetVisible = await widgetParameters.isWidgetVisible({ siret, cfd, referrer: referrerObj.code });
+      const isWidgetVisible = await widgetParameters.isWidgetVisible({
+        idRcoFormation,
+        referrer: referrerObj.code,
+      });
 
-      if (!widgetVisible) {
+      if (!isWidgetVisible) {
         return res.send(notAllowedResponse);
       }
 
-      const { formations } = await getFormationsBySiretCfd({ siret, cfd });
+      const { formations } = await getFormationsByIdRcoFormation({ idRcoFormation });
       const [formation] = formations;
 
       if (!formation) {
-        throw Boom.notFound("Etablissement et formation introuvable.");
+        throw Boom.notFound("Formation introuvable.");
       }
 
       res.send({
-        etablissement: {
-          entreprise_raison_sociale: formation.etablissement_formateur_entreprise_raison_sociale,
-        },
-        formation: {
-          intitule: formation.intitule_long,
-          adresse: formation.lieu_formation_adresse,
-          code_postal: formation.code_postal,
-          ville: formation.localite,
-        },
+        etablissement_formateur_entreprise_raison_sociale: formation.etablissement_formateur_entreprise_raison_sociale,
+        intitule_long: formation.intitule_long,
+        lieu_formation_adresse: formation.lieu_formation_adresse,
+        code_postal: formation.code_postal,
+        etablissement_formateur_siret: formation.etablissement_formateur_siret,
+        cfd: formation.cfd,
+        localite: formation.localite,
+        id_rco_formation: formation.id_rco_formation,
+        form_url: `/form?referrer=${referrer}&idRcoFormation=${idRcoFormation}`,
       });
     })
   );
@@ -73,15 +76,18 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
     tryCatch(async (req, res) => {
       await userRequestSchema.validateAsync(req.body, { abortEarly: false });
 
-      let { firstname, lastname, phone, email, siret, cfd, motivations, referrer } = req.body;
+      let { firstname, lastname, phone, email, siret, cfd, motivations, referrer, idRcoFormation } = req.body;
 
       email = email.toLowerCase();
 
       const referrerObj = getReferrerByKeyName(referrer);
 
-      const widgetVisible = await widgetParameters.isWidgetVisible({ siret, cfd, referrer: referrerObj.code });
+      const isWidgetVisible = await widgetParameters.isWidgetVisible({
+        idRcoFormation,
+        referrer: referrerObj.code,
+      });
 
-      if (!widgetVisible) {
+      if (!isWidgetVisible) {
         return res.send(notAllowedResponse);
       }
 
@@ -106,11 +112,12 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
         formation_id: cfd,
         motivations,
         referrer: referrerObj.code,
+        id_rco_formation: idRcoFormation,
       });
 
       const [catalogueResponse, widgetParameter] = await Promise.all([
-        getFormationsBySiretCfd({ siret: createdAppointement.etablissement_id, cfd: createdAppointement.formation_id }),
-        widgetParameters.getParameterBySiretCfdReferrer({ siret, cfd, referrer: referrerObj.code }),
+        getFormationsByIdRcoFormation({ idRcoFormation }),
+        widgetParameters.getParameterByIdRcoFormationReferrer({ idRcoFormation, referrer: referrerObj.code }),
       ]);
 
       const [formation] = catalogueResponse.formations;
@@ -194,10 +201,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
       const appointment = await appointments.getAppointmentById(appointmentId);
 
       const [widgetParameter, user] = await Promise.all([
-        widgetParameters.getParameterBySiretCfd({
-          siret: appointment.etablissement_id,
-          cfd: appointment.formation_id,
-        }),
+        widgetParameters.getParameterByIdRcoFormation({ idRcoFormation: appointment.id_rco_formation }),
         users.getUserById(appointment.candidat_id),
       ]);
 

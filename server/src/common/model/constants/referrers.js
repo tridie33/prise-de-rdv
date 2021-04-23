@@ -5,13 +5,13 @@ const referrers = {
   PARCOURSUP: {
     code: 1,
     name: "PARCOURSUP",
-    fullName: "Parcoursup",
+    full_name: "Parcoursup",
     url: "https://www.parcoursup.fr",
   },
   LBA: {
     code: 2,
     name: "LBA",
-    fullName: "La Bonne Alternance",
+    full_name: "La Bonne Alternance",
     url: "https://labonnealternance.apprentissage.beta.gouv.fr",
   },
 };

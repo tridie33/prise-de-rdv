@@ -1,4 +1,5 @@
 import React, { createRef, useEffect, useState } from "react";
+import _ from "lodash";
 import { useParams } from "react-router";
 import { Button, Card, Grid, Page, Table, Icon, Form as TablerForm } from "tabler-react";
 import { toast } from "react-toastify";
@@ -32,31 +33,29 @@ export default () => {
 
         const catalogueResult = await catalogueResponse.json();
 
-        // Create permission hashmap
-        const permissions = {};
+        let permissions = [];
         for (const formation of catalogueResult.formations) {
-          const parameter = parametersResponse.parameters.find((item) => item.formation_cfd === formation.cfd);
+          const parameter = parametersResponse.parameters.find(
+            (item) => item.id_rco_formation === formation.id_rco_formation
+          );
 
-          permissions[formation.cfd] = referrers.map((referrer) => ({
-            referrerId: referrer.code,
-            name: referrer.fullName,
-            cfd: formation.cfd,
-            checked: !!parameter?.referrers.map((parameterReferrer) => parameterReferrer.code).includes(referrer.code),
-          }));
+          referrers.forEach((referrer) =>
+            permissions.push({
+              referrerId: referrer.code,
+              siret: formation.etablissement_formateur_siret,
+              name: referrer.full_name,
+              cfd: formation.cfd,
+              codePostal: formation.code_postal,
+              id_rco_formation: formation.id_rco_formation,
+              checked: !!parameter?.referrers
+                .map((parameterReferrer) => parameterReferrer.code)
+                .includes(referrer.code),
+            })
+          );
         }
 
-        const formationsUniq = catalogueResult.formations.filter(
-          (v, i, a) =>
-            a.findIndex(
-              (t) => t.etablissement_formateur_siret === v.etablissement_formateur_siret && t.cfd === v.cfd
-            ) === i
-        );
-
-        setPermissions(permissions);
-        setCatalogueResult({
-          ...catalogueResult,
-          formations: formationsUniq,
-        });
+        setPermissions(_.uniqWith(permissions, _.isEqual));
+        setCatalogueResult(catalogueResult);
         setParametersResult(parametersResponse);
       } catch (error) {
         toast.error("Une erreur est survenue durant la récupération des informations.");
@@ -78,7 +77,7 @@ export default () => {
 
   /**
    * @description Returns all referrers.
-   * @returns {Promise<{code: {number}, name: {string}, fullName: {string}, url: {string}[]}>}
+   * @returns {Promise<{code: {number}, name: {string}, full_name: {string}, url: {string}[]}>}
    */
   const getReferrers = async () => {
     const { referrers } = await _get(`/api/constants`);
@@ -87,27 +86,35 @@ export default () => {
   };
 
   /**
+   * @description Returns permissions from criterias.
+   * @param {Object[]} permissions
+   * @param {String} id_rco_formation
+   * @returns {Object}
+   */
+  const getPermissionsFromCriterias = ({ permissions, id_rco_formation }) => {
+    return permissions.filter((item) => item.id_rco_formation === id_rco_formation);
+  };
+
+  /**
    * @description Toggles checkboxes.
    * @param {Object} permission
    * @param {Number} permission.referrerId
-   * @param {String} permission.name
-   * @param {String} permission.cfd
-   * @param {Boolean} permission.checked
+   * @param {String} permission.id_rco_formation
    * @returns {Promise<void>}
    */
-  const togglePermission = async (permission) => {
-    const permissionsClone = { ...permissions };
-    permissionsClone[permission.cfd] = permissionsClone[permission.cfd].map((item) => {
-      if (item.referrerId === permission.referrerId) {
-        return {
-          ...item,
-          checked: !item.checked,
-        };
-      }
-      return item;
-    });
+  const togglePermission = ({ referrerId, id_rco_formation }) => {
+    setPermissions(
+      permissions.map((item) => {
+        if (item.referrerId === referrerId && item.id_rco_formation === id_rco_formation) {
+          return {
+            ...item,
+            checked: !item.checked,
+          };
+        }
 
-    setPermissions(permissionsClone);
+        return item;
+      })
+    );
   };
 
   /**
@@ -118,7 +125,7 @@ export default () => {
    * @param {String} params.email
    * @returns {Promise<void>}
    */
-  const upsertParameter = async ({ formation, parameter, email }) => {
+  const upsertParameter = async ({ formation, parameter, email, formationPermissions }) => {
     const emailRdv = email || parameter?.email_rdv;
 
     if (!emailRdv) {
@@ -135,9 +142,11 @@ export default () => {
       etablissement_siret: formation.etablissement_formateur_siret,
       etablissement_raison_sociale: formation.etablissement_formateur_entreprise_raison_sociale,
       formation_intitule: formation.intitule_long,
+      code_postal: formation.code_postal,
       formation_cfd: formation.cfd,
       email_rdv: emailRdv,
-      referrers: permissions[formation.cfd].filter((item) => item.checked).map((item) => item.referrerId),
+      referrers: formationPermissions.filter((item) => item.checked).map((item) => item.referrerId),
+      id_rco_formation: formation.id_rco_formation,
     };
 
     // Upsert document
@@ -170,6 +179,7 @@ export default () => {
                   <Card title="Formations">
                     <Table responsive className="card-table table-vcenter text-nowrap">
                       <Table.Header>
+                        <Table.ColHeader>Id RCO</Table.ColHeader>
                         <Table.ColHeader>Intitulé</Table.ColHeader>
                         <Table.ColHeader>CFD</Table.ColHeader>
                         <Table.ColHeader>Code postal</Table.ColHeader>
@@ -184,11 +194,17 @@ export default () => {
                         {catalogueResult.formations.map((formation) => {
                           const emailRef = createRef();
                           const parameter = parametersResult.parameters.find(
-                            (item) => item.formation_cfd === formation.cfd
+                            (item) => item.formation_cfd === formation.cfd && item.code_postal === formation.code_postal
                           );
+
+                          const formationPermissions = getPermissionsFromCriterias({
+                            permissions,
+                            id_rco_formation: formation.id_rco_formation,
+                          });
 
                           return (
                             <TableRowHover key={formation._id}>
+                              <Table.Col>{formation.id_rco_formation}</Table.Col>
                               <Table.Col>{formation.intitule_long}</Table.Col>
                               <Table.Col>{formation.cfd}</Table.Col>
                               <Table.Col>{formation.code_postal}</Table.Col>
@@ -203,24 +219,27 @@ export default () => {
                                 />
                               </Table.ColHeader>
                               <Table.Col>
-                                {permissions[formation.cfd].map((permission) => {
-                                  return (
-                                    <TablerForm.Checkbox
-                                      key={`${formation.cfd}-${permission.referrerId}`}
-                                      checked={permission.checked}
-                                      label={permission.name}
-                                      value={permission.referrerId}
-                                      onChange={() => togglePermission(permission)}
-                                    />
-                                  );
-                                })}
+                                {formationPermissions.map((permission) => (
+                                  <TablerForm.Checkbox
+                                    key={`${formation.cfd}-${permission.referrerId}`}
+                                    checked={permission.checked}
+                                    label={permission.name}
+                                    value={permission.referrerId}
+                                    onChange={() => togglePermission(permission)}
+                                  />
+                                ))}
                               </Table.Col>
                               <Table.Col>
                                 <Button
                                   RootComponent="a"
                                   color="primary"
                                   onClick={() =>
-                                    upsertParameter({ formation, parameter, email: emailRef.current.value })
+                                    upsertParameter({
+                                      formation,
+                                      parameter,
+                                      email: emailRef.current.value,
+                                      formationPermissions,
+                                    })
                                   }
                                 >
                                   <Icon name="save" className="text-white" />
