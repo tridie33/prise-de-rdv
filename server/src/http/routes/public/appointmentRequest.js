@@ -167,7 +167,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
         ),
         mailer.sendEmail(
           widgetParameter.email_rdv,
-          `[RDV via ${referrerObj.fullName}] Un candidat souhaite être recontacté`,
+          `[RDV via ${referrerObj.full_name}] Un candidat souhaite être recontacté`,
           getEmailTemplate("mail-formation"),
           mailData
         ),
