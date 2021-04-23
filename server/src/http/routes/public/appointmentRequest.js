@@ -147,7 +147,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
         },
         appointment: {
           referrerLink: referrerObj.url,
-          referrer: referrerObj.fullName,
+          referrer: referrerObj.full_name,
         },
         images: {
           people: `${config.publicUrl}/assets/people.png?raw=true`,
