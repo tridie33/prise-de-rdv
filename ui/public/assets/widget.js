@@ -16,6 +16,7 @@ window.initPrdvWidget = function () {
 
 
 function createWidgetPRDV(element) {
+  element.innerHTML = "";
   return fetch("".concat("https://rdv-cfa-recette.apprentissage.beta.gouv.fr", "/api/appointment-request/context/create"), {
     method: 'POST',
     headers: {
@@ -26,7 +27,6 @@ function createWidgetPRDV(element) {
     return response.json();
   }).then(function (data) {
     if (data && !data.error) {
-      element.innerHTML = "";
       var a = document.createElement("a");
       var link = document.createTextNode("Prendre rendez-vous");
       a.appendChild(link);

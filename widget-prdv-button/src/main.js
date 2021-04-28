@@ -15,6 +15,8 @@ window.initPrdvWidget = () => {
  * @returns {Promise<Object>}
  */
 function createWidgetPRDV(element) {
+    element.innerHTML = "";
+
     return fetch(`${process.env.BASE_URL}/api/appointment-request/context/create`, {
         method: 'POST',
         headers: {
@@ -24,10 +26,7 @@ function createWidgetPRDV(element) {
     })
         .then(response => response.json())
         .then(data => {
-
             if(data && !data.error) {
-                element.innerHTML = "";
-
                 const a = document.createElement("a");
                 const link = document.createTextNode("Prendre rendez-vous");
 
