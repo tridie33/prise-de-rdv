@@ -12,7 +12,7 @@ window.initPrdvWidget = () => {
 /**
  * @description Creates button if allowed.
  * @param {HTMLCollectionOf<Element>} element - DOM element
- * @returns {void}
+ * @returns {Promise<Object>}
  */
 function createWidgetPRDV(element) {
     return fetch(`${process.env.BASE_URL}/api/appointment-request/context/create`, {
@@ -26,6 +26,8 @@ function createWidgetPRDV(element) {
         .then(data => {
 
             if(data && !data.error) {
+                element.innerHTML = "";
+
                 const a = document.createElement("a");
                 const link = document.createTextNode("Prendre rendez-vous");
 

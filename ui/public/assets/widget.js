@@ -11,7 +11,7 @@ window.initPrdvWidget = function () {
 /**
  * @description Creates button if allowed.
  * @param {HTMLCollectionOf<Element>} element - DOM element
- * @returns {void}
+ * @returns {Promise<Object>}
  */
 
 
@@ -26,6 +26,7 @@ function createWidgetPRDV(element) {
     return response.json();
   }).then(function (data) {
     if (data && !data.error) {
+      element.innerHTML = "";
       var a = document.createElement("a");
       var link = document.createTextNode("Prendre rendez-vous");
       a.appendChild(link);
