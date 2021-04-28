@@ -24,10 +24,20 @@ const widgetParameterSchema = {
     default: null,
     description: "Adresse email pour la prise de RDV",
   },
+  code_postal: {
+    type: String,
+    default: null,
+    description: "Code postal du lieu de formation",
+  },
   referrers: {
     type: [Object],
     default: [],
     description: "Liste des sites autorisés",
+  },
+  id_rco_formation: {
+    type: String,
+    default: null,
+    description: "Id RCO formation",
   },
 };
 

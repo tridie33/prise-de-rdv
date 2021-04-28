@@ -10,8 +10,10 @@ const widgetParameterSchema = Joi.object({
   etablissement_raison_sociale: Joi.string().required(),
   formation_intitule: Joi.string().required(),
   formation_cfd: Joi.string().required(),
+  code_postal: Joi.string().required(),
   email_rdv: Joi.string().required(),
   referrers: Joi.array().items(Joi.number()),
+  id_rco_formation: Joi.string().required(),
 });
 
 /**

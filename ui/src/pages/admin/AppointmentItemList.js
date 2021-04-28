@@ -67,13 +67,13 @@ export const AppointmentItemList = (props) => {
       <Table.Col>
         <a href={`mailto:${props.appointment.candidat.email}`}>{props.appointment.candidat.email}</a>
       </Table.Col>
-      <Table.Col>{props.appointment.formation.etablissement.entreprise_raison_sociale}</Table.Col>
+      <Table.Col>{props.appointment.formation.etablissement_formateur_entreprise_raison_sociale}</Table.Col>
       <Table.Col>{props.appointment.etablissement_id}</Table.Col>
-      <Table.Col>{props.appointment.formation.formation.intitule}</Table.Col>
+      <Table.Col>{props.appointment.formation.intitule_long}</Table.Col>
       <Table.Col>{props.appointment.formation_id}</Table.Col>
       <Table.Col>
         <ReferrerLayout>
-          <span>{props.appointment.referrer.fullName}</span>
+          <span>{props.appointment.referrer.full_name}</span>
         </ReferrerLayout>
       </Table.Col>
       <Table.Col>

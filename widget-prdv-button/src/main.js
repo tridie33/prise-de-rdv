@@ -12,28 +12,18 @@ window.initPrdvWidget = () => {
 /**
  * @description Creates button if allowed.
  * @param {HTMLCollectionOf<Element>} element - DOM element
- * @returns {void}
+ * @returns {Promise<Object>}
  */
 function createWidgetPRDV(element) {
-    const baseUrl = process.env.BASE_URL;
+    element.innerHTML = "";
 
-    const siret = element.dataset.siret;
-    const cfd = element.dataset.cfd;
-    const referrer = element.dataset.referrer;
-    const candidatFirstname = element.dataset.candidatFirstname;
-    const candidatLastname = element.dataset.candidatLastname;
-
-    let url = `${baseUrl}/form?referrer=${referrer}&siret=${siret}&cfd=${cfd}`;
-
-    if(candidatFirstname) {
-        url = `${url}&candidatFirstname=${candidatFirstname}`;
-    }
-
-    if(candidatLastname) {
-        url = `${url}&candidatLastname=${candidatLastname}`;
-    }
-
-    return fetch(`${baseUrl}/api/appointment-request/context/create?siret=${siret}&cfd=${cfd}&referrer=${referrer}`)
+    return fetch(`${process.env.BASE_URL}/api/appointment-request/context/create`, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(element.dataset)
+    })
         .then(response => response.json())
         .then(data => {
 
@@ -44,17 +34,12 @@ function createWidgetPRDV(element) {
                 a.appendChild(link);
                 a.title = "Prendre rendez-vous";
                 a.target = '_blank';
-                a.href = url
+                a.href = data.form_url
 
                 element.appendChild(a);
             }
 
-            return {
-                siret,
-                cfd,
-                referrer,
-                data,
-            }
+            return data;
         })
         .catch(console.error)
 }

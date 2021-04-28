@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <title>Widget - Exemple d'intégration</title>
+      <script src="/assets/widget.min.js"></script>
+   </head>
+   <body>
+      <h1>Exemple</h1>
+      <br>
+      <h3>Pré-requis</h3>
+      <p>1. Ajouter la balise suivante avant la fermeture de la balise HEAD</p>
+      <textarea disabled style="width:50%;">
+    <script src="https://rdv-cfa.apprentissage.beta.gouv.fr/assets/widget.min.js"></script>
+</textarea>
+      <br><br>
+      <h3>1. Intégration du widget via l'attribut <b>id-rco-formation</b>:</h3>
+      <h4>Code:</h4>
+      <textarea disabled style="width:50%;">
+    <div class="widget-prdv" data-id-rco-formation="15_554095|15_1117617|106339" data-referrer="lba"></div>
+</textarea>
+      <h4>Résultat</h4>
+      <div class="widget-prdv" data-id-rco-formation="15_554095|15_1117617|106339" data-referrer="lba"></div>
+      <script>
+         window.initPrdvWidget();
+      </script>
+   </body>
+</html>

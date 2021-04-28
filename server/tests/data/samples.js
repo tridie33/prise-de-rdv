@@ -17,20 +17,24 @@ const sampleUpdateAppointment = {
 };
 
 const sampleParameter = {
+  code_postal: "75000",
   etablissement_siret: "32922456200234",
   etablissement_raison_sociale: "TEST RAISON SOCIALE",
   formation_intitule: "Test Formation",
   formation_cfd: "26033206",
   email_rdv: "testContact@prdv.fr",
+  id_rco_formation: "15_554095|15_1117617|106339",
   referrers: [referrers.LBA.code],
 };
 
 const sampleUpdateParameter = {
+  code_postal: "75000",
   etablissement_siret: "32922456299999",
   etablissement_raison_sociale: "UPDATE RAISON SOCIALE",
   formation_intitule: "Update Formation",
   formation_cfd: "260999999",
   email_rdv: "updateMail@prdv.fr",
+  id_rco_formation: "15_554095|15_1117617|106339",
   referrers: [referrers.PARCOURSUP.code],
 };
 
@@ -41,6 +45,7 @@ const sampleParameters = [
     formation_intitule: "Test Formation",
     formation_cfd: "26033206",
     email_rdv: "testContact@prdv.fr",
+    id_rco_formation: "15_554095|15_1117617|106339",
     referrers: [referrers.LBA.code],
   },
   {
@@ -49,6 +54,7 @@ const sampleParameters = [
     formation_intitule: "Test Formation 2",
     formation_cfd: "26033205",
     email_rdv: "testContact2@prdv.fr",
+    id_rco_formation: "15_554095|15_1117617|12345",
     referrers: [referrers.PARCOURSUP.code],
   },
 ];

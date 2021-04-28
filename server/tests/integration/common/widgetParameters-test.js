@@ -104,6 +104,7 @@ integrationTests(__filename, () => {
       formation_intitule: sampleParameter.formation_intitule,
       formation_cfd: sampleParameter.formation_cfd,
       email_rdv: sampleParameter.email_rdv,
+      id_rco_formation: sampleParameter.id_rco_formation,
       referrers: sampleParameter.referrers,
     });
 
@@ -113,12 +114,12 @@ integrationTests(__filename, () => {
     assert.deepStrictEqual(created.formation_intitule, sampleParameter.formation_intitule);
     assert.deepStrictEqual(created.formation_cfd, sampleParameter.formation_cfd);
     assert.deepStrictEqual(created.email_rdv, sampleParameter.email_rdv);
+    assert.deepStrictEqual(created.id_rco_formation, sampleParameter.id_rco_formation);
     assert.deepStrictEqual(created.referrers.includes(referrers.LBA.code), true);
 
     // Check update
     const isVisible = await isWidgetVisible({
-      siret: sampleParameter.etablissement_siret,
-      cfd: sampleParameter.formation_cfd,
+      idRcoFormation: sampleParameter.id_rco_formation,
       referrer: referrers.LBA.code,
     });
     assert.deepStrictEqual(isVisible, true);
@@ -133,6 +134,7 @@ integrationTests(__filename, () => {
       formation_intitule: sampleParameter.formation_intitule,
       formation_cfd: sampleParameter.formation_cfd,
       email_rdv: sampleParameter.email_rdv,
+      id_rco_formation: sampleParameter.id_rco_formation,
       referrers: sampleParameter.referrers,
     });
 
@@ -142,27 +144,21 @@ integrationTests(__filename, () => {
     assert.deepStrictEqual(created.formation_intitule, sampleParameter.formation_intitule);
     assert.deepStrictEqual(created.formation_cfd, sampleParameter.formation_cfd);
     assert.deepStrictEqual(created.email_rdv, sampleParameter.email_rdv);
+    assert.deepStrictEqual(created.id_rco_formation, sampleParameter.id_rco_formation);
     assert.deepStrictEqual(created.referrers.includes(referrers.LBA.code), true);
 
     // Check if widget is visible
-    const isVisibleForBadReferrer = await isWidgetVisible({
-      siret: sampleParameter.etablissement_siret,
-      cfd: sampleParameter.formation_cfd,
+    const isNotVisibleForBadReferrer = await isWidgetVisible({
+      id_rco_formation: sampleParameter.id_rco_formation,
       referrer: "KO",
     });
-    const isVisibleForBadSiret = await isWidgetVisible({
-      siret: "BADSIRET",
-      cfd: sampleParameter.formation_cfd,
-      referrer: referrers.LBA.code,
-    });
-    const isVisibleForBadCfd = await isWidgetVisible({
-      siret: sampleParameter.etablissement_siret,
-      cfd: "BADCFD",
-      referrer: referrers.LBA.code,
+
+    const isNotVisibleForBadRcoId = await isWidgetVisible({
+      id_rco_formation: `${sampleParameter.id_rco_formation}00`,
+      referrer: sampleParameter.referrers[0],
     });
 
-    assert.deepStrictEqual(isVisibleForBadReferrer, false);
-    assert.deepStrictEqual(isVisibleForBadSiret, false);
-    assert.deepStrictEqual(isVisibleForBadCfd, false);
+    assert.deepStrictEqual(isNotVisibleForBadReferrer, false);
+    assert.deepStrictEqual(isNotVisibleForBadRcoId, false);
   });
 });

@@ -18,7 +18,10 @@ export default () => {
     async function fetchParameters() {
       try {
         setLoading(true);
-        let response = await _get('/api/widget-parameters/parameters?query={ "referrers": { "$ne": [] } }&limit=1000');
+
+        const response = await _get(
+          '/api/widget-parameters/parameters?query={ "referrers": { "$ne": [] } }&limit=1000'
+        );
 
         response.parameters = response.parameters.reverse();
 
@@ -66,7 +69,7 @@ export default () => {
                             <Tag.List>
                               {sortBy(parameter.referrers, "code").map((referrer) => (
                                 <Tag key={referrer.code} color={"blue"}>
-                                  {referrer.fullName}
+                                  {referrer.full_name}
                                 </Tag>
                               ))}
                             </Tag.List>
