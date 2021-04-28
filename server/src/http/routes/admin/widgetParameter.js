@@ -3,6 +3,7 @@ const Joi = require("joi");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const { WidgetParameter } = require("../../../common/model");
 const logger = require("../../../common/logger");
+const { getFormations } = require("../../utils/catalogue");
 const { getReferrerById } = require("../../../common/model/constants/referrers");
 
 const widgetParameterSchema = Joi.object({
@@ -49,6 +50,49 @@ module.exports = ({ widgetParameters }) => {
           total: allData.total,
         },
       });
+    })
+  );
+
+  /**
+   * Get all widgetParameters widgetParameters/count GET
+   */
+  router.get(
+    "/migrate",
+    tryCatch(async (req, res) => {
+      const widgetParameters = await WidgetParameter.find();
+
+      const result = [];
+      let loop = 0;
+
+      for (const widgetParameter of widgetParameters) {
+        console.log(loop++);
+        const catalogueFormations = await getFormations({
+          $and: [
+            { etablissement_formateur_siret: `${widgetParameter.etablissement_siret}` },
+            { cfd: `${widgetParameter.formation_cfd}` },
+            { published: true },
+            { etablissement_reference_catalogue_published: true },
+          ],
+        });
+
+        for (const formation of catalogueFormations.formations) {
+          await WidgetParameter.findOneAndUpdate(
+            { _id: widgetParameter._doc._id },
+            {
+              id_rco_formation: formation.id_rco_formation,
+              code_postal: formation.code_postal,
+            }
+          );
+          result.push({
+            ...widgetParameter._doc,
+            id_rco_formation: formation.id_rco_formation,
+            code_postal: formation.code_postal,
+            id: widgetParameter._doc._id,
+          });
+        }
+      }
+
+      res.send({ result });
     })
   );
 

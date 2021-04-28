@@ -46,7 +46,7 @@ module.exports = async (components) => {
   app.use("/api/appointment-request", appointmentRequestRoute(components));
   app.use("/api/catalogue", catalogueRoute(components));
   app.use("/api/constants", constantsRoute(components));
-  app.use("/api/widget-parameters", checkJwtToken, adminOnly, widgetParameterRoute(components));
+  app.use("/api/widget-parameters", widgetParameterRoute(components));
 
   // Config route
   app.use("/api/config", checkJwtToken, adminOnly, configRoute());
