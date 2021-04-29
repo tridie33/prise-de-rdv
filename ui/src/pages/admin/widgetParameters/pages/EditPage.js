@@ -180,7 +180,6 @@ export default () => {
                     <Table responsive className="card-table table-vcenter text-nowrap">
                       <Table.Header>
                         <Table.ColHeader>Id RCO</Table.ColHeader>
-                        <Table.ColHeader>Id PRDV</Table.ColHeader>
                         <Table.ColHeader>Intitulé</Table.ColHeader>
                         <Table.ColHeader>CFD</Table.ColHeader>
                         <Table.ColHeader>Code postal</Table.ColHeader>
@@ -206,7 +205,6 @@ export default () => {
                           return (
                             <TableRowHover key={formation._id}>
                               <Table.Col>{formation.id_rco_formation}</Table.Col>
-                              <Table.Col>{parameter?._id || ""}</Table.Col>
                               <Table.Col>{formation.intitule_long}</Table.Col>
                               <Table.Col>{formation.cfd}</Table.Col>
                               <Table.Col>{formation.code_postal}</Table.Col>
