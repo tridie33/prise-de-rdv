@@ -180,6 +180,7 @@ export default () => {
                     <Table responsive className="card-table table-vcenter text-nowrap">
                       <Table.Header>
                         <Table.ColHeader>Id RCO</Table.ColHeader>
+                        <Table.ColHeader>Id PRDV</Table.ColHeader>
                         <Table.ColHeader>Intitulé</Table.ColHeader>
                         <Table.ColHeader>CFD</Table.ColHeader>
                         <Table.ColHeader>Code postal</Table.ColHeader>
@@ -194,7 +195,7 @@ export default () => {
                         {catalogueResult.formations.map((formation) => {
                           const emailRef = createRef();
                           const parameter = parametersResult.parameters.find(
-                            (item) => item.formation_cfd === formation.cfd && item.code_postal === formation.code_postal
+                            (item) => item.id_rco_formation === formation.id_rco_formation
                           );
 
                           const formationPermissions = getPermissionsFromCriterias({
@@ -205,6 +206,7 @@ export default () => {
                           return (
                             <TableRowHover key={formation._id}>
                               <Table.Col>{formation.id_rco_formation}</Table.Col>
+                              <Table.Col>{parameter?._id || ""}</Table.Col>
                               <Table.Col>{formation.intitule_long}</Table.Col>
                               <Table.Col>{formation.cfd}</Table.Col>
                               <Table.Col>{formation.code_postal}</Table.Col>
