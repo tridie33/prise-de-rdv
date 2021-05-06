@@ -1,4 +1,4 @@
-const sampleResponseSiretCfd = {
+const sampleCatalogueResponse = {
   formations: [
     {
       _id: "5fc6213e712d48a988148ac2",
@@ -208,7 +208,8 @@ const sampleResponseSiretCfd = {
       update_error: null,
       lieu_formation_adresse: "CFA Délépine 8 Impasse Delépine",
       lieu_formation_siret: null,
-      id_rco_formation: "14_AF_0000091719|14_SE_0000434290|14_SE_0000494236|18894",
+      id_rco_formation: "14_AF_0000091719|14_SE_0000494236|18894",
+      id_parcoursup: "12345",
       lieu_formation_geo_coordonnees: "48.853136,2.389306",
       geo_coordonnees_etablissement_gestionnaire: "48.853093,2.3891",
       geo_coordonnees_etablissement_formateur: "48.853093,2.3891",
@@ -488,5 +489,5 @@ const sampleResponseSiretCfd = {
 };
 
 module.exports = {
-  sampleResponseSiretCfd,
+  sampleCatalogueResponse,
 };
