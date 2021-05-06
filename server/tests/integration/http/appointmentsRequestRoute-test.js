@@ -4,17 +4,15 @@ const widgetParameters = require("../../../src/common/components/widgetParameter
 const { sampleParameter } = require("../../data/samples");
 
 httpTests(__filename, ({ startServer }) => {
-  it("Vérifie qu'on peut récupérer les infos de context pour un siret et un cfd", async () => {
+  it("Vérifie qu'on peut récupérer les infos de context via idRcoFormation", async () => {
     const { createParameter } = await widgetParameters();
 
     await createParameter(sampleParameter);
     const { httpClient } = await startServer();
 
-    const referrer = "lba";
-
     const response = await httpClient.post(`/api/appointment-request/context/create`, {
       idRcoFormation: sampleParameter.id_rco_formation,
-      referrer,
+      referrer: "lba",
     });
 
     assert.strictEqual(response.status, 200);
@@ -29,7 +27,34 @@ httpTests(__filename, ({ startServer }) => {
     assert.ok(response.data.form_url);
   });
 
-  it("Vérifie que le context n'est pas retourné si la prise de rendez-vous n'est pas activée", async () => {
+  it("Vérifie qu'on peut récupérer les infos de context via idParcoursup", async () => {
+    const { createParameter } = await widgetParameters();
+
+    await createParameter(sampleParameter);
+    const { httpClient } = await startServer();
+
+    const response = await httpClient.post(`/api/appointment-request/context/create`, {
+      idParcoursup: "12345",
+      referrer: "parcoursup",
+    });
+
+    console.log("#################################### via idParcoursup");
+    console.log(response.status);
+    console.log(response.data);
+
+    assert.strictEqual(response.status, 200);
+    assert.ok(response.data.etablissement_formateur_entreprise_raison_sociale);
+    assert.ok(response.data.intitule_long);
+    assert.ok(response.data.lieu_formation_adresse);
+    assert.ok(response.data.code_postal);
+    assert.ok(response.data.etablissement_formateur_siret);
+    assert.ok(response.data.cfd);
+    assert.ok(response.data.localite);
+    assert.ok(response.data.id_rco_formation);
+    assert.ok(response.data.form_url);
+  });
+
+  it("Vérifie que le context n'est pas retourné si la prise de rendez-vous n'est pas activée (idRcoFormation)", async () => {
     const { httpClient } = await startServer();
 
     const referrer = "lba";
@@ -39,7 +64,25 @@ httpTests(__filename, ({ startServer }) => {
       referrer,
     });
 
-    assert.strictEqual(response.status, 200);
+    assert.strictEqual(response.status, 404);
     assert.ok(response.data.error);
+    assert.ok(response.data.message);
+    assert.ok(response.data.statusCode);
+  });
+
+  it("Vérifie que le context n'est pas retourné si la prise de rendez-vous n'est pas activée (idParcoursup)", async () => {
+    const { httpClient } = await startServer();
+
+    const referrer = "parcoursup";
+
+    const response = await httpClient.post(`/api/appointment-request/context/create`, {
+      idParcoursup: "KO",
+      referrer,
+    });
+
+    assert.strictEqual(response.status, 404);
+    assert.ok(response.data.error);
+    assert.ok(response.data.message);
+    assert.ok(response.data.statusCode);
   });
 });

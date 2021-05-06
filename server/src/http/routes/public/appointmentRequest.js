@@ -4,9 +4,22 @@ const Joi = require("joi");
 const Boom = require("boom");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const config = require("../../../../config");
-const { getReferrerById, getReferrerByKeyName } = require("../../../common/model/constants/referrers");
-const { getFormationsByIdRcoFormation } = require("../../utils/catalogue");
+const { getReferrerById, getReferrerByKeyName, referrers } = require("../../../common/model/constants/referrers");
+const { getFormationsByIdRcoFormation, getFormationsByIdParcoursup } = require("../../utils/catalogue");
 const { candidat } = require("../../../common/roles");
+
+const contextCreateSchema = Joi.alternatives().try(
+  Joi.object().keys({
+    idRcoFormation: Joi.string().allow(""),
+    idParcoursup: Joi.string().required(),
+    referrer: Joi.string().valid(referrers.PARCOURSUP.name.toLowerCase(), referrers.LBA.name.toLowerCase()).required(),
+  }),
+  Joi.object().keys({
+    idRcoFormation: Joi.string().required(),
+    idParcoursup: Joi.string().allow(""),
+    referrer: Joi.string().valid(referrers.PARCOURSUP.name.toLowerCase(), referrers.LBA.name.toLowerCase()).required(),
+  })
+);
 
 const userRequestSchema = Joi.object({
   firstname: Joi.string().required(),
@@ -37,24 +50,35 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
   router.post(
     "/context/create",
     tryCatch(async (req, res) => {
-      const { idRcoFormation, referrer } = req.body;
+      await contextCreateSchema.validateAsync(req.body, { abortEarly: false });
+
+      const { idRcoFormation, idParcoursup, referrer } = req.body;
 
       const referrerObj = getReferrerByKeyName(referrer);
 
+      let formation;
+      let catalogueResponse;
+      if (idRcoFormation) {
+        catalogueResponse = await getFormationsByIdRcoFormation({ idRcoFormation });
+      } else if (idParcoursup) {
+        catalogueResponse = await getFormationsByIdParcoursup({ idParcoursup });
+      } else {
+        throw new Error("Critère de recherche non conforme.");
+      }
+
+      [formation] = catalogueResponse.formations;
+
+      if (!formation) {
+        throw Boom.notFound("Formation introuvable.");
+      }
+
       const isWidgetVisible = await widgetParameters.isWidgetVisible({
-        idRcoFormation,
+        idRcoFormation: formation.id_rco_formation,
         referrer: referrerObj.code,
       });
 
       if (!isWidgetVisible) {
         return res.send(notAllowedResponse);
-      }
-
-      const { formations } = await getFormationsByIdRcoFormation({ idRcoFormation });
-      const [formation] = formations;
-
-      if (!formation) {
-        throw Boom.notFound("Formation introuvable.");
       }
 
       res.send({
@@ -66,7 +90,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
         cfd: formation.cfd,
         localite: formation.localite,
         id_rco_formation: formation.id_rco_formation,
-        form_url: `${config.publicUrl}/form?referrer=${referrer}&idRcoFormation=${idRcoFormation}`,
+        form_url: `${config.publicUrl}/form?referrer=${referrer}&idRcoFormation=${formation.id_rco_formation}`,
       });
     })
   );
@@ -76,7 +100,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
     tryCatch(async (req, res) => {
       await userRequestSchema.validateAsync(req.body, { abortEarly: false });
 
-      let { firstname, lastname, phone, email, motivations, referrer, idRcoFormation } = req.body;
+      let { firstname, lastname, phone, email, siret, cfd, motivations, referrer, idRcoFormation } = req.body;
 
       email = email.toLowerCase();
 
@@ -106,6 +130,15 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
         });
       }
 
+      const createdAppointement = await appointments.createAppointment({
+        candidat_id: user._id,
+        etablissement_id: siret,
+        formation_id: cfd,
+        motivations,
+        referrer: referrerObj.code,
+        id_rco_formation: idRcoFormation,
+      });
+
       const [catalogueResponse, widgetParameter] = await Promise.all([
         getFormationsByIdRcoFormation({ idRcoFormation }),
         widgetParameters.getParameterByIdRcoFormationReferrer({ idRcoFormation, referrer: referrerObj.code }),
@@ -116,15 +149,6 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
       if (!formation) {
         throw Boom.badRequest("Etablissement et formation introuvable.");
       }
-
-      const createdAppointement = await appointments.createAppointment({
-        candidat_id: user._id,
-        etablissement_id: formation.etablissement_formateur_siret,
-        formation_id: formation.cfd,
-        motivations,
-        referrer: referrerObj.code,
-        id_rco_formation: idRcoFormation,
-      });
 
       const mailData = {
         appointmentId: createdAppointement._id,

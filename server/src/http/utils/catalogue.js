@@ -6,13 +6,25 @@ const config = require("../../../config");
  * @param {String} idRcoFormation
  * @returns {Promise<Object>}
  */
-const getFormationsByIdRcoFormation = async ({ idRcoFormation }) =>
+const getFormationsByIdRcoFormation = ({ idRcoFormation }) =>
   getFormations({
     $and: [
       { id_rco_formation: idRcoFormation },
       { published: true },
       { etablissement_reference_catalogue_published: true },
     ],
+  });
+
+/**
+ * @description Get formations by its idParcoursup.
+ * @param {String} idParcoursup
+ * @returns {Promise<Object>}
+ */
+const getFormationsByIdParcoursup = ({ idParcoursup }) =>
+  getFormations({
+    id_parcoursup: idParcoursup,
+    published: true,
+    etablissement_reference_catalogue_published: true,
   });
 
 /**
@@ -36,5 +48,6 @@ const getFormations = async (query, page = 1, limit = 500) => {
 
 module.exports = {
   getFormationsByIdRcoFormation,
+  getFormationsByIdParcoursup,
   getFormations,
 };
