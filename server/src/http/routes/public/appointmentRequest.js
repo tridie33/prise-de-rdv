@@ -100,7 +100,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
     tryCatch(async (req, res) => {
       await userRequestSchema.validateAsync(req.body, { abortEarly: false });
 
-      let { firstname, lastname, phone, email, siret, cfd, motivations, referrer, idRcoFormation } = req.body;
+      let { firstname, lastname, phone, email, motivations, referrer, idRcoFormation } = req.body;
 
       email = email.toLowerCase();
 
@@ -130,15 +130,6 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
         });
       }
 
-      const createdAppointement = await appointments.createAppointment({
-        candidat_id: user._id,
-        etablissement_id: siret,
-        formation_id: cfd,
-        motivations,
-        referrer: referrerObj.code,
-        id_rco_formation: idRcoFormation,
-      });
-
       const [catalogueResponse, widgetParameter] = await Promise.all([
         getFormationsByIdRcoFormation({ idRcoFormation }),
         widgetParameters.getParameterByIdRcoFormationReferrer({ idRcoFormation, referrer: referrerObj.code }),
@@ -149,6 +140,15 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
       if (!formation) {
         throw Boom.badRequest("Etablissement et formation introuvable.");
       }
+
+      const createdAppointement = await appointments.createAppointment({
+        candidat_id: user._id,
+        etablissement_id: formation.etablissement_formateur_siret,
+        formation_id: formation.cfd,
+        motivations,
+        referrer: referrerObj.code,
+        id_rco_formation: idRcoFormation,
+      });
 
       const mailData = {
         appointmentId: createdAppointement._id,
