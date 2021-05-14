@@ -20,6 +20,7 @@ const catalogueRoute = require("./routes/public/catalogue");
 const password = require("./routes/auth/password");
 const configRoute = require("./routes/auth/config");
 const widgetParameterRoute = require("./routes/admin/widgetParameter");
+const partnersRoute = require("./routes/public/partners");
 const constantsRoute = require("./routes/public/constants");
 
 const { administrator } = require("./../common/roles");
@@ -46,7 +47,8 @@ module.exports = async (components) => {
   app.use("/api/appointment-request", appointmentRequestRoute(components));
   app.use("/api/catalogue", catalogueRoute(components));
   app.use("/api/constants", constantsRoute(components));
-  app.use("/api/widget-parameters", widgetParameterRoute(components));
+  app.use("/api/widget-parameters", checkJwtToken, adminOnly, widgetParameterRoute(components));
+  app.use("/api/partners", partnersRoute(components));
 
   // Config route
   app.use("/api/config", checkJwtToken, adminOnly, configRoute());
