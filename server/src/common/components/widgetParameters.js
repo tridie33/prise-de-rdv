@@ -44,27 +44,29 @@ module.exports = async () => ({
    * @param {WidgetParameter} body
    * @returns {Promise<*>}
    */
-  updateParameter: async (id, body) => {
-    return WidgetParameter.findOneAndUpdate({ _id: id }, body, { new: true });
-  },
+  updateParameter: (id, body) => WidgetParameter.findOneAndUpdate({ _id: id }, body, { new: true }),
 
   /**
    * @description Deletes an item.
    * @param {String} id
    * @returns {Promise<*>}
    */
-  deleteParameter: (id) => {
-    return WidgetParameter.findByIdAndDelete(id);
-  },
+  deleteParameter: (id) => WidgetParameter.findByIdAndDelete(id),
+
+  /**
+   * @description Update many documents.
+   * @param {Object} where
+   * @param {Object} body
+   * @returns {Promise<WidgetParameter>}
+   */
+  updateMany: ({ where, body }) => WidgetParameter.updateMany(where, body),
 
   /**
    * @description Returns item through its "id_rco_formation".
    * @param {String} idRcoFormation
    * @returns {Promise<WidgetParameter>}
    */
-  getParameterByIdRcoFormation: ({ idRcoFormation }) => {
-    return WidgetParameter.findOne({ id_rco_formation: idRcoFormation });
-  },
+  getParameterByIdRcoFormation: ({ idRcoFormation }) => WidgetParameter.findOne({ id_rco_formation: idRcoFormation }),
 
   /**
    * @description Returns item through its "id_rco_formation".
@@ -72,12 +74,11 @@ module.exports = async () => ({
    * @param {Number} referrer
    * @returns {Promise<WidgetParameter>}
    */
-  getParameterByIdRcoFormationReferrer: ({ idRcoFormation, referrer }) => {
-    return WidgetParameter.findOne({
+  getParameterByIdRcoFormationReferrer: ({ idRcoFormation, referrer }) =>
+    WidgetParameter.findOne({
       id_rco_formation: idRcoFormation,
       referrers: { $in: [referrer] },
-    });
-  },
+    }),
 
   /**
    * @description Checks if widget is enabled or not.
@@ -85,10 +86,9 @@ module.exports = async () => ({
    * @param {Number} referrer
    * @returns {Promise<Boolean>}
    */
-  isWidgetVisible: async ({ idRcoFormation, referrer }) => {
-    return WidgetParameter.exists({
+  isWidgetVisible: ({ idRcoFormation, referrer }) =>
+    WidgetParameter.exists({
       id_rco_formation: idRcoFormation,
       referrers: { $in: [referrer] },
-    });
-  },
+    }),
 });
