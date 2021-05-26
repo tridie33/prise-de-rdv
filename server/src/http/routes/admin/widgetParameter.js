@@ -17,6 +17,10 @@ const widgetParameterSchema = Joi.object({
   id_rco_formation: Joi.string().required(),
 });
 
+const widgetParameterReferrerUpdateBatchSchema = Joi.object({
+  referrers: Joi.array().items(Joi.number()).required(),
+});
+
 /**
  * Sample entity route module for GET
  */
@@ -153,6 +157,27 @@ module.exports = ({ widgetParameters }) => {
       logger.info("Adding new ACL Rule : ", body);
       const result = await widgetParameters.createParameter(body);
       res.send(result);
+    })
+  );
+
+  /**
+   * Updates all widgetParameter referrers.
+   */
+  router.put(
+    "/referrers",
+    tryCatch(async ({ body }, res) => {
+      await widgetParameterReferrerUpdateBatchSchema.validateAsync(body, { abortEarly: false });
+      logger.info("Updating items: ", body);
+
+      // Throw an error if referrer code isn't existing
+      body.referrers.map(getReferrerById);
+
+      const parameters = await widgetParameters.updateMany({
+        where: { referrers: { $ne: [] } },
+        body: { $set: { referrers: body.referrers } },
+      });
+
+      res.send(parameters);
     })
   );
 

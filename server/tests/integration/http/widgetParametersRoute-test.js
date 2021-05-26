@@ -206,4 +206,42 @@ httpTests(__filename, ({ startServer }) => {
     const found = await WidgetParameter.findById(addedResponse.data._id);
     assert.strictEqual(found, null);
   });
+
+  it("Vérifie qu'on peut mettre à jours l'ensemble des referrers de toutes les formations", async () => {
+    const { httpClient, createAndLogUser, components } = await startServer();
+
+    await components.widgetParameters.createParameter({
+      etablissement_siret: sampleParameter.etablissement_siret,
+      etablissement_raison_sociale: sampleParameter.etablissement_raison_sociale,
+      formation_intitule: sampleParameter.formation_intitule,
+      formation_cfd: sampleParameter.formation_cfd,
+      email_rdv: sampleParameter.email_rdv,
+      referrers: sampleParameter.referrers,
+    });
+
+    const bearerToken = await createAndLogUser("userAdmin", "password", { role: administrator });
+    const updateResponse = await httpClient.put(
+      "/api/widget-parameters/referrers",
+      { referrers: [referrers.LBA.code, referrers.PARCOURSUP.code] },
+      { headers: bearerToken }
+    );
+
+    // Check API Response
+    assert.ok(updateResponse.data.ok);
+    assert.deepStrictEqual(updateResponse.status, 200);
+  });
+
+  it("Vérifie qu'on ne peut pas mettre à jours l'ensemble des referrers de toutes les formations avec un referrer non existant", async () => {
+    const { httpClient, createAndLogUser } = await startServer();
+
+    const bearerToken = await createAndLogUser("userAdmin", "password", { role: administrator });
+    const updateResponse = await httpClient.put(
+      "/api/widget-parameters/referrers",
+      { referrers: [9999999] },
+      { headers: bearerToken }
+    );
+
+    // Check API Response
+    assert.deepStrictEqual(updateResponse.status, 500);
+  });
 });
