@@ -1,9 +1,10 @@
 const express = require("express");
+const lodash = require("lodash");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const { Appointment, User } = require("../../../common/model");
 const logger = require("../../../common/logger");
 const { getReferrerById } = require("../../../common/model/constants/referrers");
-const { getFormationsByIdRcoFormation } = require("../../utils/catalogue");
+const { getFormationsByIdRcoFormations } = require("../../utils/catalogue");
 
 /**
  * Sample entity route module for GET
@@ -48,22 +49,37 @@ module.exports = () => {
 
       const allData = await Appointment.paginate(query, { page, limit, sort: { created_at: -1 } });
 
+      const idRcoFormations = [...new Set(allData.docs.map((document) => document.id_rco_formation))];
+
+      // Split array by chunk to avoid sending unit calls to the catalogue
+      const idRcoFormationsChunks = lodash.chunk(idRcoFormations, 40);
+
+      // Get formations from catalogue by block of 40 id_rco_formations
+      let formations = await Promise.all(
+        idRcoFormationsChunks.map(async (idRcoFormations) => {
+          const { formations } = await getFormationsByIdRcoFormations({ idRcoFormations });
+
+          return formations;
+        })
+      );
+
+      formations = formations.flat();
+
       const appointmentsPromises = allData.docs.map(async (document) => {
-        const [user, catalogue] = await Promise.all([
-          User.findById(document.candidat_id),
-          getFormationsByIdRcoFormation({ idRcoFormation: document.id_rco_formation }),
-        ]);
+        const user = await User.findById(document.candidat_id);
 
-        let formation = [];
-        if (catalogue.formations.length) {
-          const [item] = catalogue.formations;
+        // Get right formation from dataset
+        const catalogueFormation = formations.find((item) => item.id_rco_formation === document.id_rco_formation);
 
+        let formation = {};
+        if (catalogueFormation) {
           formation = {
-            etablissement_formateur_entreprise_raison_sociale: item.etablissement_formateur_entreprise_raison_sociale,
-            intitule_long: item.intitule_long,
-            etablissement_formateur_adresse: item.etablissement_formateur_adresse,
-            etablissement_formateur_code_postal: item.etablissement_formateur_code_postal,
-            etablissement_formateur_nom_departement: item.etablissement_formateur_nom_departement,
+            etablissement_formateur_entreprise_raison_sociale:
+              catalogueFormation.etablissement_formateur_entreprise_raison_sociale,
+            intitule_long: catalogueFormation.intitule_long,
+            etablissement_formateur_adresse: catalogueFormation.etablissement_formateur_adresse,
+            etablissement_formateur_code_postal: catalogueFormation.etablissement_formateur_code_postal,
+            etablissement_formateur_nom_departement: catalogueFormation.etablissement_formateur_nom_departement,
           };
         }
 

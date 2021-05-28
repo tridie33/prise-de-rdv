@@ -2,14 +2,14 @@ const axios = require("axios");
 const config = require("../../../config");
 
 /**
- * @description Get formations by its idRcoFormation.
- * @param {String} idRcoFormation
+ * @description Get formations by idRcoFormations.
+ * @param {String[]} idRcoFormations
  * @returns {Promise<Object>}
  */
-const getFormationsByIdRcoFormation = ({ idRcoFormation }) =>
+const getFormationsByIdRcoFormations = ({ idRcoFormations }) =>
   getFormations({
     $and: [
-      { id_rco_formation: idRcoFormation },
+      { id_rco_formation: idRcoFormations },
       { published: true },
       { etablissement_reference_catalogue_published: true },
     ],
@@ -47,7 +47,7 @@ const getFormations = async (query, page = 1, limit = 500) => {
 };
 
 module.exports = {
-  getFormationsByIdRcoFormation,
+  getFormationsByIdRcoFormations,
   getFormationsByIdParcoursup,
   getFormations,
 };
