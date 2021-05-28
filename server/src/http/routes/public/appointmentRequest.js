@@ -5,7 +5,7 @@ const Boom = require("boom");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const config = require("../../../../config");
 const { getReferrerById, getReferrerByKeyName, referrers } = require("../../../common/model/constants/referrers");
-const { getFormationsByIdRcoFormation, getFormationsByIdParcoursup } = require("../../utils/catalogue");
+const { getFormationsByIdRcoFormations, getFormationsByIdParcoursup } = require("../../utils/catalogue");
 const { candidat } = require("../../../common/roles");
 
 const contextCreateSchema = Joi.alternatives().try(
@@ -59,7 +59,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
       let formation;
       let catalogueResponse;
       if (idRcoFormation) {
-        catalogueResponse = await getFormationsByIdRcoFormation({ idRcoFormation });
+        catalogueResponse = await getFormationsByIdRcoFormations({ idRcoFormations: idRcoFormation });
       } else if (idParcoursup) {
         catalogueResponse = await getFormationsByIdParcoursup({ idParcoursup });
       } else {
@@ -131,7 +131,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
       }
 
       const [catalogueResponse, widgetParameter] = await Promise.all([
-        getFormationsByIdRcoFormation({ idRcoFormation }),
+        getFormationsByIdRcoFormations({ idRcoFormations: idRcoFormation }),
         widgetParameters.getParameterByIdRcoFormationReferrer({ idRcoFormation, referrer: referrerObj.code }),
       ]);
 
