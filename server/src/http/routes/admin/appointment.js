@@ -45,7 +45,7 @@ module.exports = () => {
       let qs = req.query;
       const query = qs && qs.query ? JSON.parse(qs.query) : {};
       const page = qs && qs.page ? qs.page : 1;
-      const limit = qs && qs.limit ? parseInt(qs.limit, 50) : 50;
+      const limit = qs && qs.limit ? parseInt(qs.limit, 10) : 50;
 
       const allData = await Appointment.paginate(query, { page, limit, sort: { created_at: -1 } });
 
