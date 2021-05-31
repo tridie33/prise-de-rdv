@@ -7,7 +7,7 @@ import { KpisComponent } from "./KpiContainer";
 import { RequestsBoardComponent } from "./RequestsBoardComponent";
 
 export default () => {
-  const [data, loading] = useFetch("api/appointment/appointments/details");
+  const [data, loading] = useFetch("api/appointment/appointments/details?limit=500");
   const appointments = data === null ? [] : data.appointments;
 
   return (
