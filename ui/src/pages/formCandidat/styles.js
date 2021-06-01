@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { background, color, spacing, typography } from "../../utils/sharedStyles";
-import { Form as TablerForm } from "tabler-react";
+import { Form as TablerForm, Button as TableButton } from "tabler-react";
 
 export const Main = styled.main`
   display: grid;
@@ -234,9 +234,10 @@ export const Spacer = styled.div`
   padding-bottom: ${spacing.padding.xmedium};
 `;
 
-export const Button = styled.button`
+export const Button = styled(TableButton)`
+  background-color: ${color.blue};
+  color: ${color.white};
   padding: ${spacing.padding.small} ${spacing.padding.xxlarge};
-
   background-color: ${color.blue};
   border-radius: 4px;
   color: ${color.white};
