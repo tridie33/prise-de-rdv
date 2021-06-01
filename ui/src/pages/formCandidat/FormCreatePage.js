@@ -29,6 +29,7 @@ import { _post } from "../../common/httpClient";
 export const FormCreatePage = (props) => {
   const history = useHistory();
   const [data, setData] = useState();
+  const [submitLoading, setSubmitLoading] = useState(false);
   const [error, setError] = useState();
   const [loading, setLoading] = useState(false);
 
@@ -101,6 +102,7 @@ export const FormCreatePage = (props) => {
    */
   const sendNewRequest = async (values, { setStatus }) => {
     try {
+      setSubmitLoading(true);
       const { appointment } = await _post("/api/appointment-request/validate", {
         ...values,
         idRcoFormation,
@@ -108,9 +110,12 @@ export const FormCreatePage = (props) => {
       });
 
       history.push(`/form/confirm/${appointment._id}`);
+      setTimeout(() => window.scroll({ top: 0, behavior: "smooth" }), 500);
     } catch (e) {
       console.error(e);
       setStatus({ error: e.prettyMessage });
+    } finally {
+      setSubmitLoading(false);
     }
   };
 
@@ -227,7 +232,9 @@ export const FormCreatePage = (props) => {
                   <Spacer />
 
                   <ButtonLayout>
-                    <Button type={"submit"}>Envoyer</Button>
+                    <Button type={"submit"} loading={submitLoading}>
+                      Envoyer
+                    </Button>
                   </ButtonLayout>
 
                   {status.error && <FormError>{status.error}</FormError>}
