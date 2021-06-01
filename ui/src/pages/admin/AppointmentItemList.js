@@ -56,7 +56,7 @@ export const AppointmentItemList = (props) => {
   };
 
   return (
-    <Table.Row>
+    <Table.Row id={props.appointment._id}>
       <Table.Col>{moment.parseZone(props.appointment.created_at).format("DD/MM/YYYY HH:mm:ss")}</Table.Col>
       <Table.Col>
         {props.appointment.candidat.firstname} {props.appointment.candidat.lastname}
