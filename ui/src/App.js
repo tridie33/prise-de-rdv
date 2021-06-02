@@ -15,6 +15,7 @@ import { SiteParentPage } from "./pages/siteParent/SiteParentPage";
 import { FormRecapPage } from "./pages/formCandidat/FormRecapPage";
 import { FormCreatePage } from "./pages/formCandidat/FormCreatePage";
 import { isUserAdmin } from "./common/utils/rolesUtils";
+import BulkPage from "./pages/admin/widgetParameters/pages/BulkPage";
 
 function PrivateRoute({ children, ...rest }) {
   let [auth] = useAuth();
@@ -30,7 +31,7 @@ function PrivateRoute({ children, ...rest }) {
 }
 
 export default () => {
-  let [auth] = useAuth();
+  const [auth] = useAuth();
   const isAdmin = isUserAdmin(auth);
 
   return (
@@ -48,6 +49,9 @@ export default () => {
           </PrivateRoute>
           <PrivateRoute exact path="/admin/widget-parameters/edit/:id">
             <Layout>{auth && isAdmin ? <WidgetParametersEditPage /> : <LoginPage />}</Layout>
+          </PrivateRoute>
+          <PrivateRoute exact path="/admin/widget-parameters/bulk">
+            <Layout>{auth && isAdmin ? <BulkPage /> : <LoginPage />}</Layout>
           </PrivateRoute>
           <Route exact path="/">
             <Layout>{auth && isAdmin ? <Redirect to="/admin" /> : <HomePage />}</Layout>
