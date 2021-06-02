@@ -21,6 +21,7 @@ export default (props) => {
           <Nav.Item hasSubNav value="Paramètres">
             <Nav.SubItem to="/admin/widget-parameters">Liste</Nav.SubItem>
             <Nav.SubItem to="/admin/widget-parameters/search">Ajouter - Via recherche</Nav.SubItem>
+            <Nav.SubItem to="/admin/widget-parameters/bulk">Actions groupés</Nav.SubItem>
           </Nav.Item>
           <Nav.Item hasSubNav value={auth.sub} icon="user">
             <button className="dropdown-item" onClick={logout}>
