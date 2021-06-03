@@ -83,7 +83,7 @@ const UpdateAllParameterReferrersComponent = () => {
   return (
     <Grid.Row>
       <Grid.Col width={6}>
-        <Card title="Modifier les sources parution pour tous les paramètres actifs">
+        <Card title="Modifier les sources de parution pour tous les paramètres actifs">
           <Dimmer active={loading} loader>
             <Card.Body>
               Veuillez cocher l'ensemble des plateformes de diffusion sur lesquelles vous souhaitez que les formations
