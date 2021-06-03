@@ -7,7 +7,7 @@ const redis = redisClient.createClient(config.redis.port, config.redis.host);
 const cache = apicache.options({
   host: config.redis.host,
   port: config.redis.port,
-  enabled: config.env === "test",
+  enabled: ["production", "recette"].includes(config.env),
   debug: false,
   respectCacheControl: true,
   statusCodes: {
