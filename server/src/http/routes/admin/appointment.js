@@ -9,7 +9,7 @@ const { getFormationsByIdRcoFormations } = require("../../utils/catalogue");
 /**
  * Sample entity route module for GET
  */
-module.exports = () => {
+module.exports = ({ cache }) => {
   const router = express.Router();
 
   /**
@@ -41,6 +41,7 @@ module.exports = () => {
    * */
   router.get(
     "/appointments/details",
+    cache("5 minutes"),
     tryCatch(async (req, res) => {
       let qs = req.query;
       const query = qs && qs.query ? JSON.parse(qs.query) : {};
@@ -116,6 +117,7 @@ module.exports = () => {
    */
   router.get(
     "/appointments/count",
+    cache("5 minutes"),
     tryCatch(async (req, res) => {
       let qs = req.query;
       const query = qs && qs.query ? JSON.parse(qs.query) : {};
