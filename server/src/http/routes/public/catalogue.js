@@ -5,7 +5,7 @@ const { getFormations } = require("../../utils/catalogue");
 /**
  * @description Catalogue router.
  */
-module.exports = () => {
+module.exports = ({ cache }) => {
   const router = express.Router();
 
   /**
@@ -13,6 +13,7 @@ module.exports = () => {
    */
   router.get(
     "/formations",
+    cache("1 hour"),
     tryCatch(async (req, res) => {
       const qs = req.query;
       const query = qs && qs.query ? JSON.parse(qs.query) : {};

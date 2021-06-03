@@ -10,7 +10,7 @@
   "scripts": {
     "start": "nodemon -r dotenv/config --ignore tests/ src/index.js",
     "debug": "nodemon --inspect=0.0.0.0 --signal SIGINT --ignore tests/ src/index.js",
-    "test": "mocha -r dotenv/config --recursive --exit --timeout 5000 tests/",
+    "test": "mocha -r dotenv/config PRISE_DE_RDV_ENV=test --recursive --exit --timeout 5000 tests/",
     "lint": "eslint src/ tests/",
     "docker:start": "docker-compose up -d --build --force-recreate",
     "docker:stop": "docker-compose down",
@@ -33,6 +33,7 @@
     "migration:down": "migrate-mongo down"
   },
   "dependencies": {
+    "apicache": "1.6.2",
     "axios": "0.21.0",
     "body-parser": "1.19.0",
     "boom": "7.3.0",
@@ -69,6 +70,7 @@
     "passport-jwt": "4.0.0",
     "passport-local": "1.0.0",
     "randexp": "0.5.3",
+    "redis": "3.1.2",
     "sha512crypt-node": "0.1.0",
     "xlsx": "0.16.1"
   },

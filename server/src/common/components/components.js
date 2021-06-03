@@ -1,4 +1,5 @@
 const { connectToMongo } = require("../mongodb");
+const { cache } = require("../redis");
 const createUsers = require("./users");
 const createWidgetParameters = require("./widgetParameters");
 const createAppointement = require("./appointments");
@@ -15,6 +16,7 @@ module.exports = async (options = {}) => {
     users,
     appointments,
     db: options.db || (await connectToMongo()).db,
+    cache,
     mailer: options.mailer || createMailer({ smtp: { ...config.smtp, secure: false } }),
     widgetParameters,
   };
