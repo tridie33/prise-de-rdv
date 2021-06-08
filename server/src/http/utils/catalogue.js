@@ -1,5 +1,7 @@
 const axios = require("axios");
+const { AxiosRedis } = require("@tictactrip/axios-redis");
 const config = require("../../../config");
+const { axiosRedis } = require("../../common/redis");
 
 /**
  * @description Get formations by idRcoFormations.
@@ -41,6 +43,7 @@ const getFormations = async (query, page = 1, limit = 500) => {
       page,
       limit,
     },
+    adapter: (config) => AxiosRedis.ADAPTER(config, axiosRedis),
   });
 
   return data;
