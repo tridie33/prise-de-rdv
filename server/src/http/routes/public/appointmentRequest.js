@@ -38,7 +38,7 @@ const appointmentItemSchema = Joi.object({
   champsLibreCommentaires: Joi.string().optional().allow(""),
 });
 
-module.exports = ({ users, appointments, mailer, widgetParameters, cache }) => {
+module.exports = ({ users, appointments, mailer, widgetParameters }) => {
   const router = express.Router();
   const notAllowedResponse = { error: "Prise de rendez-vous non disponible." };
 
@@ -49,7 +49,6 @@ module.exports = ({ users, appointments, mailer, widgetParameters, cache }) => {
    */
   router.post(
     "/context/create",
-    cache("30 minutes"),
     tryCatch(async (req, res) => {
       await contextCreateSchema.validateAsync(req.body, { abortEarly: false });
 

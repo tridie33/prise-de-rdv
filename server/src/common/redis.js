@@ -1,6 +1,8 @@
 const apicache = require("apicache");
 const redisClient = require("redis");
+const { AxiosRedis } = require("@tictactrip/axios-redis");
 const config = require("../../config");
+const packageJson = require("../../package.json");
 
 const redis = redisClient.createClient(config.redis.port, config.redis.host);
 
@@ -18,7 +20,15 @@ const cache = apicache.options({
   },
 }).middleware;
 
+const axiosRedis = new AxiosRedis(redis, {
+  expirationInMS: 86400000, // 24h
+  separator: "___",
+  prefix: `${packageJson.name}@${packageJson.version}`,
+  axiosConfigPaths: ["method", "url", "params", "data"],
+});
+
 module.exports = {
   redis,
   cache,
+  axiosRedis,
 };
