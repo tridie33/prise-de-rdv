@@ -38,10 +38,6 @@ httpTests(__filename, ({ startServer }) => {
       referrer: "parcoursup",
     });
 
-    console.log("#################################### via idParcoursup");
-    console.log(response.status);
-    console.log(response.data);
-
     assert.strictEqual(response.status, 200);
     assert.ok(response.data.etablissement_formateur_entreprise_raison_sociale);
     assert.ok(response.data.intitule_long);
@@ -57,27 +53,21 @@ httpTests(__filename, ({ startServer }) => {
   it("Vérifie que le context n'est pas retourné si la prise de rendez-vous n'est pas activée (idRcoFormation)", async () => {
     const { httpClient } = await startServer();
 
-    const referrer = "lba";
-
     const response = await httpClient.post(`/api/appointment-request/context/create`, {
       idRcoFormation: "KO",
-      referrer,
+      referrer: "lba",
     });
 
-    assert.strictEqual(response.status, 404);
+    assert.strictEqual(response.status, 200);
     assert.ok(response.data.error);
-    assert.ok(response.data.message);
-    assert.ok(response.data.statusCode);
   });
 
   it("Vérifie que le context n'est pas retourné si la prise de rendez-vous n'est pas activée (idParcoursup)", async () => {
     const { httpClient } = await startServer();
 
-    const referrer = "parcoursup";
-
     const response = await httpClient.post(`/api/appointment-request/context/create`, {
       idParcoursup: "KO",
-      referrer,
+      referrer: "parcoursup",
     });
 
     assert.strictEqual(response.status, 404);

@@ -6,7 +6,7 @@ const { getUniqueArray } = require("../../utils/array");
 /**
  * @description Catalogue router.
  */
-module.exports = ({ cache }) => {
+module.exports = () => {
   const router = express.Router();
 
   /**
@@ -14,7 +14,6 @@ module.exports = ({ cache }) => {
    */
   router.get(
     "/formations",
-    cache("1 hour"),
     tryCatch(async (req, res) => {
       const qs = req.query;
       const query = qs && qs.query ? JSON.parse(qs.query) : {};

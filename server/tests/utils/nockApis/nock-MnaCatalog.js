@@ -5,28 +5,59 @@ const { sampleCatalogueResponse } = require("../../data/mnaCatalogSamples");
 module.exports = async () => {
   nock(config.mnaCatalog.endpoint)
     .persist()
-    .get(
-      "/v1/entity/formations2021?query=%7B%22$and%22:[%7B%22id_rco_formation%22:%2214_AF_0000091719%7C14_SE_0000494236%7C18894%22%7D,%7B%22published%22:true%7D,%7B%22etablissement_reference_catalogue_published%22:true%7D]%7D&page=1&limit=500"
-    )
+    .post("/v1/entity/formations2021", {
+      query:
+        '{"$and":[{"id_rco_formation":"14_AF_0000091719|14_SE_0000494236|18894"},{"published":true},{"etablissement_reference_catalogue_published":true}]}',
+      select:
+        '{"code_postal":1,"id_rco_formation":1,"etablissement_formateur_entreprise_raison_sociale":1,"intitule_long":1,"etablissement_formateur_adresse":1,"etablissement_formateur_code_postal":1,"etablissement_formateur_nom_departement":1,"lieu_formation_adresse":1,"etablissement_formateur_siret":1,"cfd":1,"localite":1}',
+      page: 1,
+      limit: 500,
+    })
     .reply(200, sampleCatalogueResponse);
 
   nock(config.mnaCatalog.endpoint)
     .persist()
-    .get("/v1/entity/formations2021?query=%7B%7D&page=1&limit=50")
+    .post("/v1/entity/formations2021", {
+      query:
+        '{"$and":[{"id_rco_formation":"KO"},{"published":true},{"etablissement_reference_catalogue_published":true}]}',
+      select:
+        '{"code_postal":1,"id_rco_formation":1,"etablissement_formateur_entreprise_raison_sociale":1,"intitule_long":1,"etablissement_formateur_adresse":1,"etablissement_formateur_code_postal":1,"etablissement_formateur_nom_departement":1,"lieu_formation_adresse":1,"etablissement_formateur_siret":1,"cfd":1,"localite":1}',
+      page: 1,
+      limit: 500,
+    })
     .reply(200, sampleCatalogueResponse);
 
   nock(config.mnaCatalog.endpoint)
     .persist()
-    .get(
-      "/v1/entity/formations2021?query=%7B%22id_parcoursup%22:%2212345%22,%22published%22:true,%22etablissement_reference_catalogue_published%22:true%7D&page=1&limit=500"
-    )
+    .post("/v1/entity/formations2021", {
+      query: "{}",
+      select:
+        '{"code_postal":1,"id_rco_formation":1,"etablissement_formateur_entreprise_raison_sociale":1,"intitule_long":1,"etablissement_formateur_adresse":1,"etablissement_formateur_code_postal":1,"etablissement_formateur_nom_departement":1,"lieu_formation_adresse":1,"etablissement_formateur_siret":1,"cfd":1,"localite":1}',
+      page: 1,
+      limit: 50,
+    })
     .reply(200, sampleCatalogueResponse);
 
   nock(config.mnaCatalog.endpoint)
     .persist()
-    .get(
-      "/v1/entity/formations2021?query=%7B%22$and%22:[%7B%22id_rco_formation%22:%22KO%22%7D,%7B%22published%22:true%7D,%7B%22etablissement_reference_catalogue_published%22:true%7D]%7D&page=1&limit=500"
-    )
+    .post("/v1/entity/formations2021", {
+      query: '{"id_parcoursup":"12345","published":true,"etablissement_reference_catalogue_published":true}',
+      select:
+        '{"code_postal":1,"id_rco_formation":1,"etablissement_formateur_entreprise_raison_sociale":1,"intitule_long":1,"etablissement_formateur_adresse":1,"etablissement_formateur_code_postal":1,"etablissement_formateur_nom_departement":1,"lieu_formation_adresse":1,"etablissement_formateur_siret":1,"cfd":1,"localite":1}',
+      page: 1,
+      limit: 500,
+    })
+    .reply(200, sampleCatalogueResponse);
+
+  nock(config.mnaCatalog.endpoint)
+    .persist()
+    .post("/v1/entity/formations2021", {
+      query: '{"id_parcoursup":"KO","published":true,"etablissement_reference_catalogue_published":true}',
+      select:
+        '{"code_postal":1,"id_rco_formation":1,"etablissement_formateur_entreprise_raison_sociale":1,"intitule_long":1,"etablissement_formateur_adresse":1,"etablissement_formateur_code_postal":1,"etablissement_formateur_nom_departement":1,"lieu_formation_adresse":1,"etablissement_formateur_siret":1,"cfd":1,"localite":1}',
+      page: 1,
+      limit: 500,
+    })
     .reply(200, {
       formations: [],
       pagination: {
@@ -39,9 +70,13 @@ module.exports = async () => {
 
   nock(config.mnaCatalog.endpoint)
     .persist()
-    .get(
-      "/v1/entity/formations2021?query=%7B%22id_parcoursup%22:%22KO%22,%22published%22:true,%22etablissement_reference_catalogue_published%22:true%7D&page=1&limit=500"
-    )
+    .post("/v1/entity/formations2021", {
+      query: '{"id_rco_formation":"KO","published":true,"etablissement_reference_catalogue_published":true}',
+      select:
+        '{"code_postal":1,"id_rco_formation":1,"etablissement_formateur_entreprise_raison_sociale":1,"intitule_long":1,"etablissement_formateur_adresse":1,"etablissement_formateur_code_postal":1,"etablissement_formateur_nom_departement":1,"lieu_formation_adresse":1,"etablissement_formateur_siret":1,"cfd":1,"localite":1}',
+      page: 1,
+      limit: 500,
+    })
     .reply(200, {
       formations: [],
       pagination: {
