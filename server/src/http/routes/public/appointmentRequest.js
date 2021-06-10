@@ -12,12 +12,26 @@ const contextCreateSchema = Joi.alternatives().try(
   Joi.object().keys({
     idRcoFormation: Joi.string().allow(""),
     idParcoursup: Joi.string().required(),
-    referrer: Joi.string().valid(referrers.PARCOURSUP.name.toLowerCase(), referrers.LBA.name.toLowerCase()).required(),
+    referrer: Joi.string()
+      .valid(
+        referrers.PARCOURSUP.name.toLowerCase(),
+        referrers.LBA.name.toLowerCase(),
+        referrers.PFR_PAYS_DE_LA_LOIRE.name.toLowerCase(),
+        referrers.ONISEP.name.toLowerCase()
+      )
+      .required(),
   }),
   Joi.object().keys({
     idRcoFormation: Joi.string().required(),
     idParcoursup: Joi.string().allow(""),
-    referrer: Joi.string().valid(referrers.PARCOURSUP.name.toLowerCase(), referrers.LBA.name.toLowerCase()).required(),
+    referrer: Joi.string()
+      .valid(
+        referrers.PARCOURSUP.name.toLowerCase(),
+        referrers.LBA.name.toLowerCase(),
+        referrers.PFR_PAYS_DE_LA_LOIRE.name.toLowerCase(),
+        referrers.ONISEP.name.toLowerCase()
+      )
+      .required(),
   })
 );
 

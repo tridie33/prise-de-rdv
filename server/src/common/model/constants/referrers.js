@@ -14,6 +14,18 @@ const referrers = {
     full_name: "La Bonne Alternance",
     url: "https://labonnealternance.apprentissage.beta.gouv.fr",
   },
+  PFR_PAYS_DE_LA_LOIRE: {
+    code: 3,
+    name: "PRF_PAYS_DE_LA_LOIRE",
+    full_name: "PFR - Pays de la Loire",
+    url: "https://www.choisirmonmetier-paysdelaloire.fr",
+  },
+  ONISEP: {
+    code: 4,
+    name: "ONISEP",
+    full_name: "ONISEP",
+    url: "https://www.onisep.fr",
+  },
 };
 
 /**
