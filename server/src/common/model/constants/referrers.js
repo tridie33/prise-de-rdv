@@ -16,7 +16,7 @@ const referrers = {
   },
   PFR_PAYS_DE_LA_LOIRE: {
     code: 3,
-    name: "PRF_PAYS_DE_LA_LOIRE",
+    name: "PFR_PAYS_DE_LA_LOIRE",
     full_name: "PFR - Pays de la Loire",
     url: "https://www.choisirmonmetier-paysdelaloire.fr",
   },
