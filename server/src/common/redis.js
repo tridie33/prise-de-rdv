@@ -21,7 +21,7 @@ const cache = apicache.options({
 }).middleware;
 
 const axiosRedis = new AxiosRedis(redis, {
-  expirationInMS: 86400000, // 24h
+  expirationInMS: 172800000, // 2 days
   separator: "___",
   prefix: `${packageJson.name}@${packageJson.version}`,
   axiosConfigPaths: ["method", "url", "params", "data"],
