@@ -48,4 +48,8 @@ module.exports = {
       pass: env.get("PRISE_DE_RDV_SMTP_AUTH_PASS").required().asString(),
     },
   },
+  redis: {
+    host: env.get("PRISE_DE_RDV_REDIS_HOST").required().asString(),
+    port: env.get("PRISE_DE_RDV_REDIS_PORT").required().asString(),
+  },
 };

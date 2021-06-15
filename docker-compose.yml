@@ -37,14 +37,24 @@ services:
       - prise_de_rdv_network
     depends_on:
       - mongodb
+      - redis
     environment:
       - PRISE_DE_RDV_MONGODB_URI=mongodb://mongodb:27017/prise-de-rdv?retryWrites=true&w=majority
       - PRISE_DE_RDV_OUTPUT_DIR=/data
+      - PRISE_DE_RDV_REDIS_HOST=redis
+      - PRISE_DE_RDV_REDIS_PORT=6379
 
   mongodb:
     image: mongo:4.2.6-bionic
     container_name: prise_de_rdv_mongodb
     mem_limit: 1g
+    restart: unless-stopped
+    networks:
+      - prise_de_rdv_network
+
+  redis:
+    container_name: prise_de_rdv_redis
+    image: redis:6.2.4-alpine
     restart: unless-stopped
     networks:
       - prise_de_rdv_network
@@ -55,7 +65,7 @@ services:
     networks:
       - prise_de_rdv_network
     volumes:
-      - ./sandbox/auth.txt:/app/auth.txt
+      - ./auth.txt:/app/auth.txt
     environment:
       - MH_AUTH_FILE=/app/auth.txt
 

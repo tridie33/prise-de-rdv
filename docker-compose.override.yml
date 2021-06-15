@@ -52,6 +52,12 @@ services:
     volumes:
       - prise_de_rdv_mongodb_data:/data
 
+  redis:
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - prise_de_rdv_redis_data:/data
+
   mailhog:
     ports:
       - "127.0.0.1:8025:8025"
@@ -67,3 +73,6 @@ volumes:
   prise_de_rdv_server_data:
     driver: local
     name: prise_de_rdv_server_data
+  prise_de_rdv_redis_data:
+    driver: local
+    name: prise_de_rdv_redis_data
