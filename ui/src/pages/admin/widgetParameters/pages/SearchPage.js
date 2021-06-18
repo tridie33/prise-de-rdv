@@ -24,7 +24,7 @@ export default () => {
 
     try {
       const catalogueResponse = await fetch(
-        `/api/catalogue/formations?query={ "$or": [ { "etablissement_formateur_siret": "${keyword}" }, { "etablissement_formateur_uai": "${keyword}"} ], "etablissement_reference_catalogue_published": true, "published": true }`
+        `/api/catalogue/formations?query={ "$or": [ { "etablissement_formateur_siret": "${keyword}" }, { "etablissement_formateur_uai": "${keyword}"}, { "id_rco_formation": "${keyword}"} ], "etablissement_reference_catalogue_published": true, "published": true }`
       );
 
       const catalogueResult = await catalogueResponse.json();
@@ -55,10 +55,15 @@ export default () => {
                 <Card.Body>
                   <Formik initialValues={{ keyword: searchKeyword }} onSubmit={search}>
                     <Form>
-                      <TablerForm.Group label="Siret ou UAI">
+                      <TablerForm.Group label="">
                         <Field name="keyword">
-                          {({ field, meta }) => {
-                            return <TablerForm.Input placeholder="..." {...field} />;
+                          {({ field }) => {
+                            return (
+                              <TablerForm.Input
+                                placeholder="Siret formateur / UAI / Identifiant RCO formation"
+                                {...field}
+                              />
+                            );
                           }}
                         </Field>
                       </TablerForm.Group>

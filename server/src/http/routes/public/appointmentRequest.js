@@ -7,10 +7,12 @@ const config = require("../../../../config");
 const { getReferrerById, getReferrerByKeyName, referrers } = require("../../../common/model/constants/referrers");
 const { getFormationsByIdRcoFormations, getFormationsByIdParcoursup } = require("../../utils/catalogue");
 const { candidat } = require("../../../common/roles");
+const { getIdRcoFormationThroughIdActionFormation } = require("../../utils/mappings/onisep");
 
 const contextCreateSchema = Joi.alternatives().try(
   Joi.object().keys({
     idRcoFormation: Joi.string().allow(""),
+    idActionFormation: Joi.string().allow(""),
     idParcoursup: Joi.string().required(),
     referrer: Joi.string()
       .valid(
@@ -23,6 +25,20 @@ const contextCreateSchema = Joi.alternatives().try(
   }),
   Joi.object().keys({
     idRcoFormation: Joi.string().required(),
+    idActionFormation: Joi.string().allow(""),
+    idParcoursup: Joi.string().allow(""),
+    referrer: Joi.string()
+      .valid(
+        referrers.PARCOURSUP.name.toLowerCase(),
+        referrers.LBA.name.toLowerCase(),
+        referrers.PFR_PAYS_DE_LA_LOIRE.name.toLowerCase(),
+        referrers.ONISEP.name.toLowerCase()
+      )
+      .required(),
+  }),
+  Joi.object().keys({
+    idRcoFormation: Joi.string().allow(""),
+    idActionFormation: Joi.string().required(),
     idParcoursup: Joi.string().allow(""),
     referrer: Joi.string()
       .valid(
@@ -66,7 +82,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
     tryCatch(async (req, res) => {
       await contextCreateSchema.validateAsync(req.body, { abortEarly: false });
 
-      const { idRcoFormation, idParcoursup, referrer } = req.body;
+      const { idRcoFormation, idParcoursup, idActionFormation, referrer } = req.body;
 
       const referrerObj = getReferrerByKeyName(referrer);
 
@@ -76,6 +92,14 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
         catalogueResponse = await getFormationsByIdRcoFormations({ idRcoFormations: idRcoFormation });
       } else if (idParcoursup) {
         catalogueResponse = await getFormationsByIdParcoursup({ idParcoursup });
+      } else if (idActionFormation) {
+        const idRcoFormationFound = getIdRcoFormationThroughIdActionFormation(idActionFormation);
+
+        if (!idRcoFormationFound) {
+          throw Boom.notFound("Formation introuvable.");
+        }
+
+        catalogueResponse = await getFormationsByIdRcoFormations({ idRcoFormations: idRcoFormationFound });
       } else {
         throw new Error("Critère de recherche non conforme.");
       }
