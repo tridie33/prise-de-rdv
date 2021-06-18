@@ -75,4 +75,18 @@ httpTests(__filename, ({ startServer }) => {
     assert.ok(response.data.message);
     assert.ok(response.data.statusCode);
   });
+
+  it("Vérifie que le context n'est pas retourné si la prise de rendez-vous n'est pas activée (idParcoursup)", async () => {
+    const { httpClient } = await startServer();
+
+    const response = await httpClient.post(`/api/appointment-request/context/create`, {
+      idActionFormation: "KO",
+      referrer: "onisep",
+    });
+
+    assert.strictEqual(response.status, 404);
+    assert.ok(response.data.error);
+    assert.ok(response.data.message);
+    assert.ok(response.data.statusCode);
+  });
 });
