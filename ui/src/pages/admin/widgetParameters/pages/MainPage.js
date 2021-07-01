@@ -5,6 +5,8 @@ import { useHistory } from "react-router";
 import { sortBy } from "lodash";
 import { _get } from "../../../../common/httpClient";
 import { TableRowHover } from "../../styles";
+import IconDownloadCsv from "../../../../common/components/IconDownloadCsv";
+import downloadFile from "../../../../common/utils/downloadFile";
 
 export default () => {
   const [parametersResult, setParametersResult] = useState(null);
@@ -36,6 +38,12 @@ export default () => {
     fetchParameters();
   }, []);
 
+  /**
+   * @description Downloads CSV file.
+   * @returns {Promise<void>}
+   */
+  const download = () => downloadFile(`/api/widget-parameters/parameters/export`, `parametres.csv`);
+
   return (
     <Page>
       <Page.Main>
@@ -44,7 +52,13 @@ export default () => {
           {parametersResult && !loading && (
             <Grid.Row>
               <Grid.Col>
-                <Card title="Paramètres">
+                <Card>
+                  <Card.Header>
+                    <Card.Title>Paramètres</Card.Title>
+                    <Card.Options>
+                      <IconDownloadCsv name="download" onClick={download} />
+                    </Card.Options>
+                  </Card.Header>
                   <Table responsive className="card-table table-vcenter text-nowrap">
                     <Table.Header>
                       <Table.ColHeader>Siret</Table.ColHeader>

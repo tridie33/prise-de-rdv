@@ -1,5 +1,7 @@
 const express = require("express");
 const Joi = require("joi");
+const json2csvParser = require("json2csv");
+const Boom = require("boom");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const { WidgetParameter } = require("../../../common/model");
 const logger = require("../../../common/logger");
@@ -53,6 +55,42 @@ module.exports = ({ widgetParameters }) => {
           total: allData.total,
         },
       });
+    })
+  );
+
+  /**
+   * Download in CSV.
+   */
+  router.get(
+    "/parameters/export",
+    tryCatch(async (req, res) => {
+      let qs = req.query;
+      const query = qs && qs.query ? JSON.parse(qs.query) : {};
+
+      const wigetParameters = await WidgetParameter.find(query);
+
+      const parameters = wigetParameters.map((parameter) => ({
+        siret: parameter.etablissement_siret,
+        raison_sociale: parameter.etablissement_raison_sociale,
+        id_rco_formation: parameter.id_rco_formation,
+        formation: parameter.formation_intitule,
+        cfd: parameter.formation_cfd,
+        email: parameter.email_rdv,
+        code_postal: parameter.code_postal,
+        sources: parameter.referrers.map((referrer) => getReferrerById(referrer).full_name).toString(),
+      }));
+
+      if (!parameters.length) {
+        throw Boom.badRequest("Aucune information a exporter.");
+      }
+
+      const csv2json = new json2csvParser.Parser();
+      const csv = csv2json.parse(parameters);
+
+      res.setHeader("Content-disposition", "attachment; filename=parametres.csv");
+      res.set("Content-Type", "text/csv");
+
+      return res.send(csv);
     })
   );
 
