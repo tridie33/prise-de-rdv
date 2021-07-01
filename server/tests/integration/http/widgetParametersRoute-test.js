@@ -244,4 +244,23 @@ httpTests(__filename, ({ startServer }) => {
     // Check API Response
     assert.deepStrictEqual(updateResponse.status, 500);
   });
+
+  it("Vérifie qu'on peut exporter les paramètres en csv", async () => {
+    const { httpClient, createAndLogUser, components } = await startServer();
+
+    await components.widgetParameters.createParameter({
+      etablissement_siret: sampleParameter.etablissement_siret,
+      etablissement_raison_sociale: sampleParameter.etablissement_raison_sociale,
+      formation_intitule: sampleParameter.formation_intitule,
+      formation_cfd: sampleParameter.formation_cfd,
+      email_rdv: sampleParameter.email_rdv,
+      referrers: sampleParameter.referrers,
+    });
+
+    const bearerToken = await createAndLogUser("userAdmin", "password", { role: administrator });
+    const response = await httpClient.get("/api/widget-parameters/parameters/export", { headers: bearerToken });
+
+    // Check API response
+    assert.deepStrictEqual(response.status, 200);
+  });
 });

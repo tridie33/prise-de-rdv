@@ -7,6 +7,8 @@ import * as emailValidator from "email-validator";
 import { _get, _post, _put } from "../../../../common/httpClient";
 import EtablissementComponent from "../components/EtablissementComponent";
 import { TableRowHover } from "../../styles";
+import IconDownloadCsv from "../../../../common/components/IconDownloadCsv";
+import downloadFile from "../../../../common/utils/downloadFile";
 
 export default () => {
   const { id } = useParams();
@@ -163,6 +165,17 @@ export default () => {
     toast.success("Configuration enregistrée avec succès.");
   };
 
+  /**
+   * @description Downloads CSV file.
+   * @param {string} siret
+   * @returns {Promise<void>}
+   */
+  const download = (siret) =>
+    downloadFile(
+      `/api/widget-parameters/parameters/export?query={"etablissement_siret":"${siret}"}`,
+      `parametres-${siret}.csv`
+    );
+
   return (
     <Page>
       <Page.Main>
@@ -176,7 +189,16 @@ export default () => {
               />
               <Grid.Row>
                 <Grid.Col>
-                  <Card title="Formations">
+                  <Card>
+                    <Card.Header>
+                      <Card.Title>Formations</Card.Title>
+                      <Card.Options>
+                        <IconDownloadCsv
+                          name="download"
+                          onClick={() => download(catalogueResult.formations[0].etablissement_formateur_siret)}
+                        />
+                      </Card.Options>
+                    </Card.Header>
                     <Table responsive className="card-table table-vcenter text-nowrap">
                       <Table.Header>
                         <Table.ColHeader>Id RCO</Table.ColHeader>

@@ -39,7 +39,7 @@ const handleResponse = (path, response) => {
 };
 
 const getHeaders = () => {
-  let auth = getAuth();
+  const auth = getAuth();
 
   return {
     Accept: "application/json",

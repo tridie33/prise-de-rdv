@@ -1,5 +1,7 @@
 const express = require("express");
 const lodash = require("lodash");
+const { Parser } = require("json2csv");
+const moment = require("moment");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const { Appointment, User } = require("../../../common/model");
 const logger = require("../../../common/logger");
@@ -109,6 +111,75 @@ module.exports = ({ cache }) => {
           total: allData.total,
         },
       });
+    })
+  );
+
+  /**
+   * Export appointments in csv.
+   *
+   */
+  router.get(
+    "/appointments/details/export",
+    tryCatch(async (req, res) => {
+      const allData = await Appointment.find().sort({ created_at: -1 });
+
+      const idRcoFormations = [...new Set(allData.map((document) => document.id_rco_formation))];
+
+      // Split array by chunk to avoid sending unit calls to the catalogue
+      const idRcoFormationsChunks = lodash.chunk(idRcoFormations, 40);
+
+      let formations = [];
+      for (const idRcoFormations of idRcoFormationsChunks) {
+        const data = await getFormationsByIdRcoFormations({ idRcoFormations });
+
+        formations.push(data.formations);
+      }
+
+      formations = formations.flat();
+
+      const appointmentsPromises = allData.map(async (document) => {
+        const user = await User.findById(document.candidat_id);
+
+        // Get right formation from dataset
+        const catalogueFormation = formations.find((item) => item.id_rco_formation === document.id_rco_formation);
+
+        let formation = {};
+        if (catalogueFormation) {
+          formation = {
+            etablissement_formateur_entreprise_raison_sociale:
+              catalogueFormation.etablissement_formateur_entreprise_raison_sociale,
+            intitule_long: catalogueFormation.intitule_long,
+            etablissement_formateur_adresse: catalogueFormation.etablissement_formateur_adresse,
+            etablissement_formateur_code_postal: catalogueFormation.etablissement_formateur_code_postal,
+            etablissement_formateur_nom_departement: catalogueFormation.etablissement_formateur_nom_departement,
+          };
+        }
+
+        return {
+          date: moment(document.created_at).format("DD/MM/YYYY HH:mm:ss"),
+          candidat: `${user.firstname} ${user.lastname}`,
+          phone: user.phone,
+          email: user.email,
+          etablissement: formation.etablissement_formateur_entreprise_raison_sociale,
+          siret: document.etablissement_id,
+          formation: formation.intitule_long,
+          cfd: document.formation_id,
+          source: getReferrerById(document.referrer).full_name,
+          motivation: document.motivations,
+          champs_libre_statut: document.champs_libre_status || "",
+          champs_libre_commentaire: document.champs_libre_commentaire || "",
+        };
+      });
+
+      const appointments = await Promise.all(appointmentsPromises);
+
+      const json2csvParser = new Parser();
+      const csv = json2csvParser.parse(appointments);
+
+      res.setHeader("Content-disposition", "attachment; filename=rendez-vous.csv");
+      res.set("Content-Type", "text/csv");
+
+      return res.send(csv);
     })
   );
 

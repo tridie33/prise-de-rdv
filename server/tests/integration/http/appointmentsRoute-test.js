@@ -3,6 +3,8 @@ const httpTests = require("../../utils/httpTests");
 const { administrator } = require("../../../src/common/roles");
 const { sampleAppointment, sampleUpdateAppointment } = require("../../data/samples");
 const { Appointment } = require("../../../src/common/model");
+const roles = require("../../../src/common/roles");
+const { referrers } = require("../../../src/common/model/constants/referrers");
 
 httpTests(__filename, ({ startServer }) => {
   it("Vérifie qu'on peut consulter la liste des rdvs en tant qu'admin via la Route", async () => {
@@ -24,6 +26,36 @@ httpTests(__filename, ({ startServer }) => {
     assert.deepStrictEqual(response.status, 200);
     assert.ok(response.data.appointments);
     assert.deepStrictEqual(response.data.appointments.length, 1);
+    assert.ok(response.data.pagination);
+  });
+
+  it("Vérifie qu'on peut consulter la liste en détail des rdvs en tant qu'admin via la Route", async () => {
+    const { httpClient, createAndLogUser, components } = await startServer();
+
+    const candidat = await components.users.createUser("Marc", "N/A", {
+      firstname: "firstname",
+      lastname: "password",
+      phone: "",
+      email: "test@gmail.com",
+      role: roles.candidat,
+    });
+
+    // Add item
+    await components.appointments.createAppointment({
+      id_rco_formation: sampleAppointment.id_rco_formation,
+      candidat_id: candidat._id,
+      etablissement_id: sampleAppointment.etablissement_id,
+      formation_id: sampleAppointment.formation_id,
+      motivations: sampleAppointment.motivations,
+      referrer: referrers.LBA.code,
+    });
+
+    const bearerToken = await createAndLogUser("userAdmin", "password", { role: administrator });
+    const response = await httpClient.get("/api/appointment/appointments/details", { headers: bearerToken });
+
+    // Check API response
+    assert.deepStrictEqual(response.status, 200);
+    assert.ok(response.data.appointments);
     assert.ok(response.data.pagination);
   });
 
@@ -174,5 +206,32 @@ httpTests(__filename, ({ startServer }) => {
     // Check deletion
     const found = await Appointment.findById(addedResponse.data._id);
     assert.strictEqual(found, null);
+  });
+
+  it("Vérifie qu'on peut exporter les rendez-vous en csv", async () => {
+    const { httpClient, createAndLogUser, components } = await startServer();
+
+    const candidat = await components.users.createUser("Jean", "N/A", {
+      firstname: "firstname",
+      lastname: "password",
+      phone: "",
+      email: "test@gmail.com",
+      role: roles.candidat,
+    });
+
+    await components.appointments.createAppointment({
+      id_rco_formation: sampleAppointment.id_rco_formation,
+      candidat_id: candidat._id,
+      etablissement_id: sampleAppointment.etablissement_id,
+      formation_id: sampleAppointment.formation_id,
+      motivations: sampleAppointment.motivations,
+      referrer: referrers.LBA.code,
+    });
+
+    const bearerToken = await createAndLogUser("userAdmin", "password", { role: administrator });
+    const response = await httpClient.get("/api/appointment/appointments/details/export", { headers: bearerToken });
+
+    // Check API response
+    assert.deepStrictEqual(response.status, 200);
   });
 });
