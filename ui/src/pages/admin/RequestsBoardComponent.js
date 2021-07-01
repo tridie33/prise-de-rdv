@@ -1,6 +1,8 @@
 import React from "react";
 import { Card, Grid, Table } from "tabler-react";
 import { AppointmentItemList } from "./AppointmentItemList";
+import IconDownloadCsv from "../../common/components/IconDownloadCsv";
+import downloadFile from "../../common/utils/downloadFile";
 
 /**
  * @description Appointments head table.
@@ -8,10 +10,22 @@ import { AppointmentItemList } from "./AppointmentItemList";
  * @returns {JSX.Element}
  */
 export const RequestsBoardComponent = (props) => {
+  /**
+   * @description Downloads CSV file.
+   * @returns {Promise<void>}
+   */
+  const download = () => downloadFile("/api/appointment/appointments/details/export", "rendez-vous.csv");
+
   return (
     <Grid.Row>
       <Grid.Col width={12}>
-        <Card title="Demandes">
+        <Card>
+          <Card.Header>
+            <Card.Title>Rendez-vous</Card.Title>
+            <Card.Options>
+              <IconDownloadCsv name="download" onClick={download} />
+            </Card.Options>
+          </Card.Header>
           <Table responsive className="card-table table-vcenter text-nowrap">
             <Table.Header>
               <Table.Row>

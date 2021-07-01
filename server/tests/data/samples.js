@@ -1,6 +1,7 @@
 const { referrers } = require("../../src/common/model/constants/referrers");
 
 const sampleAppointment = {
+  id_rco_formation: "21_114876|21_114876|106291",
   candidat_id: "91a370e6-3eb1-4e09-80f0-b7cc6be84fac",
   etablissement_id: "2828558M",
   formation_id: "68769673",
