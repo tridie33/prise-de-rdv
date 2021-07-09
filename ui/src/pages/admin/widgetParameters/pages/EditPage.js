@@ -7,7 +7,7 @@ import * as emailValidator from "email-validator";
 import { _get, _post, _put } from "../../../../common/httpClient";
 import EtablissementComponent from "../components/EtablissementComponent";
 import { TableRowHover } from "../../styles";
-import IconDownloadCsv from "../../../../common/components/IconDownloadCsv";
+import IconDownloadCsv from "../../../../common/components/Icon";
 import downloadFile from "../../../../common/utils/downloadFile";
 
 export default () => {

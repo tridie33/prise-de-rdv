@@ -7,6 +7,7 @@ const { WidgetParameter } = require("../../../common/model");
 const logger = require("../../../common/logger");
 const { getFormations } = require("../../utils/catalogue");
 const { getReferrerById } = require("../../../common/model/constants/referrers");
+const { getFormationsBySiretFormateur } = require("../../utils/catalogue");
 
 const widgetParameterSchema = Joi.object({
   etablissement_siret: Joi.string().required(),
@@ -17,6 +18,18 @@ const widgetParameterSchema = Joi.object({
   email_rdv: Joi.string().required(),
   referrers: Joi.array().items(Joi.number()),
   id_rco_formation: Joi.string().required(),
+});
+
+const widgetParameterImportSchema = Joi.object({
+  parameters: Joi.array()
+    .items(
+      Joi.object({
+        siret_formateur: Joi.string().required(),
+        referrers: Joi.array().items(Joi.number()),
+        email: Joi.string().required(),
+      })
+    )
+    .required(),
 });
 
 const widgetParameterReferrerUpdateBatchSchema = Joi.object({
@@ -192,9 +205,58 @@ module.exports = ({ widgetParameters }) => {
     "/",
     tryCatch(async ({ body }, res) => {
       await widgetParameterSchema.validateAsync(body, { abortEarly: false });
-      logger.info("Adding new ACL Rule : ", body);
-      const result = await widgetParameters.createParameter(body);
+      const result = await widgetParameters.findUpdateOrCreate(body);
       res.send(result);
+    })
+  );
+
+  /**
+   * Add all formations for given "siret_formateurs".
+   */
+  router.post(
+    "/import",
+    tryCatch(async ({ body }, res) => {
+      await widgetParameterImportSchema.validateAsync(body, { abortEarly: false });
+
+      const result = [];
+      for (const parameter of body.parameters) {
+        const { formations } = await getFormationsBySiretFormateur({ siretFormateur: parameter.siret_formateur });
+
+        if (formations.length) {
+          const widgetParametersCreated = await Promise.all(
+            formations.map(async (formation) => {
+              const parameterExists = await widgetParameters.getParameterByIdRcoFormationWithNotEmptyReferrers({
+                idRcoFormation: formation.id_rco_formation,
+              });
+
+              if (!parameterExists) {
+                return widgetParameters.findUpdateOrCreate({
+                  email_rdv: parameter.email,
+                  referrers: parameter.referrers,
+                  etablissement_siret: parameter.siret_formateur,
+                  id_rco_formation: formation.id_rco_formation,
+                  code_postal: formation.code_postal,
+                  etablissement_raison_sociale: formation.etablissement_formateur_entreprise_raison_sociale,
+                  formation_cfd: formation.cfd,
+                  formation_intitule: formation.intitule_long,
+                });
+              }
+            })
+          );
+
+          result.push({
+            ...parameter,
+            formations: widgetParametersCreated.filter(Boolean),
+          });
+        } else {
+          result.push({
+            ...parameter,
+            error: "Formations introuvables.",
+          });
+        }
+      }
+
+      res.send({ result });
     })
   );
 
