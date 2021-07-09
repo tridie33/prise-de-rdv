@@ -39,6 +39,51 @@ module.exports = async () => ({
   },
 
   /**
+   * @description Finds or creates a parameter.
+   * @param etablissement_siret
+   * @param etablissement_raison_sociale
+   * @param formation_intitule
+   * @param formation_cfd
+   * @param email_rdv
+   * @param code_postal
+   * @param id_rco_formation
+   * @param referrers
+   * @returns {Promise<WidgetParameter>}
+   */
+  findUpdateOrCreate: async ({
+    etablissement_siret,
+    etablissement_raison_sociale,
+    formation_intitule,
+    formation_cfd,
+    email_rdv,
+    code_postal,
+    id_rco_formation,
+    referrers,
+  }) => {
+    const parameter = {
+      etablissement_siret,
+      etablissement_raison_sociale,
+      formation_intitule,
+      formation_cfd,
+      email_rdv,
+      code_postal,
+      id_rco_formation,
+      referrers,
+    };
+
+    const widgetParameterFind = await WidgetParameter.findOne({ id_rco_formation });
+
+    if (widgetParameterFind) {
+      return WidgetParameter.findOneAndUpdate({ _id: widgetParameterFind._id }, parameter, { new: true });
+    }
+
+    const widgetParameter = new WidgetParameter(parameter);
+    await widgetParameter.save();
+
+    return widgetParameter.toObject();
+  },
+
+  /**
    * @description Updates item.
    * @param {String} id
    * @param {WidgetParameter} body
@@ -67,6 +112,14 @@ module.exports = async () => ({
    * @returns {Promise<WidgetParameter>}
    */
   getParameterByIdRcoFormation: ({ idRcoFormation }) => WidgetParameter.findOne({ id_rco_formation: idRcoFormation }),
+
+  /**
+   * @description Returns items through its "id_rco_formation" have referrer item.
+   * @param {String} idRcoFormation
+   * @returns {Promise<WidgetParameter>}
+   */
+  getParameterByIdRcoFormationWithNotEmptyReferrers: ({ idRcoFormation }) =>
+    WidgetParameter.findOne({ id_rco_formation: idRcoFormation, referrers: { $not: { $size: 0 } } }),
 
   /**
    * @description Returns item through its "id_rco_formation".
