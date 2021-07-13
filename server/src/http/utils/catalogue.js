@@ -6,7 +6,7 @@ const { axiosRedis } = require("../../common/redis");
 const commonConditions = [{ published: true }, { etablissement_reference_catalogue_published: true }];
 
 /**
- * @description Get formations by "siret formateur".
+ * @description Get formations by "siret formateur" with "common conditions".
  * @param {String} siretFormateur
  * @returns {Promise<Object>}
  */
@@ -16,13 +16,23 @@ const getFormationsBySiretFormateur = ({ siretFormateur }) =>
   });
 
 /**
- * @description Get formations by idRcoFormations.
+ * @description Get formations by idRcoFormations with "common conditions".
  * @param {String[]} idRcoFormations
  * @returns {Promise<Object>}
  */
 const getFormationsByIdRcoFormations = ({ idRcoFormations }) =>
   getFormations({
     $and: [{ id_rco_formation: idRcoFormations }, ...commonConditions],
+  });
+
+/**
+ * @description Get formations by idRcoFormations.
+ * @param {String[]} idRcoFormations
+ * @returns {Promise<Object>}
+ */
+const getFormationsByIdRcoFormationsRaw = ({ idRcoFormations }) =>
+  getFormations({
+    $and: [{ id_rco_formation: idRcoFormations }],
   });
 
 /**
@@ -61,6 +71,7 @@ const getFormations = async (query, page = 1, limit = 500) => {
         etablissement_formateur_siret: 1,
         cfd: 1,
         localite: 1,
+        email: 1,
       }),
       page,
       limit,
@@ -75,6 +86,7 @@ const getFormations = async (query, page = 1, limit = 500) => {
 
 module.exports = {
   getFormationsByIdRcoFormations,
+  getFormationsByIdRcoFormationsRaw,
   getFormationsByIdParcoursup,
   getFormationsBySiretFormateur,
   getFormations,
