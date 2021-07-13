@@ -1,12 +1,22 @@
 import React from "react";
-import { Page } from "tabler-react";
-import { UpdateAllParameterReferrersComponent } from "../components/UpdateAllParameterReferrersComponent";
+import { Grid, Page } from "tabler-react";
+import { UpdateAllParameterReferrers } from "../components/UpdateAllParameterReferrers";
+import { BulkImport } from "../components/BulkImport";
+import { ActivateAllCfaFormations } from "../components/ActivateAllCfaFormations";
 
 export default () => (
   <Page>
     <Page.Main>
       <Page.Content>
-        <UpdateAllParameterReferrersComponent />
+        <BulkImport />
+        <Grid.Row cards deck>
+          <Grid.Col>
+            <UpdateAllParameterReferrers />
+          </Grid.Col>
+          <Grid.Col>
+            <ActivateAllCfaFormations />
+          </Grid.Col>
+        </Grid.Row>
       </Page.Content>
     </Page.Main>
   </Page>

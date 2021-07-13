@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Card, Form, Button, Dimmer } from "tabler-react";
+import { Card, Form, Button, Dimmer } from "tabler-react";
 import { toast } from "react-toastify";
 import { _get, _put } from "../../../../common/httpClient";
 
@@ -7,8 +7,9 @@ import { _get, _put } from "../../../../common/httpClient";
  * @description Updates all widgetParameters to updates referrers.
  * @returns {JSX.Element}
  */
-const UpdateAllParameterReferrersComponent = () => {
+const UpdateAllParameterReferrers = () => {
   const [loading, setLoading] = useState(false);
+  const [submitLoading, setSubmitLoading] = useState(false);
   const [isSubmitDisabled, setSubmitDisabled] = useState(true);
   const [referrers, setReferrers] = useState();
 
@@ -75,41 +76,47 @@ const UpdateAllParameterReferrersComponent = () => {
    * @description Submit.
    * @returns {Promise<void>}
    */
-  const submit = () =>
-    _put("/api/widget-parameters/referrers", {
-      referrers: referrers.filter((referrer) => referrer.isChecked).map((referrer) => referrer.code),
-    });
+  const submit = async () => {
+    try {
+      setSubmitLoading(true);
+      await _put("/api/widget-parameters/referrers", {
+        referrers: referrers.filter((referrer) => referrer.isChecked).map((referrer) => referrer.code),
+      });
+      toast.success("Enregistrement effectué avec succès.");
+    } catch (error) {
+      toast.error("Une erreur est survenue");
+    } finally {
+      setSubmitLoading(false);
+    }
+  };
 
   return (
-    <Grid.Row>
-      <Grid.Col width={6}>
-        <Card title="Modifier les sources de parution pour tous les paramètres actifs">
-          <Dimmer active={loading} loader>
-            <Card.Body>
-              Veuillez cocher l'ensemble des plateformes de diffusion sur lesquelles vous souhaitez que les formations
-              actuellement publiées soient accessibles.
-              <br />
-              <br />
-              {referrers &&
-                referrers.map((referrer) => (
-                  <Form.Checkbox
-                    key={referrer.code}
-                    checked={referrer.checked}
-                    label={referrer.full_name}
-                    onChange={() => toggleReferrer(referrer.code, !referrer.isChecked)}
-                  />
-                ))}
-            </Card.Body>
-          </Dimmer>
-          <Card.Footer>
-            <Button color="primary float-right" disabled={isSubmitDisabled} onClick={submit}>
-              Enregistrer
-            </Button>
-          </Card.Footer>
-        </Card>
-      </Grid.Col>
-    </Grid.Row>
+    <Card title="Modifier les sources de parution pour tous les paramètres actifs">
+      <Dimmer active={loading} loader>
+        <Card.Body>
+          Veuillez cocher l'ensemble des plateformes de diffusion sur lesquelles vous souhaitez que les formations
+          actuellement publiées soient accessibles.
+          <br />
+          <br />
+          {referrers &&
+            referrers.map((referrer) => (
+              <Form.Checkbox
+                key={referrer.code}
+                checked={referrer.checked}
+                label={referrer.full_name}
+                onChange={() => toggleReferrer(referrer.code, !referrer.isChecked)}
+              />
+            ))}
+          <div style={{ marginBottom: "12.6rem" }} />
+        </Card.Body>
+      </Dimmer>
+      <Card.Footer>
+        <Button color="primary float-right" disabled={isSubmitDisabled} loading={submitLoading} onClick={submit}>
+          Enregistrer
+        </Button>
+      </Card.Footer>
+    </Card>
   );
 };
 
-export { UpdateAllParameterReferrersComponent };
+export { UpdateAllParameterReferrers };

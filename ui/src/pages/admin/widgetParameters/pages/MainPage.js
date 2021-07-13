@@ -5,7 +5,7 @@ import { useHistory } from "react-router";
 import { sortBy } from "lodash";
 import { _get } from "../../../../common/httpClient";
 import { TableRowHover } from "../../styles";
-import IconDownloadCsv from "../../../../common/components/IconDownloadCsv";
+import IconDownloadCsv from "../../../../common/components/Icon";
 import downloadFile from "../../../../common/utils/downloadFile";
 
 export default () => {

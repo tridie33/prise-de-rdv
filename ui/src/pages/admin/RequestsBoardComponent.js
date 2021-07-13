@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Grid, Table } from "tabler-react";
 import { AppointmentItemList } from "./AppointmentItemList";
-import IconDownloadCsv from "../../common/components/IconDownloadCsv";
+import IconDownloadCsv from "../../common/components/Icon";
 import downloadFile from "../../common/utils/downloadFile";
 
 /**

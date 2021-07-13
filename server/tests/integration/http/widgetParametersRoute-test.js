@@ -50,6 +50,36 @@ httpTests(__filename, ({ startServer }) => {
     assert.deepStrictEqual(response.data, { total: 1 });
   });
 
+  it("Vérifie qu'on peut importer une collection de paramètres via la Route", async () => {
+    const { httpClient, createAndLogUser } = await startServer();
+    const bearerToken = await createAndLogUser("userAdmin", "password", { role: administrator });
+    const response = await httpClient.post(
+      "/api/widget-parameters/import",
+      {
+        parameters: [
+          {
+            siret_formateur: sampleParameter.etablissement_siret,
+            email: sampleParameter.email_rdv,
+            referrers: [referrers.LBA.code],
+          },
+        ],
+      },
+      { headers: bearerToken }
+    );
+
+    // Check API Response
+    assert.deepStrictEqual(response.status, 200);
+    assert.deepStrictEqual(response.data.result[0].siret_formateur, sampleParameter.etablissement_siret);
+    assert.deepStrictEqual(response.data.result[0].email, sampleParameter.email_rdv);
+    assert.deepStrictEqual(response.data.result[0].referrers, [referrers.LBA.code]);
+    assert.deepStrictEqual(
+      response.data.result[0].formations[0].etablissement_siret,
+      sampleParameter.etablissement_siret
+    );
+    assert.deepStrictEqual(response.data.result[0].formations[0].email_rdv, sampleParameter.email_rdv);
+    assert.deepStrictEqual(response.data.result[0].formations[0].referrers, [referrers.LBA.code]);
+  });
+
   it("Vérifie qu'on peut ajouter un parametre de widget en tant qu'admin via la Route", async () => {
     const { httpClient, createAndLogUser } = await startServer();
     const bearerToken = await createAndLogUser("userAdmin", "password", { role: administrator });
