@@ -6,7 +6,7 @@ const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const { Appointment, User } = require("../../../common/model");
 const logger = require("../../../common/logger");
 const { getReferrerById } = require("../../../common/model/constants/referrers");
-const { getFormationsByIdRcoFormations } = require("../../utils/catalogue");
+const { getFormationsByIdRcoFormationsRaw } = require("../../utils/catalogue");
 
 /**
  * Sample entity route module for GET
@@ -60,7 +60,7 @@ module.exports = ({ cache }) => {
       // Get formations from catalogue by block of 40 id_rco_formations
       let formations = await Promise.all(
         idRcoFormationsChunks.map(async (idRcoFormations) => {
-          const { formations } = await getFormationsByIdRcoFormations({ idRcoFormations });
+          const { formations } = await getFormationsByIdRcoFormationsRaw({ idRcoFormations });
 
           return formations;
         })
@@ -130,7 +130,7 @@ module.exports = ({ cache }) => {
 
       let formations = [];
       for (const idRcoFormations of idRcoFormationsChunks) {
-        const data = await getFormationsByIdRcoFormations({ idRcoFormations });
+        const data = await getFormationsByIdRcoFormationsRaw({ idRcoFormations });
 
         formations.push(data.formations);
       }
