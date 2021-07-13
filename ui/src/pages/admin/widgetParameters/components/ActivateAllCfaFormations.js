@@ -122,7 +122,12 @@ const ActivateAllCfaFormations = () => {
       } else {
         setEmail("");
         setSiret("");
-        toast.success("Enregistrement effectué avec succès.");
+
+        if (result[0].formations.length > 0) {
+          toast.success("Enregistrement effectué avec succès.");
+        } else {
+          toast.info("Aucune modification n'a été apportée.");
+        }
       }
 
       toggleDisableButton();

@@ -61,7 +61,7 @@ const BulkImport = () => {
    * @returns {{error: {header: string, content: string}}|null}
    */
   const validFile = (data) => {
-    const [headers, ...rows] = data.slice(0, -1);
+    const [headers, ...rows] = data;
     const headerColumns = Object.values(csvHeaders);
 
     if (!isEqual(headerColumns, headers)) {
@@ -139,7 +139,7 @@ const BulkImport = () => {
   const onDrop = ([file]) => {
     const reader = new FileReader();
     reader.onload = (e) => {
-      const { data } = papaparse.readString(e.target.result);
+      const { data } = papaparse.readString(e.target.result, { skipEmptyLines: true });
 
       const validationError = validFile(data)?.error;
 
@@ -147,7 +147,7 @@ const BulkImport = () => {
         setError(validationError);
       } else {
         // False to say "not imported yet"
-        setFileContent(data.slice(1, -1).map((item) => [...item, null]));
+        setFileContent(data.slice(1).map((item) => [...item, null]));
         setError(null);
       }
     };
@@ -270,7 +270,7 @@ const BulkImport = () => {
                 <Button color="primary float-right" onClick={submit} loading={submitLoading} disabled={submitLoading}>
                   Enregistrer
                 </Button>
-                <Button color="second float-right" onClick={cancel} loading={submitLoading} disabled={submitLoading}>
+                <Button color="second float-right" onClick={cancel} disabled={submitLoading}>
                   Annuler
                 </Button>
               </Card.Footer>
