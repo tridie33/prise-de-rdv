@@ -6,6 +6,7 @@ import {
   HelloTypography,
   Input,
   Spacer,
+  Text,
   Textarea,
 } from "./styles";
 import React, { useEffect, useState } from "react";
@@ -18,6 +19,7 @@ import { ContactCentreComponent } from "./components/ContactCentreComponent";
 import { useHistory } from "react-router-dom";
 import { FormHeaderComponent } from "./components/FormHeaderComponent";
 import { FormLayoutComponent } from "./components/FormLayoutComponent";
+import { InfoMessage } from "./HolidayMessage";
 import { _post } from "../../common/httpClient";
 
 /**
@@ -163,33 +165,33 @@ export const FormCreatePage = (props) => {
                     ville={data.localite}
                   />
                   <HelloTypography as={"h2"}>Bonjour !</HelloTypography>
-                  <p>
-                    Vous êtes <AsterixTypography>*</AsterixTypography> :{" "}
-                  </p>
+                  <Text>
+                    Vous êtes<AsterixTypography>*</AsterixTypography> :
+                  </Text>
                   <Field name="firstname">
                     {({ field, meta }) => (
-                      <Input placeholder="Votre prénom" {...field} {...feedback(meta, "Prénom invalide")} />
+                      <Input placeholder="votre prénom" {...field} {...feedback(meta, "Prénom invalide")} />
                     )}
                   </Field>
                   <Field name="lastname">
                     {({ field, meta }) => (
-                      <Input placeholder="Votre nom" {...field} {...feedback(meta, "Nom invalide")} />
+                      <Input placeholder="votre nom" {...field} {...feedback(meta, "Nom invalide")} />
                     )}
                   </Field>
                   <Spacer />
 
-                  {data.training && (
-                    <p>
-                      Pour tout savoir de notre formation <u>{data.intitule_long}</u>, laissez-nous <strong>48h</strong>{" "}
-                      et <strong>votre numéro de téléphone</strong> <AsterixTypography>*</AsterixTypography> :
-                    </p>
+                  {data.intitule_long && (
+                    <Text>
+                      Pour tout savoir de la formation <u>{data.intitule_long.toUpperCase()}</u>, laissez{" "}
+                      <b>votre numéro</b> au centre de formation<AsterixTypography>*</AsterixTypography> :
+                    </Text>
                   )}
 
                   <Field name="phone" validate={validatePhone}>
                     {({ field, meta }) => {
                       return (
                         <Input
-                          placeholder="Votre numéro de téléphone"
+                          placeholder="votre numéro"
                           {...field}
                           {...feedback(meta, "Numéro de téléphone invalide")}
                         />
@@ -198,15 +200,15 @@ export const FormCreatePage = (props) => {
                   </Field>
                   <Spacer />
 
-                  <p>
-                    Vous recevrez un <strong>email de confirmation</strong> à cette adresse{" "}
+                  <Text>
+                    Vous recevrez un <b>email de confirmation</b> à cette adresse
                     <AsterixTypography>*</AsterixTypography> :
-                  </p>
+                  </Text>
                   <Field name="email" validate={validateEmail}>
                     {({ field, meta }) => {
                       return (
                         <Input
-                          placeholder="Votre adresse email"
+                          placeholder="votre adresse email"
                           {...field}
                           {...feedback(meta, "Adresse email invalide")}
                         />
@@ -215,14 +217,12 @@ export const FormCreatePage = (props) => {
                   </Field>
                   <Spacer />
 
-                  <p>
-                    Que voulez-vous savoir, plus précisément <AsterixTypography>*</AsterixTypography> ?
-                  </p>
+                  <Text>Quel sujet voulez-vous aborder ?</Text>
                   <Field name="motivations">
                     {({ field, meta }) => {
                       return (
                         <Textarea
-                          placeholder="Pré-inscription, horaires, calendrier, etc."
+                          placeholder="précisez"
                           {...field}
                           {...feedback(meta, "Désolée, ce champs est nécessaire")}
                         />
@@ -230,7 +230,7 @@ export const FormCreatePage = (props) => {
                     }}
                   </Field>
                   <Spacer />
-
+                  <InfoMessage />
                   <ButtonLayout>
                     <Button type={"submit"} loading={submitLoading}>
                       Envoyer

@@ -1,9 +1,10 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { FormHeaderComponent } from "./components/FormHeaderComponent";
-import { Divider, InfosLayout, Spacer } from "./styles";
+import { Divider, InfosLayout, Spacer, Text } from "./styles";
 import { FormLayoutComponent } from "./components/FormLayoutComponent";
 import { useFetch } from "../../common/hooks/useFetch";
+import { InfoMessage } from "./HolidayMessage";
 
 export const FormRecapPage = () => {
   const { id: appointmentId } = useParams();
@@ -17,34 +18,30 @@ export const FormRecapPage = () => {
         <>
           {data.user && (
             <InfosLayout>
-              <p>
+              <Text>
                 <span>Voilà une bonne chose de faite</span>{" "}
                 <strong>
                   {data.user.firstname} {data.user.lastname}
                 </strong>{" "}
                 !
-              </p>
-              <p>
-                Vous allez recevoir un email de confirmation à <strong>{data.user.email}.</strong>
-              </p>
-              <p>
-                Le CFA essaiera de vous joindre dans les prochaines 48h au <strong>{data.user.phone}.</strong>
-              </p>
+                <br />
+                <br />
+                Vous allez recevoir un email de confirmation de votre demande de rappel à{" "}
+                <strong>{data.user.email}</strong>.
+              </Text>
               <Spacer />
+              <InfoMessage />
               <Spacer />
               <Divider />
               {data.etablissement && (
-                <p>
+                <Text>
                   Vous souhaitez modifier ou annuler cette demande ? <br />
                   Envoyez un email à{" "}
                   <u>
                     <a href={`mailto:${data.etablissement.email}`}>{data.etablissement.email}</a>
                   </u>
-                </p>
+                </Text>
               )}
-              <p align="center">
-                <i>Vous pouvez fermer cette fenêtre pour revenir sur {data.appointment.referrer.full_name}.</i>
-              </p>
             </InfosLayout>
           )}
         </>

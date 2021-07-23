@@ -2,9 +2,11 @@
 export const background = {
   app: "#e5e5e5",
   white: "#ffffff",
+  grey: "#f0f0f0",
+  blue: "#206bc4",
   sidebar: "#fafafaff",
   header: "#d9ead3",
-  blueLight: "#E8F0F9",
+  blueLight: "#e8f0f9",
 };
 
 export const color = {
@@ -21,6 +23,7 @@ export const color = {
   otherMediumGrey: "#cccccc",
   mediumDarkGrey: "#666666",
   darkGrey: "#232E3C",
+  grey: "#dee2e6",
   beige: "antiquewhite",
   lightPurple: "#d9d2e9ff",
   lightYellow: "#fff2ccff",
@@ -44,6 +47,9 @@ export const typography = {
   type: {
     primary: '"Arial", "sans-serif"',
     code: '"SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace',
+  },
+  fontFamily: {
+    inter: "Inter",
   },
   fontWeight: {
     lowWeight: "300",
