@@ -212,6 +212,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
           referrer: referrerObj.full_name,
         },
         images: {
+          info: `${config.publicUrl}/assets/info.png?raw=true`,
           people: `${config.publicUrl}/assets/people.png?raw=true`,
           school: `${config.publicUrl}/assets/school.png?raw=true`,
           map: `${config.publicUrl}/assets/map.png?raw=true`,

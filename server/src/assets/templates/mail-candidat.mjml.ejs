@@ -11,7 +11,6 @@
             <mj-divider padding="0px" />
         </mj-attributes>
     </mj-head>
-
     <mj-body background-color="#E8F0F9">
         <mj-section background-color="#E8F0F9">
             <mj-column padding="0px" vertical-align="middle">
@@ -25,24 +24,41 @@
             </mj-column>
         </mj-section>
         <mj-wrapper padding="0px" padding-bottom="50px">
-            <mj-section background-color="#ffffff" border-top="1px solid #dddddd" border-left="1px solid #dddddd"
-                        border-right="1px solid #dddddd" padding-top="60px">
+            <mj-section background-color="#ffffff" border-top="1px solid #dddddd" border-left="1px solid #dddddd" border-right="1px solid #dddddd" padding-top="60px">
                 <mj-column width="420px">
                     <mj-text padding-bottom="20px">
                         Bonjour
                         <%= data.user.firstname %>
                         <%= data.user.lastname %>,
                     </mj-text>
-                    <mj-text padding-bottom="20px">
-                        Merci de votre intérêt pour la formation
-                        <%= data.formation.intitule %> de notre établissement.
+                    <mj-text>
+                        <b>Votre demande de rappel</b> pour tout savoir de la formation <%= data.formation.intitule %>
+                        <b>a bien été prise en compte !</b>
                     </mj-text>
-                    <mj-text padding-bottom="20px">Nous vous rappellerons au
-                        <%= data.user.phone %> dans les prochaines 48h.
-                    </mj-text>
-                    <mj-text>A très bientôt !
-                        <br>L'équipe de l’établissement.
-                    </mj-text>
+                </mj-column>
+            </mj-section>
+            <mj-section background-color="#ffffff" border-right="1px solid #dddddd" border-left="1px solid #dddddd" padding-top="32px">
+                <mj-column width="420px" border-left="5px solid #206BC4" background-color="#F0F0F0">
+                    <mj-section text-align="left" padding-top="12px" padding-left="10px" padding-bottom="16px">
+                        <mj-column width="13px" height="13px" vertical-align="top" padding="0px" >
+                            <mj-image padding="0px" src="<%= data.images.info %>" />
+                        </mj-column>
+                        <mj-column vertical-align="top" width="340px" padding-left="12px">
+                            <mj-text font-size="12px" line-height="16px" padding="0px">
+                                En août, la plupart des centres de formation sont en congés.
+                                <br>
+                                <b>En fonction de ses périodes de congés,</b> le centre de formation essaiera de vous joindre dans les prochaines 48h ouvrées au <b><a href="tel:<%= data.user.phone %>"><%= data.user.phone %></a></b>
+                                ou à sa réouverture fin août / début septembre.
+                                <br><br>
+                                Merci de votre compréhension !
+                            </mj-text>
+                        </mj-column>
+                    </mj-section>
+                </mj-column>
+            </mj-section>
+            <mj-section background-color="#ffffff" border-right="1px solid #dddddd" border-left="1px solid #dddddd" padding-top="35px">
+                <mj-column width="420px">
+                    <mj-text>A très bientôt !</mj-text>
                 </mj-column>
             </mj-section>
             <mj-section background-color="#ffffff" padding-top="0px" padding-bottom="0px">
@@ -52,7 +68,7 @@
                             <mj-image padding="0px" src="<%= data.images.school %>" />
                         </mj-column>
                         <mj-column vertical-align="top" width="340px">
-                            <mj-text font-size="12px" font-weight="600" line-height="16px" padding-bottom="5px" padding-left="10px">
+                            <mj-text font-size="12px" line-height="16px" padding-bottom="5px" padding-left="10px">
                                 <%= data.etablissement.name %>
                             </mj-text>
                         </mj-column>
@@ -62,7 +78,7 @@
                             <mj-image padding="0px" src="<%= data.images.map %>" />
                         </mj-column>
                         <mj-column vertical-align="top" width="340px">
-                            <mj-text font-size="12px" font-weight="600" line-height="16px" padding="0px" padding-left="10px">
+                            <mj-text font-size="12px" line-height="16px" padding="0px" padding-left="10px">
                                 <%= data.etablissement.address %>
                                 <br>
                                 <%= data.etablissement.postalCode %> <%= data.etablissement.ville %>
@@ -73,18 +89,25 @@
             </mj-section>
             <mj-section background-color="#ffffff" border-right="1px solid #dddddd">
                 <mj-column width="420px">
-                    <mj-divider border-width="0.5px" border-style="solid" border-color="#5B5B5B" padding-top="20px"
-                                padding-bottom="10px" />
+                    <mj-divider border-width="0.5px" border-style="solid" border-color="#5B5B5B" padding-top="20px" padding-bottom="10px" />
                     <mj-text padding="0px" padding-bottom="20px">
                         Cette demande a été réalisée via <a href="<%= data.appointment.referrerLink %>"><%= data.appointment.referrer %></a>.
                     </mj-text>
-                    <mj-text font-weight="700">
+                    <mj-text>
                         Vous souhaitez modifier ou annuler cette demande ?
                     </mj-text>
-                    <mj-text padding-bottom="40px">Envoyez un email à
+                    <mj-text>Envoyez un email à
                         <a href="mailto:<%= data.etablissement.email %>">
                             <%= data.etablissement.email %>
                         </a>
+                    </mj-text>
+                </mj-column>
+            </mj-section>
+            <mj-section background-color="#ffffff">
+                <mj-column width="420px">
+                    <mj-divider border-width="0.5px" border-style="solid" border-color="#5B5B5B" padding-top="11px" padding-bottom="10px" />
+                    <mj-text padding="0px" padding-bottom="20px">
+                        Un outil développé par <a href="https://mission-apprentissage.gitbook.io/general/">la mission nationale pour l'apprentissage</a>
                     </mj-text>
                 </mj-column>
             </mj-section>

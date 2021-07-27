@@ -5,6 +5,7 @@ import { Form as TablerForm, Button as TableButton } from "tabler-react";
 export const Main = styled.main`
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 
   background-color: ${color.ultraGrey};
 
@@ -57,7 +58,6 @@ export const Vector3 = styled.img`
   top: 460px;
   z-index: 9;
 
-  //transform: rotate(-42deg);
   transform: rotate(180deg);
 
   @media (max-width: 1250px) {
@@ -67,6 +67,12 @@ export const Vector3 = styled.img`
   @media (max-width: 950px) {
     display: none;
   }
+`;
+
+export const InfoIcon = styled.img`
+  position: absolute;
+  left: 13px;
+  top: 17px;
 `;
 
 export const Container = styled.div`
@@ -103,6 +109,7 @@ export const CallTypography = styled.span`
 `;
 
 export const ContactCentreTrainingContainer = styled.div`
+  margin-top: 25px;
   display: grid;
   grid-template-rows: 0fr 0fr;
   grid-gap: ${spacing.padding.small};
@@ -113,6 +120,7 @@ export const ContactCentreTrainingContainer = styled.div`
   box-sizing: border-box;
   border: 1px solid ${color.blue};
   border-radius: 4px;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
 `;
 
 export const ContactCentreTrainingLayout = styled.div`
@@ -152,37 +160,17 @@ export const FormIllustrationLayout = styled.div`
 export const Input = styled(TablerForm.Input)`
   width: 100%;
   margin: ${spacing.padding.xsmall} 0;
-  padding: ${spacing.padding.xxsmall};
-
-  border: 1.25px solid ${color.blue};
-  border-radius: 4px;
-  box-sizing: border-box;
+  font-family: ${typography.fontFamily.inter};
+  font-style: normal;
   font-size: ${typography.fontSize.s2};
   font-weight: ${typography.fontWeight.regular};
   line-height: ${typography.fontSize.m3};
-  text-align: center;
-
-  :-webkit-input-placeholder {
-    color: ${color.darkGrey};
-  }
-
-  :-moz-placeholder {
-    /* Firefox 18- */
-    color: ${color.darkGrey};
-  }
-
-  ::-moz-placeholder {
-    /* Firefox 19+ */
-    color: ${color.darkGrey};
-  }
-
-  :-ms-input-placeholder {
-    color: ${color.darkGrey};
-  }
-
-  ::placeholder {
-    color: ${color.darkGrey};
-  }
+  text-align: left;
+  border: 1px solid ${color.grey};
+  box-sizing: border-box;
+  box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.25);
+  border-radius: 3px;
+  padding: 6px 10px;
 `;
 
 export const Textarea = styled(TablerForm.Textarea).attrs(() => ({
@@ -191,40 +179,19 @@ export const Textarea = styled(TablerForm.Textarea).attrs(() => ({
 }))`
   width: 100%;
   margin: ${spacing.padding.xsmall} 0;
-  padding: ${spacing.padding.xsmall};
-
   border: 1.25px solid ${color.blue};
-  border-radius: 4px;
   font-size: ${typography.fontSize.s2};
   font-weight: ${typography.fontWeight.regular};
   line-height: ${typography.fontSize.m3};
-
-  :-webkit-input-placeholder {
-    color: ${color.darkGrey};
-  }
-
-  :-moz-placeholder {
-    /* Firefox 18- */
-    color: ${color.darkGrey};
-  }
-
-  ::-moz-placeholder {
-    /* Firefox 19+ */
-    color: ${color.darkGrey};
-  }
-
-  :-ms-input-placeholder {
-    color: ${color.darkGrey};
-  }
-
-  ::placeholder {
-    color: ${color.darkGrey};
-  }
+  border: 1px solid ${color.grey};
+  box-sizing: border-box;
+  box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.25);
+  border-radius: 3px;
+  padding: 6px 10px;
 `;
 
 export const HelloTypography = styled.span`
   padding-bottom: ${spacing.padding.xxsmall};
-
   font-size: ${typography.fontSize.s4};
   font-weight: ${typography.fontWeight.xxbold};
   line-height: ${typography.fontSize.l1};
@@ -254,7 +221,6 @@ export const FooterLayout = styled.div``;
 
 export const MentionsTypography = styled.p`
   padding: ${spacing.padding.xxmedium} ${spacing.padding.xmedium};
-
   color: ${color.darkGrey};
   font-size: ${typography.fontSize.s2};
   font-weight: ${typography.fontWeight.lowWeight};
@@ -272,6 +238,8 @@ export const AsterixTypography = styled.span`
 `;
 
 export const InfosLayout = styled.div`
+  margin-top: 32px;
+
   p {
     padding: ${spacing.padding.xxmedium} 0;
 
@@ -280,5 +248,29 @@ export const InfosLayout = styled.div`
       font-size: ${typography.fontSize.s2};
       line-height: ${typography.fontSize.m3};
     }
+  }
+`;
+
+export const Text = styled.p`
+  font-family: ${typography.fontFamily.inter};
+  font-weight: ${typography.fontWeight.regular};
+
+  strong {
+    font-weight: ${typography.fontWeight.bold};
+  }
+`;
+
+export const Info = styled.div`
+  position: relative;
+  width: 100%;
+  font-family: ${typography.fontFamily.inter};
+  font-weight: ${typography.fontWeight.regular};
+  border-left: 10px solid ${color.blue};
+  background-color: ${background.grey};
+  padding: 12px 18px 15px 36px;
+  margin-bottom: 34px;
+
+  strong {
+    font-weight: ${typography.fontWeight.bold};
   }
 `;
