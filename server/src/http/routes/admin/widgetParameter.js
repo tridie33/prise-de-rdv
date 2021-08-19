@@ -6,7 +6,7 @@ const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const { WidgetParameter } = require("../../../common/model");
 const logger = require("../../../common/logger");
 const { getReferrerById } = require("../../../common/model/constants/referrers");
-const { getFormationsBySiretFormateur } = require("../../utils/catalogue");
+const { getFormationsBySiretFormateur, getFormationsByIdRcoFormationsRaw } = require("../../utils/catalogue");
 
 const widgetParameterSchema = Joi.object({
   etablissement_siret: Joi.string().required(),
@@ -82,16 +82,28 @@ module.exports = ({ widgetParameters }) => {
 
       const wigetParameters = await WidgetParameter.find(query);
 
-      const parameters = wigetParameters.map((parameter) => ({
-        siret: parameter.etablissement_siret,
-        raison_sociale: parameter.etablissement_raison_sociale,
-        id_rco_formation: parameter.id_rco_formation,
-        formation: parameter.formation_intitule,
-        cfd: parameter.formation_cfd,
-        email: parameter.email_rdv,
-        code_postal: parameter.code_postal,
-        sources: parameter.referrers.map((referrer) => getReferrerById(referrer).full_name).toString(),
-      }));
+      const parameters = [];
+      for (const parameter of wigetParameters) {
+        let catalogueResponse = null;
+        // Note: "id_rco_formation" attribute isn't existing for oldest parameters
+        if (parameter.id_rco_formation) {
+          catalogueResponse = await getFormationsByIdRcoFormationsRaw({
+            idRcoFormations: [parameter.id_rco_formation],
+          });
+        }
+
+        parameters.push({
+          siret: parameter.etablissement_siret,
+          raison_sociale: parameter.etablissement_raison_sociale,
+          id_rco_formation: parameter.id_rco_formation,
+          formation: parameter.formation_intitule,
+          cfd: parameter.formation_cfd,
+          email: parameter.email_rdv,
+          email_catalogue: catalogueResponse?.formations.length ? catalogueResponse.formations[0].email : "",
+          code_postal: parameter.code_postal,
+          sources: parameter.referrers.map((referrer) => getReferrerById(referrer).full_name).join(", "),
+        });
+      }
 
       if (!parameters.length) {
         throw Boom.badRequest("Aucune information a exporter.");
