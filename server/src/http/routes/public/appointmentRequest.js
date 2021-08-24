@@ -236,6 +236,9 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
         ),
       ]);
 
+      console.log("====================================> EMAIL INFORMATIONS");
+      console.log(JSON.stringify([emailCandidat, emailCfa], null, 2));
+
       await appointments.updateStatusMailsSend({
         appointmentId: createdAppointement._id,
         candidatMessageId: emailCandidat.messageId,
