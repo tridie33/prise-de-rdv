@@ -125,8 +125,15 @@ integrationTests(__filename, () => {
       referrer: "TEST",
     });
 
-    const updated = await updateStatusMailsSend(created._id);
+    const updated = await updateStatusMailsSend({
+      appointmentId: created._id,
+      candidatMessageId: "message-id-123",
+      cfaMessageId: "message-id-456",
+    });
+
     assert.strictEqual(updated.email_premiere_demande_candidat_envoye, true);
     assert.strictEqual(updated.email_premiere_demande_cfa_envoye, true);
+    assert.strictEqual(updated.email_premiere_demande_cfa_envoye_message_id, "message-id-456");
+    assert.strictEqual(updated.email_premiere_demande_candidat_envoye_message_id, "message-id-123");
   });
 });

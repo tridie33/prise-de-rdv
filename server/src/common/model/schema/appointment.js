@@ -65,6 +65,11 @@ const appointmentSchema = {
     default: null,
     description: "La date de la première prise de contact du cfa vers le candidat",
   },
+  email_premiere_demande_candidat_envoye_message_id: {
+    type: String,
+    default: null,
+    description: "Identifiant externe du mail envoyé au candidat",
+  },
   email_premiere_demande_candidat_envoye: {
     type: Boolean,
     default: false,
@@ -74,6 +79,11 @@ const appointmentSchema = {
     type: Boolean,
     default: false,
     description: "Le candidat a t'il ouvert son mail de confirmation ?",
+  },
+  email_premiere_demande_cfa_envoye_message_id: {
+    type: String,
+    default: null,
+    description: "Identifiant externe du mail envoyé au CFA",
   },
   email_premiere_demande_cfa_envoye: {
     type: Boolean,

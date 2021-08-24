@@ -221,7 +221,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
       };
 
       // Sends email to "candidate" and "formation"
-      await Promise.all([
+      const [emailCandidat, emailCfa] = await Promise.all([
         mailer.sendEmail(
           user.email,
           `Le CFA a bien reçu votre demande de RDV via ${referrerObj.full_name}`,
@@ -236,7 +236,11 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
         ),
       ]);
 
-      await appointments.updateStatusMailsSend(createdAppointement._id);
+      await appointments.updateStatusMailsSend({
+        appointmentId: createdAppointement._id,
+        candidatMessageId: emailCandidat.messageId,
+        cfaMessageId: emailCfa.messageId,
+      });
 
       res.json({
         userId: user._id,
