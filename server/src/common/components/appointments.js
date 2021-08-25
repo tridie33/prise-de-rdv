@@ -28,16 +28,21 @@ module.exports = async () => ({
     return appointment.toObject();
   },
   /**
-   * @description Updates mail status.
-   * @param {String} appointmentId
+   * @description Updates email provider id and flag emails as sent.
+   * @param {Object} params
+   * @param {ObjectId} params.appointmentId
+   * @param {string|null} params.cfaMessageId
+   * @param {string|null} params.candidatMessageId
    * @returns {Appointment}
    */
-  updateStatusMailsSend: (appointmentId) => {
+  updateStatusMailsSend: ({ appointmentId, cfaMessageId, candidatMessageId }) => {
     return Appointment.findOneAndUpdate(
       { _id: appointmentId },
       {
         email_premiere_demande_candidat_envoye: true,
         email_premiere_demande_cfa_envoye: true,
+        email_premiere_demande_cfa_envoye_message_id: cfaMessageId,
+        email_premiere_demande_candidat_envoye_message_id: candidatMessageId,
       },
       { new: true }
     );

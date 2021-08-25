@@ -207,6 +207,7 @@ export default () => {
                         <Table.ColHeader>Code postal</Table.ColHeader>
                         <Table.ColHeader>Localité</Table.ColHeader>
                         <Table.ColHeader>Email</Table.ColHeader>
+                        <Table.ColHeader>Email catalogue</Table.ColHeader>
                         <Table.ColHeader>
                           Source <br />
                         </Table.ColHeader>
@@ -240,6 +241,7 @@ export default () => {
                                   className="text-lowercase"
                                 />
                               </Table.ColHeader>
+                              <Table.Col>{formation.email}</Table.Col>
                               <Table.Col>
                                 {formationPermissions.map((permission) => (
                                   <TablerForm.Checkbox
