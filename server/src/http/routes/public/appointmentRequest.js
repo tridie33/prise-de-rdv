@@ -237,10 +237,6 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
         ),
       ]);
 
-      logger.info("====================================> EMAIL INFORMATIONS");
-      logger.info(JSON.stringify([emailCandidat, emailCfa], null, 2));
-      logger.info(emailCandidat.messageId);
-
       await appointments.updateStatusMailsSend({
         appointmentId: createdAppointement._id,
         candidatMessageId: emailCandidat.messageId,
