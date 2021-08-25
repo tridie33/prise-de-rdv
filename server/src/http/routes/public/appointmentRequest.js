@@ -236,10 +236,9 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
         ),
       ]);
 
-      await appointments.updateStatusMailsSend({
-        appointmentId: createdAppointement._id,
-        candidatMessageId: emailCandidat.messageId,
-        cfaMessageId: emailCfa.messageId,
+      await appointments.updateAppointment(createdAppointement._id, {
+        email_premiere_demande_candidat_message_id: emailCandidat.messageId,
+        email_premiere_demande_cfa_message_id: emailCfa.messageId,
       });
 
       res.json({

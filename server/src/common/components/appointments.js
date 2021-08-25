@@ -27,29 +27,10 @@ module.exports = async () => ({
 
     return appointment.toObject();
   },
-  /**
-   * @description Updates email provider id and flag emails as sent.
-   * @param {Object} params
-   * @param {ObjectId} params.appointmentId
-   * @param {string|null} params.cfaMessageId
-   * @param {string|null} params.candidatMessageId
-   * @returns {Appointment}
-   */
-  updateStatusMailsSend: ({ appointmentId, cfaMessageId, candidatMessageId }) => {
-    return Appointment.findOneAndUpdate(
-      { _id: appointmentId },
-      {
-        email_premiere_demande_candidat_envoye: true,
-        email_premiere_demande_cfa_envoye: true,
-        email_premiere_demande_cfa_envoye_message_id: cfaMessageId,
-        email_premiere_demande_candidat_envoye_message_id: candidatMessageId,
-      },
-      { new: true }
-    );
-  },
+
   /**
    * @description Returns appoint from its id.
-   * @param {String} id
+   * @param {ObjectId} id
    * @returns {Promise<*>}
    */
   getAppointmentById: async (id) => {
@@ -59,6 +40,14 @@ module.exports = async () => ({
     }
     return appointment.toObject();
   },
+
+  /**
+   * @description Returns one item.
+   * @param {Object} conditions
+   * @returns {Promise<Appointment>}
+   */
+  findOne: async (conditions) => Appointment.findOne(conditions),
+
   /**
    * @description Updates opened mail status for candidate.
    * @param {String} id
@@ -71,6 +60,7 @@ module.exports = async () => ({
 
     return Appointment.findOneAndUpdate({ _id: id }, retrievedData, { new: true });
   },
+
   /**
    * @description Updates opened mail status for the CFA.
    * @param {String} id
@@ -83,13 +73,12 @@ module.exports = async () => ({
 
     return Appointment.findOneAndUpdate({ _id: id }, retrievedData, { new: true });
   },
+
   /**
    * @description Updates an appointment from its id.
-   * @param {String} id
-   * @param {Appointment} values
-   * @returns {*}
+   * @param {ObjectId} id
+   * @param {Object} values
+   * @returns {Appointment}
    */
-  updateAppointment: (id, values) => {
-    return Appointment.findOneAndUpdate({ _id: id }, values, { new: true });
-  },
+  updateAppointment: (id, values) => Appointment.findOneAndUpdate({ _id: id }, values, { new: true }),
 });

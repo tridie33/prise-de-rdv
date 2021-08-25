@@ -65,35 +65,25 @@ const appointmentSchema = {
     default: null,
     description: "La date de la première prise de contact du cfa vers le candidat",
   },
-  email_premiere_demande_candidat_envoye_message_id: {
+  email_premiere_demande_candidat_message_id: {
     type: String,
     default: null,
     description: "Identifiant externe du mail envoyé au candidat",
   },
-  email_premiere_demande_candidat_envoye: {
-    type: Boolean,
-    default: false,
-    description: "Envoi du premier mail au candidat",
+  email_premiere_demande_candidat_statut: {
+    type: String,
+    default: null,
+    description: "Statut du mail envoyé au candidat",
   },
-  email_premiere_demande_candidat_ouvert: {
-    type: Boolean,
-    default: false,
-    description: "Le candidat a t'il ouvert son mail de confirmation ?",
-  },
-  email_premiere_demande_cfa_envoye_message_id: {
+  email_premiere_demande_cfa_message_id: {
     type: String,
     default: null,
     description: "Identifiant externe du mail envoyé au CFA",
   },
-  email_premiere_demande_cfa_envoye: {
-    type: Boolean,
-    default: false,
-    description: "Envoi du premier mail au cfa",
-  },
-  email_premiere_demande_cfa_ouvert: {
-    type: Boolean,
-    default: false,
-    description: "Le centre a t'il ouvert son mail de demande de contact du candidat ?",
+  email_premiere_demande_cfa_statut: {
+    type: String,
+    default: null,
+    description: "Statut du mail envoyé au CFA",
   },
   id_rco_formation: {
     type: String,
