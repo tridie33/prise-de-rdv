@@ -8,7 +8,6 @@ const { getReferrerById, getReferrerByKeyName, referrers } = require("../../../c
 const { getFormationsByIdRcoFormations, getFormationsByIdParcoursup } = require("../../utils/catalogue");
 const { candidat } = require("../../../common/roles");
 const { getIdRcoFormationThroughIdActionFormation } = require("../../utils/mappings/onisep");
-const logger = require("../../../common/logger");
 
 const contextCreateSchema = Joi.alternatives().try(
   Joi.object().keys({
