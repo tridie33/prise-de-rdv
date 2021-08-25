@@ -8,6 +8,7 @@ const { getReferrerById, getReferrerByKeyName, referrers } = require("../../../c
 const { getFormationsByIdRcoFormations, getFormationsByIdParcoursup } = require("../../utils/catalogue");
 const { candidat } = require("../../../common/roles");
 const { getIdRcoFormationThroughIdActionFormation } = require("../../utils/mappings/onisep");
+const logger = require("../../../common/logger");
 
 const contextCreateSchema = Joi.alternatives().try(
   Joi.object().keys({
@@ -236,8 +237,9 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
         ),
       ]);
 
-      console.log("====================================> EMAIL INFORMATIONS");
-      console.log(JSON.stringify([emailCandidat, emailCfa], null, 2));
+      logger.info("====================================> EMAIL INFORMATIONS");
+      logger.info(JSON.stringify([emailCandidat, emailCfa], null, 2));
+      logger.info(emailCandidat.messageId);
 
       await appointments.updateStatusMailsSend({
         appointmentId: createdAppointement._id,
