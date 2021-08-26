@@ -6,6 +6,7 @@ const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const { Appointment, User } = require("../../../common/model");
 const logger = require("../../../common/logger");
 const { getReferrerById } = require("../../../common/model/constants/referrers");
+const { getEmailStatus } = require("../../../common/model/constants/emails");
 const { getFormationsByIdRcoFormationsRaw } = require("../../utils/catalogue");
 
 /**
@@ -88,6 +89,8 @@ module.exports = ({ cache }) => {
 
         return {
           ...document._doc,
+          email_premiere_demande_candidat_statut: getEmailStatus(document._doc?.email_premiere_demande_candidat_statut),
+          email_premiere_demande_cfa_statut: getEmailStatus(document._doc?.email_premiere_demande_cfa_statut),
           referrer: getReferrerById(document.referrer),
           formation,
           candidat: {
@@ -164,6 +167,8 @@ module.exports = ({ cache }) => {
           siret: document.etablissement_id,
           formation: formation.intitule_long,
           cfd: document.formation_id,
+          email_premiere_demande_candidat_statut: getEmailStatus(document?.email_premiere_demande_candidat_statut),
+          email_premiere_demande_cfa_statut: getEmailStatus(document?.email_premiere_demande_cfa_statut),
           source: getReferrerById(document.referrer).full_name,
           motivation: document.motivations,
           champs_libre_statut: document.champs_libre_status || "",

@@ -99,6 +99,8 @@ export const AppointmentItemList = (props) => {
           {champsLibreCommentaires}
         </Textarea>
       </Table.Col>
+      <Table.Col>{props.appointment.email_premiere_demande_candidat_statut}</Table.Col>
+      <Table.Col>{props.appointment.email_premiere_demande_cfa_statut}</Table.Col>
       <Table.Col>
         <>
           {!showEditionMode && (
