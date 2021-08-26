@@ -41,6 +41,8 @@ export const RequestsBoardComponent = (props) => {
                 <Table.ColHeader>Motivations du candidat</Table.ColHeader>
                 <Table.ColHeader>Champs libre statut</Table.ColHeader>
                 <Table.ColHeader>Champs libre commentaires</Table.ColHeader>
+                <Table.ColHeader>Mail candidat</Table.ColHeader>
+                <Table.ColHeader>Mail CFA</Table.ColHeader>
                 <Table.ColHeader>Actions</Table.ColHeader>
               </Table.Row>
             </Table.Header>
