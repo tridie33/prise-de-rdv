@@ -38,6 +38,8 @@ export const RequestsBoardComponent = (props) => {
                 <Table.ColHeader>Formation</Table.ColHeader>
                 <Table.ColHeader>Cfd</Table.ColHeader>
                 <Table.ColHeader>Site de provenance</Table.ColHeader>
+                <Table.ColHeader>Mail candidat</Table.ColHeader>
+                <Table.ColHeader>Mail CFA</Table.ColHeader>
                 <Table.ColHeader>Motivations du candidat</Table.ColHeader>
                 <Table.ColHeader>Champs libre statut</Table.ColHeader>
                 <Table.ColHeader>Champs libre commentaires</Table.ColHeader>

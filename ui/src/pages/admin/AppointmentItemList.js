@@ -76,6 +76,8 @@ export const AppointmentItemList = (props) => {
           <span>{props.appointment.referrer.full_name}</span>
         </ReferrerLayout>
       </Table.Col>
+      <Table.Col>{props.appointment.email_premiere_demande_candidat_statut}</Table.Col>
+      <Table.Col>{props.appointment.email_premiere_demande_cfa_statut}</Table.Col>
       <Table.Col>
         <Textarea type="text" disabled>
           {props.appointment.motivations}

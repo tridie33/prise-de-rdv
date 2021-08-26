@@ -43,6 +43,7 @@ module.exports = {
   smtp: {
     host: env.get("PRISE_DE_RDV_SMTP_HOST").required().asString(),
     port: env.get("PRISE_DE_RDV_SMTP_PORT").required().asString(),
+    sendinblueToken: env.get("PRISE_DE_RDV_SMTP_SENDINBLUE_TOKEN").default("1234").asString(),
     auth: {
       user: env.get("PRISE_DE_RDV_SMTP_AUTH_USER").required().asString(),
       pass: env.get("PRISE_DE_RDV_SMTP_AUTH_PASS").required().asString(),
