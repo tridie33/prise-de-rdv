@@ -19,7 +19,6 @@ import { ContactCentreComponent } from "./components/ContactCentreComponent";
 import { useHistory } from "react-router-dom";
 import { FormHeaderComponent } from "./components/FormHeaderComponent";
 import { FormLayoutComponent } from "./components/FormLayoutComponent";
-import { InfoMessage } from "./HolidayMessage";
 import { _post } from "../../common/httpClient";
 
 /**
@@ -230,7 +229,6 @@ export const FormCreatePage = (props) => {
                     }}
                   </Field>
                   <Spacer />
-                  <InfoMessage />
                   <ButtonLayout>
                     <Button type={"submit"} loading={submitLoading}>
                       Envoyer

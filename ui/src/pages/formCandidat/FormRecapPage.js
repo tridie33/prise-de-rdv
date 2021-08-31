@@ -4,7 +4,6 @@ import { FormHeaderComponent } from "./components/FormHeaderComponent";
 import { Divider, InfosLayout, Spacer, Text } from "./styles";
 import { FormLayoutComponent } from "./components/FormLayoutComponent";
 import { useFetch } from "../../common/hooks/useFetch";
-import { InfoMessage } from "./HolidayMessage";
 
 export const FormRecapPage = () => {
   const { id: appointmentId } = useParams();
@@ -29,8 +28,6 @@ export const FormRecapPage = () => {
                 Vous allez recevoir un email de confirmation de votre demande de rappel à{" "}
                 <strong>{data.user.email}</strong>.
               </Text>
-              <Spacer />
-              <InfoMessage />
               <Spacer />
               <Divider />
               {data.etablissement && (
