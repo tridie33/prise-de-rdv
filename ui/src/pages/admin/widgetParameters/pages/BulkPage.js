@@ -1,23 +1,16 @@
-import React from "react";
-import { Grid, Page } from "tabler-react";
+import { Box, Flex } from "@chakra-ui/react";
 import { UpdateAllParameterReferrers } from "../components/UpdateAllParameterReferrers";
 import { BulkImport } from "../components/BulkImport";
 import { ActivateAllCfaFormations } from "../components/ActivateAllCfaFormations";
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default () => (
-  <Page>
-    <Page.Main>
-      <Page.Content>
-        <BulkImport />
-        <Grid.Row cards deck>
-          <Grid.Col>
-            <UpdateAllParameterReferrers />
-          </Grid.Col>
-          <Grid.Col>
-            <ActivateAllCfaFormations />
-          </Grid.Col>
-        </Grid.Row>
-      </Page.Content>
-    </Page.Main>
-  </Page>
+  <Box>
+    <BulkImport />
+    <Flex justifyContent="center" flexDirection={["column", "column", "row", "row"]} mx={[2]}>
+      <UpdateAllParameterReferrers />
+      <ActivateAllCfaFormations />
+    </Flex>
+    <Box height="5vh" />
+  </Box>
 );

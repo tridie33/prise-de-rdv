@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Card, Form, Button, Dimmer } from "tabler-react";
+import { useEffect, useState } from "react";
 import * as emailValidator from "email-validator";
-import { toast } from "react-toastify";
+import { Box, Text, Input, Checkbox, Flex, Button, useToast } from "@chakra-ui/react";
 import { _get, _post } from "../../../../common/httpClient";
+import { Check } from "../../../../theme/components/icons";
 
 /**
  * @description Updates all widgetParameters to updates referrers.
@@ -15,6 +15,7 @@ const ActivateAllCfaFormations = () => {
   const [referrers, setReferrers] = useState();
   const [email, setEmail] = useState("");
   const [siret, setSiret] = useState("");
+  const toast = useToast();
 
   /**
    * @description Get all parameters.
@@ -27,14 +28,19 @@ const ActivateAllCfaFormations = () => {
 
         setReferrers(referrersResponse.map((referrer) => ({ ...referrer, isChecked: false })));
       } catch (error) {
-        toast.error("Une erreur est survenue durant la récupération des informations.");
+        toast({
+          title: "Une erreur est survenue durant la récupération des informations.",
+          status: "error",
+          isClosable: true,
+          position: "bottom-right",
+        });
       } finally {
         setLoading(false);
       }
     }
 
     fetchData();
-  }, []);
+  }, [toast]);
 
   /**
    * @description Returns all referrers.
@@ -118,66 +124,113 @@ const ActivateAllCfaFormations = () => {
       });
 
       if (result[0].error) {
-        toast.error(result[0].error);
+        toast({
+          title: result[0].error,
+          status: "error",
+          isClosable: true,
+          position: "bottom-right",
+        });
       } else {
         setEmail("");
         setSiret("");
 
         if (result[0].formations.length > 0) {
-          toast.success("Enregistrement effectué avec succès.");
+          toast({
+            title: "Enregistrement effectué avec succès.",
+            status: "success",
+            isClosable: true,
+            position: "bottom-right",
+          });
         } else {
-          toast.info("Aucune modification n'a été apportée.");
+          toast({
+            title: "Aucune modification n'a été apportée.",
+            status: "info",
+            isClosable: true,
+            position: "bottom-right",
+          });
         }
       }
 
       toggleDisableButton();
     } catch (error) {
-      toast.error("Une erreur est survenue");
+      toast({
+        title: "Une erreur est survenue.",
+        status: "error",
+        isClosable: true,
+        position: "bottom-right",
+      });
     } finally {
       setSubmitLoading(false);
     }
   };
 
   return (
-    <Card title="Activer toutes les formations d'un CFA">
-      <Dimmer active={loading} loader>
-        <Card.Body>
+    <Box
+      w={["100%", "100%", "40%", "40%"]}
+      boxShadow="0 1px 2px 0 rgb(0 0 0 / 5%)"
+      border="1px solid rgba(0,40,100,.12)"
+      border-radius="3px"
+      mt={10}
+      ml={[0, 0, 5, 5]}
+    >
+      <Text fontSize="15px" p={5} borderBottom="1px solid rgba(0,40,100,.12)" border-radius="3px">
+        Activer toutes les formations d'un CFA
+      </Text>
+      <Box active={loading} loader p={5}>
+        <Text>
           Veuillez cocher l'ensemble des plateformes de diffusion sur lesquelles vous souhaitez que les formations du
           SIRET formateur fournies soient activés. Ne sont affecté que les formations sans configurations.
           <br />
           <br />
           {referrers &&
             referrers.map((referrer) => (
-              <Form.Checkbox
-                key={referrer.code}
-                checked={referrer.checked}
-                label={referrer.full_name}
-                onChange={() => toggleReferrer(referrer.code, !referrer.isChecked)}
-              />
+              <Flex>
+                <Checkbox
+                  key={referrer.code}
+                  checked={referrer.checked}
+                  label={referrer.full_name}
+                  icon={<Check w="20px" h="18px" />}
+                  onChange={() => toggleReferrer(referrer.code, !referrer.isChecked)}
+                >
+                  <Text ml={2}>{referrer.full_name}</Text>
+                </Checkbox>
+              </Flex>
             ))}
-          <div style={{ marginTop: "2rem" }} />
-          <Form.Group>
-            <Form.Label>Siret formateur</Form.Label>
-            <Form.Input
+          <Box mt={5}>
+            <Text fontWeight="700" textStyle="sm">
+              Siret formateur
+            </Text>
+            <Input
+              mt={3}
               name="siret_formateur"
               placeholder="48398606300012"
               maxLength={14}
               onChange={onChangeSiret}
               value={siret}
             />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Email de contact</Form.Label>
-            <Form.Input name="email_contact" placeholder="exemple@cfa.fr" onChange={onChangeEmail} value={email} />
-          </Form.Group>
-        </Card.Body>
-      </Dimmer>
-      <Card.Footer>
-        <Button color="primary float-right" disabled={isSubmitDisabled} loading={submitLoading} onClick={submit}>
+          </Box>
+          <Box mt={5}>
+            <Text fontWeight="700" textStyle="sm">
+              Email de contact
+            </Text>
+            <Input mt={3} name="email_contact" placeholder="exemple@cfa.fr" onChange={onChangeEmail} value={email} />
+          </Box>
+        </Text>
+      </Box>
+      <Flex justifyContent="flex-end" borderTop="1px solid rgba(0,40,100,.12)" border-radius="3px" p={5}>
+        <Button
+          bg={isSubmitDisabled === true ? "tomato" : "#467fcf"}
+          disabled={isSubmitDisabled}
+          loading={submitLoading}
+          onClick={submit}
+          variant="primary"
+          mr="3rem"
+          _hover={{ bg: "#3057BE" }}
+        >
           Enregistrer
         </Button>
-      </Card.Footer>
-    </Card>
+      </Flex>
+    </Box>
   );
 };
 

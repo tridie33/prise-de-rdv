@@ -1,6 +1,5 @@
-import React from "react";
-import { Grid, ContactCard } from "tabler-react";
 import * as PropTypes from "prop-types";
+import { Box, Text, Flex } from "@chakra-ui/react";
 
 /**
  * @description Etablissement component.
@@ -11,22 +10,37 @@ import * as PropTypes from "prop-types";
  */
 const EtablissementComponent = ({ siret, raisonSociale, uai }) => {
   return (
-    <Grid.Row>
-      <Grid.Col>
-        <ContactCard
-          cardTitle="Etablissement"
-          rounded
-          details={[
-            {
-              title: "Raison sociale",
-              content: <p className="mb-5">{raisonSociale}</p>,
-            },
-            { title: "SIRET", content: <p className="mb-5">{siret}</p> },
-            { title: "UAI", content: <p className="mb-5">{uai}</p> },
-          ]}
-        />
-      </Grid.Col>
-    </Grid.Row>
+    <Box bg="white" border="1px solid #E0E5ED" borderRadius="4px" mt={10}>
+      <Box borderBottom="1px solid #E0E5ED">
+        <Text fontSize="16px" p={5}>
+          Etablissement
+        </Text>
+      </Box>
+      <Box p={5}>
+        <Flex>
+          <Text textStyle="sm" fontWeight="600">
+            Raison sociale <br />
+            <br />
+            <Text as="span" fontWeight="400">
+              {raisonSociale}
+            </Text>
+          </Text>
+          <Box ml={10}>
+            <Text textStyle="sm" fontWeight="600">
+              SIRET <br />
+              <br />
+              <Text as="span">{siret}</Text>
+            </Text>
+          </Box>
+        </Flex>
+        <Text textStyle="sm" fontWeight="600" mt={10}>
+          UAI
+        </Text>
+        <Text mt={5} mb={5}>
+          {uai}
+        </Text>
+      </Box>
+    </Box>
   );
 };
 

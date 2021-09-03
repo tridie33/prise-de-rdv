@@ -1,7 +1,7 @@
+import { Box, Text, Image, Input } from "@chakra-ui/react";
 import PropTypes from "prop-types";
 import React from "react";
 import { useDropzone } from "react-dropzone";
-import { Grid } from "tabler-react";
 
 /**
  * @description Drag and drop component.
@@ -15,20 +15,15 @@ const FileDropzone = (props) => {
   const { getRootProps, getInputProps } = useDropzone({ onDrop, accept, maxFiles });
 
   return (
-    <div style={{ paddingTop: "2rem", paddingBottom: "2rem" }}>
-      <Grid.Row>
-        <Grid.Col md={4} />
-        <Grid.Col md={4}>
-          <div {...getRootProps()} style={{ cursor: "pointer" }}>
-            <p align="center">
-              <input {...getInputProps()} />
-              <img src="/assets/undraw_add_file.svg" height={150} />
-            </p>
-          </div>
-          {children}
-        </Grid.Col>
-      </Grid.Row>
-    </div>
+    <Box mt={5}>
+      <Box {...getRootProps()} style={{ cursor: "pointer" }}>
+        <Text textAlign="center">
+          <Input {...getInputProps()} />
+          <Image display="block" mx="auto" src="/assets/undraw_add_file.svg" height={150} />
+        </Text>
+      </Box>
+      {children}
+    </Box>
   );
 };
 

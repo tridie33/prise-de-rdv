@@ -1,15 +1,13 @@
-import React from "react";
 import queryString from "query-string";
 import * as Yup from "yup";
-import { Form as TablerForm, Card, Page, Button, Grid } from "tabler-react";
+import { Box, Container, Input, Button, Text } from "@chakra-ui/react";
 import { Formik, Field, Form } from "formik";
 import { useHistory, useLocation } from "react-router-dom";
 import useAuth from "../../common/hooks/useAuth";
 import { _post } from "../../common/httpClient";
 import decodeJWT from "../../common/utils/decodeJWT";
-import FormError from "../../common/components/FormError";
-import CenteredCol from "../../common/components/CenteredCol";
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default () => {
   let [, setAuth] = useAuth();
   let history = useHistory();
@@ -47,61 +45,51 @@ export default () => {
   };
 
   return (
-    <Page>
-      <Page.Main>
-        <Page.Content>
-          <Grid.Row>
-            <CenteredCol>
-              <Card>
-                <Card.Header>
-                  <Card.Title>Changement du mot de passe pour le CFA {uai}</Card.Title>
-                </Card.Header>
-                <Card.Body>
-                  <Formik
-                    initialValues={{
-                      newPassword: "",
-                    }}
-                    validationSchema={Yup.object().shape({
-                      newPassword: Yup.string()
-                        .required("Veuillez saisir un mot de passe")
-                        .matches(
-                          "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$",
-                          "Le mot de passe doit contenir au moins 8 caractères, une lettre en majuscule, un chiffre et un caractère spécial"
-                        ),
-                    })}
-                    onSubmit={changePassword}
-                  >
-                    {({ status = {} }) => {
+    <Box p={5} bg="#FAFAFA">
+      <Container border="1px solid #E0E5ED" bg="white" p={0} maxW="45ch">
+        <Box borderBottom="1px solid #E0E5ED" p={4}>
+          <Text fontSize="16px" ml={2}>
+            Changement du mot de passe pour le CFA {uai}
+          </Text>
+        </Box>
+        <Box mx={5} mt={5}>
+          <Formik
+            initialValues={{
+              newPassword: "",
+            }}
+            validationSchema={Yup.object().shape({
+              newPassword: Yup.string()
+                .required("Veuillez saisir un mot de passe")
+                .matches(
+                  "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$",
+                  "Le mot de passe doit contenir au moins 8 caractères, une lettre en majuscule, un chiffre et un caractère spécial"
+                ),
+            })}
+            onSubmit={changePassword}
+          >
+            {({ status = {} }) => {
+              return (
+                <Form>
+                  <Text textStyle="h6" fontSize="12px">
+                    Nouveau mot de passe
+                  </Text>
+                  <Field name="newPassword">
+                    {({ field, meta }) => {
                       return (
-                        <Form>
-                          <TablerForm.Group label="Nouveau mot de passe">
-                            <Field name="newPassword">
-                              {({ field, meta }) => {
-                                return (
-                                  <TablerForm.Input
-                                    type={"password"}
-                                    placeholder="Votre mot de passe..."
-                                    {...field}
-                                    {...showError(meta)}
-                                  />
-                                );
-                              }}
-                            </Field>
-                          </TablerForm.Group>
-                          <Button color="primary" className="text-left" type={"submit"}>
-                            Réinitialiser le mot de passe
-                          </Button>
-                          {status.error && <FormError>{status.error}</FormError>}
-                        </Form>
+                        <Input type={"password"} placeholder="Votre mot de passe..." {...field} {...showError(meta)} />
                       );
                     }}
-                  </Formik>
-                </Card.Body>
-              </Card>
-            </CenteredCol>
-          </Grid.Row>
-        </Page.Content>
-      </Page.Main>
-    </Page>
+                  </Field>
+                  <Button variant="primary" type={"submit"} fontSize="12px" fontWeight="700" mt={5}>
+                    Réinitialiser le mot de passe
+                  </Button>
+                  <Box mb={5}>{status.error && <Text color="#cd201f">{status.error}</Text>}</Box>
+                </Form>
+              );
+            }}
+          </Formik>
+        </Box>
+      </Container>
+    </Box>
   );
 };
