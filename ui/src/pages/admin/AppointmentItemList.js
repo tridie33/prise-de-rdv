@@ -1,7 +1,6 @@
-import React, { useState } from "react";
-import { Table } from "tabler-react";
+import { useState } from "react";
 import * as moment from "moment";
-import { Button, ReferrerLayout, Textarea } from "./styles";
+import { Tr, Td, Text, Button, Textarea } from "@chakra-ui/react";
 import { _put } from "../../common/httpClient";
 
 /**
@@ -56,70 +55,84 @@ export const AppointmentItemList = (props) => {
   };
 
   return (
-    <Table.Row id={props.appointment._id}>
-      <Table.Col>{moment.parseZone(props.appointment.created_at).format("DD/MM/YYYY HH:mm:ss")}</Table.Col>
-      <Table.Col>
+    <Tr id={props.appointment._id} _hover={{ bg: "#f4f4f4", transition: "0.5s" }} transition="0.5s">
+      <Td>{moment.parseZone(props.appointment.created_at).format("DD/MM/YYYY HH:mm:ss")}</Td>
+      <Td>
         {props.appointment.candidat.firstname} {props.appointment.candidat.lastname}
-      </Table.Col>
-      <Table.Col>
-        <a href={`tel:${props.appointment.candidat.phone}`}>{props.appointment.candidat.phone}</a>
-      </Table.Col>
-      <Table.Col>
+      </Td>
+      <Td color="#295a9f" _hover={{ textDecoration: "underline" }}>
+        <a href={`tel:${props.appointment.candidat.phone}`} color="#295a9f">
+          {props.appointment.candidat.phone}
+        </a>
+      </Td>
+      <Td color="#295a9f" _hover={{ textDecoration: "underline" }}>
         <a href={`mailto:${props.appointment.candidat.email}`}>{props.appointment.candidat.email}</a>
-      </Table.Col>
-      <Table.Col>{props.appointment.formation.etablissement_formateur_entreprise_raison_sociale}</Table.Col>
-      <Table.Col>{props.appointment.etablissement_id}</Table.Col>
-      <Table.Col>{props.appointment.formation.intitule_long}</Table.Col>
-      <Table.Col>{props.appointment.formation_id}</Table.Col>
-      <Table.Col>
-        <ReferrerLayout>
-          <span>{props.appointment.referrer.full_name}</span>
-        </ReferrerLayout>
-      </Table.Col>
-      <Table.Col>{props.appointment.email_premiere_demande_candidat_statut}</Table.Col>
-      <Table.Col>{props.appointment.email_premiere_demande_cfa_statut}</Table.Col>
-      <Table.Col>
-        <Textarea type="text" disabled>
+      </Td>
+      <Td color="#295a9f" _hover={{ textDecoration: "underline" }}>
+        <a href={`mailto:${props.appointment.email_cfa}`}>{props.appointment.email_cfa}</a>
+      </Td>
+      <Td>{props.appointment.formation.etablissement_formateur_entreprise_raison_sociale}</Td>
+      <Td>{props.appointment.etablissement_id}</Td>
+      <Td>{props.appointment.formation.intitule_long}</Td>
+      <Td>{props.appointment.formation_id}</Td>
+      <Td>
+        <Text>{props.appointment.referrer.full_name}</Text>
+      </Td>
+      <Td>{props.appointment.email_premiere_demande_candidat_statut}</Td>
+      <Td>{props.appointment.email_premiere_demande_cfa_statut}</Td>
+      <Td>
+        <Textarea type="text" disabled minH="0">
           {props.appointment.motivations}
         </Textarea>
-      </Table.Col>
-      <Table.Col>
+      </Td>
+      <Td>
         <Textarea
+          minH="0"
           type="text"
           disabled={!showEditionMode}
           onChange={(event) => setChampsLibreStatut(event.target.value)}
         >
           {champsLibreStatut}
         </Textarea>
-      </Table.Col>
-      <Table.Col>
+      </Td>
+      <Td>
         <Textarea
+          minH="0"
           type="text"
           disabled={!showEditionMode}
           onChange={(event) => setChampsLibreCommentaires(event.target.value)}
         >
           {champsLibreCommentaires}
         </Textarea>
-      </Table.Col>
-      <Table.Col>
+      </Td>
+      <Td>
         <>
           {!showEditionMode && (
-            <Button className={"btn btn-primary ml-auto"} onClick={(event) => handleOnClick(event, "buttonEdit")}>
+            <Button variant="primary" onClick={(event) => handleOnClick(event, "buttonEdit")}>
               Passer en mode édition
             </Button>
           )}
           {showEditionMode && (
             <>
-              <Button className={"btn btn-primary ml-auto"} onClick={(event) => handleOnClick(event, "buttonValidate")}>
+              <Button variant="primary" onClick={(event) => handleOnClick(event, "buttonValidate")}>
                 Valider
               </Button>
-              <Button className={"btn btn-secondary ml-auto"} onClick={(event) => handleOnClick(event, "buttonCancel")}>
+              <Button
+                ml={5}
+                bg="white"
+                color="#485056"
+                border="1px solid #E0E5ED"
+                borderRadius="4px"
+                fontWeight="600"
+                fontSize="12px"
+                onClick={(event) => handleOnClick(event, "buttonCancel")}
+              >
                 Annuler les modifications
               </Button>
             </>
           )}
         </>
-      </Table.Col>
-    </Table.Row>
+      </Td>
+    </Tr>
   );
 };

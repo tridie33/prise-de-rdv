@@ -178,7 +178,6 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
       if (!formation) {
         throw Boom.badRequest("Etablissement et formation introuvable.");
       }
-
       const createdAppointement = await appointments.createAppointment({
         candidat_id: user._id,
         etablissement_id: formation.etablissement_formateur_siret,
@@ -213,6 +212,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
         },
         images: {
           info: `${config.publicUrl}/assets/info.png?raw=true`,
+          message: `${config.publicUrl}/assets/message.png?raw=true`,
           people: `${config.publicUrl}/assets/people.png?raw=true`,
           school: `${config.publicUrl}/assets/school.png?raw=true`,
           map: `${config.publicUrl}/assets/map.png?raw=true`,
@@ -239,6 +239,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
       await appointments.updateAppointment(createdAppointement._id, {
         email_premiere_demande_candidat_message_id: emailCandidat.messageId,
         email_premiere_demande_cfa_message_id: emailCfa.messageId,
+        email_cfa: widgetParameter.email_rdv,
       });
 
       res.json({

@@ -1,25 +1,14 @@
-import {
-  AsterixTypography,
-  Button,
-  ButtonLayout,
-  FormBodyLayout,
-  HelloTypography,
-  Input,
-  Spacer,
-  Text,
-  Textarea,
-} from "./styles";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import * as emailValidator from "email-validator";
 import * as qs from "query-string";
-import FormError from "../../common/components/FormError";
-import { ContactCentreComponent } from "./components/ContactCentreComponent";
 import { useHistory } from "react-router-dom";
-import { FormHeaderComponent } from "./components/FormHeaderComponent";
-import { FormLayoutComponent } from "./components/FormLayoutComponent";
+import { Text, Input, Button, Box, Checkbox } from "@chakra-ui/react";
+import { ContactCfaComponent } from "./layout/ContactCfaComponent";
+import { FormLayoutComponent } from "./layout/FormLayoutComponent";
 import { _post } from "../../common/httpClient";
+import { Check } from "../../theme/components/icons";
 
 /**
  * @description Form appointment page.
@@ -31,11 +20,16 @@ export const FormCreatePage = (props) => {
   const history = useHistory();
   const [data, setData] = useState();
   const [submitLoading, setSubmitLoading] = useState(false);
+
   const [error, setError] = useState();
   const [loading, setLoading] = useState(false);
+  const [checked, setChecked] = useState(false);
 
   const { idRcoFormation, referrer } = qs.parse(props.location.search);
 
+  const handleChange = () => {
+    setChecked(!checked);
+  };
   /**
    * @description Initialize.
    */
@@ -130,12 +124,11 @@ export const FormCreatePage = (props) => {
   };
 
   return (
-    <FormLayoutComponent>
-      <FormHeaderComponent title={"Le CFA vous rappelle !"} imagePath={"../../assets/people.svg"} imageAlt={"people"} />
+    <FormLayoutComponent bg="white">
       {loading && <span>Chargement des données...</span>}
       {error && <span> {error} </span>}
       {data && (
-        <FormBodyLayout>
+        <Box>
           <Formik
             initialValues={{
               firstname: "",
@@ -156,16 +149,22 @@ export const FormCreatePage = (props) => {
             {({ status = {} }) => {
               return (
                 <Form>
-                  <ContactCentreComponent
+                  <ContactCfaComponent
                     entrepriseRaisonSociale={data.etablissement_formateur_entreprise_raison_sociale}
                     intitule={data.intitule_long}
                     adresse={data.lieu_formation_adresse}
                     codePostal={data.code_postal}
                     ville={data.localite}
                   />
-                  <HelloTypography as={"h2"}>Bonjour !</HelloTypography>
-                  <Text>
-                    Vous êtes<AsterixTypography>*</AsterixTypography> :
+                  <Text textStyle="h6" color="info">
+                    Bonjour,
+                  </Text>
+                  <Text mt={6}>
+                    Vous êtes
+                    <Text color="redmarianne" as="span">
+                      *
+                    </Text>{" "}
+                    :
                   </Text>
                   <Field name="firstname">
                     {({ field, meta }) => (
@@ -174,22 +173,27 @@ export const FormCreatePage = (props) => {
                   </Field>
                   <Field name="lastname">
                     {({ field, meta }) => (
-                      <Input placeholder="votre nom" {...field} {...feedback(meta, "Nom invalide")} />
+                      <Input mt={2} placeholder="votre nom" {...field} {...feedback(meta, "Nom invalide")} />
                     )}
                   </Field>
-                  <Spacer />
-
                   {data.intitule_long && (
-                    <Text>
-                      Pour tout savoir de la formation <u>{data.intitule_long.toUpperCase()}</u>, laissez{" "}
-                      <b>votre numéro</b> au centre de formation<AsterixTypography>*</AsterixTypography> :
+                    <Text mt={5}>
+                      Pour tout savoir de la formation{" "}
+                      <b>
+                        <u>{data.intitule_long.toUpperCase()}</u>
+                      </b>
+                      , laissez votre numéro au centre de formation{" "}
+                      <Text color="redmarianne" as="span">
+                        *
+                      </Text>{" "}
+                      :
                     </Text>
                   )}
-
                   <Field name="phone" validate={validatePhone}>
                     {({ field, meta }) => {
                       return (
                         <Input
+                          mt={2}
                           placeholder="votre numéro"
                           {...field}
                           {...feedback(meta, "Numéro de téléphone invalide")}
@@ -197,11 +201,12 @@ export const FormCreatePage = (props) => {
                       );
                     }}
                   </Field>
-                  <Spacer />
-
-                  <Text>
-                    Vous recevrez un <b>email de confirmation</b> à cette adresse
-                    <AsterixTypography>*</AsterixTypography> :
+                  <Text mt={6}>
+                    Vous recevrez un email de confirmation à cette adresse
+                    <Text color="redmarianne" as="span">
+                      *
+                    </Text>{" "}
+                    :
                   </Text>
                   <Field name="email" validate={validateEmail}>
                     {({ field, meta }) => {
@@ -214,33 +219,69 @@ export const FormCreatePage = (props) => {
                       );
                     }}
                   </Field>
-                  <Spacer />
-
-                  <Text>Quel sujet voulez-vous aborder ?</Text>
+                  <Text mt={5}>Quel sujet voulez-vous aborder ?</Text>
                   <Field name="motivations">
                     {({ field, meta }) => {
                       return (
-                        <Textarea
-                          placeholder="précisez"
+                        <Input
+                          placeholder="période d’inscription, horaires, etc."
                           {...field}
                           {...feedback(meta, "Désolée, ce champs est nécessaire")}
                         />
                       );
                     }}
                   </Field>
-                  <Spacer />
-                  <ButtonLayout>
-                    <Button type={"submit"} loading={submitLoading}>
-                      Envoyer
-                    </Button>
-                  </ButtonLayout>
-
-                  {status.error && <FormError>{status.error}</FormError>}
+                  <Box
+                    as="div"
+                    variant="highlight"
+                    borderLeft="4px solid"
+                    borderColor="info"
+                    display="flex"
+                    flexDirection="row"
+                    justifyContent="center"
+                    bg="#F0F0F0"
+                    alignItems="flex-start"
+                    p={5}
+                    mb={5}
+                    mt={12}
+                  >
+                    <Checkbox value={checked} onChange={handleChange} as="span" icon={<Check w="20px" h="18px" />} />
+                    <Text textStyle="sm" ml={2}>
+                      J’accepte que mes informations soient transmises uniquement à ce centre de formation
+                      <Text as="span" color="redmarianne">
+                        *
+                      </Text>
+                      <Text color="grey.750" fontWeight="700" mt="2">
+                        {" "}
+                        Je serai attentif aux appels que je vais recevoir dans les prochains jours.
+                      </Text>
+                    </Text>
+                    <br />
+                  </Box>
+                  <Button
+                    variant="unstyled"
+                    disabled={checked === false}
+                    type={"submit"}
+                    loading={submitLoading}
+                    bg={checked === false ? "grey.300" : "grey.750"}
+                    borderRadius="10px"
+                    color="#FFFFFF"
+                    w="14.5rem"
+                    fontWeight="700"
+                    display="block"
+                    mx={["auto", "0", "0", "0"]}
+                    mt={2}
+                    _hover=""
+                    textAlign="center"
+                  >
+                    Envoyer ma demande
+                  </Button>
+                  {status.error && <Text color="#cd201f">{status.error}</Text>}
                 </Form>
               );
             }}
           </Formik>
-        </FormBodyLayout>
+        </Box>
       )}
     </FormLayoutComponent>
   );

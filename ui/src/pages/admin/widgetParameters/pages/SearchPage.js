@@ -1,13 +1,14 @@
-import React, { useState } from "react";
-import { Button, Card, Grid, Page, Form as TablerForm } from "tabler-react";
+import { useState } from "react";
 import { Field, Form, Formik } from "formik";
 import { useHistory } from "react-router";
-import { toast } from "react-toastify";
+import { Box, Button, Input, Text, useToast } from "@chakra-ui/react";
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default () => {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
+  const toast = useToast();
 
   /**
    * @description Returns search results.
@@ -30,54 +31,49 @@ export default () => {
       const catalogueResult = await catalogueResponse.json();
 
       if (!catalogueResult.formations.length) {
-        toast.info("Aucun établissement trouvé dans le catalogue.");
+        toast({
+          title: "Aucun établissement trouvé dans le catalogue.",
+          status: "info",
+          isClosable: true,
+          position: "bottom-right",
+        });
       } else {
         history.push(`/admin/widget-parameters/edit/${catalogueResult.formations[0].etablissement_formateur_siret}`);
       }
     } catch (e) {
-      toast.error("Une erreur est survenue pendant la recherche.");
+      toast({
+        title: "Une erreur est survenue pendant la recherche.",
+        status: "error",
+        isClosable: true,
+        position: "bottom-right",
+      });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Page>
-      <Page.Main>
-        <Page.Content>
-          {loading && <Button loading color="secondary" block />}
-          <Grid.Row>
-            <Grid.Col>
-              <Card>
-                <Card.Header>
-                  <Card.Title>Rechercher un établissement</Card.Title>
-                </Card.Header>
-                <Card.Body>
-                  <Formik initialValues={{ keyword: searchKeyword }} onSubmit={search}>
-                    <Form>
-                      <TablerForm.Group label="">
-                        <Field name="keyword">
-                          {({ field }) => {
-                            return (
-                              <TablerForm.Input
-                                placeholder="Siret formateur / UAI / Identifiant RCO formation"
-                                {...field}
-                              />
-                            );
-                          }}
-                        </Field>
-                      </TablerForm.Group>
-                      <Button color="primary" className="text-left" type={"submit"} loading={loading}>
-                        Rechercher
-                      </Button>
-                    </Form>
-                  </Formik>
-                </Card.Body>
-              </Card>
-            </Grid.Col>
-          </Grid.Row>
-        </Page.Content>
-      </Page.Main>
-    </Page>
+    <Box border="1px solid #E0E5ED" bg="white" mx={40} mt={6}>
+      {loading && <Button loading color="secondary" block />}
+      <Text fontWeight="500" textStyle="h6" p={4} px={6} borderBottom="1px solid #E0E5ED">
+        Rechercher un établissement
+      </Text>
+      <Box mt={5} px={6}>
+        <Formik initialValues={{ keyword: searchKeyword }} onSubmit={search}>
+          <Form>
+            <Box>
+              <Field name="keyword">
+                {({ field }) => {
+                  return <Input placeholder="Siret formateur / UAI / Identifiant RCO formation" {...field} />;
+                }}
+              </Field>
+            </Box>
+            <Button variant="primary" mt={3} mb={5} type={"submit"} loading={loading}>
+              Rechercher
+            </Button>
+          </Form>
+        </Formik>
+      </Box>
+    </Box>
   );
 };

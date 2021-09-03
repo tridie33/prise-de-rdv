@@ -1,8 +1,7 @@
-import React from "react";
-import { Card, Grid, Table } from "tabler-react";
+import { Tbody, Tr, Thead, Td, Table, Flex, Box, Text } from "@chakra-ui/react";
 import { AppointmentItemList } from "./AppointmentItemList";
-import IconDownloadCsv from "../../common/components/Icon";
 import downloadFile from "../../common/utils/downloadFile";
+import { Download } from "../../theme/components/icons";
 
 /**
  * @description Appointments head table.
@@ -17,43 +16,42 @@ export const RequestsBoardComponent = (props) => {
   const download = () => downloadFile("/api/appointment/appointments/details/export", "rendez-vous.csv");
 
   return (
-    <Grid.Row>
-      <Grid.Col width={12}>
-        <Card>
-          <Card.Header>
-            <Card.Title>Rendez-vous</Card.Title>
-            <Card.Options>
-              <IconDownloadCsv name="download" onClick={download} />
-            </Card.Options>
-          </Card.Header>
-          <Table responsive className="card-table table-vcenter text-nowrap">
-            <Table.Header>
-              <Table.Row>
-                <Table.ColHeader>Date</Table.ColHeader>
-                <Table.ColHeader>Candidat</Table.ColHeader>
-                <Table.ColHeader>Téléphone</Table.ColHeader>
-                <Table.ColHeader>Email</Table.ColHeader>
-                <Table.ColHeader>Etablissement</Table.ColHeader>
-                <Table.ColHeader>Siret</Table.ColHeader>
-                <Table.ColHeader>Formation</Table.ColHeader>
-                <Table.ColHeader>Cfd</Table.ColHeader>
-                <Table.ColHeader>Site de provenance</Table.ColHeader>
-                <Table.ColHeader>Mail candidat</Table.ColHeader>
-                <Table.ColHeader>Mail CFA</Table.ColHeader>
-                <Table.ColHeader>Motivations du candidat</Table.ColHeader>
-                <Table.ColHeader>Champs libre statut</Table.ColHeader>
-                <Table.ColHeader>Champs libre commentaires</Table.ColHeader>
-                <Table.ColHeader>Actions</Table.ColHeader>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {props.appointments.map((appointment, index) => (
-                <AppointmentItemList key={appointment._id} appointment={appointment} index={index} />
-              ))}
-            </Table.Body>
-          </Table>
-        </Card>
-      </Grid.Col>
-    </Grid.Row>
+    <Box>
+      <Flex bg="white" mt={10} border="1px solid #E0E5ED" borderBottom="none">
+        <Text flex="1" fontSize="16px" p={5}>
+          Rendez-vous
+        </Text>
+        <Download onClick={download} color="#9AA0AC" cursor="pointer" w="16px" h="16px" mt={6} mr={5} />
+      </Flex>
+      <Box border="1px solid #E0E5ED" overflow="auto" cursor="pointer">
+        <Table w="300rem" bg="white">
+          <Thead>
+            <Tr color="#ADB2BC">
+              <Td textStyle="sm">DATE</Td>
+              <Td textStyle="sm">CANDIDAT</Td>
+              <Td textStyle="sm">TÉLÉPHONE</Td>
+              <Td textStyle="sm">EMAIL CANDIDAT</Td>
+              <Td textStyle="sm">EMAIL CFA</Td>
+              <Td textStyle="sm">ETABLISSEMENT</Td>
+              <Td textStyle="sm">SIRET</Td>
+              <Td textStyle="sm">FORMATION</Td>
+              <Td textStyle="sm">CFD</Td>
+              <Td textStyle="sm">SITE DE PROVENANCE</Td>
+              <Td textStyle="sm">MAIL CANDIDAT</Td>
+              <Td textStyle="sm">MAIL CFA</Td>
+              <Td textStyle="sm">MOTIVATIONS DU CANDIDAT </Td>
+              <Td textStyle="sm">CHAMPS LIBRE STATUT </Td>
+              <Td textStyle="sm">CHAMPS LIBRE COMMENTAIRES </Td>
+              <Td textStyle="sm">ACTIONS </Td>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {props.appointments.map((appointment, index) => (
+              <AppointmentItemList key={appointment._id} appointment={appointment} index={index} />
+            ))}
+          </Tbody>
+        </Table>
+      </Box>
+    </Box>
   );
 };

@@ -1,9 +1,9 @@
-import React from "react";
-import { Site, Nav } from "tabler-react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { Box, Link, Flex, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import useAuth from "../common/hooks/useAuth";
-import Toast from "../common/components/Toast";
+import { UserLogo } from "../theme/components/icons";
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default (props) => {
   let [auth, setAuth] = useAuth();
   let history = useHistory();
@@ -12,25 +12,52 @@ export default (props) => {
     history.push("/login");
   };
 
+  const subAnonymous = "anonymous";
+
   return (
-    <Site>
-      <Site.Header>
-        <Toast />
-        <Link to="/admin">Prise de rendez-vous</Link>
-        <div className="d-flex order-lg-2 ml-auto">
-          <Nav.Item hasSubNav value="Paramètres">
-            <Nav.SubItem to="/admin/widget-parameters">Liste</Nav.SubItem>
-            <Nav.SubItem to="/admin/widget-parameters/search">Ajouter - Via recherche</Nav.SubItem>
-            <Nav.SubItem to="/admin/widget-parameters/bulk">Actions groupés</Nav.SubItem>
-          </Nav.Item>
-          <Nav.Item hasSubNav value={auth.sub} icon="user">
-            <button className="dropdown-item" onClick={logout}>
-              Déconnexion
-            </button>
-          </Nav.Item>
-        </div>
-      </Site.Header>
-      {props.children}
-    </Site>
+    <Box bg="#FAFAFA">
+      <Flex p={4} bg="white" borderBottom="1px solid #EBEBEB">
+        <Box ml={[0, 0, 0, 16]} flex={["none", "none", "1", "1"]}>
+          <Link href="/admin" color="info" ml={[0, 0, 0, 20]}>
+            RDV Apprentissage
+          </Link>
+        </Box>
+        <Flex mx={[0, 0, 0, 40]} ml={[4, 4, 0, 0]}>
+          {auth.sub !== subAnonymous && (
+            <Box>
+              <Menu isLazy>
+                <MenuButton>Paramètres</MenuButton>
+                <MenuList>
+                  <Link href="/admin/widget-parameters">
+                    <MenuItem>Liste</MenuItem>
+                  </Link>
+                  <Link href="/admin/widget-parameters/search">
+                    <MenuItem>Ajouter - Via recherche</MenuItem>
+                  </Link>
+                  <Link href="/admin/widget-parameters/bulk">
+                    <MenuItem>Actions groupés</MenuItem>
+                  </Link>
+                </MenuList>
+              </Menu>
+            </Box>
+          )}
+          <Box flex={["none", "1", "1", "1"]} ml={[0, 10, 10, 10]}>
+            <Menu>
+              <MenuButton>
+                <UserLogo ml={[4, 4, 0, 0]} />
+                {auth.sub !== subAnonymous && <>{auth.sub}</>}
+              </MenuButton>
+              <MenuList>
+                {/* MenuItems are not rendered unless Menu is open */}
+                <Link color="#5F6063" fontSize="13px" bg="white" fontWeight="400" onClick={logout}>
+                  <MenuItem>{auth.sub === subAnonymous ? <>Connexion</> : <>Se déconnecter</>}</MenuItem>
+                </Link>
+              </MenuList>
+            </Menu>
+          </Box>
+        </Flex>
+      </Flex>
+      <Box>{props.children}</Box>
+    </Box>
   );
 };

@@ -1,13 +1,11 @@
-import React from "react";
 import * as Yup from "yup";
-import { Form as TablerForm, Card, Page, Button, Grid } from "tabler-react";
 import { Formik, Field, Form } from "formik";
-import { NavLink, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { Box, Container, Input, Button, Link, Text, Flex } from "@chakra-ui/react";
 import useAuth from "../common/hooks/useAuth";
 import { _post } from "../common/httpClient";
-import CenteredCol from "../common/components/CenteredCol";
-import FormError from "../common/components/FormError";
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default () => {
   let [, setAuth] = useAuth();
   let history = useHistory();
@@ -33,75 +31,77 @@ export default () => {
   };
 
   return (
-    <Page>
-      <Page.Main>
-        <Page.Content>
-          <Grid.Row>
-            <CenteredCol>
-              <Card>
-                <Card.Header>
-                  <Card.Title>Connexion</Card.Title>
-                </Card.Header>
-                <Card.Body>
-                  <Formik
-                    initialValues={{
-                      username: "",
-                      password: "",
-                    }}
-                    validationSchema={Yup.object().shape({
-                      username: Yup.string().required("Requis"),
-                      password: Yup.string().required("Requis"),
-                    })}
-                    onSubmit={login}
-                  >
-                    {({ status = {} }) => {
-                      return (
-                        <Form>
-                          <TablerForm.Group label="Identifiant">
-                            <Field name="username">
-                              {({ field, meta }) => {
-                                return (
-                                  <TablerForm.Input
-                                    placeholder="Votre identifiant..."
-                                    {...field}
-                                    {...feedback(meta, "Identifiant invalide")}
-                                  />
-                                );
-                              }}
-                            </Field>
-                          </TablerForm.Group>
-                          <TablerForm.Group label="Mot de passe">
-                            <Field name="password">
-                              {({ field, meta }) => {
-                                return (
-                                  <TablerForm.Input
-                                    type={"password"}
-                                    placeholder="Votre mot de passe..."
-                                    {...field}
-                                    {...feedback(meta, "Mot de passe invalide")}
-                                  />
-                                );
-                              }}
-                            </Field>
-                          </TablerForm.Group>
-                          <div className={"d-flex justify-content-between align-items-center"}>
-                            <Button color="primary" className="text-left" type={"submit"}>
-                              Connexion
-                            </Button>
-                            <NavLink to="/forgotten-password">Mot de passe oublié</NavLink>
-                          </div>
+    <Box p={5} bg="#FAFAFA">
+      <Container border="1px solid #E0E5ED" bg="white" p={0} maxW="35ch">
+        <Box borderBottom="1px solid #E0E5ED" p={4}>
+          <Text fontSize="16px" ml={2}>
+            Connexion
+          </Text>
+        </Box>
+        <Box mx={5} mt={5}>
+          <Formik
+            initialValues={{
+              username: "",
+              password: "",
+            }}
+            validationSchema={Yup.object().shape({
+              username: Yup.string().required("Requis"),
+              password: Yup.string().required("Requis"),
+            })}
+            onSubmit={login}
+          >
+            {({ status = {} }) => {
+              return (
+                <Form>
+                  <Box>
+                    <Text textStyle="h6" fontSize="12px">
+                      Identifiant
+                    </Text>
+                    <Field name="username">
+                      {({ field, meta }) => {
+                        return (
+                          <Input
+                            placeholder="Votre identifiant..."
+                            {...field}
+                            {...feedback(meta, "Identifiant invalide")}
+                          />
+                        );
+                      }}
+                    </Field>
+                  </Box>
+                  <Box mt={3}>
+                    <Text textStyle="h6" fontSize="12px">
+                      Mot de passe
+                    </Text>
+                    <Field name="password">
+                      {({ field, meta }) => {
+                        return (
+                          <Input
+                            type={"password"}
+                            placeholder="Votre mot de passe..."
+                            {...field}
+                            {...feedback(meta, "Mot de passe invalide")}
+                          />
+                        );
+                      }}
+                    </Field>
+                  </Box>
+                  <Flex mt={5} justifyContent="space-between">
+                    <Button variant="primary" type={"submit"} fontSize="12px" fontWeight="700">
+                      Connexion
+                    </Button>
 
-                          {status.error && <FormError>{status.error}</FormError>}
-                        </Form>
-                      );
-                    }}
-                  </Formik>
-                </Card.Body>
-              </Card>
-            </CenteredCol>
-          </Grid.Row>
-        </Page.Content>
-      </Page.Main>
-    </Page>
+                    <Link href="/forgotten-password" color="info" mt={1}>
+                      Mot de passe oublié
+                    </Link>
+                  </Flex>
+                  <Box mb={5}>{status.error && <Text color="#cd201f">{status.error}</Text>}</Box>
+                </Form>
+              );
+            }}
+          </Formik>
+        </Box>
+      </Container>
+    </Box>
   );
 };

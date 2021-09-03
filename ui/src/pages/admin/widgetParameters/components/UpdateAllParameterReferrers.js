@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Card, Form, Button, Dimmer } from "tabler-react";
-import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
 import { _get, _put } from "../../../../common/httpClient";
-
+import { Box, Text, Checkbox, Flex, Button, useToast } from "@chakra-ui/react";
+import { Check } from "../../../../theme/components/icons";
 /**
  * @description Updates all widgetParameters to updates referrers.
  * @returns {JSX.Element}
@@ -12,6 +11,7 @@ const UpdateAllParameterReferrers = () => {
   const [submitLoading, setSubmitLoading] = useState(false);
   const [isSubmitDisabled, setSubmitDisabled] = useState(true);
   const [referrers, setReferrers] = useState();
+  const toast = useToast();
 
   /**
    * @description Get all parameters.
@@ -24,14 +24,19 @@ const UpdateAllParameterReferrers = () => {
 
         setReferrers(referrersResponse.map((referrer) => ({ ...referrer, isChecked: false })));
       } catch (error) {
-        toast.error("Une erreur est survenue durant la récupération des informations.");
+        toast({
+          title: "Une erreur est survenue durant la récupération des informations.",
+          status: "error",
+          isClosable: true,
+          position: "bottom-right",
+        });
       } finally {
         setLoading(false);
       }
     }
 
     fetchData();
-  }, []);
+  }, [toast]);
 
   /**
    * @description Returns all referrers.
@@ -82,40 +87,70 @@ const UpdateAllParameterReferrers = () => {
       await _put("/api/widget-parameters/referrers", {
         referrers: referrers.filter((referrer) => referrer.isChecked).map((referrer) => referrer.code),
       });
-      toast.success("Enregistrement effectué avec succès.");
+      toast({
+        title: "Enregistrement effectué avec succès.",
+        status: "success",
+        isClosable: true,
+        position: "bottom-right",
+      });
     } catch (error) {
-      toast.error("Une erreur est survenue");
+      toast({
+        title: "Une erreur est survenue.",
+        status: "error",
+        isClosable: true,
+        position: "bottom-right",
+      });
     } finally {
       setSubmitLoading(false);
     }
   };
 
   return (
-    <Card title="Modifier les sources de parution pour tous les paramètres actifs">
-      <Dimmer active={loading} loader>
-        <Card.Body>
+    <Box
+      w={["100%", "100%", "40%", "40%"]}
+      boxShadow="0 1px 2px 0 rgb(0 0 0 / 5%)"
+      border="1px solid rgba(0,40,100,.12)"
+      border-radius="3px"
+      mt={10}
+    >
+      <Text fontSize="15px" p={5} borderBottom="1px solid rgba(0,40,100,.12)" border-radius="3px">
+        Modifier les sources de parution pour tous les paramètres actifs
+      </Text>
+      <Box active={loading} loader p={5}>
+        <Text>
           Veuillez cocher l'ensemble des plateformes de diffusion sur lesquelles vous souhaitez que les formations
           actuellement publiées soient accessibles.
           <br />
           <br />
           {referrers &&
             referrers.map((referrer) => (
-              <Form.Checkbox
-                key={referrer.code}
-                checked={referrer.checked}
-                label={referrer.full_name}
-                onChange={() => toggleReferrer(referrer.code, !referrer.isChecked)}
-              />
+              <Flex>
+                <Checkbox
+                  key={referrer.code}
+                  checked={referrer.checked}
+                  icon={<Check w="20px" h="18px" />}
+                  onChange={() => toggleReferrer(referrer.code, !referrer.isChecked)}
+                >
+                  <Text ml={2}>{referrer.full_name}</Text>
+                </Checkbox>
+              </Flex>
             ))}
-          <div style={{ marginBottom: "12.6rem" }} />
-        </Card.Body>
-      </Dimmer>
-      <Card.Footer>
-        <Button color="primary float-right" disabled={isSubmitDisabled} loading={submitLoading} onClick={submit}>
+        </Text>
+      </Box>
+      <Flex justifyContent="flex-end" borderTop="1px solid rgba(0,40,100,.12)" border-radius="3px" p={5} mt="12.6rem">
+        <Button
+          bg={isSubmitDisabled === true ? "" : "#467fcf"}
+          disabled={isSubmitDisabled}
+          loading={submitLoading}
+          onClick={submit}
+          variant="primary"
+          mr="3rem"
+          _hover={{ bg: "#3057BE" }}
+        >
           Enregistrer
         </Button>
-      </Card.Footer>
-    </Card>
+      </Flex>
+    </Box>
   );
 };
 
