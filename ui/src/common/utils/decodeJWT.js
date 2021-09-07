@@ -1,9 +1,10 @@
 const jwt = require("jsonwebtoken");
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default (token) => {
+const Token = (token) => {
   return {
     token,
     ...jwt.decode(token),
   };
 };
+
+export default Token;

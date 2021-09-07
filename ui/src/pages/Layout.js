@@ -3,8 +3,7 @@ import { Box, Link, Flex, Menu, MenuButton, MenuItem, MenuList } from "@chakra-u
 import useAuth from "../common/hooks/useAuth";
 import { UserLogo } from "../theme/components/icons";
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default (props) => {
+const Layout = (props) => {
   let [auth, setAuth] = useAuth();
   let history = useHistory();
   let logout = () => {
@@ -61,3 +60,5 @@ export default (props) => {
     </Box>
   );
 };
+
+export default Layout;

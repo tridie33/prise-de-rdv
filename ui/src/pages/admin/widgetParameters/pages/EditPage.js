@@ -5,7 +5,6 @@ import * as emailValidator from "email-validator";
 import {
   Tbody,
   Button,
-  Input,
   Tr,
   Thead,
   Td,
@@ -25,8 +24,7 @@ import EtablissementComponent from "../components/EtablissementComponent";
 import downloadFile from "../../../../common/utils/downloadFile";
 import { Check, Disquette, Download } from "../../../../theme/components/icons";
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default () => {
+const EditPage = () => {
   const { id } = useParams();
   const [parametersResult, setParametersResult] = useState();
   const [catalogueResult, setCatalogueResult] = useState();
@@ -312,7 +310,6 @@ export default () => {
                           }
                         >
                           <Disquette w="16px" h="16px" />
-                          {/* <Icon name="save" className="text-white" /> */}
                         </Button>
                       </Td>
                     </Tr>
@@ -326,3 +323,5 @@ export default () => {
     </Box>
   );
 };
+
+export default EditPage;

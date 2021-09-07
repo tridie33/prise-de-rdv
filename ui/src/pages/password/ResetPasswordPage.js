@@ -7,8 +7,7 @@ import useAuth from "../../common/hooks/useAuth";
 import { _post } from "../../common/httpClient";
 import decodeJWT from "../../common/utils/decodeJWT";
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default () => {
+const ResetPasswordPage = () => {
   let [, setAuth] = useAuth();
   let history = useHistory();
   let location = useLocation();
@@ -93,3 +92,5 @@ export default () => {
     </Box>
   );
 };
+
+export default ResetPasswordPage;

@@ -267,10 +267,13 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
 
       const appointment = await appointments.getAppointmentById(appointmentId);
 
-      const [widgetParameter, user] = await Promise.all([
+      const [widgetParameter, user, catalogueFormations] = await Promise.all([
         widgetParameters.getParameterByIdRcoFormation({ idRcoFormation: appointment.id_rco_formation }),
         users.getUserById(appointment.candidat_id),
+        getFormationsByIdRcoFormations({ idRcoFormations: appointment.id_rco_formation }),
       ]);
+
+      const [formationCatalogue] = catalogueFormations.formations;
 
       res.json({
         appointment: {
@@ -280,6 +283,9 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
         user: user._doc,
         etablissement: {
           email: widgetParameter.email_rdv,
+          intitule_long: formationCatalogue.intitule_long,
+          etablissement_formateur_entreprise_raison_sociale:
+            formationCatalogue.etablissement_formateur_entreprise_raison_sociale,
         },
       });
     })

@@ -3,8 +3,7 @@ import { Field, Form, Formik } from "formik";
 import { useHistory } from "react-router";
 import { Box, Button, Input, Text, useToast } from "@chakra-ui/react";
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default () => {
+const SearchPage = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
@@ -77,3 +76,5 @@ export default () => {
     </Box>
   );
 };
+
+export default SearchPage;

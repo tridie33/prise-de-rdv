@@ -36,25 +36,18 @@
                         <%= data.user.lastname %>,
                     </mj-text>
                     <mj-text>
-
-                        Merci de votre intérêt pour la formation <%= data.formation.intitule %> de notre établissement. <b>Nous vous rappellerons au <%= data.user.phone %> dans les prochaines 48h.</b>
+                        Merci de votre intérêt pour la formation <%= data.formation.intitule %> de notre établissement.
                     </mj-text>
+                    <mj-text><b>Nous vous rappellerons au <%= data.user.phone %> dans les prochaines 48h.</b></mj-text>
                     <mj-text padding-top="20px">
                         A très bientôt !
-
                     </mj-text>
             </mj-section>
-            </mj-column
-
+        </mj-column>
             </mj-section>
             <mj-section background-color="#ffffff" padding-top="0px">
-
                 <mj-column width="420px">
-                    <mj-text>
-                        -
-                    </mj-text>
                     <mj-text font-style="italic">
-
                         L'équipe de l’établissement :</mj-text>
                     <mj-section >
                         <mj-column padding="0px" vertical-align="middle" width="20px">
@@ -71,11 +64,7 @@
 
                                 <%= data.etablissement.postalCode %> <%= data.etablissement.ville %>
                             </mj-text></mj-column>
-                    </mj-section>
-                </mj-column>
-            </mj-section>
-            <mj-section background-color="#ffffff" padding-top="0px" padding-bottom="0px">
-                <mj-column width="420px">
+                                    <mj-column width="420px">
                     <mj-section background-color="#ffffff">
                         <mj-column width="420px">
                             <mj-divider border-width="0.5px" border-style="solid" border-color="#D0C9C4" padding-top="0px" padding-bottom="10px" />
@@ -92,6 +81,8 @@
                             </mj-text>
                         </mj-column>
                     </mj-section>
+                </mj-column>
+            </mj-section>
         </mj-wrapper>
     </mj-body>
 </mjml>

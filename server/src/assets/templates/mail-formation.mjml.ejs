@@ -3,7 +3,7 @@
         <mj-title>Un candidat souhaite être contacté</mj-title>
         <mj-font name="Inter" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap'" />
         <mj-style inline="inline" background-color="#F9F8F6">
-            a:link,a:visited, a:hover, a:active {color: #206BC4;}, a {color: #206BC4;}, body{background: #F9F8F6; }
+            a:link,a:visited, a:hover, a:active {color: #206BC4;}, a {color: #206BC4;}, body{background: #F9F8F6; }, #decoration {text-decoration: none}
 
         </mj-style>
         <mj-attributes>
@@ -33,12 +33,12 @@
                         Bonjour,
                     </mj-text>
                     <mj-text padding-bottom="20px" font-weight="700" font-size="16px">
-                        Le ou la candidate <%= data.user.firstname %> <%= data.user.lastname %> souhaiterait être contacté au <br />
-                        <b><a href="tel:<%= data.user.phone %>" color="#3A55D1"><%= data.user.phone %></a></b> ou par email
-                        <b><a href="mailto:<%= data.user.email %>" color="#3A55D1"><%= data.user.email %></a></b> sous 48h concernant:
+                        Le ou la candidate <%= data.user.firstname %> <%= data.user.lastname %> souhaite être contacté au
+                        <b><a href="tel:<%= data.user.phone %>" color="#3A55D1" id="decoration"><%= data.user.phone %></a></b> ou par email
+                        <b><a href="mailto:<%= data.user.email %>" color="#3A55D1" id="decoration"><%= data.user.email %></a></b> sous 48h.
                     </mj-text>
                     <mj-text padding-bottom="20px">
-                        Il ou elle souhaite aborder avec vous le(s) sujet(s) suivant : “frais <br />
+                        Il ou elle souhaite aborder avec vous le(s) sujet(s) suivant : “frais
                         d’inscription et du test suivant”<br />
                         à propos de la formation : <%= data.etablissement.name %>
                     </mj-text>
@@ -46,15 +46,14 @@
                         L'équipe de la Mission apprentissage
                     </mj-text>
                 </mj-column>
-            </mj-section>
-            <mj-section background-color="#ffffff">
-                <mj-column width="70%">
+                            <mj-column width="70%">
                     <mj-divider border-width="0.5px" border-style="solid" border-color="#D0C9C4" padding-top="11px" padding-bottom="10px" />
                     <mj-text padding="0px" padding-bottom="20px">
                         Cette demande a été réalisée via <a href="<%= data.appointment.referrerLink %>"><%= data.appointment.referrer %></a>.
                     </mj-text>
                 </mj-column>
             </mj-section>
+
         </mj-wrapper>
     </mj-body>
 </mjml>

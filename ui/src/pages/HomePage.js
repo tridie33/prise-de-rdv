@@ -1,7 +1,6 @@
 import { Text, Alert, Box } from "@chakra-ui/react";
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default () => {
+const HomePage = () => {
   return (
     <Box>
       <Alert display="block" colorScheme="#FBF3CF" w="81%" mt={6} mx="auto">
@@ -15,3 +14,5 @@ export default () => {
     </Box>
   );
 };
+
+export default HomePage;
