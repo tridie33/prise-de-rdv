@@ -12,14 +12,11 @@ import { MapPin2Fill } from "../../../theme/components/icons";
  * @returns {JSX.Element}
  */
 export const ContactCfaComponent = (props) => {
-  const { adresse, codePostal, entrepriseRaisonSociale, intitule, ville } = props;
+  const { adresse, codePostal, entrepriseRaisonSociale, ville } = props;
 
   return (
     <Box py={[0, 7]} mt={2}>
-      <Text fontWeight="700">
-        {intitule || "N.C"} formation tout au long de la vie et insertion professionnelle de l’académie
-        {entrepriseRaisonSociale || "N.C"}
-      </Text>
+      <Text fontWeight="700">{entrepriseRaisonSociale}</Text>
       {adresse && codePostal && (
         <Box>
           <MapPin2Fill color="info" />

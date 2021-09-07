@@ -6,8 +6,7 @@ import { _get } from "../../../../common/httpClient";
 import downloadFile from "../../../../common/utils/downloadFile";
 import { Download } from "../../../../theme/components/icons";
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default () => {
+const MainPage = () => {
   const [parametersResult, setParametersResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const history = useHistory();
@@ -102,3 +101,5 @@ export default () => {
     </Box>
   );
 };
+
+export default MainPage;

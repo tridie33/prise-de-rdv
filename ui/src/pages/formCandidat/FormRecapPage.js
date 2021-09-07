@@ -19,10 +19,11 @@ export const FormRecapPage = () => {
               </Text>
               <Text fontWeight="700" mt={6}>
                 {" "}
-                "nom du centre" essaiera de vous joindre dans les prochaines 48h au{" "}
+                {data.etablissement.etablissement_formateur_entreprise_raison_sociale} essaiera de vous joindre dans les
+                prochaines 48h au{" "}
                 <Text as="span" color="info">
                   {" "}
-                  06.06.57.89.90
+                  {data.user.phone}
                 </Text>{" "}
                 pour répondre à vos questions.
               </Text>

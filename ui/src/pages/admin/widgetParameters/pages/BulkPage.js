@@ -3,8 +3,7 @@ import { UpdateAllParameterReferrers } from "../components/UpdateAllParameterRef
 import { BulkImport } from "../components/BulkImport";
 import { ActivateAllCfaFormations } from "../components/ActivateAllCfaFormations";
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default () => (
+const BulkPage = () => (
   <Box>
     <BulkImport />
     <Flex justifyContent="center" flexDirection={["column", "column", "row", "row"]} mx={[2]}>
@@ -14,3 +13,5 @@ export default () => (
     <Box height="5vh" />
   </Box>
 );
+
+export default BulkPage;

@@ -79,10 +79,9 @@ export const FormCreatePage = (props) => {
    */
   function validatePhone(value) {
     let error;
-
     if (!value) {
       error = "Numéro de téléphone requis";
-    } else if (!/^\d{10}$/i.test(value)) {
+    } else if (!/^0[1-98][0-9]{8}$/i.test(value)) {
       error = "Numéro de téléphone invalide";
     }
 
@@ -194,6 +193,7 @@ export const FormCreatePage = (props) => {
                       return (
                         <Input
                           mt={2}
+                          type="tel"
                           placeholder="votre numéro"
                           {...field}
                           {...feedback(meta, "Numéro de téléphone invalide")}
@@ -205,14 +205,14 @@ export const FormCreatePage = (props) => {
                     Vous recevrez un email de confirmation à cette adresse
                     <Text color="redmarianne" as="span">
                       *
-                    </Text>{" "}
-                    :
+                    </Text>
                   </Text>
                   <Field name="email" validate={validateEmail}>
                     {({ field, meta }) => {
                       return (
                         <Input
                           placeholder="votre adresse email"
+                          type="email"
                           {...field}
                           {...feedback(meta, "Adresse email invalide")}
                         />
@@ -245,18 +245,14 @@ export const FormCreatePage = (props) => {
                     mb={5}
                     mt={12}
                   >
-                    <Checkbox value={checked} onChange={handleChange} as="span" icon={<Check w="20px" h="18px" />} />
-                    <Text textStyle="sm" ml={2}>
-                      J’accepte que mes informations soient transmises uniquement à ce centre de formation
-                      <Text as="span" color="redmarianne">
-                        *
-                      </Text>
-                      <Text color="grey.750" fontWeight="700" mt="2">
-                        {" "}
+                    <Checkbox value={checked} onChange={handleChange} as="span" icon={<Check w="20px" h="18px" />}>
+                      <Text color="grey.750" fontWeight="700" textStyle="sm">
                         Je serai attentif aux appels que je vais recevoir dans les prochains jours.
+                        <Text as="span" color="redmarianne">
+                          *
+                        </Text>
                       </Text>
-                    </Text>
-                    <br />
+                    </Checkbox>
                   </Box>
                   <Button
                     variant="unstyled"

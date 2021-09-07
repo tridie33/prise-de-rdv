@@ -27,8 +27,7 @@ function PrivateRoute({ children, ...rest }) {
   );
 }
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default () => {
+const App = () => {
   const [auth] = useAuth();
   const isAdmin = isUserAdmin(auth);
 
@@ -64,3 +63,5 @@ export default () => {
     </div>
   );
 };
+
+export default App;

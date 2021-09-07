@@ -5,8 +5,7 @@ import { useHistory } from "react-router-dom";
 import useAuth from "../../common/hooks/useAuth";
 import { _post } from "../../common/httpClient";
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default () => {
+const ForgottenPasswordPage = () => {
   let [, setAuth] = useAuth();
   let history = useHistory();
 
@@ -76,3 +75,5 @@ export default () => {
     </Box>
   );
 };
+
+export default ForgottenPasswordPage;
