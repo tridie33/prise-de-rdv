@@ -192,7 +192,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
         user: {
           firstname: user.firstname,
           lastname: user.lastname,
-          phone: user.phone,
+          phone: user.phone.match(/.{1,2}/g).join("."),
           email: user.email,
           motivations: createdAppointement.motivations,
         },
@@ -224,13 +224,13 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
       const [emailCandidat, emailCfa] = await Promise.all([
         mailer.sendEmail(
           user.email,
-          `Le CFA a bien reçu votre demande de RDV via ${referrerObj.full_name}`,
+          `Le centre de formation a bien reçu votre demande de RDV`,
           getEmailTemplate("mail-candidat"),
           mailData
         ),
         mailer.sendEmail(
           widgetParameter.email_rdv,
-          `[RDV via ${referrerObj.full_name}] Un candidat souhaite être recontacté`,
+          `[RDV via ${referrerObj.full_name}] Un candidat souhaite être contacté`,
           getEmailTemplate("mail-formation"),
           mailData
         ),

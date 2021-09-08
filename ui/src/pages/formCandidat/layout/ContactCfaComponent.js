@@ -16,10 +16,12 @@ export const ContactCfaComponent = (props) => {
 
   return (
     <Box py={[0, 7]} mt={2}>
-      <Text fontWeight="700">{entrepriseRaisonSociale}</Text>
+      <Text fontWeight="700" color="grey.750">
+        {entrepriseRaisonSociale}
+      </Text>
       {adresse && codePostal && (
-        <Box>
-          <MapPin2Fill color="info" />
+        <Box mt={1}>
+          <MapPin2Fill color="info" mb={1} />
           <Text as="span" ml={1}>
             {adresse},{" "}
             <Text as="span">

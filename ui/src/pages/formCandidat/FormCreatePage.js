@@ -22,6 +22,7 @@ export const FormCreatePage = (props) => {
   const [submitLoading, setSubmitLoading] = useState(false);
 
   const [error, setError] = useState();
+  const [errorPhone, setErrorPhone] = useState();
   const [loading, setLoading] = useState(false);
   const [checked, setChecked] = useState(false);
 
@@ -83,8 +84,11 @@ export const FormCreatePage = (props) => {
       error = "Numéro de téléphone requis";
     } else if (!/^0[1-98][0-9]{8}$/i.test(value)) {
       error = "Numéro de téléphone invalide";
+      setErrorPhone(error);
+    } else {
+      error = "";
+      setErrorPhone(error);
     }
-
     return error;
   }
 
@@ -158,7 +162,7 @@ export const FormCreatePage = (props) => {
                   <Text textStyle="h6" color="info">
                     Bonjour,
                   </Text>
-                  <Text mt={6}>
+                  <Text mt={7}>
                     Vous êtes
                     <Text color="redmarianne" as="span">
                       *
@@ -181,7 +185,7 @@ export const FormCreatePage = (props) => {
                       <b>
                         <u>{data.intitule_long.toUpperCase()}</u>
                       </b>
-                      , laissez votre numéro au centre de formation{" "}
+                      , laissez votre numéro au centre de formation
                       <Text color="redmarianne" as="span">
                         *
                       </Text>{" "}
@@ -191,13 +195,12 @@ export const FormCreatePage = (props) => {
                   <Field name="phone" validate={validatePhone}>
                     {({ field, meta }) => {
                       return (
-                        <Input
-                          mt={2}
-                          type="tel"
-                          placeholder="votre numéro"
-                          {...field}
-                          {...feedback(meta, "Numéro de téléphone invalide")}
-                        />
+                        <Box>
+                          <Input mt={2} type="tel" placeholder="votre numéro" {...field} />
+                          <Text color="red" mt={2}>
+                            {errorPhone}
+                          </Text>
+                        </Box>
                       );
                     }}
                   </Field>
@@ -205,7 +208,8 @@ export const FormCreatePage = (props) => {
                     Vous recevrez un email de confirmation à cette adresse
                     <Text color="redmarianne" as="span">
                       *
-                    </Text>
+                    </Text>{" "}
+                    :
                   </Text>
                   <Field name="email" validate={validateEmail}>
                     {({ field, meta }) => {
@@ -248,9 +252,6 @@ export const FormCreatePage = (props) => {
                     <Checkbox value={checked} onChange={handleChange} as="span" icon={<Check w="20px" h="18px" />}>
                       <Text color="grey.750" fontWeight="700" textStyle="sm">
                         Je serai attentif aux appels que je vais recevoir dans les prochains jours.
-                        <Text as="span" color="redmarianne">
-                          *
-                        </Text>
                       </Text>
                     </Checkbox>
                   </Box>
@@ -266,7 +267,7 @@ export const FormCreatePage = (props) => {
                     fontWeight="700"
                     display="block"
                     mx={["auto", "0", "0", "0"]}
-                    mt={2}
+                    mt="2rem"
                     _hover=""
                     textAlign="center"
                   >

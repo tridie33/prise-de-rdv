@@ -17,13 +17,13 @@ export const FormRecapPage = () => {
               <Text as="span" color="info" textStyle="h6">
                 Voilà une bonne chose de faite {data.user.firstname} {data.user.lastname}!
               </Text>
-              <Text fontWeight="700" mt={6}>
+              <Text fontWeight="700" color="grey.750" mt={6}>
                 {" "}
                 {data.etablissement.etablissement_formateur_entreprise_raison_sociale} essaiera de vous joindre dans les
                 prochaines 48h au{" "}
                 <Text as="span" color="info">
                   {" "}
-                  {data.user.phone}
+                  {data.user.phone.match(/.{1,2}/g).join(".")}
                 </Text>{" "}
                 pour répondre à vos questions.
               </Text>
@@ -31,7 +31,7 @@ export const FormRecapPage = () => {
               <Text>
                 à{" "}
                 <Text as="span" color="info">
-                  {data.user.email}
+                  {data.user.email}.
                 </Text>
               </Text>
               <Box borderBottom="1px solid #D0C9C4" mt={10} />
