@@ -4,11 +4,10 @@ import * as Yup from "yup";
 import * as emailValidator from "email-validator";
 import * as qs from "query-string";
 import { useHistory } from "react-router-dom";
-import { Text, Input, Button, Box, Checkbox } from "@chakra-ui/react";
+import { Text, Input, Button, Box } from "@chakra-ui/react";
 import { ContactCfaComponent } from "./layout/ContactCfaComponent";
 import { FormLayoutComponent } from "./layout/FormLayoutComponent";
 import { _post } from "../../common/httpClient";
-import { Check } from "../../theme/components/icons";
 
 /**
  * @description Form appointment page.
@@ -24,13 +23,9 @@ export const FormCreatePage = (props) => {
   const [error, setError] = useState();
   const [errorPhone, setErrorPhone] = useState();
   const [loading, setLoading] = useState(false);
-  const [checked, setChecked] = useState(false);
 
   const { idRcoFormation, referrer } = qs.parse(props.location.search);
 
-  const handleChange = () => {
-    setChecked(!checked);
-  };
   /**
    * @description Initialize.
    */
@@ -235,32 +230,11 @@ export const FormCreatePage = (props) => {
                       );
                     }}
                   </Field>
-                  <Box
-                    as="div"
-                    variant="highlight"
-                    borderLeft="4px solid"
-                    borderColor="info"
-                    display="flex"
-                    flexDirection="row"
-                    justifyContent="center"
-                    bg="#F0F0F0"
-                    alignItems="flex-start"
-                    p={5}
-                    mb={5}
-                    mt={12}
-                  >
-                    <Checkbox value={checked} onChange={handleChange} as="span" icon={<Check w="20px" h="18px" />}>
-                      <Text color="grey.750" fontWeight="700" textStyle="sm">
-                        Je serai attentif aux appels que je vais recevoir dans les prochains jours.
-                      </Text>
-                    </Checkbox>
-                  </Box>
                   <Button
                     variant="unstyled"
-                    disabled={checked === false}
                     type={"submit"}
                     loading={submitLoading}
-                    bg={checked === false ? "grey.300" : "grey.750"}
+                    bg={"grey.750"}
                     borderRadius="10px"
                     color="#FFFFFF"
                     w="14.5rem"
