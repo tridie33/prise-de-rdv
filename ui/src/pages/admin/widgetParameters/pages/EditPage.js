@@ -1,21 +1,36 @@
-import React, { createRef, useEffect, useState } from "react";
+import { createRef, useEffect, useState } from "react";
 import _ from "lodash";
 import { useParams } from "react-router";
-import { Button, Card, Grid, Page, Table, Icon, Form as TablerForm } from "tabler-react";
-import { toast } from "react-toastify";
 import * as emailValidator from "email-validator";
+import {
+  Tbody,
+  Button,
+  Tr,
+  Thead,
+  Td,
+  Checkbox,
+  Table,
+  Flex,
+  Box,
+  Text,
+  useToast,
+  Spinner,
+  Editable,
+  EditableInput,
+  EditablePreview,
+} from "@chakra-ui/react";
 import { _get, _post, _put } from "../../../../common/httpClient";
 import EtablissementComponent from "../components/EtablissementComponent";
-import { TableRowHover } from "../../styles";
-import IconDownloadCsv from "../../../../common/components/Icon";
 import downloadFile from "../../../../common/utils/downloadFile";
+import { Check, Disquette, Download } from "../../../../theme/components/icons";
 
-export default () => {
+const EditPage = () => {
   const { id } = useParams();
   const [parametersResult, setParametersResult] = useState();
   const [catalogueResult, setCatalogueResult] = useState();
   const [permissions, setPermissions] = useState();
   const [loading, setLoading] = useState(false);
+  const toast = useToast();
 
   /**
    * @description Get all parameters.
@@ -60,14 +75,19 @@ export default () => {
         setCatalogueResult(catalogueResult);
         setParametersResult(parametersResponse);
       } catch (error) {
-        toast.error("Une erreur est survenue durant la récupération des informations.");
+        toast({
+          title: "Une erreur est survenue durant la récupération des informations.",
+          status: "error",
+          isClosable: true,
+          position: "bottom-right",
+        });
       } finally {
         setLoading(false);
       }
     }
 
     fetchData();
-  }, [id]);
+  }, [id, toast]);
 
   /**
    * @description Returns all parameters from given sirent.
@@ -131,12 +151,22 @@ export default () => {
     const emailRdv = email || parameter?.email_rdv;
 
     if (!emailRdv) {
-      toast.info("Vous devez renseigner un email.");
+      toast({
+        title: "Vous devez renseigner un email.",
+        status: "info",
+        isClosable: true,
+        position: "bottom-right",
+      });
       return;
     }
 
     if (!emailValidator.validate(emailRdv)) {
-      toast.error("Email non valide.");
+      toast({
+        title: "Email non valide.",
+        status: "error",
+        isClosable: true,
+        position: "bottom-right",
+      });
       return;
     }
 
@@ -161,8 +191,12 @@ export default () => {
     // Refresh data
     const parametersResponse = await getParameters(id);
     setParametersResult(parametersResponse);
-
-    toast.success("Configuration enregistrée avec succès.");
+    toast({
+      title: "Configuration enregistrée avec succès.",
+      status: "success",
+      isClosable: true,
+      position: "bottom-right",
+    });
   };
 
   /**
@@ -175,112 +209,119 @@ export default () => {
       `/api/widget-parameters/parameters/export?query={"etablissement_siret":"${siret}"}`,
       `parametres-${siret}.csv`
     );
-
+  if (!parametersResult && !catalogueResult) {
+    return <Spinner display="block" mx="auto" mt="10rem" />;
+  }
   return (
-    <Page>
-      <Page.Main>
-        <Page.Content>
-          {parametersResult && catalogueResult && !loading && (
-            <>
-              <EtablissementComponent
-                raisonSociale={catalogueResult.formations[0].etablissement_formateur_entreprise_raison_sociale}
-                siret={catalogueResult.formations[0].etablissement_formateur_siret}
-                uai={catalogueResult.formations[0].etablissement_formateur_uai}
-              />
-              <Grid.Row>
-                <Grid.Col>
-                  <Card>
-                    <Card.Header>
-                      <Card.Title>Formations</Card.Title>
-                      <Card.Options>
-                        <IconDownloadCsv
-                          name="download"
-                          onClick={() => download(catalogueResult.formations[0].etablissement_formateur_siret)}
-                        />
-                      </Card.Options>
-                    </Card.Header>
-                    <Table responsive className="card-table table-vcenter text-nowrap">
-                      <Table.Header>
-                        <Table.ColHeader>Id RCO</Table.ColHeader>
-                        <Table.ColHeader>Intitulé</Table.ColHeader>
-                        <Table.ColHeader>CFD</Table.ColHeader>
-                        <Table.ColHeader>Code postal</Table.ColHeader>
-                        <Table.ColHeader>Localité</Table.ColHeader>
-                        <Table.ColHeader>Email</Table.ColHeader>
-                        <Table.ColHeader>Email catalogue</Table.ColHeader>
-                        <Table.ColHeader>
-                          Source <br />
-                        </Table.ColHeader>
-                        <Table.ColHeader>Actions</Table.ColHeader>
-                      </Table.Header>
-                      <Table.Body>
-                        {catalogueResult.formations.map((formation) => {
-                          const emailRef = createRef();
-                          const parameter = parametersResult.parameters.find(
-                            (item) => item.id_rco_formation === formation.id_rco_formation
-                          );
+    <Box mx={["1rem", "1rem", "10rem", "10rem"]}>
+      {parametersResult && catalogueResult && !loading && (
+        <>
+          <EtablissementComponent
+            raisonSociale={catalogueResult.formations[0].etablissement_formateur_entreprise_raison_sociale}
+            siret={catalogueResult.formations[0].etablissement_formateur_siret}
+            uai={catalogueResult.formations[0].etablissement_formateur_uai}
+          />
+          <Flex bg="white" mt={10} border="1px solid #E0E5ED" borderRadius="4px" borderBottom="none">
+            <Text flex="1" fontSize="16px" p={5}>
+              Formations
+            </Text>
+            <Download
+              onClick={() => download(catalogueResult.formations[0].etablissement_formateur_siret)}
+              color="#9AA0AC"
+              cursor="pointer"
+              w="16px"
+              h="16px"
+              mt={6}
+              mr={5}
+            />
+          </Flex>
+          <Box border="1px solid #E0E5ED" overflow="auto" cursor="pointer">
+            <Table w="150rem" bg="white">
+              <Thead color="#ADB2BC">
+                <Td textStyle="sm">ID RCO</Td>
+                <Td textStyle="sm">INTITULE</Td>
+                <Td textStyle="sm">CFD</Td>
+                <Td textStyle="sm">CODE POSTAL</Td>
+                <Td textStyle="sm">LOCALITE</Td>
+                <Td textStyle="sm">EMAIL</Td>
+                <Td textStyle="sm">
+                  SOURCE <br />
+                </Td>
+                <Td textStyle="sm">ACTIONS</Td>
+              </Thead>
+              <Tbody>
+                {catalogueResult.formations.map((formation) => {
+                  const emailRef = createRef();
+                  const parameter = parametersResult.parameters.find(
+                    (item) => item.id_rco_formation === formation.id_rco_formation
+                  );
 
-                          const formationPermissions = getPermissionsFromCriterias({
-                            permissions,
-                            id_rco_formation: formation.id_rco_formation,
-                          });
+                  const formationPermissions = getPermissionsFromCriterias({
+                    permissions,
+                    id_rco_formation: formation.id_rco_formation,
+                  });
 
-                          return (
-                            <TableRowHover key={formation._id}>
-                              <Table.Col>{formation.id_rco_formation}</Table.Col>
-                              <Table.Col>{formation.intitule_long}</Table.Col>
-                              <Table.Col>{formation.cfd}</Table.Col>
-                              <Table.Col>{formation.code_postal}</Table.Col>
-                              <Table.Col>{formation.localite}</Table.Col>
-                              <Table.ColHeader>
-                                <input
-                                  ref={emailRef}
-                                  type="email"
-                                  placeholder={parameter?.email_rdv || "..."}
-                                  style={{ border: "solid #dee2e6 1px", padding: 5, marginRight: 10 }}
-                                  className="text-lowercase"
-                                />
-                              </Table.ColHeader>
-                              <Table.Col>{formation.email}</Table.Col>
-                              <Table.Col>
-                                {formationPermissions.map((permission) => (
-                                  <TablerForm.Checkbox
-                                    key={`${formation.cfd}-${permission.referrerId}`}
-                                    checked={permission.checked}
-                                    label={permission.name}
-                                    value={permission.referrerId}
-                                    onChange={() => togglePermission(permission)}
-                                  />
-                                ))}
-                              </Table.Col>
-                              <Table.Col>
-                                <Button
-                                  RootComponent="a"
-                                  color="primary"
-                                  onClick={() =>
-                                    upsertParameter({
-                                      formation,
-                                      parameter,
-                                      email: emailRef.current.value,
-                                      formationPermissions,
-                                    })
-                                  }
-                                >
-                                  <Icon name="save" className="text-white" />
-                                </Button>
-                              </Table.Col>
-                            </TableRowHover>
-                          );
-                        })}
-                      </Table.Body>
-                    </Table>
-                  </Card>
-                </Grid.Col>
-              </Grid.Row>
-            </>
-          )}
-        </Page.Content>
-      </Page.Main>
-    </Page>
+                  return (
+                    <Tr key={formation._id} _hover={{ bg: "#f4f4f4", transition: "0.5s" }} transition="0.5s">
+                      <Td>{formation.id_rco_formation}</Td>
+                      <Td>{formation.intitule_long}</Td>
+                      <Td>{formation.cfd}</Td>
+                      <Td>{formation.code_postal}</Td>
+                      <Td>{formation.localite}</Td>
+                      <Td>
+                        <Editable
+                          defaultValue={parameter?.email_rdv || "..."}
+                          style={{ border: "solid #dee2e6 1px", padding: 5, marginRight: 10, borderRadius: 4 }}
+                        >
+                          <EditablePreview />
+                          <EditableInput ref={emailRef} type="email" _focus={{ border: "none" }} />
+                        </Editable>
+                      </Td>
+                      <Td>
+                        {formationPermissions.map((permission) => (
+                          <>
+                            <Flex mt={1}>
+                              <Checkbox
+                                key={`${formation.cfd}-${permission.referrerId}`}
+                                checked={permission.checked}
+                                value={permission.referrerId}
+                                icon={<Check w="20px" h="18px" />}
+                                defaultIsChecked={permission.checked}
+                                onChange={() => togglePermission(permission)}
+                              >
+                                <Text ml={2}>{permission.name}</Text>
+                              </Checkbox>
+                            </Flex>
+                          </>
+                        ))}
+                      </Td>
+                      <Td>
+                        <Button
+                          mt={10}
+                          RootComponent="a"
+                          variant="primary"
+                          onClick={() =>
+                            upsertParameter({
+                              formation,
+                              parameter,
+                              email: emailRef.current.value,
+                              formationPermissions,
+                            })
+                          }
+                        >
+                          <Disquette w="16px" h="16px" />
+                        </Button>
+                      </Td>
+                    </Tr>
+                  );
+                })}
+              </Tbody>
+            </Table>
+          </Box>
+        </>
+      )}
+    </Box>
   );
 };
+
+export default EditPage;

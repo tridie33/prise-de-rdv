@@ -1,0 +1,71 @@
+html, body { height: 100%; }
+
+.chakra-checkbox__control,
+.css-wdogr3 {
+  color: transparent !important;
+  border: 1px solid !important;
+  border-color: #6a6a6a !important;
+}
+
+@font-face {
+  font-family: "Inter Regular";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Inter Regular"), url("./fonts/Inter-Regular.ttf") format("ttf");
+}
+
+@font-face {
+  font-family: "Inter Black";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Inter Regular"), url("./fonts/Inter-Black.ttf") format("ttf");
+}
+
+@font-face {
+  font-family: "Inter Bold";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Inter Bold"), url("./fonts/Inter-Bold.ttf") format("ttf");
+}
+
+@font-face {
+  font-family: "Inter Extra Bold";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Inter Extra Bold"), url("./fonts/Inter-ExtraBold.ttf") format("ttf");
+}
+
+@font-face {
+  font-family: "Inter Extra Light";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Inter Extra Light"), url("./fonts/Inter-ExtraLight.ttf") format("ttf");
+}
+
+@font-face {
+  font-family: "Inter Light";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Inter Light"), url("./fonts/Inter-Light.ttf") format("ttf");
+}
+
+@font-face {
+  font-family: "Inter Medium";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Inter Medium"), url("./fonts/Inter-Medium.ttf") format("ttf");
+}
+
+@font-face {
+  font-family: "Inter Semi Bold";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Inter Semi Bold"), url("./fonts/Inter-SemiBold.ttf") format("ttf");
+}
+
+@font-face {
+  font-family: "Inter Thin";
+  font-style: normal;
+  font-weight: normal;
+  src: local("Inter Thin"), url("./fonts/Inter-Thin.ttf") format("ttf");
+}

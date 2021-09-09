@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { Button, Card, Grid, Page, Table, Tag } from "tabler-react";
-import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { sortBy } from "lodash";
+import { Tbody, Tr, Thead, Tag, Td, Table, Flex, Box, Text, Button, useToast } from "@chakra-ui/react";
 import { _get } from "../../../../common/httpClient";
-import { TableRowHover } from "../../styles";
-import IconDownloadCsv from "../../../../common/components/Icon";
 import downloadFile from "../../../../common/utils/downloadFile";
+import { Download } from "../../../../theme/components/icons";
 
-export default () => {
+const MainPage = () => {
   const [parametersResult, setParametersResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const history = useHistory();
+  const toast = useToast();
 
   /**
    * @description Get all parameters.
@@ -29,14 +28,19 @@ export default () => {
 
         setParametersResult(response);
       } catch (e) {
-        toast.error("Une erreur est survenue durant la récupération des informations.");
+        toast({
+          title: "Une erreur est survenue durant la récupération des informations.",
+          status: "error",
+          isClosable: true,
+          position: "bottom-right",
+        });
       } finally {
         setLoading(false);
       }
     }
 
     fetchParameters();
-  }, []);
+  }, [toast]);
 
   /**
    * @description Downloads CSV file.
@@ -45,59 +49,57 @@ export default () => {
   const download = () => downloadFile(`/api/widget-parameters/parameters/export`, `parametres.csv`);
 
   return (
-    <Page>
-      <Page.Main>
-        <Page.Content>
-          {loading && <Button loading color="secondary" block />}
-          {parametersResult && !loading && (
-            <Grid.Row>
-              <Grid.Col>
-                <Card>
-                  <Card.Header>
-                    <Card.Title>Paramètres</Card.Title>
-                    <Card.Options>
-                      <IconDownloadCsv name="download" onClick={download} />
-                    </Card.Options>
-                  </Card.Header>
-                  <Table responsive className="card-table table-vcenter text-nowrap">
-                    <Table.Header>
-                      <Table.ColHeader>Siret</Table.ColHeader>
-                      <Table.ColHeader>Raison sociale</Table.ColHeader>
-                      <Table.ColHeader>Intitulé</Table.ColHeader>
-                      <Table.ColHeader>CFD</Table.ColHeader>
-                      <Table.ColHeader>Email</Table.ColHeader>
-                      <Table.ColHeader>Widget actif</Table.ColHeader>
-                    </Table.Header>
-                    <Table.Body>
-                      {parametersResult.parameters.map((parameter) => (
-                        <TableRowHover
-                          key={parameter._id}
-                          onClick={() => history.push(`/admin/widget-parameters/edit/${parameter.etablissement_siret}`)}
-                        >
-                          <Table.Col>{parameter.etablissement_siret}</Table.Col>
-                          <Table.Col>{parameter.etablissement_raison_sociale}</Table.Col>
-                          <Table.Col>{parameter.formation_intitule}</Table.Col>
-                          <Table.Col>{parameter.formation_cfd}</Table.Col>
-                          <Table.Col>{parameter.email_rdv.toLowerCase()}</Table.Col>
-                          <Table.Col>
-                            <Tag.List>
-                              {sortBy(parameter.referrers, "code").map((referrer) => (
-                                <Tag key={referrer.code} color={"blue"}>
-                                  {referrer.full_name}
-                                </Tag>
-                              ))}
-                            </Tag.List>
-                          </Table.Col>
-                        </TableRowHover>
+    <Box>
+      <Flex bg="white" mx="10rem" mt={10} border="1px solid #E0E5ED" borderBottom="none">
+        <Text flex="1" fontSize="16px" p={5}>
+          Paramètres
+        </Text>
+        <Download onClick={download} color="#9AA0AC" cursor="pointer" w="16px" h="16px" mt={6} mr={5} />
+      </Flex>
+      <Box border="1px solid #E0E5ED" overflow="auto" mx="10rem" cursor="pointer">
+        {loading && <Button variant="primary" />}
+        {parametersResult && !loading && (
+          <Table w="204rem" bg="white">
+            <Thead>
+              <Tr color="#ADB2BC">
+                <Td textStyle="sm">SIRET</Td>
+                <Td textStyle="sm">RAISON SOCIALE</Td>
+                <Td textStyle="sm">INTITULE</Td>
+                <Td textStyle="sm">CFD</Td>
+                <Td textStyle="sm">EMAIL</Td>
+                <Td textStyle="sm">WIDGET ACTIF</Td>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {parametersResult.parameters.map((parameter) => (
+                <Tr
+                  _hover={{ bg: "#f4f4f4", transition: "0.5s" }}
+                  transition="0.5s"
+                  key={parameter._id}
+                  onClick={() => history.push(`/admin/widget-parameters/edit/${parameter.etablissement_siret}`)}
+                >
+                  <Td>{parameter.etablissement_siret}</Td>
+                  <Td>{parameter.etablissement_raison_sociale}</Td>
+                  <Td>{parameter.formation_intitule}</Td>
+                  <Td>{parameter.formation_cfd}</Td>
+                  <Td>{parameter.email_rdv.toLowerCase()}</Td>
+                  <Td>
+                    <Text>
+                      {sortBy(parameter.referrers, "code").map((referrer) => (
+                        <Tag key={referrer.code} bg="#467FCF" size="md" ml={2} color="white">
+                          {referrer.full_name}
+                        </Tag>
                       ))}
-                    </Table.Body>
-                  </Table>
-                </Card>
-              </Grid.Col>
-            </Grid.Row>
-          )}
-        </Page.Content>
-      </Page.Main>
-    </Page>
+                    </Text>
+                  </Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        )}
+      </Box>
+    </Box>
   );
 };
+
+export default MainPage;

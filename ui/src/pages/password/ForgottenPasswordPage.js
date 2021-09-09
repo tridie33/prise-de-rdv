@@ -1,15 +1,11 @@
-import React from "react";
 import * as Yup from "yup";
-import { Form as TablerForm, Card, Page, Button, Grid } from "tabler-react";
+import { Box, Container, Input, Button, Text } from "@chakra-ui/react";
 import { Formik, Field, Form } from "formik";
 import { useHistory } from "react-router-dom";
 import useAuth from "../../common/hooks/useAuth";
 import { _post } from "../../common/httpClient";
-import FormError from "../../common/components/FormError";
-import CenteredCol from "../../common/components/CenteredCol";
-import FormMessage from "../../common/components/FormMessage";
 
-export default () => {
+const ForgottenPasswordPage = () => {
   let [, setAuth] = useAuth();
   let history = useHistory();
 
@@ -35,57 +31,49 @@ export default () => {
   };
 
   return (
-    <Page>
-      <Page.Main>
-        <Page.Content>
-          <Grid.Row>
-            <CenteredCol>
-              <Card>
-                <Card.Header>
-                  <Card.Title>Mot de passe oublié</Card.Title>
-                </Card.Header>
-                <Card.Body>
-                  <Formik
-                    initialValues={{
-                      username: "",
+    <Box p={5} bg="#FAFAFA">
+      <Container border="1px solid #E0E5ED" bg="white" p={0} maxW="35ch">
+        <Box borderBottom="1px solid #E0E5ED" p={4}>
+          <Text fontSize="16px" ml={2}>
+            Mot de passe oublié
+          </Text>
+        </Box>
+        <Box mx={5} mt={5}>
+          <Formik
+            initialValues={{
+              username: "",
+            }}
+            validationSchema={Yup.object().shape({
+              username: Yup.string().required("Veuillez saisir un identifiant"),
+            })}
+            onSubmit={resetPassword}
+          >
+            {({ status = {} }) => {
+              return (
+                <Form>
+                  <Text textStyle="h6" fontSize="12px">
+                    Identifiant
+                  </Text>
+                  <Field name="username">
+                    {({ field, meta }) => {
+                      return <Input type={"text"} placeholder="Votre identifiant..." {...field} {...showError(meta)} />;
                     }}
-                    validationSchema={Yup.object().shape({
-                      username: Yup.string().required("Veuillez saisir un identifiant"),
-                    })}
-                    onSubmit={resetPassword}
-                  >
-                    {({ status = {} }) => {
-                      return (
-                        <Form>
-                          <TablerForm.Group label="Identifiant">
-                            <Field name="username">
-                              {({ field, meta }) => {
-                                return (
-                                  <TablerForm.Input
-                                    type={"text"}
-                                    placeholder="Votre identifiant..."
-                                    {...field}
-                                    {...showError(meta)}
-                                  />
-                                );
-                              }}
-                            </Field>
-                          </TablerForm.Group>
-                          <Button color="primary" className="text-left" type={"submit"}>
-                            Demander un nouveau mot de passe
-                          </Button>
-                          {status.error && <FormError>{status.error}</FormError>}
-                          {status.message && <FormMessage>{status.message}</FormMessage>}
-                        </Form>
-                      );
-                    }}
-                  </Formik>
-                </Card.Body>
-              </Card>
-            </CenteredCol>
-          </Grid.Row>
-        </Page.Content>
-      </Page.Main>
-    </Page>
+                  </Field>
+                  <Button variant="primary" type={"submit"} fontSize="12px" fontWeight="700" mt={5}>
+                    Demander un nouveau mot de passe
+                  </Button>
+                  <Box mb={5}>
+                    {status.error && <Text color="#cd201f">{status.error}</Text>}
+                    {status.message && <Text color="#316100">{status.message}</Text>}
+                  </Box>
+                </Form>
+              );
+            }}
+          </Formik>
+        </Box>
+      </Container>
+    </Box>
   );
 };
+
+export default ForgottenPasswordPage;

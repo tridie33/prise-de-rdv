@@ -178,7 +178,6 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
       if (!formation) {
         throw Boom.badRequest("Etablissement et formation introuvable.");
       }
-
       const createdAppointement = await appointments.createAppointment({
         candidat_id: user._id,
         etablissement_id: formation.etablissement_formateur_siret,
@@ -193,7 +192,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
         user: {
           firstname: user.firstname,
           lastname: user.lastname,
-          phone: user.phone,
+          phone: user.phone.match(/.{1,2}/g).join("."),
           email: user.email,
           motivations: createdAppointement.motivations,
         },
@@ -213,6 +212,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
         },
         images: {
           info: `${config.publicUrl}/assets/info.png?raw=true`,
+          message: `${config.publicUrl}/assets/message.png?raw=true`,
           people: `${config.publicUrl}/assets/people.png?raw=true`,
           school: `${config.publicUrl}/assets/school.png?raw=true`,
           map: `${config.publicUrl}/assets/map.png?raw=true`,
@@ -224,13 +224,13 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
       const [emailCandidat, emailCfa] = await Promise.all([
         mailer.sendEmail(
           user.email,
-          `Le CFA a bien reçu votre demande de RDV via ${referrerObj.full_name}`,
+          `Le centre de formation a bien reçu votre demande de RDV`,
           getEmailTemplate("mail-candidat"),
           mailData
         ),
         mailer.sendEmail(
           widgetParameter.email_rdv,
-          `[RDV via ${referrerObj.full_name}] Un candidat souhaite être recontacté`,
+          `[RDV via ${referrerObj.full_name}] Un candidat souhaite être contacté`,
           getEmailTemplate("mail-formation"),
           mailData
         ),
@@ -239,6 +239,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
       await appointments.updateAppointment(createdAppointement._id, {
         email_premiere_demande_candidat_message_id: emailCandidat.messageId,
         email_premiere_demande_cfa_message_id: emailCfa.messageId,
+        email_cfa: widgetParameter.email_rdv,
       });
 
       res.json({
@@ -266,10 +267,13 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
 
       const appointment = await appointments.getAppointmentById(appointmentId);
 
-      const [widgetParameter, user] = await Promise.all([
+      const [widgetParameter, user, catalogueFormations] = await Promise.all([
         widgetParameters.getParameterByIdRcoFormation({ idRcoFormation: appointment.id_rco_formation }),
         users.getUserById(appointment.candidat_id),
+        getFormationsByIdRcoFormations({ idRcoFormations: appointment.id_rco_formation }),
       ]);
+
+      const [formationCatalogue] = catalogueFormations.formations;
 
       res.json({
         appointment: {
@@ -279,6 +283,9 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
         user: user._doc,
         etablissement: {
           email: widgetParameter.email_rdv,
+          intitule_long: formationCatalogue.intitule_long,
+          etablissement_formateur_entreprise_raison_sociale:
+            formationCatalogue.etablissement_formateur_entreprise_raison_sociale,
         },
       });
     })

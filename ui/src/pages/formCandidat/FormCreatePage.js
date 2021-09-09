@@ -1,24 +1,12 @@
-import {
-  AsterixTypography,
-  Button,
-  ButtonLayout,
-  FormBodyLayout,
-  HelloTypography,
-  Input,
-  Spacer,
-  Text,
-  Textarea,
-} from "./styles";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import * as emailValidator from "email-validator";
 import * as qs from "query-string";
-import FormError from "../../common/components/FormError";
-import { ContactCentreComponent } from "./components/ContactCentreComponent";
 import { useHistory } from "react-router-dom";
-import { FormHeaderComponent } from "./components/FormHeaderComponent";
-import { FormLayoutComponent } from "./components/FormLayoutComponent";
+import { Text, Input, Button, Box } from "@chakra-ui/react";
+import { ContactCfaComponent } from "./layout/ContactCfaComponent";
+import { FormLayoutComponent } from "./layout/FormLayoutComponent";
 import { _post } from "../../common/httpClient";
 
 /**
@@ -31,7 +19,9 @@ export const FormCreatePage = (props) => {
   const history = useHistory();
   const [data, setData] = useState();
   const [submitLoading, setSubmitLoading] = useState(false);
+
   const [error, setError] = useState();
+  const [errorPhone, setErrorPhone] = useState();
   const [loading, setLoading] = useState(false);
 
   const { idRcoFormation, referrer } = qs.parse(props.location.search);
@@ -85,13 +75,15 @@ export const FormCreatePage = (props) => {
    */
   function validatePhone(value) {
     let error;
-
     if (!value) {
       error = "Numéro de téléphone requis";
-    } else if (!/^\d{10}$/i.test(value)) {
+    } else if (!/^0[1-98][0-9]{8}$/i.test(value)) {
       error = "Numéro de téléphone invalide";
+      setErrorPhone(error);
+    } else {
+      error = "";
+      setErrorPhone(error);
     }
-
     return error;
   }
 
@@ -130,12 +122,11 @@ export const FormCreatePage = (props) => {
   };
 
   return (
-    <FormLayoutComponent>
-      <FormHeaderComponent title={"Le CFA vous rappelle !"} imagePath={"../../assets/people.svg"} imageAlt={"people"} />
+    <FormLayoutComponent bg="white">
       {loading && <span>Chargement des données...</span>}
       {error && <span> {error} </span>}
       {data && (
-        <FormBodyLayout>
+        <Box>
           <Formik
             initialValues={{
               firstname: "",
@@ -156,16 +147,22 @@ export const FormCreatePage = (props) => {
             {({ status = {} }) => {
               return (
                 <Form>
-                  <ContactCentreComponent
+                  <ContactCfaComponent
                     entrepriseRaisonSociale={data.etablissement_formateur_entreprise_raison_sociale}
                     intitule={data.intitule_long}
                     adresse={data.lieu_formation_adresse}
                     codePostal={data.code_postal}
                     ville={data.localite}
                   />
-                  <HelloTypography as={"h2"}>Bonjour !</HelloTypography>
-                  <Text>
-                    Vous êtes<AsterixTypography>*</AsterixTypography> :
+                  <Text textStyle="h6" color="info">
+                    Bonjour,
+                  </Text>
+                  <Text mt={7}>
+                    Vous êtes
+                    <Text color="redmarianne" as="span">
+                      *
+                    </Text>{" "}
+                    :
                   </Text>
                   <Field name="firstname">
                     {({ field, meta }) => (
@@ -174,73 +171,88 @@ export const FormCreatePage = (props) => {
                   </Field>
                   <Field name="lastname">
                     {({ field, meta }) => (
-                      <Input placeholder="votre nom" {...field} {...feedback(meta, "Nom invalide")} />
+                      <Input mt={2} placeholder="votre nom" {...field} {...feedback(meta, "Nom invalide")} />
                     )}
                   </Field>
-                  <Spacer />
-
                   {data.intitule_long && (
-                    <Text>
-                      Pour tout savoir de la formation <u>{data.intitule_long.toUpperCase()}</u>, laissez{" "}
-                      <b>votre numéro</b> au centre de formation<AsterixTypography>*</AsterixTypography> :
+                    <Text mt={5}>
+                      Pour tout savoir de la formation{" "}
+                      <b>
+                        <u>{data.intitule_long.toUpperCase()}</u>
+                      </b>
+                      , laissez votre numéro au centre de formation
+                      <Text color="redmarianne" as="span">
+                        *
+                      </Text>{" "}
+                      :
                     </Text>
                   )}
-
                   <Field name="phone" validate={validatePhone}>
                     {({ field, meta }) => {
                       return (
-                        <Input
-                          placeholder="votre numéro"
-                          {...field}
-                          {...feedback(meta, "Numéro de téléphone invalide")}
-                        />
+                        <Box>
+                          <Input mt={2} type="tel" placeholder="votre numéro" {...field} />
+                          <Text color="red" mt={2}>
+                            {errorPhone}
+                          </Text>
+                        </Box>
                       );
                     }}
                   </Field>
-                  <Spacer />
-
-                  <Text>
-                    Vous recevrez un <b>email de confirmation</b> à cette adresse
-                    <AsterixTypography>*</AsterixTypography> :
+                  <Text mt={6}>
+                    Vous recevrez un email de confirmation à cette adresse
+                    <Text color="redmarianne" as="span">
+                      *
+                    </Text>{" "}
+                    :
                   </Text>
                   <Field name="email" validate={validateEmail}>
                     {({ field, meta }) => {
                       return (
                         <Input
                           placeholder="votre adresse email"
+                          type="email"
                           {...field}
                           {...feedback(meta, "Adresse email invalide")}
                         />
                       );
                     }}
                   </Field>
-                  <Spacer />
-
-                  <Text>Quel sujet voulez-vous aborder ?</Text>
+                  <Text mt={5}>Quel sujet voulez-vous aborder ?</Text>
                   <Field name="motivations">
                     {({ field, meta }) => {
                       return (
-                        <Textarea
-                          placeholder="précisez"
+                        <Input
+                          placeholder="période d’inscription, horaires, etc."
                           {...field}
                           {...feedback(meta, "Désolée, ce champs est nécessaire")}
                         />
                       );
                     }}
                   </Field>
-                  <Spacer />
-                  <ButtonLayout>
-                    <Button type={"submit"} loading={submitLoading}>
-                      Envoyer
-                    </Button>
-                  </ButtonLayout>
-
-                  {status.error && <FormError>{status.error}</FormError>}
+                  <Button
+                    variant="unstyled"
+                    type={"submit"}
+                    loading={submitLoading}
+                    bg={"grey.750"}
+                    borderRadius="10px"
+                    color="#FFFFFF"
+                    w="14.5rem"
+                    fontWeight="700"
+                    display="block"
+                    mx={["auto", "0", "0", "0"]}
+                    mt="2rem"
+                    _hover=""
+                    textAlign="center"
+                  >
+                    Envoyer ma demande
+                  </Button>
+                  {status.error && <Text color="#cd201f">{status.error}</Text>}
                 </Form>
               );
             }}
           </Formik>
-        </FormBodyLayout>
+        </Box>
       )}
     </FormLayoutComponent>
   );

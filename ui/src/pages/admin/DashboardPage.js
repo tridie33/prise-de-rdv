@@ -1,28 +1,25 @@
-import React from "react";
-import { Page } from "tabler-react";
-
-import "./DashboardPage.css";
+import { Box, Text } from "@chakra-ui/react";
 import { useFetch } from "../../common/hooks/useFetch";
 import { KpisComponent } from "./KpiContainer";
 import { RequestsBoardComponent } from "./RequestsBoardComponent";
 
-export default () => {
+const DashboardPage = () => {
   const [data, loading] = useFetch("api/appointment/appointments/details?limit=500");
   const appointments = data === null ? [] : data.appointments;
 
   return (
-    <Page>
-      <Page.Main>
-        <Page.Content title="Tableau de bord">
-          {loading && "Chargement des données..."}
-          {data && (
-            <>
-              <KpisComponent />
-              <RequestsBoardComponent appointments={appointments} />
-            </>
-          )}
-        </Page.Content>
-      </Page.Main>
-    </Page>
+    <Box px={[5, 5, 10, 40]} py={6}>
+      <Text textStyle="h4" fontWeight="500">
+        Tableau de bord
+      </Text>
+      {loading && "Chargement des données..."}
+      {data && (
+        <>
+          <KpisComponent />
+          <RequestsBoardComponent appointments={appointments} />
+        </>
+      )}
+    </Box>
   );
 };
+export default DashboardPage;

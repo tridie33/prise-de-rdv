@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Card, Table, Button, Alert } from "tabler-react";
 import { isEqual } from "lodash";
 import * as papaparse from "react-papaparse";
 import emailValidator from "email-validator";
+import { Box, Alert, Text, Button, Link, useToast } from "@chakra-ui/react";
 import FileDropzone from "../../../../common/components/FileDropzone";
-import { TableRowHover } from "../../styles";
 import { _get, _post } from "../../../../common/httpClient";
-import { toast } from "react-toastify";
-
 /**
  * @description Bulk import CFA.
  * @returns {JSX.Element}
@@ -17,7 +14,7 @@ const BulkImport = () => {
   const [error, setError] = useState();
   const [referrers, setReferrers] = useState();
   const [submitLoading, setSubmitLoading] = useState(false);
-
+  const toast = useToast();
   const csvHeaders = {
     SIRET_FORMATEUR: "Siret formateur",
     EMAIL_CONTACT: "Email contact",
@@ -48,12 +45,17 @@ const BulkImport = () => {
 
         setReferrers(referrersResponse);
       } catch (error) {
-        toast.error("Une erreur est survenue durant la récupération des informations.");
+        toast({
+          title: "Une erreur est survenue durant la récupération des informations.",
+          status: "error",
+          isClosable: true,
+          position: "bottom-right",
+        });
       }
     }
 
     fetchData();
-  }, []);
+  }, [toast]);
 
   /**
    * @description Checks if the file is properly structured
@@ -203,82 +205,96 @@ const BulkImport = () => {
       });
 
       setFileContent(fileContentUpdated);
-      toast.success("Import effectué avec succès.");
+      toast({
+        title: "Import effectué avec succès.",
+        status: "success",
+        isClosable: true,
+        position: "bottom-right",
+      });
     } catch (error) {
-      toast.error("Une erreur est survenue");
+      toast({
+        title: "Une erreur est survenue.",
+        status: "error",
+        isClosable: true,
+        position: "bottom-right",
+      });
     } finally {
       setSubmitLoading(false);
     }
   };
 
   return (
-    <Grid.Row>
-      <Grid.Col width={12}>
-        <Card>
-          <Card.Header>
-            <Card.Title>Activation massive de formations via fichier .csv</Card.Title>
-          </Card.Header>
-
-          {error && (
-            <Grid.Col width={12} className="mt-6">
-              <Alert type="warning" icon="alert-triangle">
-                <b>{error.header}</b>
-                <br />
-                {error.content}
-              </Alert>
-            </Grid.Col>
-          )}
-
-          {!fileContent && (
-            <FileDropzone onDrop={onDrop} accept=".csv" maxFiles={1}>
-              <p align="center">
-                Veuillez importer votre fichier .csv pour activer plusieurs CFA (
-                <a href="/docs/exemple-import-cfa.csv">fichier d'exemple</a>).
-              </p>
-            </FileDropzone>
-          )}
-
-          {fileContent && (
-            <>
-              <Grid.Col width={12}>
-                <p align="center" className="my-6">
-                  Ci-dessous le récapitulatif des etablissements qui seront activés sur tous les plateformes de
-                  diffusion.
-                </p>
-                <Table responsive className="card-table">
-                  <Table.Header>
-                    <Table.ColHeader>Siret formateur</Table.ColHeader>
-                    <Table.ColHeader>Email</Table.ColHeader>
-                    <Table.ColHeader>Importé</Table.ColHeader>
-                  </Table.Header>
-                  <Table.Body>
-                    {fileContent.map((row) => (
-                      <TableRowHover>
-                        <Table.Col>{row[csvMapping[csvHeaders.SIRET_FORMATEUR]]}</Table.Col>
-                        <Table.Col>{row[csvMapping[csvHeaders.EMAIL_CONTACT]]}</Table.Col>
-                        <Table.Col>
-                          {row[Object.keys(csvMapping).length] === null && "En attente d'enregistrement"}
-                          {row[Object.keys(csvMapping).length] !== null && row[Object.keys(csvMapping).length]}
-                        </Table.Col>
-                      </TableRowHover>
-                    ))}
-                  </Table.Body>
-                </Table>
-              </Grid.Col>
-              <div className="mb-7" />
-              <Card.Footer>
-                <Button color="primary float-right" onClick={submit} loading={submitLoading} disabled={submitLoading}>
-                  Enregistrer
-                </Button>
-                <Button color="second float-right" onClick={cancel} disabled={submitLoading}>
-                  Annuler
-                </Button>
-              </Card.Footer>
-            </>
-          )}
-        </Card>
-      </Grid.Col>
-    </Grid.Row>
+    <Box>
+      <Box
+        bg="white"
+        mx={[2, 2, 40, 40]}
+        boxShadow="0 1px 2px 0 rgb(0 0 0 / 5%)"
+        border="1px solid rgba(0,40,100,.12)"
+        border-radius="3px"
+        mt={10}
+      >
+        <Text p={5} borderBottom="1px solid rgba(0,40,100,.12)" border-radius="3px">
+          Activation massive de formations via fichier .csv
+        </Text>
+        {error && (
+          <Box>
+            <Alert type="warning" icon="alert-triangle">
+              <b>{error.header}</b>
+              <br />
+              {error.content}
+            </Alert>
+          </Box>
+        )}
+        {!fileContent && (
+          <FileDropzone onDrop={onDrop} accept=".csv" maxFiles={1}>
+            <Text align="center" p={2} mb={5}>
+              Veuillez importer votre fichier .csv pour activer plusieurs CFA <br />(
+              <Link href="/docs/exemple-import-cfa.csv" color="info">
+                fichier d'exemple
+              </Link>
+              ).
+            </Text>
+          </FileDropzone>
+        )}
+      </Box>
+      {fileContent && (
+        <>
+          <Box width={12}>
+            <p align="center" className="my-6">
+              Ci-dessous le récapitulatif des etablissements qui seront activés sur tous les plateformes de diffusion.
+            </p>
+            <Box responsive className="card-table">
+              <Box>
+                <Text>Siret formateur</Text>
+                <Text>Email</Text>
+                <Text>Importé</Text>
+              </Box>
+              <Box>
+                {fileContent.map((row) => (
+                  <Box>
+                    <Text>{row[csvMapping[csvHeaders.SIRET_FORMATEUR]]}</Text>
+                    <Text>{row[csvMapping[csvHeaders.EMAIL_CONTACT]]}</Text>
+                    <Text>
+                      {row[Object.keys(csvMapping).length] === null && "En attente d'enregistrement"}
+                      {row[Object.keys(csvMapping).length] !== null && row[Object.keys(csvMapping).length]}
+                    </Text>
+                  </Box>
+                ))}
+              </Box>
+            </Box>
+          </Box>
+          <div className="mb-7" />
+          <Box>
+            <Button color="primary float-right" onClick={submit} loading={submitLoading} disabled={submitLoading}>
+              Enregistrer
+            </Button>
+            <Button color="second float-right" onClick={cancel} disabled={submitLoading}>
+              Annuler
+            </Button>
+          </Box>
+        </>
+      )}
+    </Box>
   );
 };
 

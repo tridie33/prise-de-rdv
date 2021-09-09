@@ -100,6 +100,12 @@ const appointmentSchema = {
     default: Date.now,
     description: "Date de dernières mise à jour",
   },
+  email_cfa: {
+    type: String,
+    required: false,
+    default: null,
+    description: "Adresse email CFA",
+  },
 };
 
 module.exports = appointmentSchema;
