@@ -26,7 +26,7 @@
                 <mj-image padding="0px" src="<%= data.images.people %>" alt="Figure" />
             </mj-column>
         </mj-section>
-        <mj-wrapper padding="0px" padding-bottom="50px">
+        <mj-wrapper padding="0px">
             <mj-section background-color="#ffffff" padding-top="65px">
                 <mj-column width="420px">
                     <mj-text padding-bottom="32px" font-size="20px" padding="0px" font-weight="700" line-height="24px" text-decoration="none" color="#3A55D1">
@@ -35,13 +35,35 @@
                     <mj-text font-size="16px" line-height="20px" font-weight="700">
                         Le ou la candidate <%= data.user.firstname %> <%= data.user.lastname %> souhaite être contacté
                         au <a href="tel:<%= data.user.phone %>" class="purple"><%= data.user.phone %></a>
-                        ou par mail <a href="mailto:<%= data.user.email %>" class="purple"><%= data.user.email %></a> sous 48h.</mj-text>
+                        ou par mail à l'adresse <a href="mailto:<%= data.user.email %>" class="purple"><%= data.user.email %></a> sous 48h.</mj-text>
                     <mj-text font-size="16px" line-height="20px" padding-top="20px">
                         Il ou elle souhaite aborder avec vous le(s) sujet(s) suivant :
                     </mj-text>
                     <mj-text font-size="16px" line-height="20px" padding="0px"><%= data.user.motivations %></mj-text>
-                    <mj-text font-size="16px" line-height="20px" padding-top="32px">-</mj-text>
-                    <mj-text font-size="16px" line-height="20px" padding="0px">L'équipe de la Mission apprentissage</mj-text>
+                    <mj-text font-size="16px" line-height="20px" padding-top="40px">
+                        Formation: <%= data.formation.intitule %>
+                    </mj-text>
+                    <mj-text font-size="16px" line-height="20px">
+                        Centre de formation concerné :
+                    </mj-text>
+                </mj-column>
+            </mj-section>
+            <mj-section background-color="#ffffff" padding-top="0px">
+                <mj-column vertical-align="top" width="420px">
+                    <mj-text font-size="16px" line-height="20px" padding-bottom="5px">
+                        <%= data.etablissement.name %>
+                    </mj-text>
+                    <mj-text font-size="16px" line-height="20px">
+                        <%= data.etablissement.address %>
+                        <br>
+                        <%= data.etablissement.postalCode %> <%= data.etablissement.ville %>
+                    </mj-text>
+                </mj-column>
+            </mj-section>
+            <mj-section background-color="#ffffff" padding-top="10px">
+                <mj-column width="420px" padding-top="2px">
+                    <mj-text font-size="16px" line-height="20px" padding-top="32px">A très bientôt,</mj-text>
+                    <mj-text font-size="16px" line-height="20px" padding="0px">L'équipe de la <a href="https://mission-apprentissage.gitbook.io/general/les-services-en-devenir/prise-de-rendez-vous/vous-etes-un-cfa-et-vous-souhaitez-activer-le-service-mode-demploi">Mission apprentissage</a></mj-text>
                 </mj-column>
             </mj-section>
             <mj-section background-color="#ffffff" padding-top="10px">
@@ -49,8 +71,11 @@
                     <mj-section background-color="#ffffff">
                         <mj-column width="420px">
                             <mj-divider border-width="0.5px" border-style="solid" border-color="#D0C9C4" padding-top="0px" padding-bottom="16px" />
+                            <mj-text padding="0px">
+                                Si vous avez des questions ou si vous souhaitez vous désinscrire du service, envoyez un email à <a href="mailto:rdv_apprentissage@apprentissage.beta.gouv.fr">rdv_apprentissage@apprentissage.beta.gouv.fr</a>.
+                            </mj-text>
                             <mj-text padding="0px" padding-bottom="20px">
-                                Cette demande a été réalisé sur le site <a href="<%= data.appointment.referrerLink %>"><%= data.appointment.referrer %></a>.
+                                Cette demande a été réalisée sur le site <a href="<%= data.appointment.referrerLink %>"><%= data.appointment.referrer %></a>.
                             </mj-text>
                         </mj-column>
                     </mj-section>
