@@ -8,6 +8,7 @@ const { getReferrerById, getReferrerByKeyName, referrers } = require("../../../c
 const { getFormationsByIdRcoFormations, getFormationsByIdParcoursup } = require("../../utils/catalogue");
 const { candidat } = require("../../../common/roles");
 const { getIdRcoFormationThroughIdActionFormation } = require("../../utils/mappings/onisep");
+const { dayjs } = require("../../utils/dayjs");
 
 const contextCreateSchema = Joi.alternatives().try(
   Joi.object().keys({
@@ -240,6 +241,8 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
         email_premiere_demande_candidat_message_id: emailCandidat.messageId,
         email_premiere_demande_cfa_message_id: emailCfa.messageId,
         email_cfa: widgetParameter.email_rdv,
+        email_premiere_demande_cfa_date: dayjs().format(),
+        email_premiere_demande_candidat_date: dayjs().format(),
       });
 
       res.json({

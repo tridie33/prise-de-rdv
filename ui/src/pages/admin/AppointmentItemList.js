@@ -1,7 +1,7 @@
 import { useState } from "react";
-import * as moment from "moment";
-import { Tr, Td, Text, Button, Textarea } from "@chakra-ui/react";
+import { Tr, Td, Text, Button, Textarea, Tooltip } from "@chakra-ui/react";
 import { _put } from "../../common/httpClient";
+import { formatDate } from "../../common/dayjs";
 
 /**
  * @description Row table component.
@@ -56,7 +56,7 @@ export const AppointmentItemList = (props) => {
 
   return (
     <Tr id={props.appointment._id} _hover={{ bg: "#f4f4f4", transition: "0.5s" }} transition="0.5s">
-      <Td>{moment.parseZone(props.appointment.created_at).format("DD/MM/YYYY HH:mm:ss")}</Td>
+      <Td>{formatDate(props.appointment.created_at)}</Td>
       <Td>
         {props.appointment.candidat.firstname} {props.appointment.candidat.lastname}
       </Td>
@@ -78,8 +78,30 @@ export const AppointmentItemList = (props) => {
       <Td>
         <Text>{props.appointment.referrer.full_name}</Text>
       </Td>
-      <Td>{props.appointment.email_premiere_demande_candidat_statut}</Td>
-      <Td>{props.appointment.email_premiere_demande_cfa_statut}</Td>
+      <Td>
+        <Tooltip
+          hasArrow
+          label={`Envoi: ${
+            formatDate(props.appointment.email_premiere_demande_candidat_date) || "N/C"
+          } / Dernier statut: ${formatDate(props.appointment.email_premiere_demande_candidat_statut_date) || "N/C"}`}
+          bg="gray.300"
+          color="black"
+        >
+          {props.appointment.email_premiere_demande_candidat_statut}
+        </Tooltip>
+      </Td>
+      <Td>
+        <Tooltip
+          hasArrow
+          label={`Envoi: ${formatDate(props.appointment.email_premiere_demande_cfa_date) || "N/C"} / Dernier statut: ${
+            formatDate(props.appointment.email_premiere_demande_cfa_statut_date) || "N/C"
+          }`}
+          bg="gray.300"
+          color="black"
+        >
+          {props.appointment.email_premiere_demande_cfa_statut}
+        </Tooltip>
+      </Td>
       <Td>
         <Textarea type="text" disabled minH="0">
           {props.appointment.motivations}
