@@ -1,13 +1,13 @@
 const express = require("express");
 const lodash = require("lodash");
 const { Parser } = require("json2csv");
-const moment = require("moment");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const { Appointment, User } = require("../../../common/model");
 const logger = require("../../../common/logger");
 const { getReferrerById } = require("../../../common/model/constants/referrers");
 const { getEmailStatus } = require("../../../common/model/constants/emails");
 const { getFormationsByIdRcoFormationsRaw } = require("../../utils/catalogue");
+const { formatDate } = require("../../utils/dayjs");
 
 /**
  * Sample entity route module for GET
@@ -159,7 +159,7 @@ module.exports = ({ cache }) => {
         }
 
         return {
-          date: moment(document.created_at).format("DD/MM/YYYY HH:mm:ss"),
+          date: formatDate(document.created_at),
           candidat: `${user.firstname} ${user.lastname}`,
           phone: user.phone,
           email: user.email,
@@ -169,6 +169,11 @@ module.exports = ({ cache }) => {
           cfd: document.formation_id,
           email_premiere_demande_candidat_statut: getEmailStatus(document?.email_premiere_demande_candidat_statut),
           email_premiere_demande_cfa_statut: getEmailStatus(document?.email_premiere_demande_cfa_statut),
+          cfa_pris_contact_candidat_date: formatDate(document.cfa_pris_contact_candidat_date) || "",
+          email_premiere_demande_candidat_date: formatDate(document.email_premiere_demande_candidat_date) || "",
+          email_premiere_demande_candidat_statut_date:
+            formatDate(document.email_premiere_demande_candidat_statut_date) || "",
+          email_premiere_demande_cfa_date: formatDate(document.email_premiere_demande_cfa_date) || "",
           source: getReferrerById(document.referrer).full_name,
           motivation: document.motivations,
           champs_libre_statut: document.champs_libre_status || "",

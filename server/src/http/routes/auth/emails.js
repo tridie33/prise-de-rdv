@@ -4,6 +4,7 @@ const Joi = require("joi");
 const { Strategy: LocalAPIKeyStrategy } = require("passport-localapikey");
 const config = require("../../../../config");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
+const { dayjs } = require("../../utils/dayjs");
 
 /**
  * @description Checks "Sendinblue" token.
@@ -21,8 +22,7 @@ const checkWebhookToken = () => {
 
 /**
  * @description Email controllers.
- * @param {string} emails
- * @param {User} users
+ * @param {Appointment} appointments
  * @return {Router}
  */
 module.exports = ({ appointments }) => {
@@ -58,10 +58,12 @@ module.exports = ({ appointments }) => {
       if (appointment.email_premiere_demande_candidat_message_id === parameters["message-id"]) {
         await appointments.updateAppointment(appointment._id, {
           email_premiere_demande_candidat_statut: parameters.event,
+          email_premiere_demande_cfa_statut_date: dayjs().format(),
         });
       } else if (appointment.email_premiere_demande_cfa_message_id === parameters["message-id"]) {
         await appointments.updateAppointment(appointment._id, {
           email_premiere_demande_cfa_statut: parameters.event,
+          email_premiere_demande_candidat_statut_date: dayjs().format(),
         });
       }
 

@@ -65,6 +65,11 @@ const appointmentSchema = {
     default: null,
     description: "La date de la première prise de contact du cfa vers le candidat",
   },
+  email_premiere_demande_candidat_date: {
+    type: Date,
+    default: null,
+    description: "Date d'envoi du premier email au candidat",
+  },
   email_premiere_demande_candidat_message_id: {
     type: String,
     default: null,
@@ -75,6 +80,16 @@ const appointmentSchema = {
     default: null,
     description: "Statut du mail envoyé au candidat",
   },
+  email_premiere_demande_candidat_statut_date: {
+    type: Date,
+    default: null,
+    description: "Date du dernier statut",
+  },
+  email_premiere_demande_cfa_date: {
+    type: Date,
+    default: null,
+    description: "Date d'envoi du premier email au cfa",
+  },
   email_premiere_demande_cfa_message_id: {
     type: String,
     default: null,
@@ -84,6 +99,11 @@ const appointmentSchema = {
     type: String,
     default: null,
     description: "Statut du mail envoyé au CFA",
+  },
+  email_premiere_demande_cfa_statut_date: {
+    type: Date,
+    default: null,
+    description: "Date du dernier statut",
   },
   id_rco_formation: {
     type: String,
