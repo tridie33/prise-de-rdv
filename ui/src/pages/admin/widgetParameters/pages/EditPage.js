@@ -244,6 +244,7 @@ const EditPage = () => {
                 <Td textStyle="sm">CODE POSTAL</Td>
                 <Td textStyle="sm">LOCALITE</Td>
                 <Td textStyle="sm">EMAIL</Td>
+                <Td textStyle="sm">EMAIL CATALOGUE</Td>
                 <Td textStyle="sm">
                   SOURCE <br />
                 </Td>
@@ -277,6 +278,7 @@ const EditPage = () => {
                           <EditableInput ref={emailRef} type="email" _focus={{ border: "none" }} />
                         </Editable>
                       </Td>
+                      <Td>{formation.email || "N/C"}</Td>
                       <Td>
                         {formationPermissions.map((permission) => (
                           <>
