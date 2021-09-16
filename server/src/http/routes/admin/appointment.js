@@ -7,7 +7,7 @@ const logger = require("../../../common/logger");
 const { getReferrerById } = require("../../../common/model/constants/referrers");
 const { getEmailStatus } = require("../../../common/model/constants/emails");
 const { getFormationsByIdRcoFormationsRaw } = require("../../utils/catalogue");
-const { formatDate } = require("../../utils/dayjs");
+const { formatDate, dayjs } = require("../../utils/dayjs");
 
 /**
  * Sample entity route module for GET
@@ -171,10 +171,11 @@ module.exports = ({ cache }) => {
           email_premiere_demande_candidat_date: formatDate(document.email_premiere_demande_candidat_date) || "N/C",
           email_premiere_demande_candidat_statut: getEmailStatus(document?.email_premiere_demande_candidat_statut),
           email_premiere_demande_candidat_statut_date:
-            formatDate(document.email_premiere_demande_candidat_statut_date) || "N/C",
+            dayjs.utc(document.email_premiere_demande_candidat_statut_date).format("DD/MM/YYYY HH:mm:ss") || "N/C",
           email_premiere_demande_cfa_date: document.email_premiere_demande_cfa_date || "N/C",
           email_premiere_demande_cfa_statut: getEmailStatus(document?.email_premiere_demande_cfa_statut),
-          email_premiere_demande_cfa_statut_date: document.email_premiere_demande_cfa_statut_date || "N/C",
+          email_premiere_demande_cfa_statut_date:
+            dayjs.utc(document.email_premiere_demande_cfa_statut_date).format("DD/MM/YYYY HH:mm:ss") || "N/C",
           cfa_pris_contact_candidat_date: formatDate(document.cfa_pris_contact_candidat_date) || "N/C",
           source: getReferrerById(document.referrer).full_name,
           motivation: document.motivations,
