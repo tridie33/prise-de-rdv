@@ -83,7 +83,7 @@ export const AppointmentItemList = (props) => {
           hasArrow
           label={`Envoi: ${
             formatDate(props.appointment.email_premiere_demande_candidat_date) || "N/C"
-          } / Dernier statut: ${formatDate(props.appointment.email_premiere_demande_candidat_statut_date) || "N/C"}`}
+          } / Dernier statut: ${props.appointment.email_premiere_demande_candidat_statut_date || "N/C"}`}
           bg="gray.300"
           color="black"
         >
@@ -94,7 +94,7 @@ export const AppointmentItemList = (props) => {
         <Tooltip
           hasArrow
           label={`Envoi: ${formatDate(props.appointment.email_premiere_demande_cfa_date) || "N/C"} / Dernier statut: ${
-            formatDate(props.appointment.email_premiere_demande_cfa_statut_date) || "N/C"
+            props.appointment.email_premiere_demande_cfa_statut_date || "N/C"
           }`}
           bg="gray.300"
           color="black"
