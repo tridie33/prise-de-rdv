@@ -40,6 +40,7 @@ module.exports = ({ appointments }) => {
       const parameters = await Joi.object({
         event: Joi.string().required(),
         "message-id": Joi.string().required(),
+        date: Joi.string().required(),
       })
         .unknown()
         .validateAsync(req.body, { abortEarly: false });
@@ -58,12 +59,12 @@ module.exports = ({ appointments }) => {
       if (appointment.email_premiere_demande_candidat_message_id === parameters["message-id"]) {
         await appointments.updateAppointment(appointment._id, {
           email_premiere_demande_candidat_statut: parameters.event,
-          email_premiere_demande_cfa_statut_date: dayjs().format(),
+          email_premiere_demande_cfa_statut_date: dayjs.utc(parameters["date"]).format(),
         });
       } else if (appointment.email_premiere_demande_cfa_message_id === parameters["message-id"]) {
         await appointments.updateAppointment(appointment._id, {
           email_premiere_demande_cfa_statut: parameters.event,
-          email_premiere_demande_candidat_statut_date: dayjs().format(),
+          email_premiere_demande_candidat_statut_date: dayjs.utc(parameters["date"]).format(),
         });
       }
 
