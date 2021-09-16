@@ -163,6 +163,7 @@ module.exports = ({ cache }) => {
           candidat: `${user.firstname} ${user.lastname}`,
           phone: user.phone,
           email: user.email,
+          email_cfa: document.email_cfa,
           etablissement: formation.etablissement_formateur_entreprise_raison_sociale,
           siret: document.etablissement_id,
           formation: formation.intitule_long,
