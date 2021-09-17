@@ -4,7 +4,6 @@ const Joi = require("joi");
 const { Strategy: LocalAPIKeyStrategy } = require("passport-localapikey");
 const config = require("../../../../config");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
-const { dayjs } = require("../../utils/dayjs");
 
 /**
  * @description Checks "Sendinblue" token.
@@ -59,12 +58,12 @@ module.exports = ({ appointments }) => {
       if (appointment.email_premiere_demande_candidat_message_id === parameters["message-id"]) {
         await appointments.updateAppointment(appointment._id, {
           email_premiere_demande_candidat_statut: parameters.event,
-          email_premiere_demande_cfa_statut_date: dayjs.utc(parameters["date"]).format(),
+          email_premiere_demande_cfa_statut_date: parameters["date"],
         });
       } else if (appointment.email_premiere_demande_cfa_message_id === parameters["message-id"]) {
         await appointments.updateAppointment(appointment._id, {
           email_premiere_demande_cfa_statut: parameters.event,
-          email_premiere_demande_candidat_statut_date: dayjs.utc(parameters["date"]).format(),
+          email_premiere_demande_candidat_statut_date: parameters["date"],
         });
       }
 
