@@ -24,6 +24,11 @@ const widgetParameterSchema = {
     default: null,
     description: "Adresse email pour la prise de RDV",
   },
+  email_decisionnaire: {
+    type: String,
+    default: null,
+    description: "Adresse email du décisionnaire pour la prise de RDV",
+  },
   code_postal: {
     type: String,
     default: null,

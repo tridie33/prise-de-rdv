@@ -82,7 +82,7 @@ const MainPage = () => {
                   <Td>{parameter.etablissement_raison_sociale}</Td>
                   <Td>{parameter.formation_intitule}</Td>
                   <Td>{parameter.formation_cfd}</Td>
-                  <Td>{parameter.email_rdv.toLowerCase()}</Td>
+                  <Td>{parameter.email_rdv?.toLowerCase()}</Td>
                   <Td>
                     <Text>
                       {sortBy(parameter.referrers, "code").map((referrer) => (

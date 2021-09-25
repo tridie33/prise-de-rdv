@@ -8,6 +8,7 @@ module.exports = async () => ({
    * @param {String} formation_intitule
    * @param {String} formation_cfd
    * @param {String} email_rdv
+   * @param {String} email_decisionnaire
    * @param {String} code_postal
    * @param {Number[]} referrers
    * @param {String} id_rco_formation
@@ -19,6 +20,7 @@ module.exports = async () => ({
     formation_intitule,
     formation_cfd,
     email_rdv,
+    email_decisionnaire,
     code_postal,
     referrers,
     id_rco_formation,
@@ -29,6 +31,7 @@ module.exports = async () => ({
       formation_intitule,
       formation_cfd,
       email_rdv,
+      email_decisionnaire,
       referrers,
       code_postal,
       id_rco_formation,
@@ -45,6 +48,7 @@ module.exports = async () => ({
    * @param formation_intitule
    * @param formation_cfd
    * @param email_rdv
+   * @param email_decisionnaire
    * @param code_postal
    * @param id_rco_formation
    * @param referrers
@@ -56,6 +60,7 @@ module.exports = async () => ({
     formation_intitule,
     formation_cfd,
     email_rdv,
+    email_decisionnaire,
     code_postal,
     id_rco_formation,
     referrers,
@@ -66,6 +71,7 @@ module.exports = async () => ({
       formation_intitule,
       formation_cfd,
       email_rdv,
+      email_decisionnaire,
       code_postal,
       id_rco_formation,
       referrers,
@@ -107,6 +113,13 @@ module.exports = async () => ({
   updateMany: ({ where, body }) => WidgetParameter.updateMany(where, body),
 
   /**
+   * @description Returns all formations that have
+   * @param {String} etablissement_siret
+   * @returns {Promise<WidgetParameter>}
+   */
+  getParametersBySiret: ({ etablissement_siret }) => WidgetParameter.find({ etablissement_siret }),
+
+  /**
    * @description Returns item through its "id_rco_formation".
    * @param {String} idRcoFormation
    * @returns {Promise<WidgetParameter>}
@@ -139,9 +152,12 @@ module.exports = async () => ({
    * @param {Number} referrer
    * @returns {Promise<Boolean>}
    */
-  isWidgetVisible: ({ idRcoFormation, referrer }) =>
-    WidgetParameter.exists({
+  isWidgetVisible: async ({ idRcoFormation, referrer }) => {
+    const widgetParameter = await WidgetParameter.findOne({
       id_rco_formation: idRcoFormation,
       referrers: { $in: [referrer] },
-    }),
+    });
+
+    return !!(widgetParameter && widgetParameter.email_rdv);
+  },
 });

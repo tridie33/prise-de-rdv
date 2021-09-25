@@ -24,6 +24,7 @@ const sampleParameter = {
   formation_intitule: "Test Formation",
   formation_cfd: "26033206",
   email_rdv: "testContact@prdv.fr",
+  email_decisionnaire: "emaildecisionnaire@rdva.fr",
   id_rco_formation: "14_AF_0000091719|14_SE_0000494236|18894",
   referrers: [referrers.LBA.code, referrers.PARCOURSUP.code],
 };
@@ -35,6 +36,7 @@ const sampleUpdateParameter = {
   formation_intitule: "Update Formation",
   formation_cfd: "260999999",
   email_rdv: "updateMail@prdv.fr",
+  email_decisionnaire: "emaildecisionnaire@rdva.fr",
   id_rco_formation: "15_554095|15_1117617|106339",
   referrers: [referrers.PARCOURSUP.code],
 };
@@ -46,6 +48,7 @@ const sampleParameters = [
     formation_intitule: "Test Formation",
     formation_cfd: "26033206",
     email_rdv: "testContact@prdv.fr",
+    email_decisionnaire: "emaildecisionnaire@rdva.fr",
     id_rco_formation: "15_554095|15_1117617|106339",
     referrers: [referrers.LBA.code],
   },
@@ -55,6 +58,7 @@ const sampleParameters = [
     formation_intitule: "Test Formation 2",
     formation_cfd: "26033205",
     email_rdv: "testContact2@prdv.fr",
+    email_decisionnaire: "emaildecisionnaire@rdva.fr",
     id_rco_formation: "15_554095|15_1117617|12345",
     referrers: [referrers.PARCOURSUP.code],
   },

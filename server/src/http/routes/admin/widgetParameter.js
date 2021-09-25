@@ -14,7 +14,14 @@ const widgetParameterSchema = Joi.object({
   formation_intitule: Joi.string().required(),
   formation_cfd: Joi.string().required(),
   code_postal: Joi.string().required(),
-  email_rdv: Joi.string().required(),
+  email_rdv: Joi.string()
+    .email({ tlds: { allow: false } })
+    .allow(null)
+    .required(),
+  email_decisionnaire: Joi.string()
+    .email({ tlds: { allow: false } })
+    .allow(null)
+    .required(),
   referrers: Joi.array().items(Joi.number()),
   id_rco_formation: Joi.string().required(),
 });
@@ -33,6 +40,13 @@ const widgetParameterImportSchema = Joi.object({
 
 const widgetParameterReferrerUpdateBatchSchema = Joi.object({
   referrers: Joi.array().items(Joi.number()).required(),
+});
+
+const widgetParameterEmailDecisionaireSchema = Joi.object({
+  etablissement_siret: Joi.string().required(),
+  email_decisionnaire: Joi.string()
+    .email({ tlds: { allow: false } })
+    .required(),
 });
 
 /**
@@ -99,7 +113,8 @@ module.exports = ({ widgetParameters }) => {
           formation: parameter.formation_intitule,
           cfd: parameter.formation_cfd,
           email: parameter.email_rdv,
-          email_catalogue: catalogueResponse?.formations.length ? catalogueResponse.formations[0].email : "",
+          email_decisionnaire: parameter.email_decisionnaire || "",
+          email_catalogue: catalogueResponse?.formations.length ? catalogueResponse?.formations[0].email : "",
           code_postal: parameter.code_postal,
           sources: parameter.referrers.map((referrer) => getReferrerById(referrer).full_name).join(", "),
         });
@@ -200,6 +215,7 @@ module.exports = ({ widgetParameters }) => {
               if (!parameterExists) {
                 return widgetParameters.findUpdateOrCreate({
                   email_rdv: parameter.email,
+                  email_decisionnaire: parameter.email_decisionnaire,
                   referrers: parameter.referrers,
                   etablissement_siret: parameter.siret_formateur,
                   id_rco_formation: formation.id_rco_formation,
@@ -225,6 +241,57 @@ module.exports = ({ widgetParameters }) => {
       }
 
       res.send({ result });
+    })
+  );
+
+  /**
+   * Updates all widgetParameter "email_decisionnaire".
+   */
+  router.put(
+    "/email-decisionnaire",
+    tryCatch(async ({ body }, res) => {
+      const {
+        etablissement_siret,
+        email_decisionnaire,
+      } = await widgetParameterEmailDecisionaireSchema.validateAsync(body, { abortEarly: false });
+      logger.info("Updating items: ", body);
+
+      const [catalogueResponse, widgetParametersDb] = await Promise.all([
+        getFormationsBySiretFormateur({ siretFormateur: etablissement_siret }),
+        widgetParameters.getParametersBySiret({ etablissement_siret }),
+      ]);
+
+      catalogueResponse.formations.map((formation) => {
+        const parameter = widgetParametersDb.find(
+          (parameter) => parameter.id_rco_formation === formation.id_rco_formation
+        );
+
+        if (parameter) {
+          return widgetParameters.findUpdateOrCreate({
+            ...parameter._doc,
+            email_decisionnaire,
+          });
+        }
+
+        return widgetParameters.findUpdateOrCreate({
+          etablissement_siret: formation.etablissement_formateur_siret,
+          etablissement_raison_sociale: formation.etablissement_formateur_entreprise_raison_sociale,
+          formation_intitule: formation.intitule_long,
+          formation_cfd: formation.cfd,
+          email_rdv: null,
+          email_decisionnaire,
+          code_postal: formation.code_postal,
+          id_rco_formation: formation.id_rco_formation,
+          referrers: [],
+        });
+      });
+
+      await widgetParameters.updateMany({
+        where: { etablissement_siret },
+        body: { $set: { email_decisionnaire } },
+      });
+
+      res.send({});
     })
   );
 
