@@ -33,59 +33,61 @@ const EditPage = () => {
   const toast = useToast();
 
   /**
+   * @description Fetch initial data.
+   * @return {Promise<void>}
+   */
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+
+      const [catalogueResponse, parametersResponse, referrers] = await Promise.all([
+        fetch(
+          `/api/catalogue/formations?query={"etablissement_formateur_siret":"${id}", "etablissement_reference_catalogue_published": true, "published": true }&page=1&limit=500`
+        ),
+        getParameters(id),
+        getReferrers(),
+      ]);
+
+      const catalogueResult = await catalogueResponse.json();
+
+      let permissions = [];
+      for (const formation of catalogueResult.formations) {
+        const parameter = parametersResponse.parameters.find(
+          (item) => item.id_rco_formation === formation.id_rco_formation
+        );
+
+        referrers.forEach((referrer) =>
+          permissions.push({
+            referrerId: referrer.code,
+            siret: formation.etablissement_formateur_siret,
+            name: referrer.full_name,
+            cfd: formation.cfd,
+            codePostal: formation.code_postal,
+            id_rco_formation: formation.id_rco_formation,
+            checked: !!parameter?.referrers.map((parameterReferrer) => parameterReferrer.code).includes(referrer.code),
+          })
+        );
+      }
+
+      setPermissions(_.uniqWith(permissions, _.isEqual));
+      setCatalogueResult(catalogueResult);
+      setParametersResult(parametersResponse);
+    } catch (error) {
+      toast({
+        title: "Une erreur est survenue durant la récupération des informations.",
+        status: "error",
+        isClosable: true,
+        position: "bottom-right",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /**
    * @description Get all parameters.
    */
   useEffect(() => {
-    async function fetchData() {
-      try {
-        setLoading(true);
-
-        const [catalogueResponse, parametersResponse, referrers] = await Promise.all([
-          fetch(
-            `/api/catalogue/formations?query={"etablissement_formateur_siret":"${id}", "etablissement_reference_catalogue_published": true, "published": true }&page=1&limit=500`
-          ),
-          getParameters(id),
-          getReferrers(),
-        ]);
-
-        const catalogueResult = await catalogueResponse.json();
-
-        let permissions = [];
-        for (const formation of catalogueResult.formations) {
-          const parameter = parametersResponse.parameters.find(
-            (item) => item.id_rco_formation === formation.id_rco_formation
-          );
-
-          referrers.forEach((referrer) =>
-            permissions.push({
-              referrerId: referrer.code,
-              siret: formation.etablissement_formateur_siret,
-              name: referrer.full_name,
-              cfd: formation.cfd,
-              codePostal: formation.code_postal,
-              id_rco_formation: formation.id_rco_formation,
-              checked: !!parameter?.referrers
-                .map((parameterReferrer) => parameterReferrer.code)
-                .includes(referrer.code),
-            })
-          );
-        }
-
-        setPermissions(_.uniqWith(permissions, _.isEqual));
-        setCatalogueResult(catalogueResult);
-        setParametersResult(parametersResponse);
-      } catch (error) {
-        toast({
-          title: "Une erreur est survenue durant la récupération des informations.",
-          status: "error",
-          isClosable: true,
-          position: "bottom-right",
-        });
-      } finally {
-        setLoading(false);
-      }
-    }
-
     fetchData();
   }, [id, toast]);
 
@@ -140,33 +142,67 @@ const EditPage = () => {
   };
 
   /**
-   * @description Inserts in database or updates.
-   * @param {Object} params
-   * @param {Object} params.formation
-   * @param {Object} params.parameter
-   * @param {String} params.email
-   * @returns {Promise<void>}
+   * @description Submits "email decisionnaire".
+   * @param {string} siret
+   * @param {string|null} emailDecisionnaireInput
+   * @return {Promise<void>}
    */
-  const upsertParameter = async ({ formation, parameter, email, formationPermissions }) => {
-    const emailRdv = email || parameter?.email_rdv;
-
-    if (!emailRdv) {
+  const submitEmailDecisionnaire = async (siret, emailDecisionnaireInput) => {
+    if (emailDecisionnaireInput && !emailValidator.validate(emailDecisionnaireInput)) {
       toast({
-        title: "Vous devez renseigner un email.",
-        status: "info",
-        isClosable: true,
-        position: "bottom-right",
-      });
-      return;
-    }
-
-    if (!emailValidator.validate(emailRdv)) {
-      toast({
-        title: "Email non valide.",
+        title: "Email décisionnaire non valide.",
         status: "error",
         isClosable: true,
         position: "bottom-right",
       });
+
+      return;
+    }
+
+    await _put("/api/widget-parameters/email-decisionnaire", {
+      etablissement_siret: siret,
+      email_decisionnaire: emailDecisionnaireInput,
+    });
+
+    // Refresh data
+    const parametersResponse = await getParameters(id);
+    setParametersResult(parametersResponse);
+    toast({
+      title: "Configuration enregistrée avec succès.",
+      status: "success",
+      isClosable: true,
+      position: "bottom-right",
+    });
+  };
+
+  /**
+   * @description Returns "email gestionnaire" from parameters.
+   * @param {Object} parameters
+   * @return {null|string}
+   */
+  const getEmailGestionnaire = (parameters) => {
+    const parameterFound = parameters.find((parameter) => parameter.email_decisionnaire);
+
+    return parameterFound ? parameterFound.email_decisionnaire : null;
+  };
+
+  /**
+   * @description Inserts in database or updates.
+   * @param {Object} params
+   * @param {Object} params.formation
+   * @param {Object} params.parameter
+   * @param {String} params.emailRdv
+   * @returns {Promise<void>}
+   */
+  const upsertParameter = async ({ formation, parameter, emailRdv, formationPermissions }) => {
+    if (emailRdv && !emailValidator.validate(emailRdv)) {
+      toast({
+        title: "Email de contact non valide.",
+        status: "error",
+        isClosable: true,
+        position: "bottom-right",
+      });
+
       return;
     }
 
@@ -176,7 +212,8 @@ const EditPage = () => {
       formation_intitule: formation.intitule_long,
       code_postal: formation.code_postal,
       formation_cfd: formation.cfd,
-      email_rdv: emailRdv,
+      email_rdv: emailRdv || null,
+      email_decisionnaire: parameter?.email_decisionnaire || null,
       referrers: formationPermissions.filter((item) => item.checked).map((item) => item.referrerId),
       id_rco_formation: formation.id_rco_formation,
     };
@@ -219,7 +256,8 @@ const EditPage = () => {
           <EtablissementComponent
             raisonSociale={catalogueResult.formations[0].etablissement_formateur_entreprise_raison_sociale}
             siret={catalogueResult.formations[0].etablissement_formateur_siret}
-            uai={catalogueResult.formations[0].etablissement_formateur_uai}
+            emailDecisionnaire={getEmailGestionnaire(parametersResult.parameters)}
+            emailDecisionnaireSubmit={submitEmailDecisionnaire}
           />
           <Flex bg="white" mt={10} border="1px solid #E0E5ED" borderRadius="4px" borderBottom="none">
             <Text flex="1" fontSize="16px" p={5}>
@@ -253,6 +291,8 @@ const EditPage = () => {
               <Tbody>
                 {catalogueResult.formations.map((formation) => {
                   const emailRef = createRef();
+                  const emailFocusRef = createRef();
+                  const emailDecisionnaireRef = createRef();
                   const parameter = parametersResult.parameters.find(
                     (item) => item.id_rco_formation === formation.id_rco_formation
                   );
@@ -269,12 +309,18 @@ const EditPage = () => {
                       <Td>{formation.cfd}</Td>
                       <Td>{formation.code_postal}</Td>
                       <Td>{formation.localite}</Td>
-                      <Td>
+                      <Td onClick={() => emailFocusRef.current.focus()}>
                         <Editable
-                          defaultValue={parameter?.email_rdv || "..."}
-                          style={{ border: "solid #dee2e6 1px", padding: 5, marginRight: 10, borderRadius: 4 }}
+                          defaultValue={parameter?.email_rdv}
+                          style={{
+                            border: "solid #dee2e6 1px",
+                            padding: 5,
+                            marginRight: 10,
+                            borderRadius: 4,
+                            minWidth: 200,
+                          }}
                         >
-                          <EditablePreview />
+                          <EditablePreview ref={emailFocusRef} />
                           <EditableInput ref={emailRef} type="email" _focus={{ border: "none" }} />
                         </Editable>
                       </Td>
@@ -306,7 +352,7 @@ const EditPage = () => {
                             upsertParameter({
                               formation,
                               parameter,
-                              email: emailRef.current.value,
+                              emailRdv: emailRef.current.value,
                               formationPermissions,
                             })
                           }

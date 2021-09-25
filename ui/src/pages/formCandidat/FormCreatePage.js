@@ -4,7 +4,7 @@ import * as Yup from "yup";
 import * as emailValidator from "email-validator";
 import * as qs from "query-string";
 import { useHistory } from "react-router-dom";
-import { Text, Input, Button, Box } from "@chakra-ui/react";
+import { Input, Button, Box, Spinner, Text } from "@chakra-ui/react";
 import { ContactCfaComponent } from "./layout/ContactCfaComponent";
 import { FormLayoutComponent } from "./layout/FormLayoutComponent";
 import { _post } from "../../common/httpClient";
@@ -123,8 +123,12 @@ export const FormCreatePage = (props) => {
 
   return (
     <FormLayoutComponent bg="white">
-      {loading && <span>Chargement des données...</span>}
-      {error && <span> {error} </span>}
+      {loading && <Spinner display="block" mx="auto" size="xl" mt="10rem" />}
+      {error && (
+        <Box mt="5rem" textAlign="center">
+          {error}
+        </Box>
+      )}
       {data && (
         <Box>
           <Formik

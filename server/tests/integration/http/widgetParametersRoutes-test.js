@@ -93,6 +93,7 @@ httpTests(__filename, ({ startServer }) => {
     assert.deepStrictEqual(response.data.formation_intitule, sampleParameter.formation_intitule);
     assert.deepStrictEqual(response.data.formation_cfd, sampleParameter.formation_cfd);
     assert.deepStrictEqual(response.data.email_rdv, sampleParameter.email_rdv);
+    assert.deepStrictEqual(response.data.email_decisionnaire, sampleParameter.email_decisionnaire);
     assert.deepStrictEqual(response.data.referrers.includes(referrers.LBA.code), true);
 
     // Check query db
@@ -102,6 +103,7 @@ httpTests(__filename, ({ startServer }) => {
     assert.deepStrictEqual(found.formation_intitule, sampleParameter.formation_intitule);
     assert.deepStrictEqual(found.formation_cfd, sampleParameter.formation_cfd);
     assert.deepStrictEqual(found.email_rdv, sampleParameter.email_rdv);
+    assert.deepStrictEqual(found.email_decisionnaire, sampleParameter.email_decisionnaire);
     assert.deepStrictEqual(found.referrers.includes(referrers.LBA.code), true);
   });
 
@@ -115,6 +117,7 @@ httpTests(__filename, ({ startServer }) => {
       formation_intitule: sampleParameter.formation_intitule,
       formation_cfd: sampleParameter.formation_cfd,
       email_rdv: sampleParameter.email_rdv,
+      email_decisionnaire: sampleParameter.email_decisionnaire,
       referrers: sampleParameter.referrers,
     });
 
@@ -133,6 +136,7 @@ httpTests(__filename, ({ startServer }) => {
     assert.deepStrictEqual(response.data.formation_intitule, sampleParameter.formation_intitule);
     assert.deepStrictEqual(response.data.formation_cfd, sampleParameter.formation_cfd);
     assert.deepStrictEqual(response.data.email_rdv, sampleParameter.email_rdv);
+    assert.deepStrictEqual(response.data.email_decisionnaire, sampleParameter.email_decisionnaire);
     assert.deepStrictEqual(response.data.referrers.includes(referrers.LBA.code), true);
   });
 
@@ -152,6 +156,7 @@ httpTests(__filename, ({ startServer }) => {
     assert.deepStrictEqual(addedResponse.data.formation_intitule, sampleParameter.formation_intitule);
     assert.deepStrictEqual(addedResponse.data.formation_cfd, sampleParameter.formation_cfd);
     assert.deepStrictEqual(addedResponse.data.email_rdv, sampleParameter.email_rdv);
+    assert.deepStrictEqual(addedResponse.data.email_decisionnaire, sampleParameter.email_decisionnaire);
     assert.deepStrictEqual(addedResponse.data.referrers.includes(referrers.LBA.code), true);
 
     // Check query db
@@ -167,6 +172,7 @@ httpTests(__filename, ({ startServer }) => {
     assert.deepStrictEqual(getByIdResponse.data.formation_intitule, sampleParameter.formation_intitule);
     assert.deepStrictEqual(getByIdResponse.data.formation_cfd, sampleParameter.formation_cfd);
     assert.deepStrictEqual(getByIdResponse.data.email_rdv, sampleParameter.email_rdv);
+    assert.deepStrictEqual(getByIdResponse.data.email_decisionnaire, sampleParameter.email_decisionnaire);
     assert.deepStrictEqual(getByIdResponse.data.referrers.includes(referrers.LBA.code), true);
   });
 
@@ -186,6 +192,7 @@ httpTests(__filename, ({ startServer }) => {
     assert.deepStrictEqual(addedResponse.data.formation_intitule, sampleParameter.formation_intitule);
     assert.deepStrictEqual(addedResponse.data.formation_cfd, sampleParameter.formation_cfd);
     assert.deepStrictEqual(addedResponse.data.email_rdv, sampleParameter.email_rdv);
+    assert.deepStrictEqual(addedResponse.data.email_decisionnaire, sampleParameter.email_decisionnaire);
     assert.deepStrictEqual(addedResponse.data.referrers.includes(referrers.LBA.code), true);
 
     // Check query db
@@ -205,6 +212,7 @@ httpTests(__filename, ({ startServer }) => {
     assert.deepStrictEqual(updateResponse.data.formation_intitule, sampleUpdateParameter.formation_intitule);
     assert.deepStrictEqual(updateResponse.data.formation_cfd, sampleUpdateParameter.formation_cfd);
     assert.deepStrictEqual(updateResponse.data.email_rdv, sampleUpdateParameter.email_rdv);
+    assert.deepStrictEqual(updateResponse.data.email_decisionnaire, sampleUpdateParameter.email_decisionnaire);
     assert.deepStrictEqual(updateResponse.data.referrers.includes(referrers.PARCOURSUP.code), true);
   });
 
@@ -224,6 +232,7 @@ httpTests(__filename, ({ startServer }) => {
     assert.deepStrictEqual(addedResponse.data.formation_intitule, sampleParameter.formation_intitule);
     assert.deepStrictEqual(addedResponse.data.formation_cfd, sampleParameter.formation_cfd);
     assert.deepStrictEqual(addedResponse.data.email_rdv, sampleParameter.email_rdv);
+    assert.deepStrictEqual(addedResponse.data.email_decisionnaire, sampleParameter.email_decisionnaire);
     assert.deepStrictEqual(addedResponse.data.referrers.includes(referrers.LBA.code), true);
 
     // Check query db
@@ -261,6 +270,33 @@ httpTests(__filename, ({ startServer }) => {
     assert.deepStrictEqual(updateResponse.status, 200);
   });
 
+  it("Vérifie qu'on peut mettre à jours l'ensemble des email décisionnaires de toutes les formations", async () => {
+    const { httpClient, createAndLogUser, components } = await startServer();
+
+    await components.widgetParameters.createParameter({
+      etablissement_siret: sampleParameter.etablissement_siret,
+      etablissement_raison_sociale: sampleParameter.etablissement_raison_sociale,
+      formation_intitule: sampleParameter.formation_intitule,
+      formation_cfd: sampleParameter.formation_cfd,
+      email_rdv: sampleParameter.email_rdv,
+      email_decisionnaire: sampleParameter.email_decisionnaire,
+      referrers: sampleParameter.referrers,
+    });
+
+    const bearerToken = await createAndLogUser("userAdmin", "password", { role: administrator });
+    const updateResponse = await httpClient.put(
+      "/api/widget-parameters/email-decisionnaire",
+      {
+        etablissement_siret: sampleParameter.etablissement_siret,
+        email_decisionnaire: sampleParameter.email_decisionnaire,
+      },
+      { headers: bearerToken }
+    );
+
+    // Check API Response
+    assert.deepStrictEqual(updateResponse.status, 200);
+  });
+
   it("Vérifie qu'on ne peut pas mettre à jours l'ensemble des referrers de toutes les formations avec un referrer non existant", async () => {
     const { httpClient, createAndLogUser } = await startServer();
 
@@ -284,6 +320,7 @@ httpTests(__filename, ({ startServer }) => {
       formation_intitule: sampleParameter.formation_intitule,
       formation_cfd: sampleParameter.formation_cfd,
       email_rdv: sampleParameter.email_rdv,
+      email_decisionnaire: sampleParameter.email_decisionnaire,
       referrers: sampleParameter.referrers,
     });
 
