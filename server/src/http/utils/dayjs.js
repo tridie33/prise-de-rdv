@@ -15,7 +15,7 @@ const formatDate = (date) => {
     return;
   }
 
-  return dayjs.tz(date, "Europe/Paris").format("YYYY-MM-DD HH:mm:ss");
+  return dayjs.tz(date, "Europe/Paris").format("DD/MM/YYYY HH:mm:ss");
 };
 
 module.exports = {

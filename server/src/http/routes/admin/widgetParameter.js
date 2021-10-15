@@ -6,7 +6,9 @@ const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const { WidgetParameter } = require("../../../common/model");
 const logger = require("../../../common/logger");
 const { getReferrerById } = require("../../../common/model/constants/referrers");
+const { optMode } = require("../../../common/model/constants/etablissement");
 const { getFormationsBySiretFormateur, getFormationsByIdRcoFormationsRaw } = require("../../utils/catalogue");
+const { dayjs } = require("../../utils/dayjs");
 
 const widgetParameterSchema = Joi.object({
   etablissement_siret: Joi.string().required(),
@@ -15,10 +17,6 @@ const widgetParameterSchema = Joi.object({
   formation_cfd: Joi.string().required(),
   code_postal: Joi.string().required(),
   email_rdv: Joi.string()
-    .email({ tlds: { allow: false } })
-    .allow(null)
-    .required(),
-  email_decisionnaire: Joi.string()
     .email({ tlds: { allow: false } })
     .allow(null)
     .required(),
@@ -42,17 +40,10 @@ const widgetParameterReferrerUpdateBatchSchema = Joi.object({
   referrers: Joi.array().items(Joi.number()).required(),
 });
 
-const widgetParameterEmailDecisionaireSchema = Joi.object({
-  etablissement_siret: Joi.string().required(),
-  email_decisionnaire: Joi.string()
-    .email({ tlds: { allow: false } })
-    .required(),
-});
-
 /**
  * Sample entity route module for GET
  */
-module.exports = ({ widgetParameters }) => {
+module.exports = ({ widgetParameters, etablissements }) => {
   const router = express.Router();
 
   /**
@@ -68,10 +59,17 @@ module.exports = ({ widgetParameters }) => {
 
       const allData = await WidgetParameter.paginate(query, { page, limit });
 
-      const parameters = allData.docs.map((parameter) => ({
-        ...parameter._doc,
-        referrers: parameter.referrers.map(getReferrerById),
-      }));
+      const parameters = await Promise.all(
+        allData.docs.map(async (parameter) => {
+          const etablissement = await etablissements.findOne({ siret_formateur: parameter.etablissement_siret });
+
+          return {
+            etablissement_raison_sociale: etablissement?.raison_sociale || "N/C",
+            ...parameter._doc,
+            referrers: parameter.referrers.map(getReferrerById),
+          };
+        })
+      );
 
       return res.send({
         parameters,
@@ -106,14 +104,15 @@ module.exports = ({ widgetParameters }) => {
           });
         }
 
+        const etablissement = await etablissements.findOne({ siret_formateur: parameter.etablissement_siret });
+
         parameters.push({
           siret: parameter.etablissement_siret,
-          raison_sociale: parameter.etablissement_raison_sociale,
+          raison_sociale: etablissement?.raison_sociale,
           id_rco_formation: parameter.id_rco_formation,
           formation: parameter.formation_intitule,
           cfd: parameter.formation_cfd,
           email: parameter.email_rdv,
-          email_decisionnaire: parameter.email_decisionnaire || "",
           email_catalogue: catalogueResponse?.formations.length ? catalogueResponse?.formations[0].email : "",
           code_postal: parameter.code_postal,
           sources: parameter.referrers.map((referrer) => getReferrerById(referrer).full_name).join(", "),
@@ -215,7 +214,6 @@ module.exports = ({ widgetParameters }) => {
               if (!parameterExists) {
                 return widgetParameters.findUpdateOrCreate({
                   email_rdv: parameter.email,
-                  email_decisionnaire: parameter.email_decisionnaire,
                   referrers: parameter.referrers,
                   etablissement_siret: parameter.siret_formateur,
                   id_rco_formation: formation.id_rco_formation,
@@ -228,6 +226,10 @@ module.exports = ({ widgetParameters }) => {
             })
           );
 
+          await etablissements.findOneAndUpdate(
+            { siret_formateur: parameter.siret_formateur, opt_mode: null },
+            { opt_mode: optMode.OPT_IN, opt_in_activated_at: dayjs().format() }
+          );
           result.push({
             ...parameter,
             formations: widgetParametersCreated.filter(Boolean),
@@ -245,57 +247,6 @@ module.exports = ({ widgetParameters }) => {
   );
 
   /**
-   * Updates all widgetParameter "email_decisionnaire".
-   */
-  router.put(
-    "/email-decisionnaire",
-    tryCatch(async ({ body }, res) => {
-      const {
-        etablissement_siret,
-        email_decisionnaire,
-      } = await widgetParameterEmailDecisionaireSchema.validateAsync(body, { abortEarly: false });
-      logger.info("Updating items: ", body);
-
-      const [catalogueResponse, widgetParametersDb] = await Promise.all([
-        getFormationsBySiretFormateur({ siretFormateur: etablissement_siret }),
-        widgetParameters.getParametersBySiret({ etablissement_siret }),
-      ]);
-
-      catalogueResponse.formations.map((formation) => {
-        const parameter = widgetParametersDb.find(
-          (parameter) => parameter.id_rco_formation === formation.id_rco_formation
-        );
-
-        if (parameter) {
-          return widgetParameters.findUpdateOrCreate({
-            ...parameter._doc,
-            email_decisionnaire,
-          });
-        }
-
-        return widgetParameters.findUpdateOrCreate({
-          etablissement_siret: formation.etablissement_formateur_siret,
-          etablissement_raison_sociale: formation.etablissement_formateur_entreprise_raison_sociale,
-          formation_intitule: formation.intitule_long,
-          formation_cfd: formation.cfd,
-          email_rdv: null,
-          email_decisionnaire,
-          code_postal: formation.code_postal,
-          id_rco_formation: formation.id_rco_formation,
-          referrers: [],
-        });
-      });
-
-      await widgetParameters.updateMany({
-        where: { etablissement_siret },
-        body: { $set: { email_decisionnaire } },
-      });
-
-      res.send({});
-    })
-  );
-
-  /**
    * Updates all widgetParameter referrers.
    */
   router.put(
@@ -307,10 +258,7 @@ module.exports = ({ widgetParameters }) => {
       // Throw an error if referrer code isn't existing
       body.referrers.map(getReferrerById);
 
-      const parameters = await widgetParameters.updateMany({
-        where: { referrers: { $ne: [] } },
-        body: { $set: { referrers: body.referrers } },
-      });
+      const parameters = await widgetParameters.updateMany({ referrers: { $ne: [] } }, { referrers: body.referrers });
 
       res.send(parameters);
     })

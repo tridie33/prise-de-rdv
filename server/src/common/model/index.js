@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const { mongooseInstance } = require("../mongodb");
-const { userSchema, appointmentSchema, widgetParameterSchema } = require("../model/schema");
+const { userSchema, appointmentSchema, widgetParameterSchema, etablissementSchema } = require("../model/schema");
 
 const getMongoostaticModel = (modelName, schema, instanceMongoose = mongooseInstance) => {
   const Schema = new instanceMongoose.Schema(schema);
@@ -39,6 +39,11 @@ if (!widgetParameterModel) {
   widgetParameterModel = getModel("widgetParameter", widgetParameterSchema);
 }
 
+let etablissementModel = null;
+if (!etablissementModel) {
+  etablissementModel = getModel("etablissement", etablissementSchema);
+}
+
 let logModel = null;
 if (!logModel) {
   logModel = getMongooseModel("log");
@@ -50,4 +55,5 @@ module.exports = {
   WidgetParameter: widgetParameterModel,
   Log: logModel,
   Appointment: appointmentModel,
+  Etablissement: etablissementModel,
 };

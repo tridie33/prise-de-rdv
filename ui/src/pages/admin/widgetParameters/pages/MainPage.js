@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { sortBy } from "lodash";
-import { Tbody, Tr, Thead, Tag, Td, Table, Flex, Box, Text, Button, useToast } from "@chakra-ui/react";
+import { Tbody, Tr, Thead, Tag, Td, Table, Flex, Box, Text, useToast, Button } from "@chakra-ui/react";
 import { _get } from "../../../../common/httpClient";
 import downloadFile from "../../../../common/utils/downloadFile";
 import { Download } from "../../../../theme/components/icons";
@@ -17,9 +17,8 @@ const MainPage = () => {
    */
   useEffect(() => {
     async function fetchParameters() {
+      setLoading(true);
       try {
-        setLoading(true);
-
         const response = await _get(
           '/api/widget-parameters/parameters?query={ "referrers": { "$ne": [] } }&limit=1000'
         );
@@ -57,8 +56,8 @@ const MainPage = () => {
         <Download onClick={download} color="#9AA0AC" cursor="pointer" w="16px" h="16px" mt={6} mr={5} />
       </Flex>
       <Box border="1px solid #E0E5ED" overflow="auto" mx="10rem" cursor="pointer">
-        {loading && <Button variant="primary" />}
-        {parametersResult && !loading && (
+        {loading && <Button loading color="primary" block />}
+        {parametersResult && (
           <Table w="204rem" bg="white">
             <Thead>
               <Tr color="#ADB2BC">
