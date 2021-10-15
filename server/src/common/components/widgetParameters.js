@@ -8,10 +8,11 @@ module.exports = async () => ({
    * @param {String} formation_intitule
    * @param {String} formation_cfd
    * @param {String} email_rdv
-   * @param {String} email_decisionnaire
    * @param {String} code_postal
    * @param {Number[]} referrers
    * @param {String} id_rco_formation
+   * @param {String} catalogue_published
+   * @param {Date} last_catalogue_sync
    * @returns {Promise<*>}
    */
   createParameter: async ({
@@ -20,10 +21,11 @@ module.exports = async () => ({
     formation_intitule,
     formation_cfd,
     email_rdv,
-    email_decisionnaire,
     code_postal,
     referrers,
     id_rco_formation,
+    catalogue_published,
+    last_catalogue_sync,
   }) => {
     const widgetParameter = new WidgetParameter({
       etablissement_siret,
@@ -31,10 +33,11 @@ module.exports = async () => ({
       formation_intitule,
       formation_cfd,
       email_rdv,
-      email_decisionnaire,
       referrers,
       code_postal,
       id_rco_formation,
+      catalogue_published,
+      last_catalogue_sync,
     });
     await widgetParameter.save();
 
@@ -106,11 +109,11 @@ module.exports = async () => ({
 
   /**
    * @description Update many documents.
-   * @param {Object} where
-   * @param {Object} body
+   * @param {Object} conditions
+   * @param {Object} values
    * @returns {Promise<WidgetParameter>}
    */
-  updateMany: ({ where, body }) => WidgetParameter.updateMany(where, body),
+  updateMany: (conditions, values) => WidgetParameter.updateMany(conditions, values, { new: true, upsert: true }),
 
   /**
    * @description Returns all formations that have

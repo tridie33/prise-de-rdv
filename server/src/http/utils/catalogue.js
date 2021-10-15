@@ -52,9 +52,16 @@ const getFormationsByIdParcoursup = ({ idParcoursup }) =>
  * @param {Object} query - Mongo query
  * @param {Number} page - For pagination
  * @param {Number} limit - Item limit
+ * @param {boolean} enableCache - Flag to enable or disable cache (default: true)
  * @returns {Promise<Object>}
  */
-const getFormations = async (query, page = 1, limit = 500) => {
+const getFormations = async (query, page = 1, limit = 500, enableCache = true) => {
+  let axiosConfig = {};
+
+  if (enableCache) {
+    axiosConfig = { adapter: (config) => AxiosRedis.ADAPTER(config, axiosRedis) };
+  }
+
   const { data } = await axios.post(
     `${config.mnaCatalog.endpoint}/v1/entity/formations2021`,
     {
@@ -67,18 +74,19 @@ const getFormations = async (query, page = 1, limit = 500) => {
         etablissement_formateur_adresse: 1,
         etablissement_formateur_code_postal: 1,
         etablissement_formateur_nom_departement: 1,
+        etablissement_formateur_localite: 1,
         lieu_formation_adresse: 1,
         etablissement_formateur_siret: 1,
+        etablissement_gestionnaire_siret: 1,
         cfd: 1,
         localite: 1,
         email: 1,
+        published: 1,
       }),
       page,
       limit,
     },
-    {
-      adapter: (config) => AxiosRedis.ADAPTER(config, axiosRedis),
-    }
+    axiosConfig
   );
 
   return data;

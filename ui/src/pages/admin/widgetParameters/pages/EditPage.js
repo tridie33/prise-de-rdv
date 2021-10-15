@@ -29,6 +29,7 @@ const EditPage = () => {
   const [parametersResult, setParametersResult] = useState();
   const [catalogueResult, setCatalogueResult] = useState();
   const [permissions, setPermissions] = useState();
+  const [etablissement, setEtablissement] = useState();
   const [loading, setLoading] = useState(false);
   const toast = useToast();
 
@@ -40,12 +41,13 @@ const EditPage = () => {
     try {
       setLoading(true);
 
-      const [catalogueResponse, parametersResponse, referrers] = await Promise.all([
+      const [catalogueResponse, parametersResponse, referrers, etablissementResponse] = await Promise.all([
         fetch(
           `/api/catalogue/formations?query={"etablissement_formateur_siret":"${id}", "etablissement_reference_catalogue_published": true, "published": true }&page=1&limit=500`
         ),
         getParameters(id),
         getReferrers(),
+        getEtablissement(id),
       ]);
 
       const catalogueResult = await catalogueResponse.json();
@@ -72,6 +74,7 @@ const EditPage = () => {
       setPermissions(_.uniqWith(permissions, _.isEqual));
       setCatalogueResult(catalogueResult);
       setParametersResult(parametersResponse);
+      setEtablissement(etablissementResponse.etablissements[0]);
     } catch (error) {
       toast({
         title: "Une erreur est survenue durant la récupération des informations.",
@@ -98,6 +101,13 @@ const EditPage = () => {
    */
   const getParameters = (id) =>
     _get(`/api/widget-parameters/parameters?query={"etablissement_siret":"${id}"}&limit=1000`);
+
+  /**
+   * @description Returns etablissement from its SIRET.
+   * @param {String} siret
+   * @returns {Promise<*>}
+   */
+  const getEtablissement = (siret) => _get(`/api/etablissements/?query={"siret_formateur":"${siret}"}`);
 
   /**
    * @description Returns all referrers.
@@ -142,51 +152,6 @@ const EditPage = () => {
   };
 
   /**
-   * @description Submits "email decisionnaire".
-   * @param {string} siret
-   * @param {string|null} emailDecisionnaireInput
-   * @return {Promise<void>}
-   */
-  const submitEmailDecisionnaire = async (siret, emailDecisionnaireInput) => {
-    if (emailDecisionnaireInput && !emailValidator.validate(emailDecisionnaireInput)) {
-      toast({
-        title: "Email décisionnaire non valide.",
-        status: "error",
-        isClosable: true,
-        position: "bottom-right",
-      });
-
-      return;
-    }
-
-    await _put("/api/widget-parameters/email-decisionnaire", {
-      etablissement_siret: siret,
-      email_decisionnaire: emailDecisionnaireInput,
-    });
-
-    // Refresh data
-    const parametersResponse = await getParameters(id);
-    setParametersResult(parametersResponse);
-    toast({
-      title: "Configuration enregistrée avec succès.",
-      status: "success",
-      isClosable: true,
-      position: "bottom-right",
-    });
-  };
-
-  /**
-   * @description Returns "email gestionnaire" from parameters.
-   * @param {Object} parameters
-   * @return {null|string}
-   */
-  const getEmailGestionnaire = (parameters) => {
-    const parameterFound = parameters.find((parameter) => parameter.email_decisionnaire);
-
-    return parameterFound ? parameterFound.email_decisionnaire : null;
-  };
-
-  /**
    * @description Inserts in database or updates.
    * @param {Object} params
    * @param {Object} params.formation
@@ -212,8 +177,7 @@ const EditPage = () => {
       formation_intitule: formation.intitule_long,
       code_postal: formation.code_postal,
       formation_cfd: formation.cfd,
-      email_rdv: emailRdv || null,
-      email_decisionnaire: parameter?.email_decisionnaire || null,
+      email_rdv: `${emailRdv}`.toLowerCase() || null,
       referrers: formationPermissions.filter((item) => item.checked).map((item) => item.referrerId),
       id_rco_formation: formation.id_rco_formation,
     };
@@ -251,14 +215,9 @@ const EditPage = () => {
   }
   return (
     <Box mx={["1rem", "1rem", "10rem", "10rem"]}>
-      {parametersResult && catalogueResult && !loading && (
+      {parametersResult && catalogueResult && etablissement && !loading && (
         <>
-          <EtablissementComponent
-            raisonSociale={catalogueResult.formations[0].etablissement_formateur_entreprise_raison_sociale}
-            siret={catalogueResult.formations[0].etablissement_formateur_siret}
-            emailDecisionnaire={getEmailGestionnaire(parametersResult.parameters)}
-            emailDecisionnaireSubmit={submitEmailDecisionnaire}
-          />
+          <EtablissementComponent id={etablissement._id} />
           <Flex bg="white" mt={10} border="1px solid #E0E5ED" borderRadius="4px" borderBottom="none">
             <Text flex="1" fontSize="16px" p={5}>
               Formations
@@ -283,6 +242,7 @@ const EditPage = () => {
                 <Td textStyle="sm">LOCALITE</Td>
                 <Td textStyle="sm">EMAIL</Td>
                 <Td textStyle="sm">EMAIL CATALOGUE</Td>
+                <Td textStyle="sm">PUBLIE SUR LE CATALOGUE</Td>
                 <Td textStyle="sm">
                   SOURCE <br />
                 </Td>
@@ -292,7 +252,6 @@ const EditPage = () => {
                 {catalogueResult.formations.map((formation) => {
                   const emailRef = createRef();
                   const emailFocusRef = createRef();
-                  const emailDecisionnaireRef = createRef();
                   const parameter = parametersResult.parameters.find(
                     (item) => item.id_rco_formation === formation.id_rco_formation
                   );
@@ -325,6 +284,7 @@ const EditPage = () => {
                         </Editable>
                       </Td>
                       <Td>{formation.email || "N/C"}</Td>
+                      <Td>{parameter?.catalogue_published ? "Oui" : "Non"}</Td>
                       <Td>
                         {formationPermissions.map((permission) => (
                           <>

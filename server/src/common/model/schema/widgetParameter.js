@@ -2,17 +2,17 @@ const widgetParameterSchema = {
   etablissement_siret: {
     type: String,
     default: null,
-    description: "Siret du cfa formateur",
-  },
-  etablissement_raison_sociale: {
-    type: String,
-    default: null,
-    description: "Raison sociale du cfa formateur",
+    description: "Siret formateur",
   },
   formation_intitule: {
     type: String,
     default: null,
     description: "Intitulé long de la formation autorisée",
+  },
+  code_postal: {
+    type: String,
+    default: null,
+    description: "Code postal du lieu de formation",
   },
   formation_cfd: {
     type: String,
@@ -24,16 +24,6 @@ const widgetParameterSchema = {
     default: null,
     description: "Adresse email pour la prise de RDV",
   },
-  email_decisionnaire: {
-    type: String,
-    default: null,
-    description: "Adresse email du décisionnaire pour la prise de RDV",
-  },
-  code_postal: {
-    type: String,
-    default: null,
-    description: "Code postal du lieu de formation",
-  },
   referrers: {
     type: [Object],
     default: [],
@@ -43,6 +33,16 @@ const widgetParameterSchema = {
     type: String,
     default: null,
     description: "Id RCO formation",
+  },
+  catalogue_published: {
+    type: Boolean,
+    default: null,
+    description: "Si la formation est publiée sur le Catalogue",
+  },
+  last_catalogue_sync: {
+    type: Date,
+    default: Date.now,
+    description: "Date de la dernière synchronisation avec le Catalogue",
   },
 };
 

@@ -11,7 +11,6 @@ integrationTests(__filename, () => {
 
     const created = await createParameter({
       etablissement_siret: sampleParameter.etablissement_siret,
-      etablissement_raison_sociale: sampleParameter.etablissement_raison_sociale,
       formation_intitule: sampleParameter.formation_intitule,
       formation_cfd: sampleParameter.formation_cfd,
       email_rdv: sampleParameter.email_rdv,
@@ -20,7 +19,6 @@ integrationTests(__filename, () => {
 
     // Check creation
     assert.deepStrictEqual(created.etablissement_siret, sampleParameter.etablissement_siret);
-    assert.deepStrictEqual(created.etablissement_raison_sociale, sampleParameter.etablissement_raison_sociale);
     assert.deepStrictEqual(created.formation_intitule, sampleParameter.formation_intitule);
     assert.deepStrictEqual(created.formation_cfd, sampleParameter.formation_cfd);
     assert.deepStrictEqual(created.email_rdv, sampleParameter.email_rdv);
@@ -29,7 +27,6 @@ integrationTests(__filename, () => {
     // Check query db
     const found = await WidgetParameter.findById(created._id);
     assert.deepStrictEqual(found.etablissement_siret, sampleParameter.etablissement_siret);
-    assert.deepStrictEqual(found.etablissement_raison_sociale, sampleParameter.etablissement_raison_sociale);
     assert.deepStrictEqual(found.formation_intitule, sampleParameter.formation_intitule);
     assert.deepStrictEqual(found.formation_cfd, sampleParameter.formation_cfd);
     assert.deepStrictEqual(found.email_rdv, sampleParameter.email_rdv);
@@ -41,7 +38,6 @@ integrationTests(__filename, () => {
 
     const created = await createParameter({
       etablissement_siret: sampleParameter.etablissement_siret,
-      etablissement_raison_sociale: sampleParameter.etablissement_raison_sociale,
       formation_intitule: sampleParameter.formation_intitule,
       formation_cfd: sampleParameter.formation_cfd,
       email_rdv: sampleParameter.email_rdv,
@@ -50,7 +46,6 @@ integrationTests(__filename, () => {
 
     // Check creation
     assert.deepStrictEqual(created.etablissement_siret, sampleParameter.etablissement_siret);
-    assert.deepStrictEqual(created.etablissement_raison_sociale, sampleParameter.etablissement_raison_sociale);
     assert.deepStrictEqual(created.formation_intitule, sampleParameter.formation_intitule);
     assert.deepStrictEqual(created.formation_cfd, sampleParameter.formation_cfd);
     assert.deepStrictEqual(created.email_rdv, sampleParameter.email_rdv);
@@ -68,7 +63,6 @@ integrationTests(__filename, () => {
 
     const created = await createParameter({
       etablissement_siret: sampleParameter.etablissement_siret,
-      etablissement_raison_sociale: sampleParameter.etablissement_raison_sociale,
       formation_intitule: sampleParameter.formation_intitule,
       formation_cfd: sampleParameter.formation_cfd,
       email_rdv: sampleParameter.email_rdv,
@@ -77,7 +71,6 @@ integrationTests(__filename, () => {
 
     // Check creation
     assert.deepStrictEqual(created.etablissement_siret, sampleParameter.etablissement_siret);
-    assert.deepStrictEqual(created.etablissement_raison_sociale, sampleParameter.etablissement_raison_sociale);
     assert.deepStrictEqual(created.formation_intitule, sampleParameter.formation_intitule);
     assert.deepStrictEqual(created.formation_cfd, sampleParameter.formation_cfd);
     assert.deepStrictEqual(created.email_rdv, sampleParameter.email_rdv);
@@ -88,7 +81,6 @@ integrationTests(__filename, () => {
     // Check update
     const found = await WidgetParameter.findById(created._id);
     assert.deepStrictEqual(found.etablissement_siret, sampleUpdateParameter.etablissement_siret);
-    assert.deepStrictEqual(found.etablissement_raison_sociale, sampleUpdateParameter.etablissement_raison_sociale);
     assert.deepStrictEqual(found.formation_intitule, sampleUpdateParameter.formation_intitule);
     assert.deepStrictEqual(found.formation_cfd, sampleUpdateParameter.formation_cfd);
     assert.deepStrictEqual(found.email_rdv, sampleUpdateParameter.email_rdv);
@@ -100,7 +92,6 @@ integrationTests(__filename, () => {
 
     const created = await createParameter({
       etablissement_siret: sampleParameter.etablissement_siret,
-      etablissement_raison_sociale: sampleParameter.etablissement_raison_sociale,
       formation_intitule: sampleParameter.formation_intitule,
       formation_cfd: sampleParameter.formation_cfd,
       email_rdv: sampleParameter.email_rdv,
@@ -110,7 +101,6 @@ integrationTests(__filename, () => {
 
     // Check creation
     assert.deepStrictEqual(created.etablissement_siret, sampleParameter.etablissement_siret);
-    assert.deepStrictEqual(created.etablissement_raison_sociale, sampleParameter.etablissement_raison_sociale);
     assert.deepStrictEqual(created.formation_intitule, sampleParameter.formation_intitule);
     assert.deepStrictEqual(created.formation_cfd, sampleParameter.formation_cfd);
     assert.deepStrictEqual(created.email_rdv, sampleParameter.email_rdv);
@@ -130,7 +120,6 @@ integrationTests(__filename, () => {
 
     const created = await createParameter({
       etablissement_siret: sampleParameter.etablissement_siret,
-      etablissement_raison_sociale: sampleParameter.etablissement_raison_sociale,
       formation_intitule: sampleParameter.formation_intitule,
       formation_cfd: sampleParameter.formation_cfd,
       email_rdv: sampleParameter.email_rdv,
@@ -140,7 +129,6 @@ integrationTests(__filename, () => {
 
     // Check creation
     assert.deepStrictEqual(created.etablissement_siret, sampleParameter.etablissement_siret);
-    assert.deepStrictEqual(created.etablissement_raison_sociale, sampleParameter.etablissement_raison_sociale);
     assert.deepStrictEqual(created.formation_intitule, sampleParameter.formation_intitule);
     assert.deepStrictEqual(created.formation_cfd, sampleParameter.formation_cfd);
     assert.deepStrictEqual(created.email_rdv, sampleParameter.email_rdv);
