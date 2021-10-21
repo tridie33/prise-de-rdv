@@ -1,4 +1,3 @@
-const cron = require("node-cron");
 const logger = require("../common/logger");
 const { dayjs } = require("../http/utils/dayjs");
 const { getFormations } = require("../http/utils/catalogue");
@@ -82,12 +81,6 @@ const syncEtablissementsAndFormations = async () => {
   logger.info("Cron #syncEtablissementsAndFormations done.");
 };
 
-// At 05:00 AM
-const syncEtablissementsAndFormationsCron = cron.schedule("0 5 * * *", syncEtablissementsAndFormations, {
-  scheduled: true,
-  timezone: "Europe/Paris",
-});
-
 module.exports = {
-  syncEtablissementsAndFormationsCron,
+  syncEtablissementsAndFormations,
 };

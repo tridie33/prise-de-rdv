@@ -1,7 +1,8 @@
 const express = require("express");
+const bodyParser = require("body-parser");
+const cron = require("node-cron");
 const config = require("../../config/index");
 const logger = require("../common/logger");
-const bodyParser = require("body-parser");
 const logMiddleware = require("./middlewares/logMiddleware");
 const errorMiddleware = require("./middlewares/errorMiddleware");
 const tryCatch = require("./middlewares/tryCatchMiddleware");
@@ -25,7 +26,7 @@ const partnersRoute = require("./routes/public/partners");
 const emailsRoute = require("./routes/auth/emails");
 const constantsRoute = require("./routes/public/constants");
 const { administrator } = require("./../common/roles");
-const { syncEtablissementsAndFormationsCron } = require("../cron/syncEtablissementsAndFormations");
+const { syncEtablissementsAndFormations } = require("../cron/syncEtablissementsAndFormations");
 
 /**
  * @description Express function that embed components in routes.
@@ -91,8 +92,8 @@ module.exports = async (components) => {
 
   app.use(errorMiddleware());
 
-  // Crons
-  syncEtablissementsAndFormationsCron.start();
+  // At 05:00 AM
+  cron.schedule("0 5 * * *", syncEtablissementsAndFormations);
 
   return app;
 };
