@@ -36,6 +36,8 @@ export const RequestsBoardComponent = (props) => {
               <Td textStyle="sm">SIRET</Td>
               <Td textStyle="sm">FORMATION</Td>
               <Td textStyle="sm">CFD</Td>
+              <Td textStyle="sm">OPT MODE</Td>
+              <Td textStyle="sm">OPT ACTIVE LE</Td>
               <Td textStyle="sm">SITE DE PROVENANCE</Td>
               <Td textStyle="sm">MAIL CANDIDAT</Td>
               <Td textStyle="sm">MAIL CFA</Td>

@@ -7,12 +7,12 @@ const logger = require("../../../common/logger");
 const { getReferrerById } = require("../../../common/model/constants/referrers");
 const { getEmailStatus } = require("../../../common/model/constants/emails");
 const { getFormationsByIdRcoFormationsRaw } = require("../../utils/catalogue");
-const { formatDate, dayjs } = require("../../utils/dayjs");
+const { formatDate, formatDatetime, dayjs } = require("../../utils/dayjs");
 
 /**
  * Sample entity route module for GET
  */
-module.exports = ({ cache }) => {
+module.exports = ({ cache, etablissements }) => {
   const router = express.Router();
 
   /**
@@ -75,6 +75,8 @@ module.exports = ({ cache }) => {
         // Get right formation from dataset
         const catalogueFormation = formations.find((item) => item.id_rco_formation === document.id_rco_formation);
 
+        const etablissement = await etablissements.findOne({ siret_formateur: document.etablissement_id });
+
         let formation = {};
         if (catalogueFormation) {
           formation = {
@@ -93,6 +95,7 @@ module.exports = ({ cache }) => {
           email_premiere_demande_cfa_statut: getEmailStatus(document._doc?.email_premiere_demande_cfa_statut),
           referrer: getReferrerById(document.referrer),
           formation,
+          etablissement,
           candidat: {
             _id: user._id,
             firstname: user.firstname,
@@ -145,6 +148,7 @@ module.exports = ({ cache }) => {
 
         // Get right formation from dataset
         const catalogueFormation = formations.find((item) => item.id_rco_formation === document.id_rco_formation);
+        const etablissement = await etablissements.findOne({ siret_formateur: document.etablissement_id });
 
         let formation = {};
         if (catalogueFormation) {
@@ -159,28 +163,33 @@ module.exports = ({ cache }) => {
         }
 
         return {
-          date: formatDate(document.created_at),
+          date: formatDatetime(document.created_at),
           candidat: `${user.firstname} ${user.lastname}`,
           phone: user.phone,
           email: user.email,
           email_cfa: document.email_cfa,
           etablissement: formation.etablissement_formateur_entreprise_raison_sociale,
           siret: document.etablissement_id,
+          opt_mode: etablissement?.opt_mode || "N/C",
+          opt_in_activated_at: formatDate(etablissement?.opt_in_activated_at) || "N/C",
+          opt_out_invited_at: formatDate(etablissement?.opt_out_invited_at) || "N/C",
+          opt_out_activated_at: formatDate(etablissement?.opt_out_activated_at) || "N/C",
+          opt_out_refused_at: formatDatetime(etablissement?.opt_out_refused_at) || "N/C",
           formation: formation.intitule_long,
           cfd: document.formation_id,
-          email_premiere_demande_candidat_date: formatDate(document.email_premiere_demande_candidat_date) || "N/C",
+          email_premiere_demande_candidat_date: formatDatetime(document.email_premiere_demande_candidat_date) || "N/C",
           email_premiere_demande_candidat_statut: getEmailStatus(document?.email_premiere_demande_candidat_statut),
           email_premiere_demande_candidat_statut_date: document.email_premiere_demande_candidat_statut_date
             ? dayjs.utc(document.email_premiere_demande_candidat_statut_date).format("DD/MM/YYYY HH:mm:ss")
             : "N/C",
           email_premiere_demande_cfa_date: document.email_premiere_demande_cfa_date
-            ? formatDate(document.email_premiere_demande_cfa_date)
+            ? formatDatetime(document.email_premiere_demande_cfa_date)
             : "N/C",
           email_premiere_demande_cfa_statut: getEmailStatus(document?.email_premiere_demande_cfa_statut),
           email_premiere_demande_cfa_statut_date: document.email_premiere_demande_cfa_statut_date
             ? dayjs.utc(document.email_premiere_demande_cfa_statut_date).format("DD/MM/YYYY HH:mm:ss")
             : "N/C",
-          cfa_pris_contact_candidat_date: formatDate(document.cfa_pris_contact_candidat_date) || "N/C",
+          cfa_pris_contact_candidat_date: formatDatetime(document.cfa_pris_contact_candidat_date) || "N/C",
           source: getReferrerById(document.referrer).full_name,
           motivation: document.motivations,
           champs_libre_statut: document.champs_libre_status || "",
