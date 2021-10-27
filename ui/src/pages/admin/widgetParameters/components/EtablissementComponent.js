@@ -294,38 +294,36 @@ const EtablissementComponent = ({ id }) => {
           </Box>
         )}
       </Grid>
-      {etablissement?.email_decisionnaire && (
-        <Grid templateColumns="repeat(3, 1fr)" gap={5} p="5" pt="10">
-          <Box onClick={() => emailDecisionnaireFocusRef.current.focus()}>
-            <Text textStyle="sm" fontWeight="600">
-              Email décisionnaire <br />
-              <br />
-            </Text>
-            <Flex>
-              <Editable
-                defaultValue={etablissement?.email_decisionnaire}
-                style={{
-                  border: "solid #dee2e6 1px",
-                  padding: 5,
-                  marginRight: 10,
-                  borderRadius: 4,
-                  minWidth: "70%",
-                }}
-              >
-                <EditablePreview ref={emailDecisionnaireFocusRef} />
-                <EditableInput ref={emailDecisionnaireRef} type="email" _focus={{ border: "none" }} />
-              </Editable>
-              <Button
-                RootComponent="a"
-                variant="primary"
-                onClick={() => upsertEmailDecisionnaire(emailDecisionnaireRef.current.value.toLowerCase())}
-              >
-                <Disquette w="16px" h="16px" />
-              </Button>
-            </Flex>
-          </Box>
-        </Grid>
-      )}
+      <Grid templateColumns="repeat(3, 1fr)" gap={5} p="5" pt="10">
+        <Box onClick={() => emailDecisionnaireFocusRef.current.focus()}>
+          <Text textStyle="sm" fontWeight="600">
+            Email décisionnaire <br />
+            <br />
+          </Text>
+          <Flex>
+            <Editable
+              defaultValue={etablissement?.email_decisionnaire}
+              style={{
+                border: "solid #dee2e6 1px",
+                padding: 5,
+                marginRight: 10,
+                borderRadius: 4,
+                minWidth: "70%",
+              }}
+            >
+              <EditablePreview ref={emailDecisionnaireFocusRef} />
+              <EditableInput ref={emailDecisionnaireRef} type="email" _focus={{ border: "none" }} />
+            </Editable>
+            <Button
+              RootComponent="a"
+              variant="primary"
+              onClick={() => upsertEmailDecisionnaire(emailDecisionnaireRef.current.value.toLowerCase())}
+            >
+              <Disquette w="16px" h="16px" />
+            </Button>
+          </Flex>
+        </Box>
+      </Grid>
     </Box>
   );
 };

@@ -1,16 +1,12 @@
 const logger = require("../common/logger");
 const { dayjs } = require("../http/utils/dayjs");
 const { getFormations } = require("../http/utils/catalogue");
-const components = require("../common/components/components");
 
 /**
  * @description Gets Catalogue etablissments informations and insert in etablissement collection.
  * @returns {Promise<void>}
  */
-const syncEtablissementsAndFormations = async () => {
-  logger.info(`Cron #syncEtablissementsAndFormations launched.`);
-  const { etablissements, widgetParameters } = await components();
-
+const syncEtablissementsAndFormations = async ({ etablissements, widgetParameters }) => {
   const batchSize = 1000;
   let response;
 

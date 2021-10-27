@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Tr, Td, Text, Button, Textarea, Tooltip } from "@chakra-ui/react";
+import { Tr, Td, Text, Button, Textarea, Tooltip, Tag } from "@chakra-ui/react";
 import { _put } from "../../common/httpClient";
 import { formatDate, dayjs } from "../../common/dayjs";
 
@@ -75,6 +75,28 @@ export const AppointmentItemList = (props) => {
       <Td>{props.appointment.etablissement_id}</Td>
       <Td>{props.appointment.formation.intitule_long}</Td>
       <Td>{props.appointment.formation_id}</Td>
+      <Td>
+        {props.appointment.etablissement?.opt_mode === "OPT_IN" && (
+          <Tag bg="#467FCF" size="md" ml={2} color="white">
+            Opt-In
+          </Tag>
+        )}
+        {props.appointment.etablissement?.opt_mode === "OPT_OUT" && (
+          <Tag bg="#467FCF" size="md" ml={2} color="white">
+            Opt-Out
+          </Tag>
+        )}
+        {!props.appointment.etablissement?.opt_mode && "N/C"}
+      </Td>
+      <Td>
+        {props.appointment.etablissement?.opt_mode === "OPT_IN" && (
+          <> {dayjs(props.appointment.etablissement?.opt_in_activated_at).format("DD/MM/YYYY")} </>
+        )}
+        {props.appointment.etablissement?.opt_mode === "OPT_OUT" && (
+          <> {dayjs(props.appointment.etablissement?.opt_out_activated_at).format("DD/MM/YYYY")} </>
+        )}
+        {!props.appointment.etablissement?.opt_mode && "N/C"}
+      </Td>
       <Td>
         <Text>{props.appointment.referrer.full_name}</Text>
       </Td>

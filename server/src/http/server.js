@@ -34,7 +34,7 @@ const { syncEtablissementsAndFormations } = require("../cron/syncEtablissementsA
  * @returns {Promise<*|Express>}
  */
 module.exports = async (components) => {
-  const { db } = components;
+  const { db, etablissements, widgetParameters } = components;
   const app = express();
   const checkJwtToken = authMiddleware(components);
   const adminOnly = permissionsMiddleware(administrator);
@@ -93,7 +93,7 @@ module.exports = async (components) => {
   app.use(errorMiddleware());
 
   // At 05:00 AM
-  cron.schedule("0 5 * * *", syncEtablissementsAndFormations);
+  cron.schedule("0 5 * * *", () => syncEtablissementsAndFormations({ etablissements, widgetParameters }));
 
   return app;
 };
