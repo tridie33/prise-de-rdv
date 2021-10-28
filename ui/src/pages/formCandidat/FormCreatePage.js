@@ -161,7 +161,7 @@ export const FormCreatePage = (props) => {
                   <Text textStyle="h6" color="info">
                     Bonjour,
                   </Text>
-                  <Text mt={7}>
+                  <Text mt={7} pb={2}>
                     Vous êtes
                     <Text color="redmarianne" as="span">
                       *
@@ -184,7 +184,7 @@ export const FormCreatePage = (props) => {
                       <b>
                         <u>{data.intitule_long.toUpperCase()}</u>
                       </b>
-                      , laissez votre numéro au centre de formation
+                      , laissez votre numéro et votre adresse email au centre de formation
                       <Text color="redmarianne" as="span">
                         *
                       </Text>{" "}
@@ -203,13 +203,6 @@ export const FormCreatePage = (props) => {
                       );
                     }}
                   </Field>
-                  <Text mt={6}>
-                    Vous recevrez un email de confirmation à cette adresse
-                    <Text color="redmarianne" as="span">
-                      *
-                    </Text>{" "}
-                    :
-                  </Text>
                   <Field name="email" validate={validateEmail}>
                     {({ field, meta }) => {
                       return (
@@ -222,7 +215,9 @@ export const FormCreatePage = (props) => {
                       );
                     }}
                   </Field>
-                  <Text mt={5}>Quel sujet voulez-vous aborder ?</Text>
+                  <Text mt={5} pb={2}>
+                    Quel sujet souhaitez-vous aborder ?
+                  </Text>
                   <Field name="motivations">
                     {({ field, meta }) => {
                       return (
@@ -241,7 +236,8 @@ export const FormCreatePage = (props) => {
                     bg={"grey.750"}
                     borderRadius="10px"
                     color="#FFFFFF"
-                    w="14.5rem"
+                    w="269px"
+                    h="44px"
                     fontWeight="700"
                     display="block"
                     mx={["auto", "0", "0", "0"]}

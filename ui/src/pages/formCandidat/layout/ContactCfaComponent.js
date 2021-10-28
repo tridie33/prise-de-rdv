@@ -22,7 +22,7 @@ export const ContactCfaComponent = (props) => {
       {adresse && codePostal && (
         <Box mt={1}>
           <MapPin2Fill color="info" mb={1} />
-          <Text as="span" ml={1}>
+          <Text as="span" ml={2}>
             {adresse},{" "}
             <Text as="span">
               {codePostal} {ville}

@@ -1,6 +1,7 @@
 const commonFieldStyle = {
   color: "#E7E7E7",
   borderColor: "#E7E7E7",
+  height: "48px",
 };
 
 const Input = {

@@ -225,7 +225,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
       const [emailCandidat, emailCfa] = await Promise.all([
         mailer.sendEmail(
           user.email,
-          `Le centre de formation a bien reçu votre demande de RDV`,
+          `Le centre de formation a bien reçu votre demande de contact`,
           getEmailTemplate("mail-candidat"),
           mailData
         ),
