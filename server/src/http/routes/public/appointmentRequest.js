@@ -226,13 +226,13 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
         mailer.sendEmail(
           user.email,
           `Le centre de formation a bien reçu votre demande de contact`,
-          getEmailTemplate("mail-candidat"),
+          getEmailTemplate("mail-candidat-confirmation-rdv"),
           mailData
         ),
         mailer.sendEmail(
           widgetParameter.email_rdv,
           `[RDV via ${referrerObj.full_name}] Un candidat souhaite être contacté`,
-          getEmailTemplate("mail-formation"),
+          getEmailTemplate("mail-cfa-demande-de-contact"),
           mailData
         ),
       ]);
