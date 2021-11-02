@@ -214,7 +214,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
         images: {
           info: `${config.publicUrl}/assets/info.png?raw=true`,
           message: `${config.publicUrl}/assets/message.png?raw=true`,
-          people: `${config.publicUrl}/assets/people.png?raw=true`,
+          peopleLaptop: `${config.publicUrl}/assets/girl-laptop.png?raw=true`,
           school: `${config.publicUrl}/assets/school.png?raw=true`,
           map: `${config.publicUrl}/assets/map.png?raw=true`,
           third: `${config.publicUrl}/api/appointment/${createdAppointement._id}/candidat`,
