@@ -212,9 +212,9 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
           referrer: referrerObj.full_name,
         },
         images: {
+          peopleLaptop: `${config.publicUrl}/assets/girl_laptop.png?raw=true`,
           info: `${config.publicUrl}/assets/info.png?raw=true`,
           message: `${config.publicUrl}/assets/message.png?raw=true`,
-          peopleLaptop: `${config.publicUrl}/assets/girl-laptop.png?raw=true`,
           school: `${config.publicUrl}/assets/school.png?raw=true`,
           map: `${config.publicUrl}/assets/map.png?raw=true`,
           third: `${config.publicUrl}/api/appointment/${createdAppointement._id}/candidat`,
@@ -226,13 +226,13 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
         mailer.sendEmail(
           user.email,
           `Le centre de formation a bien reçu votre demande de contact`,
-          getEmailTemplate("mail-candidat-confirmation-rdv"),
+          path.join(__dirname, `../../../assets/templates/mail-candidat-confirmation-rdv.mjml.ejs`),
           mailData
         ),
         mailer.sendEmail(
           widgetParameter.email_rdv,
           `[RDV via ${referrerObj.full_name}] Un candidat souhaite être contacté`,
-          getEmailTemplate("mail-cfa-demande-de-contact"),
+          path.join(__dirname, `../../../assets/templates/mail-cfa-demande-de-contact.mjml.ejs`),
           mailData
         ),
       ]);
@@ -313,9 +313,4 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
   );
 
   return router;
-};
-
-// TODO move to HELPERS file
-const getEmailTemplate = (type = "mail-candidat") => {
-  return path.join(__dirname, `../../../assets/templates/${type}.mjml.ejs`);
 };

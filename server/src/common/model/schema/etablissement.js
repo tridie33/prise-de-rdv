@@ -52,6 +52,11 @@ const etablissementSchema = {
     default: null,
     description: "Date d'invitation de l'opt-out",
   },
+  opt_out_will_be_activated_at: {
+    type: Date,
+    default: null,
+    description: "Date à laquelle l'activation sera effective",
+  },
   opt_out_activated_at: {
     type: Date,
     default: null,
@@ -70,7 +75,7 @@ const etablissementSchema = {
       type: "object",
       required: false,
       properties: {
-        campagne: {
+        campaign: {
           type: "string",
           default: "string",
           description: "Identifiant de campagne",
@@ -78,17 +83,12 @@ const etablissementSchema = {
         messageId: {
           type: "string",
           default: "string",
-          description: "Identifiant sendinblue",
+          description: "Identifiant Sendinblue",
         },
-        code: {
+        status: {
           type: "string",
           default: "string",
           description: "Code erreur Sendinblue",
-        },
-        message: {
-          type: "string",
-          default: "string",
-          description: "Message erreur Sendinblue",
         },
       },
     },

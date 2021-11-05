@@ -1,14 +1,17 @@
 const express = require("express");
+const path = require("path");
+const config = require("../../../../config");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const { Etablissement } = require("../../../common/model");
 const { enableAllEtablissementFormations } = require("../../../http/utils/optIn");
-const { optMode } = require("../../../common/model/constants/etablissement");
+const { optMode, mailType } = require("../../../common/model/constants/etablissement");
 const { referrers } = require("../../../common/model/constants/referrers");
+const { dayjs } = require("../../utils/dayjs");
 
 /**
  * @description Etablissement Router.
  */
-module.exports = ({ etablissements }) => {
+module.exports = ({ etablissements, mailer }) => {
   const router = express.Router();
 
   /**
@@ -102,6 +105,51 @@ module.exports = ({ etablissements }) => {
           etablissement.siret_formateur,
           Object.values(referrers).map((referrer) => referrer.code)
         );
+        output = await etablissements.findById(params.id);
+      } else if (etablissement?.opt_mode === null && body?.opt_mode === optMode.OPT_OUT) {
+        const optOutWillBeActivatedAt = body?.opt_out_will_be_activated_at || dayjs().add(15, "days").format();
+        const optOutWillBeActivatedAtDayjs = dayjs(optOutWillBeActivatedAt);
+
+        const { messageId } = await mailer.sendEmail(
+          etablissement.email_decisionnaire,
+          `Améliorer le sourcing de vos candidats !`,
+          path.join(__dirname, `../../../assets/templates/mail-cfa-optout-invitation.mjml.ejs`),
+          {
+            images: {
+              peopleLaptop: `${config.publicUrl}/assets/girl_laptop.png?raw=true`,
+              optOutLbaIntegrationExample: `${config.publicUrl}/assets/exemple_integration_lba.png?raw=true`,
+              gouvernementLogo: `${config.publicUrl}/assets/gouvernement_logo.png?raw=true`,
+            },
+            etablissement: {
+              name: etablissement.raison_sociale,
+              address: etablissement.adresse,
+              postalCode: etablissement.code_postal,
+              ville: etablissement.localite,
+              optOutActivatedAtDate: optOutWillBeActivatedAtDayjs.format("DD/MM"),
+            },
+            user: {
+              destinataireEmail: etablissement.email_decisionnaire,
+            },
+          },
+          config.email
+        );
+
+        await Etablissement.updateOne(
+          { siret_formateur: etablissement.siret_formateur },
+          {
+            opt_mode: optMode.OPT_OUT,
+            opt_out_invited_at: dayjs().format(),
+            opt_out_will_be_activated_at: optOutWillBeActivatedAtDayjs.format(),
+            $push: {
+              mailing: {
+                campaign: mailType.OPT_OUT_INVITE,
+                status: null,
+                messageId,
+              },
+            },
+          }
+        );
+
         output = await etablissements.findById(params.id);
       } else {
         output = await etablissements.findByIdAndUpdate(params.id, body, { new: true });
