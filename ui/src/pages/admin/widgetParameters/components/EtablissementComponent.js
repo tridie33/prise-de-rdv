@@ -140,16 +140,23 @@ const EtablissementComponent = ({ id }) => {
   };
 
   /**
-   * @description Display a Toast on opt-out click.
+   * @description Enable opt-out.
    * @returns {string | number}
    */
-  const enableOptOut = () =>
-    toast({
-      title: "Cette fonctionnalité n'a pas été encore implémentée.",
-      status: "info",
-      isClosable: true,
-      position: "bottom-right",
-    });
+  const enableOptOut = async () => {
+    try {
+      setOptModeLoading(true);
+      const response = await _put(`/api/etablissements/${etablissement._id}`, {
+        opt_mode: "OPT_OUT",
+        opt_out_will_be_activated_at: dayjs().add(15, "days").format(),
+      });
+      setEtablissement(response);
+    } catch (error) {
+      putError();
+    } finally {
+      setOptModeLoading(false);
+    }
+  };
 
   return (
     <Box bg="white" border="1px solid #E0E5ED" borderRadius="4px" mt={10} pb="5" loading={loading}>
@@ -281,14 +288,14 @@ const EtablissementComponent = ({ id }) => {
             </Text>
           </Box>
         )}
-        {etablissement?.opt_out_activated_at && (
+        {etablissement?.opt_out_will_be_activated_at && (
           <Box w="100%" h="10">
             <Text textStyle="sm" fontWeight="600">
               Date d'activation des formations
               <br />
               <br />
               <Tag bg="#467FCF" size="md" color="white">
-                {dayjs(etablissement?.opt_out_activated_at).format("DD/MM/YYYY")}
+                {dayjs(etablissement?.opt_out_will_be_activated_at).format("DD/MM/YYYY")}
               </Tag>
             </Text>
           </Box>
@@ -303,6 +310,7 @@ const EtablissementComponent = ({ id }) => {
           <Flex>
             <Editable
               defaultValue={etablissement?.email_decisionnaire}
+              key={etablissement?.email_decisionnaire || "email_decisionnaire"}
               style={{
                 border: "solid #dee2e6 1px",
                 padding: 5,

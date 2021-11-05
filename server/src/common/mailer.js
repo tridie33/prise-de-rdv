@@ -32,10 +32,23 @@ module.exports = (config, transporter = createTransporter(config.smtp)) => {
   };
 
   return {
+    /**
+     * @description Process template ejs and mjml tempalte.
+     * @returns {string}
+     */
     renderEmail,
-    sendEmail: async (to, subject, template, data) => {
+    /**
+     * @description Sends email.
+     * @param {string} to
+     * @param {string} subject
+     * @param {string} template
+     * @param {Object} data
+     * @param {string} from
+     * @returns {Promise<{messageId: string}>}
+     */
+    sendEmail: async (to, subject, template, data, from = "nepasrepondre@apprentissage.beta.gouv.fr") => {
       return transporter.sendMail({
-        from: "no-reply@apprentissage.beta.gouv.fr",
+        from,
         to,
         subject,
         html: await renderEmail(template, data),

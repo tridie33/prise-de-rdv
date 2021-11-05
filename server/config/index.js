@@ -3,6 +3,7 @@ const env = require("env-var");
 module.exports = {
   appName: env.get("PRISE_DE_RDV_NAME").default("Prise de rdv").asString(),
   env: env.get("PRISE_DE_RDV_ENV").required().asString(),
+  email: "rdv_apprentissage@apprentissage.beta.gouv.fr",
   publicUrl: env.get("PRISE_DE_RDV_PUBLIC_URL").required().asString(),
   mongodb: {
     uri: env.get("PRISE_DE_RDV_MONGODB_URI").required().asString(),

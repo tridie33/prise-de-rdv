@@ -3,6 +3,11 @@ const optMode = {
   OPT_OUT: "OPT_OUT",
 };
 
+const mailType = {
+  OPT_OUT_INVITE: "OPT_OUT_INVITE",
+};
+
 module.exports = {
   optMode,
+  mailType,
 };
