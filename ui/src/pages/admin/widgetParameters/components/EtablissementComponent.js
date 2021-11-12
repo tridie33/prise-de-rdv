@@ -25,7 +25,6 @@ import {
   ModalBody,
   ModalFooter,
   Table,
-  TableCaption,
   Thead,
   Th,
   Tr,
@@ -35,6 +34,7 @@ import {
 import { Disquette } from "../../../../theme/components/icons";
 import { _get, _put } from "../../../../common/httpClient";
 import { dayjs, formatDate } from "../../../../common/dayjs";
+import { emailStatus } from "../constants/email";
 
 /**
  * @description Etablissement component.
@@ -318,15 +318,11 @@ const EtablissementComponent = ({ id }) => {
                     </Thead>
                     <Tbody>
                       {etablissement?.mailing
-                        .filter((mail) => mail.campaign === "OPT_OUT_INVITE")
+                        .filter((mail) => mail.campaign === "OPT_OUT_INVITE" && mail?.webhook_status_at)
                         .map((mail) => (
                           <Tr>
-                            <Td>
-                              {mail?.email_sent_at
-                                ? formatDate(mail?.email_sent_at)
-                                : formatDate(mail?.webhook_status_at)}
-                            </Td>
-                            <Td>{mail?.email_sent_at ? "Email envoyé" : mail?.status}</Td>
+                            <Td>{formatDate(mail?.webhook_status_at)}</Td>
+                            <Td>{emailStatus[mail.status]}</Td>
                           </Tr>
                         ))}
                     </Tbody>
