@@ -16,10 +16,25 @@ import {
   Tag,
   Tooltip,
   useToast,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Table,
+  TableCaption,
+  Thead,
+  Th,
+  Tr,
+  Tbody,
+  Td,
 } from "@chakra-ui/react";
 import { Disquette } from "../../../../theme/components/icons";
 import { _get, _put } from "../../../../common/httpClient";
-import { dayjs } from "../../../../common/dayjs";
+import { dayjs, formatDate } from "../../../../common/dayjs";
 
 /**
  * @description Etablissement component.
@@ -36,6 +51,8 @@ const EtablissementComponent = ({ id }) => {
   const [optInActivatedAt, setOptInActivatedAt] = useState();
   const [focused, setFocused] = useState();
   const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const optModes = {
     OPT_IN: "Opt-In",
     OPT_OUT: "Opt-Out",
@@ -282,10 +299,46 @@ const EtablissementComponent = ({ id }) => {
             <Text textStyle="sm" fontWeight="600">
               Date d'invitation à l'opt-out <br />
               <br />
-              <Tag bg="#467FCF" size="md" color="white">
+              <Tag bg="#467FCF" size="md" color="white" onClick={onOpen} cursor="pointer">
                 {dayjs(etablissement?.opt_out_invited_at).format("DD/MM/YYYY")}
               </Tag>
             </Text>
+            <Modal isOpen={isOpen} onClose={onClose} isCentered>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>Détails des événements</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                  <Table variant="simple">
+                    <Thead>
+                      <Tr>
+                        <Th>Date</Th>
+                        <Th>Statut</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      {etablissement?.mailing
+                        .filter((mail) => mail.campaign === "OPT_OUT_INVITE")
+                        .map((mail) => (
+                          <Tr>
+                            <Td>
+                              {mail?.email_sent_at
+                                ? formatDate(mail?.email_sent_at)
+                                : formatDate(mail?.webhook_status_at)}
+                            </Td>
+                            <Td>{mail?.email_sent_at ? "Email envoyé" : mail?.status}</Td>
+                          </Tr>
+                        ))}
+                    </Tbody>
+                  </Table>
+                </ModalBody>
+                <ModalFooter>
+                  <Button colorScheme="blue" mr={3} onClick={onClose}>
+                    Fermer
+                  </Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
           </Box>
         )}
         {etablissement?.opt_out_will_be_activated_at && (
