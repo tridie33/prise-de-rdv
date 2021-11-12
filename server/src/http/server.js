@@ -27,6 +27,7 @@ const emailsRoute = require("./routes/auth/emails");
 const constantsRoute = require("./routes/public/constants");
 const { administrator } = require("./../common/roles");
 const { syncEtablissementsAndFormations } = require("../cron/syncEtablissementsAndFormations");
+const { activateOptOutEtablissementFormations } = require("../cron/activateOptOutEtablissementFormations");
 
 /**
  * @description Express function that embed components in routes.
@@ -92,8 +93,11 @@ module.exports = async (components) => {
 
   app.use(errorMiddleware());
 
-  // At 05:00 AM
+  // Everyday at 05:00 AM
   cron.schedule("0 5 * * *", () => syncEtablissementsAndFormations({ etablissements, widgetParameters }));
+
+  // Everyday, every 5 minutes
+  cron.schedule("*/5 * * * *", () => activateOptOutEtablissementFormations({ etablissements, widgetParameters }));
 
   return app;
 };

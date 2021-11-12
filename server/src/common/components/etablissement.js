@@ -29,6 +29,13 @@ module.exports = async () => ({
   },
 
   /**
+   * @description Returns items.
+   * @param {Object} conditions
+   * @returns {Promise<Etablissement[]>}
+   */
+  find: (conditions) => Etablissement.find(conditions),
+
+  /**
    * @description Returns one item.
    * @param {Object} conditions
    * @returns {Promise<Etablissement>}
