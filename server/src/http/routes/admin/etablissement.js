@@ -138,13 +138,14 @@ module.exports = ({ etablissements, mailer }) => {
           { siret_formateur: etablissement.siret_formateur },
           {
             opt_mode: optMode.OPT_OUT,
-            opt_out_invited_at: dayjs().format(),
-            opt_out_will_be_activated_at: optOutWillBeActivatedAtDayjs.format(),
+            opt_out_invited_at: dayjs().toDate(),
+            opt_out_will_be_activated_at: optOutWillBeActivatedAtDayjs.toDate(),
             $push: {
               mailing: {
                 campaign: mailType.OPT_OUT_INVITE,
                 status: null,
-                messageId,
+                message_id: messageId,
+                email_sent_at: dayjs().toDate(),
               },
             },
           }

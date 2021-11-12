@@ -77,25 +77,35 @@ const etablissementSchema = {
       properties: {
         campaign: {
           type: "string",
-          default: "string",
+          default: null,
           description: "Identifiant de campagne",
         },
-        messageId: {
+        message_id: {
           type: "string",
-          default: "string",
+          default: null,
           description: "Identifiant Sendinblue",
         },
         status: {
           type: "string",
-          default: "string",
+          default: null,
           description: "Code erreur Sendinblue",
+        },
+        webhook_status_at: {
+          type: Date,
+          default: null,
+          description: "Date fournie par les webhooks Sendinblue lors de la réception d'un event",
+        },
+        email_sent_at: {
+          type: Date,
+          default: null,
+          description: "Date de création de la collection",
         },
       },
     },
   },
   last_catalogue_sync: {
     type: Date,
-    default: Date.now,
+    default: null,
     description: "Date de la dernière synchronisation avec le Catalogue",
   },
   created_at: {

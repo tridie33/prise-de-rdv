@@ -3,11 +3,19 @@ const utc = require("dayjs/plugin/utc");
 const timezone = require("dayjs/plugin/timezone");
 const advancedFormat = require("dayjs/plugin/advancedFormat");
 const duration = require("dayjs/plugin/duration");
+const isSameOrAfter = require("dayjs/plugin/isSameOrAfter");
+const isBetween = require("dayjs/plugin/isBetween");
+const isSameOrBefore = require("dayjs/plugin/isSameOrBefore");
+const customParseFormat = require("dayjs/plugin/customParseFormat");
 
 dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.extend(advancedFormat);
 dayjs.extend(duration);
+dayjs.extend(timezone);
+dayjs.extend(isSameOrBefore);
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isBetween);
+dayjs.extend(customParseFormat);
+dayjs.extend(advancedFormat);
 
 /**
  * @description Formats date.
