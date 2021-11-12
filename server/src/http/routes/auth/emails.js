@@ -79,7 +79,7 @@ module.exports = ({ appointments, etablissements }) => {
 
       // If mail sent from etablissement model
       if (etablissementFound) {
-        const previousEmail = etablissementFound.mailing.find((mail) => mail.messageId.includes(messageId));
+        const previousEmail = etablissementFound.mailing.find((mail) => mail.message_id.includes(messageId));
 
         await etablissementFound.update({
           $push: {
