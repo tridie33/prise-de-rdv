@@ -24,6 +24,10 @@ import EtablissementComponent from "../components/EtablissementComponent";
 import downloadFile from "../../../../common/utils/downloadFile";
 import { Check, Disquette, Download } from "../../../../theme/components/icons";
 
+/**
+ * @description Page that handle formation editions.
+ * @returns {JSX.Element}
+ */
 const EditPage = () => {
   const { id } = useParams();
   const [parametersResult, setParametersResult] = useState();
@@ -107,7 +111,7 @@ const EditPage = () => {
    * @param {String} siret
    * @returns {Promise<*>}
    */
-  const getEtablissement = (siret) => _get(`/api/etablissements/?query={"siret_formateur":"${siret}"}`);
+  const getEtablissement = (siret) => _get(`/api/admin/etablissements/?query={"siret_formateur":"${siret}"}`);
 
   /**
    * @description Returns all referrers.

@@ -21,6 +21,12 @@ const Button = {
       fontWeight: "600",
       fontSize: "12px",
     },
+    beta: {
+      ...commonButtonStyle,
+      padding: "8px 24px",
+      bg: "#000091",
+      color: "white",
+    },
   },
 };
 

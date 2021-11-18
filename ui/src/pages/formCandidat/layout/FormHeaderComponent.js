@@ -1,6 +1,10 @@
 import { Box, Text, Flex } from "@chakra-ui/react";
-import { MessageLogo, IconeLogo } from "../../../theme/components/icons";
+import { IconeLogo } from "../../../theme/components/icons";
 
+/**
+ * @description Form header component.
+ * @returns {JSX.Element}
+ */
 export const FormHeaderComponent = () => {
   return (
     <Box bg="#F9F8F6">

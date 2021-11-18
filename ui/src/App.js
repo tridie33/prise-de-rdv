@@ -13,6 +13,7 @@ import { FormRecapPage } from "./pages/formCandidat/FormRecapPage";
 import { FormCreatePage } from "./pages/formCandidat/FormCreatePage";
 import { isUserAdmin } from "./common/utils/rolesUtils";
 import BulkPage from "./pages/admin/widgetParameters/pages/BulkPage";
+import Unsubscribe from "./pages/formOptOut/Unsubscribe";
 
 function PrivateRoute({ children, ...rest }) {
   let [auth] = useAuth();
@@ -58,6 +59,7 @@ const App = () => {
           <Route exact path="/forgotten-password" component={ForgottenPasswordPage} />
           <Route exact path="/form" component={FormCreatePage} />
           <Route exact path="/form/confirm/:id" component={FormRecapPage} />
+          <Route exact path="/form/opt-out/unsubscribe/:id" component={Unsubscribe} />
         </Switch>
       </Router>
     </div>

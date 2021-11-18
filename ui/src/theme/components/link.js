@@ -23,6 +23,13 @@ const Link = {
       _hover: { textDecoration: "none", bg: "grey.200" },
       p: 2,
     },
+    basic: {
+      borderRadius: 24,
+      fontSize: "zeta",
+      color: "bluefrance",
+      px: 3,
+      py: 1,
+    },
   },
 };
 
