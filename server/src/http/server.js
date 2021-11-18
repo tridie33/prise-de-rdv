@@ -16,7 +16,8 @@ const login = require("./routes/auth/login");
 const authentified = require("./routes/auth/authentified");
 const admin = require("./routes/admin/admin");
 const appointmentRoute = require("./routes/admin/appointment");
-const etablissementRoute = require("./routes/admin/etablissement");
+const adminEtablissementRoute = require("./routes/admin/etablissement");
+const etablissementRoute = require("./routes/public/etablissement");
 const appointmentRequestRoute = require("./routes/public/appointmentRequest");
 const catalogueRoute = require("./routes/public/catalogue");
 const password = require("./routes/auth/password");
@@ -53,7 +54,8 @@ module.exports = async (components) => {
 
   // Logic route
   app.use("/api/appointment", checkJwtToken, adminOnly, appointmentRoute(components));
-  app.use("/api/etablissements", checkJwtToken, adminOnly, etablissementRoute(components));
+  app.use("/api/admin/etablissements", checkJwtToken, adminOnly, adminEtablissementRoute(components));
+  app.use("/api/etablissements", etablissementRoute(components));
   app.use("/api/appointment-request", appointmentRequestRoute(components));
   app.use("/api/catalogue", catalogueRoute(components));
   app.use("/api/constants", constantsRoute(components));

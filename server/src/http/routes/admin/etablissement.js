@@ -126,6 +126,7 @@ module.exports = ({ etablissements, mailer }) => {
               postalCode: etablissement.code_postal,
               ville: etablissement.localite,
               optOutActivatedAtDate: optOutWillBeActivatedAtDayjs.format("DD/MM"),
+              linkToUnsubscribe: `${config.publicUrl}/form/opt-out/unsubscribe/${etablissement._id}`,
             },
             user: {
               destinataireEmail: etablissement.email_decisionnaire,

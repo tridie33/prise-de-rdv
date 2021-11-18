@@ -65,7 +65,7 @@ const EtablissementComponent = ({ id }) => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await _get(`/api/etablissements/${id}`);
+      const response = await _get(`/api/admin/etablissements/${id}`);
       setEtablissement(response);
       setOptInActivatedAt(moment(response.opt_in_activated_at));
     } catch (error) {
@@ -114,7 +114,7 @@ const EtablissementComponent = ({ id }) => {
   const updateOptInActivedDate = async (date) => {
     try {
       setOptInActivatedAt(moment(date));
-      const response = await _put(`/api/etablissements/${etablissement._id}`, {
+      const response = await _put(`/api/admin/etablissements/${etablissement._id}`, {
         opt_in_activated_at: dayjs(date).format("YYYY-MM-DD"),
         opt_mode: "OPT_IN",
       });
@@ -132,7 +132,7 @@ const EtablissementComponent = ({ id }) => {
    */
   const upsertEmailDecisionnaire = async (email) => {
     try {
-      const response = await _put(`/api/etablissements/${etablissement._id}`, { email_decisionnaire: email });
+      const response = await _put(`/api/admin/etablissements/${etablissement._id}`, { email_decisionnaire: email });
       setEtablissement(response);
       putSuccess();
     } catch (error) {
@@ -147,7 +147,7 @@ const EtablissementComponent = ({ id }) => {
   const enableOptIn = async () => {
     try {
       setOptModeLoading(true);
-      await _put(`/api/etablissements/${etablissement._id}`, { opt_mode: "OPT_IN" });
+      await _put(`/api/admin/etablissements/${etablissement._id}`, { opt_mode: "OPT_IN" });
       window.location.reload(false);
     } catch (error) {
       putError();
@@ -163,7 +163,7 @@ const EtablissementComponent = ({ id }) => {
   const enableOptOut = async () => {
     try {
       setOptModeLoading(true);
-      const response = await _put(`/api/etablissements/${etablissement._id}`, {
+      const response = await _put(`/api/admin/etablissements/${etablissement._id}`, {
         opt_mode: "OPT_OUT",
         opt_out_will_be_activated_at: dayjs().add(15, "days").format(),
       });
@@ -346,6 +346,30 @@ const EtablissementComponent = ({ id }) => {
               <Tag bg="#467FCF" size="md" color="white">
                 {dayjs(etablissement?.opt_out_will_be_activated_at).format("DD/MM/YYYY")}
               </Tag>
+            </Text>
+          </Box>
+        )}
+      </Grid>
+      <Grid templateColumns="repeat(3, 1fr)" gap={5} p="5" pt="10">
+        {etablissement?.opt_out_refused_at && (
+          <Box w="100%" h="10">
+            <Text textStyle="sm" fontWeight="600">
+              Date de refus de l'opt-out
+              <br />
+              <br />
+              <Tag bg="#467FCF" size="md" color="white">
+                {dayjs(etablissement?.opt_out_refused_at).format("DD/MM/YYYY")}
+              </Tag>
+            </Text>
+          </Box>
+        )}
+        {etablissement?.opt_out_refused_reason && (
+          <Box w="100%" h="10">
+            <Text textStyle="sm" fontWeight="600">
+              Question posée lors du refus de l'opt-out
+              <br />
+              <br />
+              <Text fontWeight="normal">{etablissement?.opt_out_refused_reason}</Text>
             </Text>
           </Box>
         )}

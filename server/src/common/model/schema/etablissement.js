@@ -67,6 +67,11 @@ const etablissementSchema = {
     default: null,
     description: "Date de refus de l'opt-out",
   },
+  opt_out_refused_reason: {
+    type: String,
+    default: null,
+    description: "Motif de refus de l'opt-out",
+  },
   mailing: {
     type: "array",
     description: "Liste des évènements MAIL récupéré par le serveur",

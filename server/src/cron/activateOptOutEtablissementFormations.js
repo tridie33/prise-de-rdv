@@ -15,6 +15,7 @@ const activateOptOutEtablissementFormations = async ({ etablissements, widgetPar
     opt_out_will_be_activated_at: {
       $lte: dayjs().toDate(),
     },
+    opt_out_refused_at: null,
     opt_out_activated_at: null,
     opt_mode: optMode.OPT_OUT,
   });
