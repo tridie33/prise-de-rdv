@@ -35,8 +35,9 @@ const Unsubscribe = () => {
    */
   const submit = async () => {
     await _post(`/api/etablissements/${id}/opt-out/unsubscribe`, {
-      opt_out_refused_reason: textarea,
+      opt_out_refused_reason: textarea === "" ? undefined : textarea,
     });
+    window.scrollTo(0, 0);
     setHasBeenSubmit(true);
   };
 

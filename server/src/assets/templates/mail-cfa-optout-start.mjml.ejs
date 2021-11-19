@@ -1,9 +1,10 @@
 <mjml>
     <mj-head>
-        <mj-title>Améliorer le sourcing de vos candidats !</mj-title>
+        <mj-title>C'est parti pour améliorer le sourcing de vos candidats !</mj-title>
         <mj-font name="Inter" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap'" />
         <mj-style inline="inline">
             a:link,a:visited, a:hover, a:active {color: #206BC4;}, a {color: #3A55D1;}, body{background: #F9F8F6;}
+            a.grey:link,a:visited, a:hover, a:active {color: #1E1E1E;text-decoration: none;}, a {color: #1E1E1E;text-decoration: none;}, body{background: #1E1E1E;text-decoration: none;}
             .purple {color: #3A55D1; text-decoration: none}
         </mj-style>
         <mj-attributes>
@@ -27,13 +28,13 @@
         </mj-section>
         <mj-wrapper padding="0" padding-top="25px">
             <mj-section background-color="#ffffff" padding-top="50px" padding-bottom="0">
-                <mj-column width="300px">
+                <mj-column width="320px">
                     <mj-text font-size="20px" padding="0px" font-weight="700" line-height="24px" color="#3A55D1">
-                        Recevez les demandes de contact des candidats
+                        Félicitation ! Vous allez recevoir des demandes de contacts
                     </mj-text>
                     <mj-text font-size="20px" font-weight="700" line-height="24px" color="#383838" padding-bottom="0">directement dans les boîtes mails de votre CFA !</mj-text>
                 </mj-column>
-                <mj-column vertical-align="middle" width="180px" padding-bottom="0">
+                <mj-column vertical-align="middle" width="160px" padding-bottom="0">
                     <mj-image padding="0px" src="<%= data.images.peopleLaptop %>" alt="Figure" />
                 </mj-column>
             </mj-section>
@@ -42,16 +43,29 @@
             </mj-section>
             <mj-section background-color="#ffffff" padding-top="25px">
                 <mj-column width="480px">
-                    <mj-text font-size="16px" line-height="20px" font-weight="700">
-                        A partir du <%= data.etablissement.optOutActivatedAtDate %>, un nouveau service sera ajouté à vos fiches formations publiées sur La Bonne Alternance. Il permettra aux candidats intéressés par vos formations de vous envoyer une demande de contact.
+                    <mj-text font-size="16px" line-height="20px" font-weight="700" color="#1E1E1E">
+                        Le service RDV Apprentissage est désormais activé sur vos fiches formations publiées sur <a href="https://labonnealternance.pole-emploi.fr" class="grey">La Bonne Alternance</a>.
                     </mj-text>
-                    <mj-text font-size="16px" line-height="20px" padding-top="25px">Vous recevrez ces demandes sur les adresses email que vous avez enregistrées auprès de votre <u><a href="https://www.intercariforef.org">Carif-Oref</a></u> pour l’organisme de formation suivant :</mj-text>
+                    <mj-text font-size="16px" line-height="20px" padding-top="25px">A partir d’aujourd’hui, vous recevrez ces demandes sur les adresses e-mail que vous avez enregistrées auprès de votre <u><a href="https://www.intercariforef.org">Carif-Oref</a></u> pour l’organisme de formation suivant :</mj-text>
                     <mj-text font-size="16px" line-height="20px" padding-top="0"><b><%= data.etablissement.name %></b></mj-text>
                     <mj-text font-size="16px" line-height="20px" padding-top="0"><b><%= data.etablissement.address %></b></mj-text>
                     <mj-text font-size="16px" line-height="20px" padding-top="0"><b><%= data.etablissement.postalCode %>, <%= data.etablissement.ville %></b></mj-text>
+                    <mj-text font-size="16px" line-height="20px" padding-top="0"><b>SIRET : <%= data.etablissement.siret %></b></mj-text>
                 </mj-column>
             </mj-section>
-            <mj-section background-color="#ffffff" padding-top="0" padding-bottom="0">
+            <mj-section background-color="#ffffff" padding-top="10px">
+                <mj-column width="50px" background-color="#F8F8F8" border-left="5px solid #FF6F4C" vertical-align="middle">
+                    <mj-spacer height="25px" />
+                    <mj-image padding="0" src="<%= data.images.informationIcon %>" alt="Information" width="20px" padding-left="5px" />
+                    <mj-spacer height="26px" />
+                </mj-column>
+                <mj-column width="430px" padding-top="0" background-color="#F8F8F8" vertical-align="middle">
+                    <mj-text font-size="16px" line-height="20px" padding-left="5px" padding-right="10px" padding-top="15px" height="56px">
+                        Nous vous invitons à vérifier régulièrement vos boîtes mails pour répondre aux candidats dès que possible.
+                    </mj-text>
+                </mj-column>
+            </mj-section>
+            <mj-section background-color="#ffffff" padding-top="10px" padding-bottom="0">
                 <mj-column vertical-align="middle" width="480px" padding-bottom="0">
                     <mj-image padding="0px" src="<%= data.images.optOutLbaIntegrationExample %>" alt="Intégration La" />
                 </mj-column>
@@ -59,7 +73,7 @@
             <mj-section background-color="#ffffff">
                 <mj-column width="480px" padding-top="0">
                     <mj-text font-size="16px" line-height="20px">
-                        Pour continuer à améliorer votre sourcing, ce service sera progressivement activé sur chacunes de vos fiches formations publiées sur Parcoursup, Affelnet et d’autres plateformes et portails du service public.
+                        Vous pouvez vous rendre sur le site <a href="https://labonnealternance.pole-emploi.fr">La Bonne Alternance</a> pour vérifier que le bouton "Prendre rendez-vous" apparaît bien sur vos formations.
                     </mj-text>
                 </mj-column>
             </mj-section>
