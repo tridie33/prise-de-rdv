@@ -36,7 +36,7 @@ const { activateOptOutEtablissementFormations } = require("../cron/activateOptOu
  * @returns {Promise<*|Express>}
  */
 module.exports = async (components) => {
-  const { db, etablissements, widgetParameters } = components;
+  const { db, etablissements, widgetParameters, mailer } = components;
   const app = express();
   const checkJwtToken = authMiddleware(components);
   const adminOnly = permissionsMiddleware(administrator);
@@ -99,7 +99,7 @@ module.exports = async (components) => {
   cron.schedule("0 5 * * *", () => syncEtablissementsAndFormations({ etablissements, widgetParameters }));
 
   // Everyday, every 5 minutes
-  cron.schedule("*/5 * * * *", () => activateOptOutEtablissementFormations({ etablissements, widgetParameters }));
+  cron.schedule("* * * * *", () => activateOptOutEtablissementFormations({ etablissements, widgetParameters, mailer }));
 
   return app;
 };

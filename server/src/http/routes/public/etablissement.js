@@ -1,7 +1,10 @@
 const express = require("express");
 const Joi = require("joi");
+const path = require("path");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const { dayjs } = require("../../utils/dayjs.js");
+const { mailType } = require("../../../common/model/constants/etablissement");
+const config = require("../../../../config");
 
 const optOutUnsubscribeSchema = Joi.object({
   opt_out_refused_reason: Joi.string().optional(),
@@ -10,7 +13,7 @@ const optOutUnsubscribeSchema = Joi.object({
 /**
  * @description Etablissement Router.
  */
-module.exports = ({ etablissements }) => {
+module.exports = ({ etablissements, mailer, widgetParameters }) => {
   const router = express.Router();
 
   /**
@@ -47,10 +50,60 @@ module.exports = ({ etablissements }) => {
         return res.sendStatus(400);
       }
 
+      // If opt-out is already running but user unsubscribe, disable all formations
+      if (etablissement.opt_out_activated_at && dayjs(etablissement.opt_out_activated_at).isBefore(dayjs())) {
+        // Disable all formations
+        await widgetParameters.updateMany(
+          {
+            etablissement_siret: etablissement.siret_formateur,
+          },
+          {
+            referrers: [],
+          }
+        );
+      }
+
       await etablissements.findByIdAndUpdate(req.params.id, {
         opt_out_refused_at: dayjs().toDate(),
         opt_out_refused_reason,
       });
+
+      // Sends unsubscription email to "décisionnaire"
+      const { messageId } = await mailer.sendEmail(
+        etablissement.email_decisionnaire,
+        `Désincription au service "RDV Apprentissage"`,
+        path.join(__dirname, `../../../assets/templates/mail-cfa-optout-unsubscription.mjml.ejs`),
+        {
+          images: {
+            peopleLaptop: `${config.publicUrl}/assets/man_laptop.png?raw=true`,
+            gouvernementLogo: `${config.publicUrl}/assets/gouvernement_logo.png?raw=true`,
+          },
+          etablissement: {
+            name: etablissement.raison_sociale,
+            address: etablissement.adresse,
+            postalCode: etablissement.code_postal,
+            ville: etablissement.localite,
+          },
+          user: {
+            destinataireEmail: etablissement.email_decisionnaire,
+          },
+        },
+        config.email
+      );
+
+      await etablissements.findOneAndUpdate(
+        { _id: etablissement._id },
+        {
+          $push: {
+            mailing: {
+              campaign: mailType.OPT_OUT_UNSUBSCRIPTION_CONFIRMATION,
+              status: null,
+              message_id: messageId,
+              email_sent_at: dayjs().toDate(),
+            },
+          },
+        }
+      );
 
       etablissement = await etablissements.findById(req.params.id);
 
