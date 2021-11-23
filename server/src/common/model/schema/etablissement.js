@@ -67,10 +67,10 @@ const etablissementSchema = {
     default: null,
     description: "Date de refus de l'opt-out",
   },
-  opt_out_refused_reason: {
+  opt_out_question: {
     type: String,
     default: null,
-    description: "Motif de refus de l'opt-out",
+    description: "Question du décisionnaire quand il se rends sur le formulaire de désinscript à l'opt-out",
   },
   mailing: {
     type: "array",

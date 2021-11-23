@@ -363,13 +363,13 @@ const EtablissementComponent = ({ id }) => {
             </Text>
           </Box>
         )}
-        {etablissement?.opt_out_refused_reason && (
+        {etablissement?.opt_out_question && (
           <Box w="100%" h="10">
             <Text textStyle="sm" fontWeight="600">
               Question posée lors du refus de l'opt-out
               <br />
               <br />
-              <Text fontWeight="normal">{etablissement?.opt_out_refused_reason}</Text>
+              <Text fontWeight="normal">{etablissement?.opt_out_question}</Text>
             </Text>
           </Box>
         )}

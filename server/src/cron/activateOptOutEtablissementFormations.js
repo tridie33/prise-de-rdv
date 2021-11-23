@@ -33,7 +33,9 @@ const activateOptOutEtablissementFormations = async ({ etablissements, widgetPar
             email_rdv: { $nin: [null, ""] },
           },
           {
-            referrers: Object.values(referrers).map((referrer) => referrer.code),
+            referrers: Object.values(referrers)
+              .map((referrer) => referrer.code)
+              .filter((referrer) => referrer !== referrers.PARCOURSUP.code),
           }
         ),
         etablissements.findOneAndUpdate(
