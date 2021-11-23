@@ -7,7 +7,7 @@ const { mailType } = require("../../../common/model/constants/etablissement");
 const config = require("../../../../config");
 
 const optOutUnsubscribeSchema = Joi.object({
-  opt_out_refused_reason: Joi.string().optional(),
+  opt_out_question: Joi.string().optional(),
 });
 
 /**
@@ -38,7 +38,7 @@ module.exports = ({ etablissements, mailer, widgetParameters }) => {
   router.post(
     "/:id/opt-out/unsubscribe",
     tryCatch(async (req, res) => {
-      const { opt_out_refused_reason } = await optOutUnsubscribeSchema.validateAsync(req.body, { abortEarly: false });
+      const { opt_out_question } = await optOutUnsubscribeSchema.validateAsync(req.body, { abortEarly: false });
 
       let etablissement = await etablissements.findById(req.params.id);
 
@@ -48,6 +48,40 @@ module.exports = ({ etablissements, mailer, widgetParameters }) => {
 
       if (etablissement.opt_out_refused_at) {
         return res.sendStatus(400);
+      }
+
+      if (opt_out_question) {
+        await etablissements.findByIdAndUpdate(req.params.id, {
+          opt_out_question,
+        });
+
+        etablissement = await etablissements.findById(req.params.id);
+
+        // Sends email to the team with the question
+        await mailer.sendEmail(
+          config.email,
+          `Un CFA se pose une question concernant l'opt-out"`,
+          path.join(__dirname, `../../../assets/templates/mail-rdva-optout-unsubscription-question.mjml.ejs`),
+          {
+            images: {
+              peopleLaptop: `${config.publicUrl}/assets/man_laptop.png?raw=true`,
+              gouvernementLogo: `${config.publicUrl}/assets/gouvernement_logo.png?raw=true`,
+            },
+            etablissement: {
+              name: etablissement.raison_sociale,
+              address: etablissement.adresse,
+              postalCode: etablissement.code_postal,
+              ville: etablissement.localite,
+              opt_out_question: etablissement.opt_out_question,
+            },
+            user: {
+              destinataireEmail: etablissement.email_decisionnaire,
+            },
+          },
+          etablissement.email_decisionnaire
+        );
+
+        return res.send(etablissement);
       }
 
       // If opt-out is already running but user unsubscribe, disable all formations
@@ -65,7 +99,6 @@ module.exports = ({ etablissements, mailer, widgetParameters }) => {
 
       await etablissements.findByIdAndUpdate(req.params.id, {
         opt_out_refused_at: dayjs().toDate(),
-        opt_out_refused_reason,
       });
 
       // Sends unsubscription email to "décisionnaire"

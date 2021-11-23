@@ -18,7 +18,8 @@ const Unsubscribe = () => {
 
   const { id } = useParams();
   const [textarea, setTextarea] = useState("");
-  const [hasBeenSubmit, setHasBeenSubmit] = useState(false);
+  const [hasBeenUnsubscribed, setHasBeenUnsubscribed] = useState(false);
+  const [isQuestionSent, setIsQuestionSent] = useState(false);
   const [etablissement, setEtablissement] = useState();
   const [radioValue, setRadioValue] = useState(radioOptions.UNSUBSCRIBE_NO_DETAILS);
 
@@ -34,18 +35,19 @@ const Unsubscribe = () => {
    * @returns {Promise<void>}
    */
   const submit = async () => {
-    await _post(`/api/etablissements/${id}/opt-out/unsubscribe`, {
-      opt_out_refused_reason: textarea === "" ? undefined : textarea,
-    });
+    const opt_out_question = textarea === "" ? undefined : textarea;
+
+    await _post(`/api/etablissements/${id}/opt-out/unsubscribe`, { opt_out_question });
     window.scrollTo(0, 0);
-    setHasBeenSubmit(true);
+
+    opt_out_question ? setIsQuestionSent(true) : setHasBeenUnsubscribed(true);
   };
 
   useEffect(async () => {
     const etablissement = await _get(`/api/etablissements/${id}`);
 
     if (etablissement.opt_out_refused_at) {
-      setHasBeenSubmit(true);
+      setHasBeenUnsubscribed(true);
     }
 
     setEtablissement(etablissement);
@@ -66,22 +68,33 @@ const Unsubscribe = () => {
         pl={20}
         pr={24}
         py={20}
-        mb={hasBeenSubmit ? "400px" : "0"}
+        mb={hasBeenUnsubscribed ? "400px" : "0"}
       >
-        {hasBeenSubmit ? (
-          <>
-            <Flex>
-              <Box w="40px">
-                <SuccessCircle width={33} />
-              </Box>
-              <Box w="100%">
-                <Text textStyle="h3" fontSize="24px" fontWeight="bold" color="grey.800" ml={2}>
-                  Votre désinscription au service “RDV Apprentissage” a bien été prise en compte
-                </Text>
-              </Box>
-            </Flex>
-          </>
-        ) : (
+        {hasBeenUnsubscribed && (
+          <Flex>
+            <Box w="40px">
+              <SuccessCircle width={33} />
+            </Box>
+            <Box w="100%">
+              <Text textStyle="h3" fontSize="24px" fontWeight="bold" color="grey.800" ml={2}>
+                Votre désinscription au service “RDV Apprentissage” a bien été prise en compte
+              </Text>
+            </Box>
+          </Flex>
+        )}
+        {isQuestionSent && (
+          <Flex>
+            <Box w="40px">
+              <SuccessCircle width={33} />
+            </Box>
+            <Box w="100%">
+              <Text textStyle="h3" fontSize="24px" fontWeight="bold" color="grey.800" ml={2}>
+                L'équipe “RDV Apprentissage” reviendra vers vous très prochainement pour répondre à vos questions.
+              </Text>
+            </Box>
+          </Flex>
+        )}
+        {!hasBeenUnsubscribed && !isQuestionSent && (
           <>
             <Box>
               <Text textStyle="h3" fontSize="24px" fontWeight="bold" color="grey.800" ml={2}>
