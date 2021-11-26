@@ -307,30 +307,32 @@ const EtablissementComponent = ({ id }) => {
                 {dayjs(etablissement?.opt_out_invited_at).format("DD/MM/YYYY")}
               </Tag>
             </Text>
-            <Modal isOpen={isOpen} onClose={onClose} isCentered size="xl">
+            <Modal isOpen={isOpen} onClose={onClose} size={"full"}>
               <ModalOverlay />
               <ModalContent>
                 <ModalHeader>Détails des emails</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                  <Table variant="simple">
-                    <Thead>
-                      <Tr>
-                        <Th>Date</Th>
-                        <Th>Campagne</Th>
-                        <Th>Statut</Th>
-                      </Tr>
-                    </Thead>
-                    <Tbody>
-                      {etablissement?.mailing.map((mail) => (
+                  <Box>
+                    <Table variant="simple">
+                      <Thead>
                         <Tr>
-                          <Td>{formatDate(mail?.webhook_status_at) || formatDate(mail.email_sent_at)}</Td>
-                          <Td>{mail.campaign}</Td>
-                          <Td>{emailStatus[mail.status] || "Envoyé"}</Td>
+                          <Th>Date</Th>
+                          <Th>Campagne</Th>
+                          <Th>Statut</Th>
                         </Tr>
-                      ))}
-                    </Tbody>
-                  </Table>
+                      </Thead>
+                      <Tbody>
+                        {etablissement?.mailing.map((mail) => (
+                          <Tr>
+                            <Td>{formatDate(mail?.webhook_status_at) || formatDate(mail.email_sent_at)}</Td>
+                            <Td>{mail.campaign}</Td>
+                            <Td>{emailStatus[mail.status] || "Envoyé"}</Td>
+                          </Tr>
+                        ))}
+                      </Tbody>
+                    </Table>
+                  </Box>
                 </ModalBody>
                 <ModalFooter>
                   <Button colorScheme="blue" mr={3} onClick={onClose}>
