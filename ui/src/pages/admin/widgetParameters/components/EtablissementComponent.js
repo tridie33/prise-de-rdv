@@ -1,4 +1,5 @@
 import { createRef, useState, useEffect } from "react";
+import { EmailIcon } from "@chakra-ui/icons";
 import * as PropTypes from "prop-types";
 import "react-dates/initialize";
 import { SingleDatePicker } from "react-dates";
@@ -180,6 +181,9 @@ const EtablissementComponent = ({ id }) => {
       <Box borderBottom="1px solid #E0E5ED">
         <Text fontSize="16px" p={5}>
           Etablissement
+          <Text as="span" fontSize="16px" float="right" onClick={onOpen}>
+            <EmailIcon cursor="pointer" fontSize={30} />
+          </Text>
         </Text>
       </Box>
       <Grid templateColumns="repeat(3, 1fr)" gap={5} p="5">
@@ -299,32 +303,32 @@ const EtablissementComponent = ({ id }) => {
             <Text textStyle="sm" fontWeight="600">
               Date d'invitation à l'opt-out <br />
               <br />
-              <Tag bg="#467FCF" size="md" color="white" onClick={onOpen} cursor="pointer">
+              <Tag bg="#467FCF" size="md" color="white">
                 {dayjs(etablissement?.opt_out_invited_at).format("DD/MM/YYYY")}
               </Tag>
             </Text>
-            <Modal isOpen={isOpen} onClose={onClose} isCentered>
+            <Modal isOpen={isOpen} onClose={onClose} isCentered size="xl">
               <ModalOverlay />
               <ModalContent>
-                <ModalHeader>Détails des événements</ModalHeader>
+                <ModalHeader>Détails des emails</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                   <Table variant="simple">
                     <Thead>
                       <Tr>
                         <Th>Date</Th>
+                        <Th>Campagne</Th>
                         <Th>Statut</Th>
                       </Tr>
                     </Thead>
                     <Tbody>
-                      {etablissement?.mailing
-                        .filter((mail) => mail.campaign === "OPT_OUT_INVITE" && mail?.webhook_status_at)
-                        .map((mail) => (
-                          <Tr>
-                            <Td>{formatDate(mail?.webhook_status_at)}</Td>
-                            <Td>{emailStatus[mail.status]}</Td>
-                          </Tr>
-                        ))}
+                      {etablissement?.mailing.map((mail) => (
+                        <Tr>
+                          <Td>{formatDate(mail?.webhook_status_at) || formatDate(mail.email_sent_at)}</Td>
+                          <Td>{mail.campaign}</Td>
+                          <Td>{emailStatus[mail.status] || "Envoyé"}</Td>
+                        </Tr>
+                      ))}
                     </Tbody>
                   </Table>
                 </ModalBody>
