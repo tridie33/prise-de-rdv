@@ -93,6 +93,20 @@ module.exports = async () => ({
   },
 
   /**
+   * @description Returns items.
+   * @param {Object} conditions
+   * @returns {Promise<WidgetParameter[]>}
+   */
+  find: (conditions) => WidgetParameter.find(conditions),
+
+  /**
+   * @description Returns one item.
+   * @param {Object} conditions
+   * @returns {Promise<WidgetParameter>}
+   */
+  findOne: async (conditions) => WidgetParameter.findOne(conditions),
+
+  /**
    * @description Updates item.
    * @param {String} id
    * @param {WidgetParameter} body

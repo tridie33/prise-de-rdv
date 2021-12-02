@@ -104,7 +104,7 @@ module.exports = ({ etablissements, mailer, widgetParameters }) => {
       // Sends unsubscription email to "décisionnaire"
       const { messageId } = await mailer.sendEmail(
         etablissement.email_decisionnaire,
-        `Désincription au service "RDV Apprentissage"`,
+        `Désinscription au service "RDV Apprentissage"`,
         path.join(__dirname, `../../../assets/templates/mail-cfa-optout-unsubscription.mjml.ejs`),
         {
           images: {

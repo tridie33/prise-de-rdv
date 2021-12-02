@@ -87,6 +87,20 @@ module.exports = async () => ({
   },
 
   /**
+   * @description Returns items.
+   * @param {Object} conditions
+   * @returns {Promise<User[]>}
+   */
+  find: (conditions) => User.find(conditions),
+
+  /**
+   * @description Returns one item.
+   * @param {Object} conditions
+   * @returns {Promise<User>}
+   */
+  findOne: async (conditions) => User.findOne(conditions),
+
+  /**
    * @description Removes an user from its username.
    * @param username
    * @returns {Promise<User>}

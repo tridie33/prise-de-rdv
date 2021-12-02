@@ -65,6 +65,83 @@ const appointmentSchema = {
     default: null,
     description: "La date de la première prise de contact du cfa vers le candidat",
   },
+  candidat_contacted_at: {
+    type: Date,
+    default: null,
+    description: "Date à laquelle le candidat à signalé qu'il a été contacté par le CFA",
+  },
+  candidat_mailing: {
+    type: "array",
+    description: "Liste des évènements MAIL récupéré par le serveur",
+    required: false,
+    items: {
+      type: "object",
+      required: false,
+      properties: {
+        campaign: {
+          type: "string",
+          default: null,
+          description: "Identifiant de campagne",
+        },
+        message_id: {
+          type: "string",
+          default: null,
+          description: "Identifiant Sendinblue",
+        },
+        status: {
+          type: "string",
+          default: null,
+          description: "Code erreur Sendinblue",
+        },
+        webhook_status_at: {
+          type: Date,
+          default: null,
+          description: "Date fournie par les webhooks Sendinblue lors de la réception d'un event",
+        },
+        email_sent_at: {
+          type: Date,
+          default: null,
+          description: "Date de création de la collection",
+        },
+      },
+    },
+  },
+  cfa_mailing: {
+    type: "array",
+    description: "Liste des évènements MAIL récupéré par le serveur",
+    required: false,
+    items: {
+      type: "object",
+      required: false,
+      properties: {
+        campaign: {
+          type: "string",
+          default: null,
+          description: "Identifiant de campagne",
+        },
+        message_id: {
+          type: "string",
+          default: null,
+          description: "Identifiant Sendinblue",
+        },
+        status: {
+          type: "string",
+          default: null,
+          description: "Code erreur Sendinblue",
+        },
+        webhook_status_at: {
+          type: Date,
+          default: null,
+          description: "Date fournie par les webhooks Sendinblue lors de la réception d'un event",
+        },
+        email_sent_at: {
+          type: Date,
+          default: null,
+          description: "Date de création de la collection",
+        },
+      },
+    },
+  },
   email_premiere_demande_candidat_date: {
     type: Date,
     default: null,

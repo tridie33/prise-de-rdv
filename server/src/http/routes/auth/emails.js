@@ -93,6 +93,44 @@ module.exports = ({ appointments, etablissements }) => {
         });
       }
 
+      const [appointmentCandidatFound] = await appointments.find({
+        "candidat_mailing.message_id": { $regex: messageId },
+      });
+
+      // If mail sent from appointment (to the candidat)
+      if (appointmentCandidatFound) {
+        const previousEmail = appointmentCandidatFound.mailing.find((mail) => mail.message_id.includes(messageId));
+
+        await appointmentCandidatFound.update({
+          $push: {
+            candidat_mailing: {
+              campaign: previousEmail.campaign,
+              status: parameters.event,
+              message_id: previousEmail.message_id,
+              webhook_status_at: eventDate,
+            },
+          },
+        });
+      }
+
+      const [appointmentCfaFound] = await appointments.find({ "cfa_mailing.message_id": { $regex: messageId } });
+
+      // If mail sent from appointment (to the CFA)
+      if (appointmentCfaFound) {
+        const previousEmail = appointmentCfaFound.mailing.find((mail) => mail.message_id.includes(messageId));
+
+        await appointmentCfaFound.update({
+          $push: {
+            cfa_mailing: {
+              campaign: previousEmail.campaign,
+              status: parameters.event,
+              message_id: previousEmail.message_id,
+              webhook_status_at: eventDate,
+            },
+          },
+        });
+      }
+
       return res.json({});
     })
   );
