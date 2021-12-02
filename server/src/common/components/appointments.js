@@ -42,11 +42,26 @@ module.exports = async () => ({
   },
 
   /**
+   * @description Returns items.
+   * @param {Object} conditions
+   * @returns {Promise<Appointment[]>}
+   */
+  find: (conditions) => Appointment.find(conditions),
+
+  /**
    * @description Returns one item.
    * @param {Object} conditions
    * @returns {Promise<Appointment>}
    */
   findOne: async (conditions) => Appointment.findOne(conditions),
+
+  /**
+   * @description Updates an appointment from its conditions.
+   * @param {Object} conditions
+   * @param {Object} values
+   * @returns {Promise<Appointment>}
+   */
+  findOneAndUpdate: (conditions, values) => Appointment.findOneAndUpdate(conditions, values, { new: true }),
 
   /**
    * @description Updates opened mail status for candidate.

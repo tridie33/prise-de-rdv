@@ -5,6 +5,7 @@ const Boom = require("boom");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const config = require("../../../../config");
 const { getReferrerById, getReferrerByKeyName, referrers } = require("../../../common/model/constants/referrers");
+const { candidatFollowUpType, mailType } = require("../../../common/model/constants/appointments");
 const { getFormationsByIdRcoFormations, getFormationsByIdParcoursup } = require("../../utils/catalogue");
 const { candidat } = require("../../../common/roles");
 const { getIdRcoFormationThroughIdActionFormation } = require("../../utils/mappings/onisep");
@@ -69,7 +70,11 @@ const appointmentItemSchema = Joi.object({
   champsLibreCommentaires: Joi.string().optional().allow(""),
 });
 
-module.exports = ({ users, appointments, mailer, widgetParameters }) => {
+const appointmentIdFollowUpSchema = Joi.object({
+  action: Joi.string().valid(candidatFollowUpType.CONFIRM, candidatFollowUpType.RESEND).required(),
+});
+
+module.exports = ({ users, appointments, mailer, widgetParameters, etablissements }) => {
   const router = express.Router();
   const notAllowedResponse = { error: "Prise de rendez-vous non disponible." };
 
@@ -291,6 +296,122 @@ module.exports = ({ users, appointments, mailer, widgetParameters }) => {
             formationCatalogue.etablissement_formateur_entreprise_raison_sociale,
         },
       });
+    })
+  );
+
+  router.get(
+    "/:id/candidat/follow-up",
+    tryCatch(async (req, res) => {
+      const appointment = await appointments.findOne({ _id: req.params.id });
+
+      if (!appointment) {
+        return res.sendStatus(400);
+      }
+
+      const etablissement = await etablissements.findOne({ siret_formateur: appointment.etablissement_id });
+
+      // Check if the RESEND action has already been triggered
+      const cfaMailResendExists = appointment.cfa_mailing.find(
+        (mail) => mail.campaign === mailType.CFA_REMINDER_RESEND_APPOINTMENT
+      );
+
+      res.send({
+        formAlreadySubmit: !!(appointment.candidat_contacted_at || cfaMailResendExists),
+        appointment: {
+          candidat_contacted_at: appointment.candidat_contacted_at,
+        },
+        etablissement: {
+          raison_sociale: etablissement.raison_sociale,
+          adresse: etablissement.adresse,
+          code_postal: etablissement.code_postal,
+          localite: etablissement.localite,
+        },
+      });
+    })
+  );
+
+  router.post(
+    "/:id/candidat/follow-up",
+    tryCatch(async (req, res) => {
+      const { action } = await appointmentIdFollowUpSchema.validateAsync(req.body, { abortEarly: false });
+
+      const appointment = await appointments.findOne({ _id: req.params.id });
+
+      if (!appointment) {
+        return res.sendStatus(400);
+      }
+
+      // Check if the RESEND action has already been triggered
+      const cfaMailResendExists = appointment.cfa_mailing.find(
+        (mail) => mail.campaign === mailType.CFA_REMINDER_RESEND_APPOINTMENT
+      );
+
+      if (appointment.candidat_contacted_at || cfaMailResendExists) {
+        return res.sendStatus(400);
+      }
+
+      const [user, widgetParameter, catalogueResponse] = await Promise.all([
+        users.findOne({ _id: appointment.candidat_id }),
+        widgetParameters.findOne({ id_rco_formation: appointment.id_rco_formation }),
+        getFormationsByIdRcoFormations({ idRcoFormations: appointment.id_rco_formation }),
+      ]);
+
+      if (action === candidatFollowUpType.CONFIRM) {
+        await appointment.update({ candidat_contacted_at: dayjs().toDate() });
+      }
+
+      if (action === candidatFollowUpType.RESEND) {
+        const referrerObj = getReferrerById(appointment.referrer);
+
+        const [formation] = catalogueResponse.formations;
+
+        const { messageId } = await mailer.sendEmail(
+          widgetParameter.email_rdv,
+          `[RDV via ${referrerObj.full_name}] Relance - Un candidat souhaite être contacté`,
+          path.join(__dirname, `../../../assets/templates/mail-cfa-demande-de-contact.mjml.ejs`),
+          {
+            user: {
+              firstname: user.firstname,
+              lastname: user.lastname,
+              phone: user.phone.match(/.{1,2}/g).join("."),
+              email: user.email,
+              motivations: appointment.motivations,
+            },
+            etablissement: {
+              name: formation.etablissement_formateur_entreprise_raison_sociale,
+              address: formation.lieu_formation_adresse,
+              postalCode: formation.code_postal,
+              ville: formation.localite,
+            },
+            formation: {
+              intitule: formation.intitule_long,
+            },
+            appointment: {
+              referrerLink: referrerObj.url,
+              referrer: referrerObj.full_name,
+            },
+            images: {
+              peopleLaptop: `${config.publicUrl}/assets/girl_laptop.png?raw=true`,
+            },
+          }
+        );
+
+        await appointments.findOneAndUpdate(
+          { _id: appointment._id },
+          {
+            $push: {
+              cfa_mailing: {
+                campaign: mailType.CFA_REMINDER_RESEND_APPOINTMENT,
+                status: null,
+                message_id: messageId,
+                email_sent_at: dayjs().toDate(),
+              },
+            },
+          }
+        );
+      }
+
+      res.sendStatus(200);
     })
   );
 

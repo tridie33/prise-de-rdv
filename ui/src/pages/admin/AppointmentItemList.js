@@ -76,17 +76,33 @@ export const AppointmentItemList = (props) => {
       <Td>{props.appointment.formation.intitule_long}</Td>
       <Td>{props.appointment.formation_id}</Td>
       <Td>
+        {!props.appointment.appointment?.candidat_contacted_at && (
+          <Tag bg="grey.500" size="md" ml={2} color="white">
+            N/A
+          </Tag>
+        )}
+        {props.appointment.etablissement?.opt_mode && (
+          <Tag bg="greenmedium.500" size="md" ml={2} color="white">
+            Oui
+          </Tag>
+        )}
+      </Td>
+      <Td>
         {props.appointment.etablissement?.opt_mode === "OPT_IN" && (
-          <Tag bg="#467FCF" size="md" ml={2} color="white">
+          <Tag bg="bluesoft.600" size="md" ml={2} color="white">
             Opt-In
           </Tag>
         )}
         {props.appointment.etablissement?.opt_mode === "OPT_OUT" && (
-          <Tag bg="#467FCF" size="md" ml={2} color="white">
+          <Tag bg="bluesoft.600" size="md" ml={2} color="white">
             Opt-Out
           </Tag>
         )}
-        {!props.appointment.etablissement?.opt_mode && "N/C"}
+        {!props.appointment.etablissement?.opt_mode && (
+          <Tag bg="grey.500" size="md" ml={2} color="white">
+            N/C
+          </Tag>
+        )}
       </Td>
       <Td>
         {props.appointment.etablissement?.opt_mode === "OPT_IN" && (

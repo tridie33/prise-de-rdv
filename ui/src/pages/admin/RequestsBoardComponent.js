@@ -27,24 +27,63 @@ export const RequestsBoardComponent = (props) => {
         <Table w="300rem" bg="white">
           <Thead>
             <Tr color="#ADB2BC">
-              <Td textStyle="sm">DATE</Td>
-              <Td textStyle="sm">CANDIDAT</Td>
-              <Td textStyle="sm">TÉLÉPHONE</Td>
-              <Td textStyle="sm">EMAIL CANDIDAT</Td>
-              <Td textStyle="sm">EMAIL CFA</Td>
-              <Td textStyle="sm">ETABLISSEMENT</Td>
-              <Td textStyle="sm">SIRET</Td>
-              <Td textStyle="sm">FORMATION</Td>
-              <Td textStyle="sm">CFD</Td>
-              <Td textStyle="sm">OPT MODE</Td>
-              <Td textStyle="sm">OPT ACTIVE LE</Td>
-              <Td textStyle="sm">SITE DE PROVENANCE</Td>
-              <Td textStyle="sm">MAIL CANDIDAT</Td>
-              <Td textStyle="sm">MAIL CFA</Td>
-              <Td textStyle="sm">MOTIVATIONS DU CANDIDAT </Td>
-              <Td textStyle="sm">CHAMPS LIBRE STATUT </Td>
-              <Td textStyle="sm">CHAMPS LIBRE COMMENTAIRES </Td>
-              <Td textStyle="sm">ACTIONS </Td>
+              <Td textStyle="sm" minW={40}>
+                DATE
+              </Td>
+              <Td textStyle="sm" minW={40}>
+                CANDIDAT
+              </Td>
+              <Td textStyle="sm" minW={40}>
+                TÉLÉPHONE
+              </Td>
+              <Td textStyle="sm" minW={40}>
+                EMAIL CANDIDAT
+              </Td>
+              <Td textStyle="sm" minW={40}>
+                EMAIL CFA
+              </Td>
+              <Td textStyle="sm" minW={40}>
+                ETABLISSEMENT
+              </Td>
+              <Td textStyle="sm" minW={40}>
+                SIRET
+              </Td>
+              <Td textStyle="sm" minW={40}>
+                FORMATION
+              </Td>
+              <Td textStyle="sm" minW={40}>
+                CFD
+              </Td>
+              <Td textStyle="sm" minW={40}>
+                A ETE CONTACTE
+              </Td>
+              <Td textStyle="sm" minW={40}>
+                OPT MODE
+              </Td>
+              <Td textStyle="sm" minW={40}>
+                OPT ACTIVE LE
+              </Td>
+              <Td textStyle="sm" minW={40}>
+                SITE DE PROVENANCE
+              </Td>
+              <Td textStyle="sm" minW={40}>
+                MAIL CANDIDAT
+              </Td>
+              <Td textStyle="sm" minW={40}>
+                MAIL CFA
+              </Td>
+              <Td textStyle="sm" minW={40}>
+                MOTIVATIONS DU CANDIDAT{" "}
+              </Td>
+              <Td textStyle="sm" minW={40}>
+                CHAMPS LIBRE STATUT{" "}
+              </Td>
+              <Td textStyle="sm" minW={40}>
+                CHAMPS LIBRE COMMENTAIRES{" "}
+              </Td>
+              <Td textStyle="sm" minW={40}>
+                ACTIONS{" "}
+              </Td>
             </Tr>
           </Thead>
           <Tbody>
