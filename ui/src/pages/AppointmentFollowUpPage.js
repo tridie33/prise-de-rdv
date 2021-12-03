@@ -48,7 +48,7 @@ const AppointmentFollowUpPage = () => {
             <Flex px={91}>
               <Box w="100%">
                 <Text textStyle="h3" fontSize="28px" fontWeight="700" color="info" align="center">
-                  Votre demande de contact <br />a bien été renvoyé au centre de formation :
+                  Votre demande de contact <br />a bien été renvoyée au centre de formation :
                 </Text>
               </Box>
             </Flex>

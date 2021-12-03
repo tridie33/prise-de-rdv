@@ -26,7 +26,6 @@ function createWidgetPRDV(element) {
     })
         .then(response => response.json())
         .then(data => {
-
             if(data && !data.error) {
                 const a = document.createElement("a");
                 const link = document.createTextNode("Prendre rendez-vous");

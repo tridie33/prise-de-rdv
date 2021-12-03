@@ -17,10 +17,12 @@ const candidatHaveYouBeenContacted = async ({ etablissements, widgetParameters, 
     created_at: {
       $lte: dayjs().subtract(5, "days").toDate(),
       // Excludes very older appointments
-      $gte: dayjs("2021-10-10T00:00:00.486Z").toDate(),
+      $gte: dayjs("2021-12-01T00:00:00.486Z").toDate(),
     },
     "candidat_mailing.campaign": { $ne: mailType.CANDIDAT_HAVE_YOU_BEEN_CONTACTED },
   });
+
+  logger.info("Appointments to follow-up:", { appointments: appointmentsToTrigger });
 
   const promises = appointmentsToTrigger.map(async (appointment) => {
     const referrerObj = getReferrerById(appointment.referrer);
