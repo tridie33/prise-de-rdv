@@ -8,7 +8,7 @@ const { optMode } = require("../common/model/constants/etablissement");
  * @returns {Promise<void>}
  */
 const syncEtablissementsAndFormations = async ({ etablissements, widgetParameters }) => {
-  const batchSize = 1000;
+  const batchSize = 300;
   let response;
 
   do {
