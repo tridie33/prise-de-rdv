@@ -1,107 +1,102 @@
 <mjml>
     <mj-head>
-        <mj-title>Nous allons vous rappeler</mj-title>
+        <mj-title>Avez-vous été contacté ?</mj-title>
         <mj-font name="Inter" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap'" />
         <mj-style inline="inline">
             a:link,a:visited, a:hover, a:active {color: #206BC4;}, a {color: #3A55D1;}, body{background: #F9F8F6;}
             .purple {color: #3A55D1; text-decoration: none}
         </mj-style>
         <mj-attributes>
-            <mj-text padding="0" color="#232E3C" font-family="Inter,sans-serif" font-size="14px" line-height="23px" />
-            <mj-divider padding="0" />
+            <mj-text color="#232E3C" font-family="Inter,sans-serif" font-size="14px" line-height="23px" />
+            <mj-divider />
         </mj-attributes>
     </mj-head>
     <mj-body background-color="#F9F8F6">
-        <mj-section padding="0" padding-top="20px">
-            <mj-column padding="0" vertical-align="middle" width="160px" padding-right="20px" padding-top="30px">
-                <mj-image padding="0" src="<%= data.images.peopleLaptop %>" alt="Figure" />
+        <mj-section padding-top="20px" padding-bottom="0">
+            <mj-column vertical-align="middle" width="220px" padding-right="20px" padding-top="30px" padding-bottom="0">
+                <mj-image src="<%= data.images.peopleLaptop %>" alt="Figure" padding-bottom="0"></mj-image>
             </mj-column>
-            <mj-column padding="0" vertical-align="middle" width="320px">
-                <mj-text padding="0" padding-top="30px" font-size="22px" font-weight="700" color="#3A55D1" line-height="26px" text-decoration="none" align="left">
+            <mj-column vertical-align="middle" width="380px">
+                <mj-text font-size="22px" font-weight="700" color="#3A55D1" line-height="26px" text-decoration="none" align="left" padding="0" padding-top="30px">
                     Avez-vous bien été contacté
                 </mj-text>
-                <mj-text padding="0" font-size="22px" font-weight="700" line-height="26.63px" text-decoration="none" color="#383838" align="left">par le centre de formation ?</mj-text>
+                <mj-text font-size="22px" font-weight="700" line-height="26.63px" text-decoration="none" color="#383838" align="left" padding="0">par le centre de formation ?</mj-text>
             </mj-column>
         </mj-section>
-        <mj-wrapper padding="0" background-color="#ffffff">
-            <mj-section background-color="#ffffff" padding-top="65px" padding-bottom="10px">
-                <mj-column width="480px">
-                    <mj-text padding-bottom="32px" font-size="20px" padding="0" font-weight="700" line-height="24px" text-decoration="none" color="#3A55D1">
-                        Bonjour
-                        <%= data.user.firstname %>
-                        <%= data.user.lastname %>,
-                    </mj-text>
-                    <mj-text font-size="16px" line-height="20px" padding-top="0">
-                        Votre demande de contact a été envoyée le <%= data.appointment.createdAt %> concernant la formation <b><%= data.formation.intitule %></b>, dispensée par :
-                    </mj-text>
-                </mj-column>
-            </mj-section>
-            <mj-section padding="0">
-                <mj-column padding="0" width="480px">
-                    <mj-text font-size="16px" line-height="20px">
-                        <b><%= data.etablissement.name %></b>
-                    </mj-text>
-                </mj-column>
-            </mj-section>
-            <mj-section padding="0">
-                <mj-column padding="0" width="20px">
-                    <mj-image padding="0" src="<%= data.images.map %>" width="16px" padding-top="6px" alt="Icon position" />
-                </mj-column>
-                <mj-column width="460px" padding-top="4px">
-                    <mj-text font-size="14px" padding-left="4px">
-                        <%= data.etablissement.address %>,
-                        <%= data.etablissement.postalCode %> <%= data.etablissement.ville %>
-                    </mj-text>
-                </mj-column>
-            </mj-section>
-            <mj-section background-color="#ffffff" padding-top="30px">
-                <mj-column width="480px">
-                    <mj-text padding="0" font-size="16px" line-height="20px">
-                        <b>L’établissement vous a-t-il contacté ?</b>
-                    </mj-text>
-                </mj-column>
-            </mj-section>
-            <mj-section background-color="#ffffff" padding-top="0" padding-bottom="0">
-                <mj-column width="480px">
-                    <mj-button color="#3A55D1" width="480px" border-radius="8px" padding-left="0" background-color="#ffffff" border="0.5px solid #3A55D1" font-size="16px" href="<%= data.links.confirm %>">
-                        👌 Oui l’établissement m’a contacté
-                    </mj-button>
-                </mj-column>
-            </mj-section>
-            <mj-section background-color="#ffffff" padding-top="0" padding-bottom="0">
-                <mj-column width="480px">
-                    <mj-button color="#3A55D1" width="480px" border-radius="8px" padding-left="0" background-color="#ffffff" border="0.5px solid #3A55D1" font-size="16px" href="<%= data.links.resend %>">
-                        🤔 Je n’ai pas encore été contacté, envoyer une relance !
-                    </mj-button>
-                </mj-column>
-            </mj-section>
-            <mj-section background-color="#ffffff" padding-bottom="50px">
-                <mj-column width="480px">
-                    <mj-divider border-width="0.5px" border-style="solid" border-color="#D0C9C4" padding-top="20px" padding-bottom="35px" />
-                    <mj-text padding="0" padding-bottom="15px">
-                        Vous avez fait cette demande sur le site <a href="<%= data.appointment.referrerLink %>"><%= data.appointment.referrer %></a>
-                    </mj-text>
-                    <mj-text>
-                        Vous souhaitez modifier ou annuler cette demande ?
-                    </mj-text>
-                    <mj-text>Envoyez un email à
-                        <a href="mailto:<%= data.user.email %>">
-                            <%= data.user.email %>
-                        </a>
-                    </mj-text>
-                </mj-column>
-            </mj-section>
-            <mj-section background-color="#f9f8f6" padding="0" padding-bottom="50px">
-                <mj-column width="480px">
-                    <mj-text padding="0" padding-top="20px" align="center">
-                        <b>RDV Apprentissage</b> est un outil développé
-                    </mj-text>
-                    <mj-text padding="0" padding-bottom="20px" align="center">
-                        par la <a href="https://mission-apprentissage.gitbook.io/general/">Mission interministérielle pour l’apprentissage</a>
-                    </mj-text>
-                </mj-column>
-            </mj-section>
+        <mj-section background-color="#ffffff" padding-top="45px" padding-bottom="0">
+            <mj-column width="520px">
+                <mj-text padding-bottom="32px" font-size="20px" font-weight="700" line-height="24px" text-decoration="none" color="#3A55D1">
+                    Bonjour
+                    <%= data.user.firstname %>
+                    <%= data.user.lastname %>,
+                </mj-text>
+                <mj-text font-size="16px" line-height="20px" padding-top="0" padding-bottom="0">
+                    Votre demande de contact a été envoyée le <%= data.appointment.createdAt %> concernant la formation <b><%= data.formation.intitule %></b>, dispensée par :
+                </mj-text>
             </mj-column>
-        </mj-wrapper>
+        </mj-section>
+        <mj-section background-color="#ffffff" padding-top="0" padding-bottom="0">
+            <mj-column width="520px" padding-bottom="0">
+                <mj-text font-size="16px" line-height="20px" padding-top="0" padding-bottom="0">
+                    <b><%= data.etablissement.name %></b>
+                </mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#ffffff" padding-top="0" padding-bottom="0">
+            <mj-column width="20px">
+                <mj-image width="20px" height="20px" padding="0" src="https://rdv-cfa.apprentissage.beta.gouv.fr/assets/map.png"></mj-image>
+            </mj-column>
+            <mj-column width="450px">
+                <mj-text font-size="14px" padding-top="0">
+                    <%= data.etablissement.address %>,
+                    <%= data.etablissement.postalCode %> <%= data.etablissement.ville %>
+                </mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#ffffff" padding-top="30px">
+            <mj-column width="520px">
+                <mj-text font-size="16px" line-height="20px" padding-bottom="0">
+                    <b>L’établissement vous a-t-il contacté ?</b>
+                </mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#ffffff" padding-top="0" padding-bottom="0">
+            <mj-column width="520px">
+                <mj-button color="#3A55D1" width="100%" border-radius="8px" background-color="#ffffff" border="0.5px solid #3A55D1" font-size="16px" href="<%= data.links.confirm %>">
+                    👌 Oui l’établissement m’a contacté
+                </mj-button>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#ffffff" padding-top="0" padding-bottom="0">
+            <mj-column width="520px">
+                <mj-button color="#3A55D1" width="100%" border-radius="8px" background-color="#ffffff" border="0.5px solid #3A55D1" font-size="16px" href="<%= data.links.resend %>">
+                    🤔 Je n’ai pas encore été contacté, envoyer une relance !
+                </mj-button>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#ffffff">
+            <mj-column width="520px">
+                <mj-divider border-width="0.5px" border-style="solid" border-color="#D0C9C4" padding-top="0" padding-bottom="25px" />
+                <mj-text padding-bottom="15px">
+                    Vous avez fait cette demande sur le site <a href="<%= data.appointment.referrerLink %>"><%= data.appointment.referrer %></a> <br/>
+                </mj-text>
+                <mj-text padding-bottom="30px">
+                    Vous souhaitez modifier ou annuler cette demande ? <br />
+                    Envoyez un email à
+                    <a href="mailto:<%= data.etablissement.email %>">
+                        <%= data.etablissement.email %>
+                    </a>
+                </mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#f9f8f6">
+            <mj-column width="520px">
+                <mj-text padding-top="20px" padding-bottom="20px" align="center">
+                    <b>RDV Apprentissage</b> est un outil développé <br/>
+                    par la <a href="https://mission-apprentissage.gitbook.io/general/">Mission interministérielle pour l’apprentissage</a>
+                </mj-text>
+            </mj-column>
+            </mj-column>
+        </mj-section>
     </mj-body>
 </mjml>

@@ -1,6 +1,6 @@
 <mjml>
     <mj-head>
-        <mj-title>Nous allons vous rappeler</mj-title>
+        <mj-title>️Pouvez-vous contacter ce candidat ?</mj-title>
         <mj-font name="Inter" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap'" />
         <mj-style inline="inline">
             a:link,a:visited, a:hover, a:active {color: #206BC4;}, a {color: #3A55D1;}, body{background: #F9F8F6;}
@@ -15,9 +15,9 @@
         <mj-section padding-top="20px" padding-bottom="0">
             <mj-column vertical-align="middle" width="380px">
                 <mj-text font-size="22px" font-weight="700" color="#383838" line-height="26px" text-decoration="none" align="left" padding="0" padding-top="30px">
-                    Le centre de formation a bien reçu
+                    Pouvez-vous
                 </mj-text>
-                <mj-text font-size="22px" font-weight="700" line-height="26.63px" text-decoration="none" color="#3A55D1" align="left" padding="0">votre demande de contact !</mj-text>
+                <mj-text font-size="22px" font-weight="700" line-height="26.63px" text-decoration="none" color="#3A55D1" align="left" padding="0">contacter ce candidat ?</mj-text>
             </mj-column>
             <mj-column vertical-align="middle" width="220px" padding-right="20px" padding-top="30px" padding-bottom="0">
                 <mj-image src="<%= data.images.peopleLaptop %>" alt="Figure" padding-bottom="0" />
@@ -26,52 +26,35 @@
         <mj-section background-color="#ffffff" padding-top="45px" padding-bottom="0">
             <mj-column width="480px">
                 <mj-text padding-bottom="32px" font-size="20px" font-weight="700" line-height="24px" text-decoration="none" color="#3A55D1">
-                    Bonjour
-                    <%= data.user.firstname %>
-                    <%= data.user.lastname %>,
+                    Bonjour,
                 </mj-text>
-                <mj-text font-size="16px" line-height="20px" padding-top="0" padding-bottom="0">
-                    Merci de votre intérêt pour la formation <b><%= data.formation.intitule %></b>, dispensée par :
+                <mj-text font-size="16px" line-height="20px" font-weight="700">
+                    Le ou la candidate <%= data.user.firstname %> <%= data.user.lastname %> a signalé ne pas avoir été contacté par votre établissement suite à sa demande envoyée le <%= data.appointment.createdAt %>.
+                    Merci de le contacter le plus vite possible au <a href="tel:<%= data.user.phone %>" class="purple"><%= data.user.phone %></a> ou par mail <a href="mailto:<%= data.user.email %>" class="purple"><%= data.user.email %></a> !
+                </mj-text>
+                <mj-text font-size="16px" line-height="20px" padding-top="20px">
+                    Il ou elle souhaite aborder avec vous le(s) sujet(s) suivant : <br/>
+                    "<%= data.appointment.motivation %>"<br/>
+                    à propos de la formation : <b><%= data.formation.intitule %></b><br/>
+                    dispensée par :
+                    <b><%= data.etablissement.name %></b>, <%= data.etablissement.address %>, <%= data.etablissement.postalCode %> <%= data.etablissement.ville %>
                 </mj-text>
             </mj-column>
         </mj-section>
         <mj-section background-color="#ffffff" padding-top="0" padding-bottom="0">
-            <mj-column width="480px" padding-bottom="0">
-                <mj-text font-size="16px" line-height="20px" padding-top="0" padding-bottom="0">
-                    <b><%= data.etablissement.name %></b>
-                </mj-text>
-            </mj-column>
-        </mj-section>
-        <mj-section background-color="#ffffff" padding-top="0" padding-bottom="0">
-            <mj-column width="20px">
-                <mj-image width="20px" height="20px" padding="0" src="https://rdv-cfa.apprentissage.beta.gouv.fr/assets/map.png"></mj-image>
-            </mj-column>
-            <mj-column width="410px">
-                <mj-text font-size="14px" padding-top="0">
-                    <%= data.etablissement.address %>,
-                    <%= data.etablissement.postalCode %> <%= data.etablissement.ville %>
-                </mj-text>
-            </mj-column>
-        </mj-section>
-        <mj-section background-color="#ffffff" padding-bottom="0" padding-top="20px">
             <mj-column width="480px">
-                <mj-text font-size="16px" line-height="20px">
-                    <b>L’établissement prendra contact avec vous très prochainement au <span class="purple"><%= data.user.phone %></span> ou sur <span class="purple"><%= data.user.email %></span>.</b>
-                </mj-text>
+                <mj-text font-size="16px" line-height="20px" padding-top="15px">A très bientôt, <br/>
+                    <i>L'équipe de la Mission apprentissage</i></mj-text>
             </mj-column>
         </mj-section>
         <mj-section background-color="#ffffff">
             <mj-column width="480px">
                 <mj-divider border-width="0.5px" border-style="solid" border-color="#D0C9C4" padding-top="0" padding-bottom="25px" />
                 <mj-text padding-bottom="15px">
-                    Vous avez fait cette demande sur le site <a href="<%= data.appointment.referrerLink %>"><%= data.appointment.referrer %></a> <br/>
+                    Si vous avez des questions ou si vous souhaitez vous désinscrire du service, envoyez un email à <a href="mailto:rdv_apprentissage@apprentissage.beta.gouv.fr">rdv_apprentissage@apprentissage.beta.gouv.fr</a>.
                 </mj-text>
-                <mj-text padding-bottom="30px">
-                    Vous souhaitez modifier ou annuler cette demande ? <br />
-                    Envoyez un email à
-                    <a href="mailto:<%= data.etablissement.email %>">
-                        <%= data.etablissement.email %>
-                    </a>
+                <mj-text padding-top="15px">
+                    Cette demande a été réalisée sur le site <a href="<%= data.appointment.referrerLink %>"><%= data.appointment.referrer %></a>.
                 </mj-text>
             </mj-column>
         </mj-section>

@@ -29,7 +29,7 @@ const constantsRoute = require("./routes/public/constants");
 const { administrator } = require("./../common/roles");
 const { syncEtablissementsAndFormations } = require("../cron/syncEtablissementsAndFormations");
 const { activateOptOutEtablissementFormations } = require("../cron/activateOptOutEtablissementFormations");
-// const { candidatHaveYouBeenContacted } = require("../cron/candidatHaveYouBeenContacted");
+const { candidatHaveYouBeenContacted } = require("../cron/candidatHaveYouBeenContacted");
 
 /**
  * @description Express function that embed components in routes.
@@ -37,7 +37,7 @@ const { activateOptOutEtablissementFormations } = require("../cron/activateOptOu
  * @returns {Promise<*|Express>}
  */
 module.exports = async (components) => {
-  const { db, etablissements, widgetParameters, mailer } = components;
+  const { db, etablissements, widgetParameters, mailer, appointments, users } = components;
   const app = express();
   const checkJwtToken = authMiddleware(components);
   const adminOnly = permissionsMiddleware(administrator);
@@ -105,9 +105,9 @@ module.exports = async (components) => {
   );
 
   // Everyday, every 5 minutes
-  // cron.schedule("*/5 * * * *", () =>
-  //   candidatHaveYouBeenContacted({ mailer, appointments, widgetParameters, users, etablissements })
-  // );
+  cron.schedule("*/5 * * * *", () =>
+    candidatHaveYouBeenContacted({ mailer, appointments, widgetParameters, users, etablissements })
+  );
 
   return app;
 };

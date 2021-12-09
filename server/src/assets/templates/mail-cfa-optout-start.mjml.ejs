@@ -4,128 +4,120 @@
         <mj-font name="Inter" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap'" />
         <mj-style inline="inline">
             a:link,a:visited, a:hover, a:active {color: #206BC4;}, a {color: #3A55D1;}, body{background: #F9F8F6;}
-            a.grey:link,a:visited, a:hover, a:active {color: #1E1E1E;text-decoration: none;}, a {color: #1E1E1E;text-decoration: none;}, body{background: #1E1E1E;text-decoration: none;}
             .purple {color: #3A55D1; text-decoration: none}
         </mj-style>
         <mj-attributes>
-            <mj-text padding="0px" color="#232E3C" font-family="Inter,sans-serif" font-size="14px" line-height="23px" />
-            <mj-divider padding="0px" />
+            <mj-text color="#232E3C" font-family="Inter,sans-serif" font-size="14px" line-height="23px" />
+            <mj-divider />
         </mj-attributes>
     </mj-head>
     <mj-body background-color="#F9F8F6">
-        <mj-section padding="0px" padding-top="20px">
-            <mj-column vertical-align="middle" width="140px" padding-bottom="0">
-                <mj-image padding="0px" src="<%= data.images.gouvernementLogo %>" alt="Figure" />
+        <mj-section padding-top="20px">
+            <mj-column vertical-align="middle" width="120px" padding-bottom="0">
+                <mj-image src="<%= data.images.gouvernementLogo %>" padding="0" alt="Logo gouvernement" />
             </mj-column>
-            <mj-column padding="0px" vertical-align="middle" width="460px" padding-left="25px">
-                <mj-text padding="0px" font-size="20px" font-weight="700" line-height="28px">
+            <mj-column vertical-align="middle" width="480px">
+                <mj-text font-size="20px" font-weight="700" line-height="28px" padding-bottom="0">
                     RDV Apprentissage
                 </mj-text>
-                <mj-text padding="0px" font-size="14px" line-height="24px">
+                <mj-text font-size="14px" line-height="24px" padding-top="0">
                     Mise en relation entre les candidats à l'apprentissage et les CFA
                 </mj-text>
             </mj-column>
         </mj-section>
-        <mj-wrapper padding="0" padding-top="25px">
-            <mj-section background-color="#ffffff" padding-top="50px" padding-bottom="0">
-                <mj-column width="320px">
-                    <mj-text font-size="20px" padding="0px" font-weight="700" line-height="24px" color="#3A55D1">
-                        Félicitations ! Vous allez recevoir des demandes de contacts
-                    </mj-text>
-                    <mj-text font-size="20px" font-weight="700" line-height="24px" color="#383838" padding-bottom="0">directement dans les boîtes mails de votre CFA !</mj-text>
-                </mj-column>
-                <mj-column vertical-align="middle" width="160px" padding-bottom="0">
-                    <mj-image padding="0px" src="<%= data.images.peopleLaptop %>" alt="Figure" />
-                </mj-column>
-            </mj-section>
-            <mj-section background-color="#ffffff" padding="0">
-                <mj-column width="480px" border-bottom="0.5px solid #D0C9C4" padding="0"></mj-column>
-            </mj-section>
-            <mj-section background-color="#ffffff" padding-top="25px">
-                <mj-column width="480px">
-                    <mj-text font-size="16px" line-height="20px" font-weight="700" color="#1E1E1E">
-                        Le service RDV Apprentissage est désormais activé sur vos fiches formations publiées sur <a href="https://labonnealternance.pole-emploi.fr" class="grey">La Bonne Alternance</a>.
-                    </mj-text>
-                    <mj-text font-size="16px" line-height="20px" padding-top="25px">A partir d’aujourd’hui, vous recevrez ces demandes sur les adresses e-mail que vous avez enregistrées auprès de votre <u><a href="https://www.intercariforef.org">Carif-Oref</a></u> pour l’organisme de formation suivant :</mj-text>
-                    <mj-text font-size="16px" line-height="20px" padding-top="0"><b><%= data.etablissement.name %></b></mj-text>
-                    <mj-text font-size="16px" line-height="20px" padding-top="0"><b><%= data.etablissement.address %></b></mj-text>
-                    <mj-text font-size="16px" line-height="20px" padding-top="0"><b><%= data.etablissement.postalCode %> <%= data.etablissement.ville %></b></mj-text>
-                    <mj-text font-size="16px" line-height="20px" padding-top="0"><b>SIRET : <%= data.etablissement.siret %></b></mj-text>
-                </mj-column>
-            </mj-section>
-            <mj-section background-color="#ffffff" padding-top="10px">
-                <mj-column width="50px" background-color="#F8F8F8" border-left="5px solid #FF6F4C" vertical-align="middle">
-                    <mj-spacer height="25px" />
-                    <mj-image padding="0" src="<%= data.images.informationIcon %>" alt="Information" width="20px" padding-left="5px" />
-                    <mj-spacer height="26px" />
-                </mj-column>
-                <mj-column width="430px" padding-top="0" background-color="#F8F8F8" vertical-align="middle">
-                    <mj-text font-size="16px" line-height="20px" padding-left="5px" padding-right="10px" padding-top="15px" height="56px">
-                        Nous vous invitons à vérifier régulièrement vos boîtes mails pour répondre aux candidats dès que possible.
-                    </mj-text>
-                </mj-column>
-            </mj-section>
-            <mj-section background-color="#ffffff" padding-top="10px" padding-bottom="0">
-                <mj-column vertical-align="middle" width="480px" padding-bottom="0">
-                    <mj-image padding="0px" src="<%= data.images.optOutLbaIntegrationExample %>" alt="Intégration La" />
-                </mj-column>
-            </mj-section>
-            <mj-section background-color="#ffffff">
-                <mj-column width="480px" padding-top="0">
-                    <mj-text font-size="16px" line-height="20px">
-                        Vous pouvez vous rendre sur le site <a href="https://labonnealternance.pole-emploi.fr">La Bonne Alternance</a> pour vérifier que le bouton "Prendre rendez-vous" apparaît bien sur vos formations.
-                    </mj-text>
-                </mj-column>
-            </mj-section>
-            <mj-section background-color="#ffffff" padding-top="0" padding-bottom="0">
-                <mj-column>
-                    <mj-button color="#3A55D1" width="480px" border-radius="8px" background-color="#ffffff" border="0.5px solid #3A55D1" href="https://mission-apprentissage.gitbook.io/rendez-vous-apprentissage-inscription/">
-                        Je souhaite en savoir plus sur ce service
-                    </mj-button>
-                </mj-column>
-            </mj-section>
-            <mj-section background-color="#ffffff" padding-top="0" padding-bottom="0">
-                <mj-column>
-                    <mj-button color="#3A55D1" width="480px" border-radius="8px" background-color="#ffffff" border="0.5px solid #3A55D1" href="mailto:rdv_apprentissage@apprentissage.beta.gouv.fr">
-                        J’ai une question
-                    </mj-button>
-                </mj-column>
-            </mj-section>
-            <mj-section background-color="#ffffff" padding-top="0" padding-bottom="0">
-                <mj-column>
-                    <mj-button color="#3A55D1" width="480px" border-radius="8px" background-color="#ffffff" border="0.5px solid #3A55D1" href="<%= data.etablissement.linkToUnsubscribe %>">
-                        Je ne souhaite pas bénéficier de ce service
-                    </mj-button>
-                </mj-column>
-            </mj-section>
-            <mj-section background-color="#ffffff" padding-top="20px">
-                <mj-column width="480px" padding-top="2px">
-                    <mj-divider border-width="0.5px" border-style="solid" border-color="#D0C9C4" padding-top="0px" />
-                </mj-column>
-            </mj-section>
-            <mj-section background-color="#ffffff" padding-top="10px" padding-bottom="30px">
-                <mj-section padding="0px">
-                    <mj-column width="480px">
-                        <mj-text padding="0">
-                            Ce mail a été envoyé à <a href="mailto:<%= data.user.destinataireEmail %>"><%= data.user.destinataireEmail %></a>
-                        </mj-text>
-                    </mj-column>
-                </mj-section>
-                </mj-column>
-            </mj-section>
-            <mj-section background-color="#f9f8f6">
-                <mj-section padding="0px">
-                    <mj-column width="420px">
-                        <mj-text padding="0px" padding-top="20px" align="center">
-                            <b>RDV Apprentissage</b> est un outil développé
-                        </mj-text>
-                        <mj-text padding="0px" padding-bottom="20px" align="center">
-                            par la <a href="https://mission-apprentissage.gitbook.io/general/">Mission interministérielle pour l’apprentissage</a>
-                        </mj-text>
-                    </mj-column>
-                </mj-section>
-                </mj-column>
-            </mj-section>
-        </mj-wrapper>
+        <mj-section background-color="#ffffff" padding-top="50px" padding-bottom="0">
+            <mj-column width="340px">
+                <mj-text font-size="20px" font-weight="700" line-height="24px" color="#3A55D1" padding-bottom="0">
+                    Recevez les demandes de contact des candidats
+                </mj-text>
+                <mj-text font-size="20px" font-weight="700" line-height="24px" color="#383838" padding-bottom="0" padding-top="0">directement dans les boîtes mails de votre CFA !</mj-text>
+            </mj-column>
+            <mj-column vertical-align="middle" width="170px" padding-bottom="0" padding-top="20px">
+                <mj-image src="<%= data.images.peopleLaptop %>" width="140px" padding="0" alt="Figure" />
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#ffffff" padding-top="0">
+            <mj-column width="520px">
+                <mj-divider border-color="#D0C9C4" border-width="1px"  padding-top="0"></mj-divider>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#ffffff" padding-top="0">
+            <mj-column width="520px">
+                <mj-text font-size="16px" line-height="20px" font-weight="700">
+                    A partir du <%= data.etablissement.optOutActivatedAtDate %>, un nouveau service sera ajouté à vos fiches formations publiées sur La Bonne Alternance. Il permettra aux candidats intéressés par vos formations de vous envoyer une demande de contact.
+                </mj-text>
+                <mj-text font-size="16px" line-height="20px" padding-top="25px">Vous recevrez ces demandes sur les adresses email que vous avez enregistrées auprès de votre <u><a href="https://www.intercariforef.org">Carif-Oref</a></u> pour l’organisme de formation suivant :</mj-text>
+                <mj-text font-size="16px" line-height="20px" padding-top="0"><b><%= data.etablissement.name %> <br />
+                        <%= data.etablissement.address %><br/>
+                        <%= data.etablissement.postalCode %> <%= data.etablissement.ville %></b>
+                </mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#ffffff" padding-top="10px">
+            <mj-column width="50px" background-color="#F8F8F8" border-left="5px solid #FF6F4C" vertical-align="middle">
+                <mj-spacer height="23px"/>
+                <mj-image src="<%= data.images.informationIcon %>" alt="Information" width="20px" padding-left="5px" />
+                <mj-spacer height="23px" />
+            </mj-column>
+            <mj-column width="420px" padding-top="0" background-color="#F8F8F8" vertical-align="middle">
+                <mj-text font-size="16px" line-height="20px" padding-right="10px" padding-top="15px" height="56px">
+                    Nous vous invitons à vérifier régulièrement vos boîtes mails pour répondre aux candidats dès que possible.
+                </mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#ffffff" padding-top="0" padding-bottom="0">
+            <mj-column vertical-align="middle" width="520px" padding-bottom="0">
+                <mj-image src="<%= data.images.optOutLbaIntegrationExample %>" alt="Intégration La" />
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#ffffff">
+            <mj-column width="520px" padding-top="0">
+                <mj-text font-size="16px" line-height="20px">
+                    Pour continuer à améliorer votre sourcing, ce service sera progressivement activé sur chacune de vos fiches formations publiées sur Parcoursup, Affelnet et d’autres plateformes et portails du service public.
+                </mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#ffffff" padding-top="0" padding-bottom="0">
+            <mj-column width="520px">
+                <mj-button color="#3A55D1" width="100%" border-radius="8px" background-color="#ffffff" border="0.5px solid #3A55D1" font-size="16px" href="https://mission-apprentissage.gitbook.io/rendez-vous-apprentissage-inscription/">
+                    Je souhaite en savoir plus sur ce service
+                </mj-button>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#ffffff" padding-top="0" padding-bottom="0">
+            <mj-column width="520px">
+                <mj-button color="#3A55D1" width="100%" border-radius="8px" background-color="#ffffff" border="0.5px solid #3A55D1" font-size="16px" href="mailto:rdv_apprentissage@apprentissage.beta.gouv.fr">
+                    J’ai une question
+                </mj-button>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#ffffff" padding-top="0" padding-bottom="0">
+            <mj-column width="520px">
+                <mj-button color="#3A55D1" width="100%" border-radius="8px" background-color="#ffffff" border="0.5px solid #3A55D1" font-size="16px" href="<%= data.etablissement.linkToUnsubscribe %>">
+                    Je ne souhaite pas bénéficier de ce service
+                </mj-button>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#ffffff" padding-top="20px">
+            <mj-column width="520px" padding-top="2px">
+                <mj-divider border-width="0.5px" border-style="solid" border-color="#D0C9C4" padding-top="0px" />
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#ffffff" padding-top="0" padding-bottom="30px">
+            <mj-column width="520px">
+                <mj-text padding-top="0">
+                    Ce mail a été envoyé à <a href="mailto:<%= data.user.destinataireEmail %>"><%= data.user.destinataireEmail %></a>
+                </mj-text>
+            </mj-column>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#f9f8f6">
+            <mj-column width="420px">
+                <mj-text padding-top="20px" align="center">
+                    <b>RDV Apprentissage</b> est un outil développé <br/>
+                    par la <a href="https://mission-apprentissage.gitbook.io/general/">Mission interministérielle pour l’apprentissage</a>
+                </mj-text>
+            </mj-column>
+        </mj-section>
     </mj-body>
 </mjml>

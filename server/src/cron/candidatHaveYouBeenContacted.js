@@ -33,44 +33,83 @@ const candidatHaveYouBeenContacted = async ({ etablissements, widgetParameters, 
       etablissements.findOne({ siret_formateur: appointment.etablissement_id }),
     ]);
 
-    const { messageId } = await mailer.sendEmail(
-      user.email,
-      `🛎️ Avez-vous été contacté par le centre de formation ?`,
-      path.join(__dirname, `../assets/templates/mail-candidat-rdv-have-you-been-contacted.mjml.ejs`),
-      {
-        images: {
-          peopleLaptop: `${config.publicUrl}/assets/man_laptop.png?raw=true`,
-          gouvernementLogo: `${config.publicUrl}/assets/gouvernement_logo.png?raw=true`,
-          optOutLbaIntegrationExample: `${config.publicUrl}/assets/exemple_integration_lba.png?raw=true`,
-          informationIcon: `${config.publicUrl}/assets/icon_warning_orange.png?raw=true`,
-          map: `${config.publicUrl}/assets/map.png?raw=true`,
+    const [mailCandidat, mailCfa] = await Promise.all([
+      mailer.sendEmail(
+        user.email,
+        `🛎️ Avez-vous été contacté par le centre de formation ?`,
+        path.join(__dirname, `../assets/templates/mail-candidat-rdv-have-you-been-contacted.mjml.ejs`),
+        {
+          images: {
+            peopleLaptop: `${config.publicUrl}/assets/man_laptop.png?raw=true`,
+            gouvernementLogo: `${config.publicUrl}/assets/gouvernement_logo.png?raw=true`,
+            optOutLbaIntegrationExample: `${config.publicUrl}/assets/exemple_integration_lba.png?raw=true`,
+            informationIcon: `${config.publicUrl}/assets/icon_warning_orange.png?raw=true`,
+            map: `${config.publicUrl}/assets/map.png?raw=true`,
+          },
+          etablissement: {
+            name: etablissement.raison_sociale,
+            address: etablissement.adresse,
+            postalCode: etablissement.code_postal,
+            ville: etablissement.localite,
+            email: widgetParameter.email_rdv,
+          },
+          formation: {
+            intitule: widgetParameter.formation_intitule,
+          },
+          user: {
+            firstname: user.firstname,
+            lastname: user.lastname,
+            email: user.email,
+          },
+          appointment: {
+            createdAt: dayjs(appointment.created_at).format("DD/MM/YYYY"),
+            referrerLink: referrerObj.url,
+            referrer: referrerObj.full_name,
+          },
+          links: {
+            confirm: `${config.publicUrl}/appointment/candidat/follow-up/${appointment._id}/confirm`,
+            resend: `${config.publicUrl}/appointment/candidat/follow-up/${appointment._id}/resend`,
+          },
         },
-        etablissement: {
-          name: etablissement.raison_sociale,
-          address: etablissement.adresse,
-          postalCode: etablissement.code_postal,
-          ville: etablissement.localite,
+        config.email
+      ),
+      mailer.sendEmail(
+        user.email,
+        `[RDV via ${referrerObj.full_name}] 🛎 ️Pouvez-vous contacter ce candidat ?`,
+        path.join(__dirname, `../assets/templates/mail-cfa-relance-demande-de-contact.mjml.ejs`),
+        {
+          images: {
+            peopleLaptop: `${config.publicUrl}/assets/man_laptop.png?raw=true`,
+          },
+          etablissement: {
+            name: etablissement.raison_sociale,
+            address: etablissement.adresse,
+            postalCode: etablissement.code_postal,
+            ville: etablissement.localite,
+          },
+          formation: {
+            intitule: widgetParameter.formation_intitule,
+          },
+          user: {
+            firstname: user.firstname,
+            lastname: user.lastname,
+            email: user.email,
+            phone: user.phone,
+          },
+          appointment: {
+            createdAt: dayjs(appointment.created_at).format("DD/MM/YYYY"),
+            motivation: appointment.motivations,
+            referrerLink: referrerObj.url,
+            referrer: referrerObj.full_name,
+          },
+          links: {
+            confirm: `${config.publicUrl}/appointment/candidat/follow-up/${appointment._id}/confirm`,
+            resend: `${config.publicUrl}/appointment/candidat/follow-up/${appointment._id}/resend`,
+          },
         },
-        formation: {
-          intitule: widgetParameter.formation_intitule,
-        },
-        user: {
-          firstname: user.firstname,
-          lastname: user.lastname,
-          email: user.email,
-        },
-        appointment: {
-          createdAt: dayjs(appointment.created_at).format("DD/MM/YYYY"),
-          referrerLink: referrerObj.url,
-          referrer: referrerObj.full_name,
-        },
-        links: {
-          confirm: `${config.publicUrl}/appointment/candidat/follow-up/${appointment._id}/confirm`,
-          resend: `${config.publicUrl}/appointment/candidat/follow-up/${appointment._id}/resend`,
-        },
-      },
-      config.email
-    );
+        config.email
+      ),
+    ]);
 
     await appointments.findOneAndUpdate(
       { _id: appointment._id },
@@ -79,7 +118,13 @@ const candidatHaveYouBeenContacted = async ({ etablissements, widgetParameters, 
           candidat_mailing: {
             campaign: mailType.CANDIDAT_HAVE_YOU_BEEN_CONTACTED,
             status: null,
-            message_id: messageId,
+            message_id: mailCandidat.messageId,
+            email_sent_at: dayjs().toDate(),
+          },
+          cfa_mailing: {
+            campaign: mailType.CFA_REMINDER_RESEND_APPOINTMENT,
+            status: null,
+            message_id: mailCfa.messageId,
             email_sent_at: dayjs().toDate(),
           },
         },
