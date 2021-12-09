@@ -7,87 +7,79 @@
             .purple {color: #3A55D1; text-decoration: none}
         </mj-style>
         <mj-attributes>
-            <mj-text padding="0px" color="#232E3C" font-family="Inter,sans-serif" font-size="14px" line-height="23px" />
-            <mj-divider padding="0px" />
+            <mj-text color="#232E3C" font-family="Inter,sans-serif" font-size="14px" line-height="23px" />
+            <mj-divider />
         </mj-attributes>
     </mj-head>
     <mj-body background-color="#F9F8F6">
-        <mj-section padding="0px" padding-top="20px">
-            <mj-column vertical-align="middle" width="140px" padding-bottom="0">
-                <mj-image padding="0px" src="<%= data.images.gouvernementLogo %>" alt="Figure" />
+        <mj-section padding-top="20px">
+            <mj-column vertical-align="middle" width="120px" padding-bottom="0">
+                <mj-image src="<%= data.images.gouvernementLogo %>" padding="0" alt="Logo gouvernement" />
             </mj-column>
-            <mj-column padding="0px" vertical-align="middle" width="460px" padding-left="25px">
-                <mj-text padding="0px" font-size="20px" font-weight="700" line-height="28px">
+            <mj-column vertical-align="middle" width="480px">
+                <mj-text font-size="20px" font-weight="700" line-height="28px" padding-bottom="0">
                     RDV Apprentissage
                 </mj-text>
-                <mj-text padding="0px" font-size="14px" line-height="24px">
+                <mj-text font-size="14px" line-height="24px" padding-top="0">
                     Mise en relation entre les candidats à l'apprentissage et les CFA
                 </mj-text>
             </mj-column>
         </mj-section>
-        <mj-wrapper padding="0" padding-top="25px">
-            <mj-section background-color="#ffffff" padding-top="50px" padding-bottom="0">
-                <mj-column vertical-align="middle" width="160px" padding-bottom="0">
-                    <mj-image padding="0px" src="<%= data.images.peopleLaptop %>" alt="Figure" />
-                </mj-column>
-                <mj-column width="320px" padding-left="20px" padding-top="10px">
-                    <mj-text font-size="20px" padding="0px" font-weight="700" line-height="24px" color="#3A55D1">
-                        Votre désinscription au service “RDV Apprentissage”
-                    </mj-text>
-                    <mj-text font-size="20px" font-weight="700" line-height="24px" color="#383838" padding-bottom="0">a bien été prise en compte !</mj-text>
-                </mj-column>
-            </mj-section>
-            <mj-section background-color="#ffffff" padding="0">
-                <mj-column width="480px" border-bottom="0.5px solid #D0C9C4" padding="0"></mj-column>
-            </mj-section>
-            <mj-section background-color="#ffffff" padding-top="25px">
-                <mj-column width="480px">
-                    <mj-text font-size="16px" line-height="20px">La désinscription au service est effective pour l’organisme de formation suivant :</mj-text>
-                    <mj-text font-size="16px" line-height="20px"><b><%= data.etablissement.name %></b></mj-text>
-                    <mj-text font-size="16px" line-height="20px"><b><%= data.etablissement.address %></b></mj-text>
-                    <mj-text font-size="16px" line-height="20px"><b><%= data.etablissement.postalCode %> <%= data.etablissement.ville %></b></mj-text>
-                </mj-column>
-            </mj-section>
-            <mj-section background-color="#ffffff" padding-top="0">
-                <mj-column width="480px" padding-top="0" padding-bottom="0">
-                    <mj-text font-size="16px" line-height="20px">
-                        A très bientôt,
-                    </mj-text>
-                    <mj-text font-size="16px" line-height="20px">
-                        L'équipe de la Mission apprentissage
-                    </mj-text>
-                </mj-column>
-            </mj-section>
-            <mj-section background-color="#ffffff">
-                <mj-column width="480px" padding-top="20px" border-top="1px solid #d0c9c4">
-                    <mj-text>
-                        Si vous avez des questions ou si vous souhaitez vous résinscrire du service, envoyez un email à <a href="mailto:rdv_apprentissage@apprentissage.beta.gouv.fr">rdv_apprentissage@apprentissage.beta.gouv.fr</a>
-                    </mj-text>
-                </mj-column>
-            </mj-section>
-            <mj-section background-color="#ffffff" padding-top="10px" padding-bottom="30px">
-                <mj-section padding="0px">
-                    <mj-column width="480px">
-                        <mj-text padding="0">
-                            Ce mail a été envoyé à <a href="mailto:<%= data.user.destinataireEmail %>"><%= data.user.destinataireEmail %></a>
-                        </mj-text>
-                    </mj-column>
-                </mj-section>
-                </mj-column>
-            </mj-section>
-            <mj-section background-color="#f9f8f6">
-                <mj-section padding="0px">
-                    <mj-column width="420px">
-                        <mj-text padding="0px" padding-top="20px" align="center">
-                            <b>RDV Apprentissage</b> est un outil développé
-                        </mj-text>
-                        <mj-text padding="0px" padding-bottom="20px" align="center">
-                            par la <a href="https://mission-apprentissage.gitbook.io/general/">Mission interministérielle pour l’apprentissage</a>
-                        </mj-text>
-                    </mj-column>
-                </mj-section>
-                </mj-column>
-            </mj-section>
-        </mj-wrapper>
+        <mj-section background-color="#ffffff" padding-top="50px" padding-bottom="0">
+            <mj-column vertical-align="middle" width="170px" padding-bottom="0" padding-top="20px">
+                <mj-image src="<%= data.images.peopleLaptop %>" width="140px" padding="0" alt="Figure" />
+            </mj-column>
+            <mj-column width="340px">
+                <mj-text font-size="20px" font-weight="700" line-height="24px" color="#3A55D1" padding-bottom="0">
+                    Votre désinscription au service “RDV Apprentissage”
+                </mj-text>
+                <mj-text font-size="20px" font-weight="700" line-height="24px" color="#383838" padding-bottom="0" padding-top="0">a bien été prise en compte !</mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#ffffff" padding-top="0">
+            <mj-column width="520px">
+                <mj-divider border-color="#D0C9C4" border-width="1px"  padding-top="0"></mj-divider>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#ffffff" padding-top="0">
+            <mj-column width="520px">
+                <mj-text font-size="16px" line-height="20px" padding-top="25px">La désinscription au service est effective pour l’organisme de formation suivant :</mj-text>
+                <mj-text font-size="16px" line-height="20px" padding-top="0"><b><%= data.etablissement.name %> <br />
+                        <%= data.etablissement.address %><br/>
+                        <%= data.etablissement.postalCode %> <%= data.etablissement.ville %><br/>SIRET: <%= data.etablissement.siret %></b>
+                </mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#ffffff" padding-top="0">
+            <mj-column width="520px" padding-top="0" padding-bottom="0">
+                <mj-text font-size="16px" line-height="20px">
+                    A très bientôt, <br />
+                    L'équipe de la Mission apprentissage
+                </mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#ffffff" padding-top="0" padding-bottom="0">
+            <mj-column width="520px">
+                <mj-divider border-width="0.5px" border-style="solid" border-color="#D0C9C4" padding-top="0" />
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#ffffff" padding-top="0">
+            <mj-column width="520px" padding-top="0">
+                <mj-text>
+                    Si vous avez des questions ou si vous souhaitez vous résinscrire du service, envoyez un email à <a href="mailto:rdv_apprentissage@apprentissage.beta.gouv.fr">rdv_apprentissage@apprentissage.beta.gouv.fr</a>
+                </mj-text>
+                <mj-text padding-top="0" padding-bottom="30px">
+                    Ce mail a été envoyé à <a href="mailto:<%= data.user.destinataireEmail %>"><%= data.user.destinataireEmail %></a>
+                </mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#f9f8f6">
+            <mj-column width="520px">
+                <mj-text padding-top="20px" align="center">
+                    <b>RDV Apprentissage</b> est un outil développé <br/>
+                    par la <a href="https://mission-apprentissage.gitbook.io/general/">Mission interministérielle pour l’apprentissage</a>
+                </mj-text>
+            </mj-column>
+        </mj-section>
     </mj-body>
 </mjml>

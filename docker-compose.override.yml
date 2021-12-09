@@ -28,7 +28,7 @@ services:
       - PRISE_DE_RDV_PUBLIC_URL=http://localhost
       - PRISE_DE_RDV_API_KEY=12345
       # API MNA Catalogue
-      - PRISE_DE_RDV_MNA_CATALOG_ENDPOINT=https://catalogue-recette.apprentissage.beta.gouv.fr/api
+      - PRISE_DE_RDV_MNA_CATALOG_ENDPOINT=https://catalogue.apprentissage.beta.gouv.fr/api
       - PRISE_DE_RDV_MNA_API_TOKEN=1234
       # auth
       - PRISE_DE_RDV_AUTH_PASSWORD_HASH_ROUNDS=1001

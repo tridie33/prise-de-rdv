@@ -116,6 +116,7 @@ module.exports = ({ etablissements, mailer, widgetParameters }) => {
             address: etablissement.adresse,
             postalCode: etablissement.code_postal,
             ville: etablissement.localite,
+            siret: etablissement.siret_formateur,
           },
           user: {
             destinataireEmail: etablissement.email_decisionnaire,
