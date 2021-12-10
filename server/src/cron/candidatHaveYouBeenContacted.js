@@ -70,11 +70,10 @@ const candidatHaveYouBeenContacted = async ({ etablissements, widgetParameters, 
             confirm: `${config.publicUrl}/appointment/candidat/follow-up/${appointment._id}/confirm`,
             resend: `${config.publicUrl}/appointment/candidat/follow-up/${appointment._id}/resend`,
           },
-        },
-        config.email
+        }
       ),
       mailer.sendEmail(
-        user.email,
+        widgetParameter.email_rdv,
         `[RDV via ${referrerObj.full_name}] 🛎 ️Pouvez-vous contacter ce candidat ?`,
         path.join(__dirname, `../assets/templates/mail-cfa-relance-demande-de-contact.mjml.ejs`),
         {
@@ -101,10 +100,6 @@ const candidatHaveYouBeenContacted = async ({ etablissements, widgetParameters, 
             motivation: appointment.motivations,
             referrerLink: referrerObj.url,
             referrer: referrerObj.full_name,
-          },
-          links: {
-            confirm: `${config.publicUrl}/appointment/candidat/follow-up/${appointment._id}/confirm`,
-            resend: `${config.publicUrl}/appointment/candidat/follow-up/${appointment._id}/resend`,
           },
         },
         config.email
