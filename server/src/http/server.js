@@ -105,7 +105,7 @@ module.exports = async (components) => {
   );
 
   // Everyday, every 5 minutes
-  cron.schedule("* * * * *", () =>
+  cron.schedule("*/5 * * * *", () =>
     candidatHaveYouBeenContacted({ mailer, appointments, widgetParameters, users, etablissements })
   );
 
