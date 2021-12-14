@@ -13,9 +13,10 @@ const { dayjs } = require("../../utils/dayjs");
 
 const contextCreateSchema = Joi.alternatives().try(
   Joi.object().keys({
+    idParcoursup: Joi.string().required(),
     idRcoFormation: Joi.string().allow(""),
     idActionFormation: Joi.string().allow(""),
-    idParcoursup: Joi.string().required(),
+    idCleMinistereEducatif: Joi.string().allow(""),
     referrer: Joi.string()
       .valid(
         referrers.PARCOURSUP.name.toLowerCase(),
@@ -29,6 +30,7 @@ const contextCreateSchema = Joi.alternatives().try(
     idRcoFormation: Joi.string().required(),
     idActionFormation: Joi.string().allow(""),
     idParcoursup: Joi.string().allow(""),
+    idCleMinistereEducatif: Joi.string().allow(""),
     referrer: Joi.string()
       .valid(
         referrers.PARCOURSUP.name.toLowerCase(),
@@ -39,8 +41,38 @@ const contextCreateSchema = Joi.alternatives().try(
       .required(),
   }),
   Joi.object().keys({
-    idRcoFormation: Joi.string().allow(""),
     idActionFormation: Joi.string().required(),
+    idRcoFormation: Joi.string().allow(""),
+    idParcoursup: Joi.string().allow(""),
+    idCleMinistereEducatif: Joi.string().allow(""),
+    referrer: Joi.string()
+      .valid(
+        referrers.PARCOURSUP.name.toLowerCase(),
+        referrers.LBA.name.toLowerCase(),
+        referrers.PFR_PAYS_DE_LA_LOIRE.name.toLowerCase(),
+        referrers.ONISEP.name.toLowerCase()
+      )
+      .required(),
+  }),
+  Joi.object().keys({
+    idCleMinistereEducatif: Joi.string().required(),
+    idRcoFormation: Joi.string().allow(""),
+    idActionFormation: Joi.string().allow(""),
+    idParcoursup: Joi.string().allow(""),
+    referrer: Joi.string()
+      .valid(
+        referrers.PARCOURSUP.name.toLowerCase(),
+        referrers.LBA.name.toLowerCase(),
+        referrers.PFR_PAYS_DE_LA_LOIRE.name.toLowerCase(),
+        referrers.ONISEP.name.toLowerCase()
+      )
+      .required(),
+  }),
+  // Temporary for LBA during "idCleMinistereEducatif" migration
+  Joi.object().keys({
+    idCleMinistereEducatif: Joi.string().required(),
+    idRcoFormation: Joi.string().required(),
+    idActionFormation: Joi.string().allow(""),
     idParcoursup: Joi.string().allow(""),
     referrer: Joi.string()
       .valid(
