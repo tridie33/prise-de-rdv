@@ -96,8 +96,8 @@ module.exports = async (components) => {
 
   app.use(errorMiddleware());
 
-  // Everyday at 05:00 AM
-  cron.schedule("0 5 * * *", () => syncEtablissementsAndFormations({ etablissements, widgetParameters }));
+  // Everyday at 04:00 AM UTC
+  cron.schedule("0 4 * * *", () => syncEtablissementsAndFormations({ etablissements, widgetParameters }));
 
   // Everyday, every 5 minutes
   cron.schedule("*/5 * * * *", () =>
