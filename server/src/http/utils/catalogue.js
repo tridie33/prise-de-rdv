@@ -3,8 +3,6 @@ const { AxiosRedis } = require("@tictactrip/axios-redis");
 const config = require("../../../config");
 const { axiosRedis } = require("../../common/redis");
 
-const commonConditions = [{ published: true }, { etablissement_reference_catalogue_published: true }];
-
 /**
  * @description Get formations by "siret formateur" with "common conditions".
  * @param {String} siretFormateur
@@ -12,7 +10,7 @@ const commonConditions = [{ published: true }, { etablissement_reference_catalog
  */
 const getFormationsBySiretFormateur = ({ siretFormateur }) =>
   getFormations({
-    $and: [{ etablissement_formateur_siret: siretFormateur }, ...commonConditions],
+    $and: [{ etablissement_formateur_siret: siretFormateur }],
   });
 
 /**
@@ -22,7 +20,7 @@ const getFormationsBySiretFormateur = ({ siretFormateur }) =>
  */
 const getFormationsByIdRcoFormations = ({ idRcoFormations }) =>
   getFormations({
-    $and: [{ id_rco_formation: idRcoFormations }, ...commonConditions],
+    $and: [{ id_rco_formation: idRcoFormations }],
   });
 
 /**
@@ -43,8 +41,6 @@ const getFormationsByIdRcoFormationsRaw = ({ idRcoFormations }) =>
 const getFormationsByIdParcoursup = ({ idParcoursup }) =>
   getFormations({
     id_parcoursup: idParcoursup,
-    published: true,
-    etablissement_reference_catalogue_published: true,
   });
 
 /**

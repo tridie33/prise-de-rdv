@@ -4,10 +4,9 @@ import commonjs from "rollup-plugin-commonjs";
 import babel from "rollup-plugin-babel";
 import injectProcessEnv from "rollup-plugin-inject-process-env";
 
-// rollup.config.js
-/*
-To save repeating ourselves, we can create a config file containing all the options we need.
-A config file is written in JavaScript and is more flexible than the raw CLI.
+/**
+ * @description To save repeating ourselves, we can create a config file containing all the options we need.
+ A config file is written in JavaScript and is more flexible than the raw CLI.
  */
 export default {
   input: "src/main.js",
@@ -30,7 +29,7 @@ export default {
     }),
     commonjs(),
     injectProcessEnv({
-      PRDV_MNA_ENV: process.env.BUNDLE_ENV,
+      PRDV_MNA_ENV: process.env.BUNDLE_ENV || 'https://rdv-cfa.apprentissage.beta.gouv.fr',
     }),
   ],
 };
