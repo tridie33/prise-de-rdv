@@ -46,9 +46,7 @@ const EditPage = () => {
       setLoading(true);
 
       const [catalogueResponse, parametersResponse, referrers, etablissementResponse] = await Promise.all([
-        fetch(
-          `/api/catalogue/formations?query={"etablissement_formateur_siret":"${id}", "etablissement_reference_catalogue_published": true, "published": true }&page=1&limit=500`
-        ),
+        fetch(`/api/catalogue/formations?query={"etablissement_formateur_siret":"${id}"}&page=1&limit=500`),
         getParameters(id),
         getReferrers(),
         getEtablissement(id),
