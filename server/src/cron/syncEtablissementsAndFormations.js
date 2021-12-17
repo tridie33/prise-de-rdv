@@ -56,7 +56,7 @@ const syncEtablissementsAndFormations = async ({ etablissements, widgetParameter
                 etablissement_siret: formation.etablissement_formateur_siret,
                 catalogue_published: formation.published,
                 id_rco_formation: formation.id_rco_formation,
-                email_rdv: formation.email,
+                email_rdv: widgetParameter.email_rdv || formation.email,
                 last_catalogue_sync: dayjs().format(),
               }
             );
