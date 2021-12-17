@@ -24,7 +24,7 @@ const SearchPage = () => {
 
     try {
       const catalogueResponse = await fetch(
-        `/api/catalogue/formations?query={ "$or": [ { "etablissement_formateur_siret": "${keyword}" }, { "etablissement_formateur_uai": "${keyword}"}, { "id_rco_formation": "${keyword}"} ], "etablissement_reference_catalogue_published": true, "published": true }`
+        `/api/catalogue/formations?query={ "$or": [ { "etablissement_formateur_siret": "${keyword}" }, { "etablissement_formateur_uai": "${keyword}"}, { "id_rco_formation": "${keyword}"} ] }`
       );
 
       const catalogueResult = await catalogueResponse.json();
