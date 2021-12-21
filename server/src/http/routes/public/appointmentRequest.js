@@ -166,7 +166,9 @@ module.exports = ({ users, appointments, mailer, widgetParameters, etablissement
         cfd: formation.cfd,
         localite: formation.localite,
         id_rco_formation: formation.id_rco_formation,
-        form_url: `${config.publicUrl}/form?referrer=${referrer}&idRcoFormation=${formation.id_rco_formation}`,
+        form_url: `${config.publicUrl}/form?referrer=${referrer}&idRcoFormation=${encodeURIComponent(
+          formation.id_rco_formation
+        )}`,
       });
     })
   );
