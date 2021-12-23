@@ -17,7 +17,7 @@ window.initPrdvWidget = function () {
 
 function createWidgetPRDV(element) {
   element.innerHTML = "";
-  return fetch("".concat("https://rdv-cfa.apprentissage.beta.gouv.fr", "/api/appointment-request/context/create"), {
+  return fetch("".concat("https://rdv-cfa-recette.apprentissage.beta.gouv.fr", "/api/appointment-request/context/create"), {
     method: 'POST',
     headers: {
       "Content-Type": "application/json"
