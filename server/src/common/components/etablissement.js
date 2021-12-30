@@ -59,6 +59,14 @@ module.exports = async () => ({
   updateMany: (conditions, values) => Etablissement.updateMany(conditions, values, { new: true, upsert: true }),
 
   /**
+   * @description Update one.
+   * @param {Object} conditions
+   * @param {Object} values
+   * @returns {Promise<Etablissement>}
+   */
+  updateOne: (conditions, values) => Etablissement.updateOne(conditions, values, { new: true, upsert: true }),
+
+  /**
    * @description Updates an etablissement from its id.
    * @param {ObjectId} id
    * @param {Object} values

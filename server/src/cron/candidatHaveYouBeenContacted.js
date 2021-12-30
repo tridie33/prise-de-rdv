@@ -15,7 +15,7 @@ const candidatHaveYouBeenContacted = async ({ etablissements, widgetParameters, 
   // Appointments created there are less than 5 days
   const appointmentsToTrigger = await appointments.find({
     created_at: {
-      $lte: dayjs().subtract(5, "days").toDate(),
+      $lte: dayjs().subtract(10, "seconds").toDate(),
       // Excludes very older appointments
       $gte: dayjs("2021-12-01T00:00:00.486Z").toDate(),
     },
