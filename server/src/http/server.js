@@ -30,6 +30,7 @@ const { administrator } = require("./../common/roles");
 const { syncEtablissementsAndFormations } = require("../cron/syncEtablissementsAndFormations");
 const { activateOptOutEtablissementFormations } = require("../cron/activateOptOutEtablissementFormations");
 const { candidatHaveYouBeenContacted } = require("../cron/candidatHaveYouBeenContacted");
+const { inviteOptOutEtablissements } = require("../cron/inviteOptOutEtablissement");
 
 /**
  * @description Express function that embed components in routes.
@@ -96,15 +97,18 @@ module.exports = async (components) => {
 
   app.use(errorMiddleware());
 
-  // Everyday at 05:00 AM
+  // Everyday at 14:00: Opt-out invite
+  cron.schedule("0 14 * * *", () => inviteOptOutEtablissements({ mailer, widgetParameters, etablissements }));
+
+  // Everyday at 05:00 AM: Copy catalogue formations
   cron.schedule("0 5 * * *", () => syncEtablissementsAndFormations({ etablissements, widgetParameters }));
 
-  // Everyday, every 5 minutes
+  // Everyday, every 5 minutes: Opt-out activation
   cron.schedule("*/5 * * * *", () =>
     activateOptOutEtablissementFormations({ etablissements, widgetParameters, mailer })
   );
 
-  // Everyday, every 5 minutes
+  // Everyday, every minutes: Send an email to candidats to know if they were contacted by the CFA
   cron.schedule("* * * * *", () =>
     candidatHaveYouBeenContacted({ mailer, appointments, widgetParameters, users, etablissements })
   );
