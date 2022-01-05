@@ -8,6 +8,8 @@ const { optMode } = require("../common/model/constants/etablissement");
  * @returns {Promise<void>}
  */
 const syncEtablissementsAndFormations = async ({ etablissements, widgetParameters }) => {
+  logger.info("Cron #syncEtablissementsAndFormations started.");
+
   const batchSize = 300;
   let response;
 
