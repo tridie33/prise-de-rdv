@@ -33,7 +33,7 @@ const inviteOptOutEtablissements = async ({ etablissements, widgetParameters, ma
       formations.map(({ email_rdv }) => {
         // Ignore null, empty or not valid email
         if (!email_rdv || !emailJoiSchema.validate(email_rdv)) {
-          logger.info("Invalid email", { email: email_rdv });
+          logger.info("Invalid email", { email: email_rdv, siret_formateur: etablissement.siret_formateur });
           return;
         }
 
@@ -59,8 +59,8 @@ const inviteOptOutEtablissements = async ({ etablissements, widgetParameters, ma
       await etablissement.update({ email_decisionnaire: emailDecisionaire });
     }
 
-    // Invite all etablissements only in production environment
-    else if (["production", "local"].includes(config.env)) {
+    // Invite all etablissements only in production environment, for etablissement that have an "email_decisionnaire"
+    if (["production", "local"].includes(config.env) && emailDecisionaire) {
       const willBeActivatedAt = dayjs().add(15, "days").format();
       const optOutWillBeActivatedAtDayjs = dayjs(willBeActivatedAt);
 
