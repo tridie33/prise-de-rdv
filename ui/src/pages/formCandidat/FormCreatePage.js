@@ -105,7 +105,6 @@ export const FormCreatePage = (props) => {
       history.push(`/form/confirm/${appointment._id}`);
       setTimeout(() => window.scroll({ top: 0, behavior: "smooth" }), 500);
     } catch (e) {
-      console.error(e);
       setStatus({ error: e.prettyMessage });
     } finally {
       setSubmitLoading(false);
@@ -233,6 +232,7 @@ export const FormCreatePage = (props) => {
                     variant="unstyled"
                     type={"submit"}
                     loading={submitLoading}
+                    disabled={submitLoading}
                     bg={"grey.750"}
                     borderRadius="10px"
                     color="#FFFFFF"
