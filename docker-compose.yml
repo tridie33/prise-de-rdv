@@ -59,16 +59,6 @@ services:
     networks:
       - prise_de_rdv_network
 
-  mailhog:
-    image: mailhog/mailhog:v1.0.1
-    container_name: prise_de_rdv_mailhog
-    networks:
-      - prise_de_rdv_network
-    volumes:
-      - ./auth.txt:/app/auth.txt
-    environment:
-      - MH_AUTH_FILE=/app/auth.txt
-
 networks:
   prise_de_rdv_network:
     name: prise_de_rdv_network
