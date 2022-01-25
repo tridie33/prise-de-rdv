@@ -66,8 +66,11 @@ services:
       - 1025:1025
     networks:
       - prise_de_rdv_network
+    volumes:
+      - ./mailhog-auth.txt:/app/auth.txt
     environment:
       - MH_UI_WEB_PATH=smtp
+      - MH_AUTH_FILE=/app/auth.txt
 
 volumes:
   prise_de_rdv_mongodb_data:
