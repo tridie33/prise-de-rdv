@@ -41,7 +41,7 @@ services:
       - PRISE_DE_RDV_USERS_DEFAULT_ADMIN_PASSWORD=password
       - PRISE_DE_RDV_USERS_DEFAULT_ADMIN_ROLE=administrator
       # smtp
-      - PRISE_DE_RDV_SMTP_HOST=mailhog
+      - PRISE_DE_RDV_SMTP_HOST=smtp
       - PRISE_DE_RDV_SMTP_PORT=1025
       - PRISE_DE_RDV_SMTP_AUTH_USER=xxxxx
       - PRISE_DE_RDV_SMTP_AUTH_PASS=12345
@@ -58,10 +58,16 @@ services:
     volumes:
       - prise_de_rdv_redis_data:/data
 
-  mailhog:
+  smtp:
+    image: mailhog/mailhog
+    container_name: prise_de_rdv_smtp
+    mem_limit: 128m
     ports:
-      - "127.0.0.1:8025:8025"
-      - "127.0.0.1:1025:1025"
+      - 1025:1025
+    networks:
+      - prise_de_rdv_network
+    environment:
+      - MH_UI_WEB_PATH=smtp
 
 volumes:
   prise_de_rdv_mongodb_data:
