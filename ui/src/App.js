@@ -13,7 +13,8 @@ import { FormRecapPage } from "./pages/formCandidat/FormRecapPage";
 import { FormCreatePage } from "./pages/formCandidat/FormCreatePage";
 import { isUserAdmin } from "./common/utils/rolesUtils";
 import BulkPage from "./pages/admin/widgetParameters/pages/BulkPage";
-import Unsubscribe from "./pages/formOptOut/Unsubscribe";
+import OptOutUnsubscribe from "./pages/OptOutUnsubscribe";
+import PremiumForm from "./pages/PremiumForm";
 import AppointmentFollowUpPage from "./pages/AppointmentFollowUpPage";
 import WidgetTutorial from "./pages/widget/Tutorial";
 
@@ -61,7 +62,8 @@ const App = () => {
           <Route exact path="/forgotten-password" component={ForgottenPasswordPage} />
           <Route exact path="/form" component={FormCreatePage} />
           <Route exact path="/form/confirm/:id" component={FormRecapPage} />
-          <Route exact path="/form/opt-out/unsubscribe/:id" component={Unsubscribe} />
+          <Route exact path="/form/opt-out/unsubscribe/:id" component={OptOutUnsubscribe} />
+          <Route exact path="/form/premium/:id" component={PremiumForm} />
           <Route
             exact
             path="/appointment/candidat/follow-up/:id/:action(confirm|resend)"

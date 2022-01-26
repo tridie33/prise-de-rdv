@@ -11,8 +11,8 @@ const emailJoiSchema = joi.string().email();
  * @description Invite all "etablissements" without opt_mode to opt-out.
  * @returns {Promise<void>}
  */
-const inviteOptOutEtablissements = async ({ etablissements, widgetParameters, mailer }) => {
-  logger.info("Cron #inviteOptOutEtablissements started.");
+const inviteEtablissementToOptOut = async ({ etablissements, widgetParameters, mailer }) => {
+  logger.info("Cron #inviteEtablissementToOptOut started.");
 
   // Opt-out etablissement to activate
   const etablissementsWithouOptMode = await etablissements.find({
@@ -114,9 +114,9 @@ const inviteOptOutEtablissements = async ({ etablissements, widgetParameters, ma
     }
   }
 
-  logger.info("Cron #inviteOptOutEtablissements done.");
+  logger.info("Cron #inviteEtablissementToOptOut done.");
 };
 
 module.exports = {
-  inviteOptOutEtablissements,
+  inviteEtablissementToOptOut,
 };

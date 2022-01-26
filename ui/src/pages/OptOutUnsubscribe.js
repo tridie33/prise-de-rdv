@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { Box, Container, Flex, Text, RadioGroup, Stack, Radio, Textarea, Button } from "@chakra-ui/react";
 import { useParams } from "react-router";
-import GovernmentHeader from "../../common/components/GovernmentHeader";
-import GovernmentFooter from "../../common/components/GovernmentFooter";
-import SuccessCircle from "../../theme/components/icons/SuccessCircle";
-import { _get, _post } from "../../common/httpClient";
+import GovernmentHeader from "../common/components/GovernmentHeader";
+import GovernmentFooter from "../common/components/GovernmentFooter";
+import { SuccessCircle } from "../theme/components/icons";
+import { _get, _post } from "../common/httpClient";
 
 /**
- * @description Unsubscribe component.
+ * @description OptOutUnsubscribe component.
  * @returns {JSX.Element}
  */
-const Unsubscribe = () => {
+const OptOutUnsubscribe = () => {
   const radioOptions = {
     UNSUBSCRIBE_NO_DETAILS: "unsubscribe_no_details",
     UNSUBSCRIBE_MORE_DETAILS: "unsubscribe_more_details",
@@ -73,7 +73,7 @@ const Unsubscribe = () => {
         {hasBeenUnsubscribed && (
           <Flex>
             <Box w="40px">
-              <SuccessCircle width={33} />
+              <SuccessCircle width={33} fillHexaColor="#000091" />
             </Box>
             <Box w="100%">
               <Text textStyle="h3" fontSize="24px" fontWeight="bold" color="grey.800" ml={2}>
@@ -85,7 +85,7 @@ const Unsubscribe = () => {
         {isQuestionSent && (
           <Flex>
             <Box w="40px">
-              <SuccessCircle width={33} />
+              <SuccessCircle width={33} fillHexaColor="#000091" />
             </Box>
             <Box w="100%">
               <Text textStyle="h3" fontSize="24px" fontWeight="bold" color="grey.800" ml={2}>
@@ -176,4 +176,4 @@ const Unsubscribe = () => {
   );
 };
 
-export default Unsubscribe;
+export default OptOutUnsubscribe;

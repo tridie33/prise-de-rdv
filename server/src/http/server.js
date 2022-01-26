@@ -30,7 +30,8 @@ const { administrator } = require("./../common/roles");
 const { syncEtablissementsAndFormations } = require("../cron/syncEtablissementsAndFormations");
 const { activateOptOutEtablissementFormations } = require("../cron/activateOptOutEtablissementFormations");
 const { candidatHaveYouBeenContacted } = require("../cron/candidatHaveYouBeenContacted");
-const { inviteOptOutEtablissements } = require("../cron/inviteOptOutEtablissement");
+const { inviteEtablissementToOptOut } = require("../cron/inviteEtablissementToOptOut");
+const { inviteEtablissementToPremium } = require("../cron/inviteEtablissementToPremium");
 
 /**
  * @description Express function that embed components in routes.
@@ -98,7 +99,7 @@ module.exports = async (components) => {
   app.use(errorMiddleware());
 
   // Everyday at 14:00: Opt-out invite
-  cron.schedule("0 14 * * *", () => inviteOptOutEtablissements({ mailer, widgetParameters, etablissements }));
+  cron.schedule("0 14 * * *", () => inviteEtablissementToOptOut({ mailer, widgetParameters, etablissements }));
 
   // Everyday at 05:00 AM: Copy catalogue formations
   cron.schedule("0 5 * * *", () => syncEtablissementsAndFormations({ etablissements, widgetParameters }));
@@ -112,6 +113,9 @@ module.exports = async (components) => {
   cron.schedule("* * * * *", () =>
     candidatHaveYouBeenContacted({ mailer, appointments, widgetParameters, users, etablissements })
   );
+
+  // Everyday, every minutes: Premium invite
+  cron.schedule("* * * * *", () => inviteEtablissementToPremium({ mailer, widgetParameters, etablissements }));
 
   return app;
 };
