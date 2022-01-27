@@ -151,32 +151,22 @@ module.exports = ({ etablissements, mailer, widgetParameters }) => {
         config.email
       );
 
-      const [widgetParametersFound] = await Promise.all([
-        widgetParameters.find({ etablissement_siret: etablissement.siret_formateur }),
-        etablissements.findOneAndUpdate(
-          { _id: etablissement._id },
-          {
-            $push: {
-              mailing: {
-                campaign: mailType.PREMIUM_REFUSED,
-                status: null,
-                message_id: messageId,
-                email_sent_at: dayjs().toDate(),
-              },
+      await etablissements.findOneAndUpdate(
+        { _id: etablissement._id },
+        {
+          $push: {
+            mailing: {
+              campaign: mailType.PREMIUM_REFUSED,
+              status: null,
+              message_id: messageId,
+              email_sent_at: dayjs().toDate(),
             },
-            premium_refused_at: dayjs().toDate(),
-          }
-        ),
-      ]);
+          },
+          premium_refused_at: dayjs().toDate(),
+        }
+      );
 
-      const [etablissementUpdated] = await Promise.all([
-        etablissements.findById(req.params.id),
-        ...widgetParametersFound.map((widgetParameter) =>
-          widgetParameters.updateParameter(widgetParameter._id, {
-            referrers: [...new Set([...widgetParameter.referrers, referrers.PARCOURSUP.code])],
-          })
-        ),
-      ]);
+      const etablissementUpdated = await etablissements.findById(req.params.id);
 
       return res.send(etablissementUpdated);
     })
