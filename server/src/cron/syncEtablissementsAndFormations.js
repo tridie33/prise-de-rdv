@@ -1,7 +1,6 @@
 const logger = require("../common/logger");
 const { dayjs } = require("../http/utils/dayjs");
 const { getFormations } = require("../http/utils/catalogue");
-const { optMode } = require("../common/model/constants/etablissement");
 
 /**
  * @description Gets Catalogue etablissments informations and insert in etablissement collection.
@@ -21,50 +20,41 @@ const syncEtablissementsAndFormations = async ({ etablissements, widgetParameter
 
     await Promise.all(
       response.formations.map(async (formation) => {
-        const [widgetParameter, etablissement] = await Promise.all([
-          widgetParameters.getParameterByIdRcoFormation({
-            idRcoFormation: formation.id_rco_formation,
-          }),
-          etablissements.findOne({ siret_formateur: formation.etablissement_formateur_siret }),
-        ]);
+        const widgetParameter = await widgetParameters.getParameterByIdRcoFormation({
+          idRcoFormation: formation.id_rco_formation,
+        });
 
         if (widgetParameter) {
           // Doesn't update "email_rdv" (if exists) if etablissement has opt_mode == OPT_IN flag
-          if (etablissement?.opt_mode === optMode.OPT_IN) {
-            await widgetParameters.updateMany(
-              { id_rco_formation: formation.id_rco_formation },
-              {
-                etablissement_raison_sociale: formation.etablissement_formateur_entreprise_raison_sociale,
-                formation_cfd: formation.cfd,
-                code_postal: formation.code_postal,
-                formation_intitule: formation.intitule_long,
-                referrers: widgetParameter.referrers,
-                etablissement_siret: formation.etablissement_formateur_siret,
-                catalogue_published: formation.published,
-                id_rco_formation: formation.id_rco_formation,
-                email_rdv: widgetParameter.email_rdv || formation.email,
-                last_catalogue_sync: dayjs().format(),
-              }
-            );
-          } else {
-            await widgetParameters.updateMany(
-              { id_rco_formation: formation.id_rco_formation },
-              {
-                etablissement_raison_sociale: formation.etablissement_formateur_entreprise_raison_sociale,
-                formation_cfd: formation.cfd,
-                code_postal: formation.code_postal,
-                formation_intitule: formation.intitule_long,
-                referrers: widgetParameter.referrers,
-                etablissement_siret: formation.etablissement_formateur_siret,
-                catalogue_published: formation.published,
-                id_rco_formation: formation.id_rco_formation,
-                email_rdv: widgetParameter.email_rdv || formation.email,
-                last_catalogue_sync: dayjs().format(),
-              }
-            );
-          }
+          await widgetParameters.updateMany(
+            { id_rco_formation: formation.id_rco_formation },
+            {
+              email_rdv: formation.email || widgetParameter.email_rdv,
+              id_parcoursup: formation.id_parcoursup,
+              cle_ministere_educatif: formation.cle_ministere_educatif,
+              etablissement_raison_sociale: formation.etablissement_formateur_entreprise_raison_sociale,
+              formation_cfd: formation.cfd,
+              code_postal: formation.code_postal,
+              formation_intitule: formation.intitule_long,
+              referrers: widgetParameter.referrers,
+              etablissement_siret: formation.etablissement_formateur_siret,
+              catalogue_published: formation.published,
+              id_rco_formation: formation.id_rco_formation,
+              last_catalogue_sync: dayjs().format(),
+              etablissement_formateur_adresse: formation.etablissement_formateur_adresse,
+              etablissement_formateur_code_postal: formation.etablissement_formateur_code_postal,
+              etablissement_formateur_nom_departement: formation.etablissement_formateur_nom_departement,
+              etablissement_formateur_localite: formation.etablissement_formateur_localite,
+              lieu_formation_adresse: formation.lieu_formation_adresse,
+              etablissement_formateur_siret: formation.etablissement_formateur_siret,
+              etablissement_gestionnaire_siret: formation.etablissement_gestionnaire_siret,
+              cfd: formation.cfd,
+              localite: formation.localite,
+            }
+          );
         } else {
           await widgetParameters.createParameter({
+            email_rdv: formation.email,
             etablissement_raison_sociale: formation.etablissement_formateur_entreprise_raison_sociale,
             formation_cfd: formation.cfd,
             code_postal: formation.code_postal,
@@ -73,8 +63,16 @@ const syncEtablissementsAndFormations = async ({ etablissements, widgetParameter
             etablissement_siret: formation.etablissement_formateur_siret,
             catalogue_published: formation.published,
             id_rco_formation: formation.id_rco_formation,
-            email_rdv: formation.email,
             last_catalogue_sync: dayjs().format(),
+            etablissement_formateur_adresse: formation.etablissement_formateur_adresse,
+            etablissement_formateur_code_postal: formation.etablissement_formateur_code_postal,
+            etablissement_formateur_nom_departement: formation.etablissement_formateur_nom_departement,
+            etablissement_formateur_localite: formation.etablissement_formateur_localite,
+            lieu_formation_adresse: formation.lieu_formation_adresse,
+            etablissement_formateur_siret: formation.etablissement_formateur_siret,
+            etablissement_gestionnaire_siret: formation.etablissement_gestionnaire_siret,
+            cfd: formation.cfd,
+            localite: formation.localite,
           });
         }
 

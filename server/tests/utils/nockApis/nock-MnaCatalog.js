@@ -8,7 +8,7 @@ module.exports = async () => {
     .post("/v1/entity/formations", {
       query: '{"$and":[{"id_rco_formation":["21_114876|21_114876|106291"]}]}',
       select:
-        '{"code_postal":1,"id_rco_formation":1,"etablissement_formateur_entreprise_raison_sociale":1,"intitule_long":1,"etablissement_formateur_adresse":1,"etablissement_formateur_code_postal":1,"etablissement_formateur_nom_departement":1,"etablissement_formateur_localite":1,"lieu_formation_adresse":1,"etablissement_formateur_siret":1,"etablissement_gestionnaire_siret":1,"cfd":1,"localite":1,"email":1,"published":1}',
+        '{"code_postal":1,"id_rco_formation":1,"etablissement_formateur_entreprise_raison_sociale":1,"intitule_long":1,"etablissement_formateur_adresse":1,"etablissement_formateur_code_postal":1,"etablissement_formateur_nom_departement":1,"etablissement_formateur_localite":1,"lieu_formation_adresse":1,"etablissement_formateur_siret":1,"etablissement_gestionnaire_siret":1,"cfd":1,"localite":1,"email":1,"published":1,"id_parcoursup":1,"cle_ministere_educatif":1}',
       page: 1,
       limit: 500,
     })
@@ -19,7 +19,7 @@ module.exports = async () => {
     .post("/v1/entity/formations", {
       query: '{"$and":[{"id_rco_formation":"14_AF_0000091719|14_SE_0000494236|18894"}]}',
       select:
-        '{"code_postal":1,"id_rco_formation":1,"etablissement_formateur_entreprise_raison_sociale":1,"intitule_long":1,"etablissement_formateur_adresse":1,"etablissement_formateur_code_postal":1,"etablissement_formateur_nom_departement":1,"etablissement_formateur_localite":1,"lieu_formation_adresse":1,"etablissement_formateur_siret":1,"etablissement_gestionnaire_siret":1,"cfd":1,"localite":1,"email":1,"published":1}',
+        '{"code_postal":1,"id_rco_formation":1,"etablissement_formateur_entreprise_raison_sociale":1,"intitule_long":1,"etablissement_formateur_adresse":1,"etablissement_formateur_code_postal":1,"etablissement_formateur_nom_departement":1,"etablissement_formateur_localite":1,"lieu_formation_adresse":1,"etablissement_formateur_siret":1,"etablissement_gestionnaire_siret":1,"cfd":1,"localite":1,"email":1,"published":1,"id_parcoursup":1,"cle_ministere_educatif":1}',
       page: 1,
       limit: 500,
     })
@@ -30,7 +30,7 @@ module.exports = async () => {
     .post("/v1/entity/formations", {
       query: '{"$and":[{"id_rco_formation":"KO"}]}',
       select:
-        '{"code_postal":1,"id_rco_formation":1,"etablissement_formateur_entreprise_raison_sociale":1,"intitule_long":1,"etablissement_formateur_adresse":1,"etablissement_formateur_code_postal":1,"etablissement_formateur_nom_departement":1,"etablissement_formateur_localite":1,"lieu_formation_adresse":1,"etablissement_formateur_siret":1,"etablissement_gestionnaire_siret":1,"cfd":1,"localite":1,"email":1,"published":1}',
+        '{"code_postal":1,"id_rco_formation":1,"etablissement_formateur_entreprise_raison_sociale":1,"intitule_long":1,"etablissement_formateur_adresse":1,"etablissement_formateur_code_postal":1,"etablissement_formateur_nom_departement":1,"etablissement_formateur_localite":1,"lieu_formation_adresse":1,"etablissement_formateur_siret":1,"etablissement_gestionnaire_siret":1,"cfd":1,"localite":1,"email":1,"published":1,"id_parcoursup":1,"cle_ministere_educatif":1}',
       page: 1,
       limit: 500,
     })
@@ -41,7 +41,7 @@ module.exports = async () => {
     .post("/v1/entity/formations", {
       query: "{}",
       select:
-        '{"code_postal":1,"id_rco_formation":1,"etablissement_formateur_entreprise_raison_sociale":1,"intitule_long":1,"etablissement_formateur_adresse":1,"etablissement_formateur_code_postal":1,"etablissement_formateur_nom_departement":1,"etablissement_formateur_localite":1,"lieu_formation_adresse":1,"etablissement_formateur_siret":1,"etablissement_gestionnaire_siret":1,"cfd":1,"localite":1,"email":1,"published":1}',
+        '{"code_postal":1,"id_rco_formation":1,"etablissement_formateur_entreprise_raison_sociale":1,"intitule_long":1,"etablissement_formateur_adresse":1,"etablissement_formateur_code_postal":1,"etablissement_formateur_nom_departement":1,"etablissement_formateur_localite":1,"lieu_formation_adresse":1,"etablissement_formateur_siret":1,"etablissement_gestionnaire_siret":1,"cfd":1,"localite":1,"email":1,"published":1,"id_parcoursup":1,"cle_ministere_educatif":1}',
       page: 1,
       limit: 50,
     })
@@ -52,7 +52,7 @@ module.exports = async () => {
     .post("/v1/entity/formations", {
       query: '{"id_parcoursup":"12345"}',
       select:
-        '{"code_postal":1,"id_rco_formation":1,"etablissement_formateur_entreprise_raison_sociale":1,"intitule_long":1,"etablissement_formateur_adresse":1,"etablissement_formateur_code_postal":1,"etablissement_formateur_nom_departement":1,"etablissement_formateur_localite":1,"lieu_formation_adresse":1,"etablissement_formateur_siret":1,"etablissement_gestionnaire_siret":1,"cfd":1,"localite":1,"email":1,"published":1}',
+        '{"code_postal":1,"id_rco_formation":1,"etablissement_formateur_entreprise_raison_sociale":1,"intitule_long":1,"etablissement_formateur_adresse":1,"etablissement_formateur_code_postal":1,"etablissement_formateur_nom_departement":1,"etablissement_formateur_localite":1,"lieu_formation_adresse":1,"etablissement_formateur_siret":1,"etablissement_gestionnaire_siret":1,"cfd":1,"localite":1,"email":1,"published":1,"id_parcoursup":1,"cle_ministere_educatif":1}',
       page: 1,
       limit: 500,
     })
@@ -82,7 +82,7 @@ module.exports = async () => {
     .post("/v1/entity/formations", {
       query: '{"id_rco_formation":"KO"}',
       select:
-        '{"code_postal":1,"id_rco_formation":1,"etablissement_formateur_entreprise_raison_sociale":1,"intitule_long":1,"etablissement_formateur_adresse":1,"etablissement_formateur_code_postal":1,"etablissement_formateur_nom_departement":1,"lieu_formation_adresse":1,"etablissement_formateur_siret":1,"cfd":1,"localite":1,"email":1}',
+        '{"code_postal":1,"id_rco_formation":1,"etablissement_formateur_entreprise_raison_sociale":1,"intitule_long":1,"etablissement_formateur_adresse":1,"etablissement_formateur_code_postal":1,"etablissement_formateur_nom_departement":1,"lieu_formation_adresse":1,"etablissement_formateur_siret":1,"cfd":1,"localite":1,"email":1,"id_parcoursup":1,"cle_ministere_educatif":1}',
       page: 1,
       limit: 500,
     })
@@ -101,7 +101,7 @@ module.exports = async () => {
     .post("/v1/entity/formations", {
       query: '{"$and":[{"id_rco_formation":["21_114876|21_114876|106291"]}]}',
       select:
-        '{"code_postal":1,"id_rco_formation":1,"etablissement_formateur_entreprise_raison_sociale":1,"intitule_long":1,"etablissement_formateur_adresse":1,"etablissement_formateur_code_postal":1,"etablissement_formateur_nom_departement":1,"lieu_formation_adresse":1,"etablissement_formateur_siret":1,"cfd":1,"localite":1,"email":1}',
+        '{"code_postal":1,"id_rco_formation":1,"etablissement_formateur_entreprise_raison_sociale":1,"intitule_long":1,"etablissement_formateur_adresse":1,"etablissement_formateur_code_postal":1,"etablissement_formateur_nom_departement":1,"lieu_formation_adresse":1,"etablissement_formateur_siret":1,"cfd":1,"localite":1,"email":1,"id_parcoursup":1,"cle_ministere_educatif":1}',
       page: 1,
       limit: 500,
     })
@@ -137,7 +137,7 @@ module.exports = async () => {
     .post("/v1/entity/formations", {
       query: '{"$and":[{"etablissement_formateur_siret":"32922456200234"}]}',
       select:
-        '{"code_postal":1,"id_rco_formation":1,"etablissement_formateur_entreprise_raison_sociale":1,"intitule_long":1,"etablissement_formateur_adresse":1,"etablissement_formateur_code_postal":1,"etablissement_formateur_nom_departement":1,"etablissement_formateur_localite":1,"lieu_formation_adresse":1,"etablissement_formateur_siret":1,"etablissement_gestionnaire_siret":1,"cfd":1,"localite":1,"email":1,"published":1}',
+        '{"code_postal":1,"id_rco_formation":1,"etablissement_formateur_entreprise_raison_sociale":1,"intitule_long":1,"etablissement_formateur_adresse":1,"etablissement_formateur_code_postal":1,"etablissement_formateur_nom_departement":1,"etablissement_formateur_localite":1,"lieu_formation_adresse":1,"etablissement_formateur_siret":1,"etablissement_gestionnaire_siret":1,"cfd":1,"localite":1,"email":1,"published":1,"id_parcoursup":1,"cle_ministere_educatif":1}',
       page: 1,
       limit: 500,
     })

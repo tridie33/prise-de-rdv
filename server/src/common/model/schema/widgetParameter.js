@@ -44,6 +44,61 @@ const widgetParameterSchema = {
     default: Date.now,
     description: "Date de la dernière synchronisation avec le Catalogue",
   },
+  id_parcoursup: {
+    type: String,
+    default: null,
+    description: "Identifiant Parcoursup",
+  },
+  cle_ministere_educatif: {
+    type: String,
+    default: null,
+    description: "Identifiant unique d'une formation",
+  },
+  etablissement_raison_sociale: {
+    type: String,
+    default: null,
+    description: "Raison sociale de l'établissement",
+  },
+  etablissement_formateur_adresse: {
+    type: String,
+    default: null,
+    description: "Adresse de l'établissement formateur",
+  },
+  etablissement_formateur_code_postal: {
+    type: String,
+    default: null,
+    description: "Code postal de l'établissement formateur",
+  },
+  etablissement_formateur_nom_departement: {
+    type: String,
+    default: null,
+    description: "Département de l'établissement formateur",
+  },
+  etablissement_formateur_localite: {
+    type: String,
+    default: null,
+    description: "Localité de l'établissement formateur",
+  },
+  lieu_formation_adresse: {
+    type: String,
+    default: null,
+    description: "Adresse du lieux de formation",
+  },
+  etablissement_formateur_siret: {
+    type: String,
+    default: null,
+    description: "Siret formateur",
+  },
+  etablissement_gestionnaire_siret: {
+    type: String,
+    default: null,
+    description: "Siret gestionnaire",
+  },
+  localite: {
+    type: String,
+    default: null,
+    description: "Localité de la formation",
+  },
 };
 
 module.exports = widgetParameterSchema;
