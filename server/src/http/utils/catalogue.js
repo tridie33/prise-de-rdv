@@ -78,6 +78,8 @@ const getFormations = async (query, page = 1, limit = 500, enableCache = true) =
         localite: 1,
         email: 1,
         published: 1,
+        id_parcoursup: 1,
+        cle_ministere_educatif: 1,
       }),
       page,
       limit,
