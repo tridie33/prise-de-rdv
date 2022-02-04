@@ -66,14 +66,39 @@ const PremiumForm = () => {
         py={20}
         mb={hasRefused || hasAccepted ? "400px" : "0"}
       >
-        {(hasRefused || hasAccepted) && (
+        {hasRefused && !hasAccepted && (
           <Flex>
             <Box w="40px">
               <SuccessCircle width={33} fillHexaColor="#000091" />
             </Box>
             <Box w="100%">
               <Text textStyle="h3" fontSize="24px" fontWeight="bold" color="grey.800" ml={2}>
-                Votre choix a bien été pris en compte.
+                Votre choix a bien été pris en compte
+              </Text>
+              <Text mt={4} color="grey.800" ml={2}>
+                Le service RDV Apprentissage n'a pas été activé pour vos formations. Si vous changez d'avis, merci de
+                nous contacter à l'adresse suivante:{" "}
+                <a href="mailto:rdv_apprentissage@apprentissage.beta.gouv.fr">
+                  rdv_apprentissage@apprentissage.beta.gouv.fr
+                </a>
+                .
+              </Text>
+            </Box>
+          </Flex>
+        )}
+        {hasAccepted && (
+          <Flex>
+            <Box w="40px">
+              <SuccessCircle width={33} fillHexaColor="#000091" />
+            </Box>
+            <Box w="100%">
+              <Text textStyle="h3" fontSize="24px" fontWeight="bold" color="grey.800" ml={2}>
+                Félicitations, votre choix a bien été pris en compte.
+              </Text>
+              <Text mt={4} color="grey.800" ml={2}>
+                Le service RDV Apprentissage est désormais activé sur Parcoursup. <br />
+                Afin de recevoir les demandes de RDV, assurez-vous que vos coordonnées de contact CARIF FOREF soient à
+                jour.
               </Text>
             </Box>
           </Flex>
