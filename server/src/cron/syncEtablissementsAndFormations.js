@@ -30,7 +30,7 @@ const syncEtablissementsAndFormations = async ({ etablissements, widgetParameter
             { id_rco_formation: formation.id_rco_formation },
             {
               email_rdv: formation.email || widgetParameter.email_rdv,
-              id_parcoursup: formation.id_parcoursup,
+              id_parcoursup: formation.parcoursup_id,
               cle_ministere_educatif: formation.cle_ministere_educatif,
               etablissement_raison_sociale: formation.etablissement_formateur_entreprise_raison_sociale,
               formation_cfd: formation.cfd,
@@ -55,6 +55,8 @@ const syncEtablissementsAndFormations = async ({ etablissements, widgetParameter
         } else {
           await widgetParameters.createParameter({
             email_rdv: formation.email,
+            id_parcoursup: formation.parcoursup_id,
+            cle_ministere_educatif: formation.cle_ministere_educatif,
             etablissement_raison_sociale: formation.etablissement_formateur_entreprise_raison_sociale,
             formation_cfd: formation.cfd,
             code_postal: formation.code_postal,
