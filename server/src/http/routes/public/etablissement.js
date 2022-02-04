@@ -46,10 +46,6 @@ module.exports = ({ etablissements, mailer, widgetParameters }) => {
         throw Boom.badRequest("Etablissement not found.");
       }
 
-      if (etablissement.premium_refused_at) {
-        throw Boom.badRequest("Premium already refused.");
-      }
-
       if (etablissement.premium_activated_at) {
         throw Boom.badRequest("Premium already activated.");
       }
