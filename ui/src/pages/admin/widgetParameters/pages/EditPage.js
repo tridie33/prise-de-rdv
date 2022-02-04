@@ -23,6 +23,7 @@ import { _get, _post, _put } from "../../../../common/httpClient";
 import EtablissementComponent from "../components/EtablissementComponent";
 import downloadFile from "../../../../common/utils/downloadFile";
 import { Check, Disquette, Download } from "../../../../theme/components/icons";
+import { formatDate } from "../../../../common/dayjs";
 
 /**
  * @description Page that handle formation editions.
@@ -245,6 +246,7 @@ const EditPage = () => {
                 <Td textStyle="sm">EMAIL</Td>
                 <Td textStyle="sm">EMAIL CATALOGUE</Td>
                 <Td textStyle="sm">PUBLIE SUR LE CATALOGUE</Td>
+                <Td textStyle="sm">DERNIERE SYNCHRONISATION CATALOGUE</Td>
                 <Td textStyle="sm">
                   SOURCE <br />
                 </Td>
@@ -287,6 +289,7 @@ const EditPage = () => {
                       </Td>
                       <Td>{formation.email || "N/C"}</Td>
                       <Td>{parameter?.catalogue_published ? "Oui" : "Non"}</Td>
+                      <Td>{parameter?.last_catalogue_sync ? formatDate(parameter?.last_catalogue_sync) : "N/A"}</Td>
                       <Td>
                         {formationPermissions.map((permission) => (
                           <>
