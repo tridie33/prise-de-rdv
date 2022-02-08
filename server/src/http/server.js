@@ -31,7 +31,7 @@ const { syncEtablissementsAndFormations } = require("../cron/syncEtablissementsA
 const { activateOptOutEtablissementFormations } = require("../cron/activateOptOutEtablissementFormations");
 const { candidatHaveYouBeenContacted } = require("../cron/candidatHaveYouBeenContacted");
 const { inviteEtablissementToOptOut } = require("../cron/inviteEtablissementToOptOut");
-const { inviteEtablissementToPremium } = require("../cron/inviteEtablissementToPremium");
+// const { inviteEtablissementToPremium } = require("../cron/inviteEtablissementToPremium");
 
 /**
  * @description Express function that embed components in routes.
@@ -115,7 +115,7 @@ module.exports = async (components) => {
   );
 
   // Everyday, every minutes: Premium invite
-  cron.schedule("* * * * *", () => inviteEtablissementToPremium({ mailer, widgetParameters, etablissements }));
+  // cron.schedule("* * * * *", () => inviteEtablissementToPremium({ mailer, widgetParameters, etablissements }));
 
   return app;
 };
