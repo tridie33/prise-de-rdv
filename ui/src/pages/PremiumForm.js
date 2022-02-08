@@ -129,7 +129,7 @@ const PremiumForm = () => {
               <Box float="left" pt={1} pr={3}>
                 <SuccessCircle width={16} fillHexaColor="#00AC8C" />
               </Box>{" "}
-              Dans un délais de 4 jours ouvrés après réception de la demande par e-mail
+              Dans un délai de 4 jours ouvrés après réception de la demande par e-mail
             </Text>
             <Text mt={6}>
               Je prends acte du fait que la Mission interministérielle pour l’apprentissage pourra prendre toutes les
