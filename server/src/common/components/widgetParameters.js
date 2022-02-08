@@ -95,9 +95,10 @@ module.exports = async () => ({
   /**
    * @description Returns items.
    * @param {Object} conditions
+   * @param {Object} options
    * @returns {Promise<WidgetParameter[]>}
    */
-  find: (conditions) => WidgetParameter.find(conditions),
+  find: (conditions, options = {}) => WidgetParameter.find(conditions, options),
 
   /**
    * @description Returns one item.
