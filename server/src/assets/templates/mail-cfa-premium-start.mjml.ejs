@@ -1,0 +1,73 @@
+<mjml>
+    <mj-head>
+        <mj-title>️Pouvez-vous contacter ce candidat ?</mj-title>
+        <mj-font name="Inter" href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap'" />
+        <mj-style inline="inline">
+            a:link,a:visited, a:hover, a:active {color: #206BC4;}, a {color: #3A55D1;}, body{background: #F9F8F6;}
+            .purple {color: #3A55D1; text-decoration: none}
+        </mj-style>
+        <mj-attributes>
+            <mj-text color="#232E3C" font-family="Inter,sans-serif" font-size="14px" line-height="23px" />
+            <mj-divider />
+        </mj-attributes>
+    </mj-head>
+    <mj-body background-color="#F9F8F6">
+        <mj-section padding-top="20px" padding-bottom="0">
+            <mj-column vertical-align="middle" width="220px" padding-right="20px" padding-top="30px" padding-bottom="0">
+                <mj-image src="<%= data.images.peopleLaptop %>" alt="Figure" padding-bottom="0" />
+            </mj-column>
+            <mj-column vertical-align="middle" width="380px">
+                <mj-text font-size="22px" font-weight="700" color="#383838" line-height="26px" text-decoration="none" align="left" padding="0" padding-top="30px">
+                    Vous avez activé le service
+                </mj-text>
+                <mj-text font-size="22px" font-weight="700" line-height="26.63px" text-decoration="none" color="#3A55D1" align="left" padding="0">Apprentissage sur Parcoursup !</mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#ffffff" padding-top="45px" padding-bottom="0">
+            <mj-column width="480px">
+                <mj-text padding-bottom="32px" font-size="20px" font-weight="700" line-height="24px" text-decoration="none" color="#3A55D1">
+                    Bonjour,
+                </mj-text>
+                <mj-text font-size="16px" line-height="20px" font-weight="700">
+                    A votre demande, le service RDV Apprentissage sera activé à partir du <%= data.activationDate %> sur Parcoursup pour l’organisme suivant :
+                </mj-text>
+                <mj-text font-size="16px" line-height="20px" padding-top="0"><%= data.etablissement.name %> <br />
+                        <%= data.etablissement.address %><br/>
+                        <%= data.etablissement.postalCode %> <%= data.etablissement.ville %><br/>
+                    SIRET : <%= data.etablissement.siret %>
+                </mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#ffffff" padding-top="0" padding-bottom="0">
+            <mj-column width="480px">
+                <mj-text font-size="16px" line-height="20px" padding-top="15px">A très bientôt, <br/>
+                    <i>L'équipe de la Mission apprentissage</i></mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#ffffff">
+            <mj-column width="480px">
+                <mj-divider border-width="0.5px" border-style="solid" border-color="#D0C9C4" padding-top="0" padding-bottom="25px" />
+                <mj-text padding-bottom="15px">
+                    Si vous avez des questions ou si vous souhaitez vous désinscrire du service, envoyez un email à <a href="mailto:rdv_apprentissage@apprentissage.beta.gouv.fr">rdv_apprentissage@apprentissage.beta.gouv.fr</a>.
+                </mj-text>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#ffffff" padding-top="0" padding-bottom="30px">
+            <mj-column width="480px">
+                <mj-text padding-top="0">
+                    Ce mail a été envoyé à <a href="mailto:<%= data.etablissement.email %>"><%= data.etablissement.email %></a>
+                </mj-text>
+            </mj-column>
+            </mj-column>
+        </mj-section>
+        <mj-section background-color="#f9f8f6">
+            <mj-column width="480px">
+                <mj-text padding-top="20px" padding-bottom="20px" align="center">
+                    <b>RDV Apprentissage</b> est un outil développé <br/>
+                    par la <a href="https://mission-apprentissage.gitbook.io/general/">Mission interministérielle pour l’apprentissage</a>
+                </mj-text>
+            </mj-column>
+            </mj-column>
+        </mj-section>
+    </mj-body>
+</mjml>

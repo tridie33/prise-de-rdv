@@ -59,7 +59,7 @@ const getFormations = async (query, page = 1, limit = 500, enableCache = true) =
   }
 
   const { data } = await axios.post(
-    `${config.mnaCatalog.endpoint}/v1/entity/formations2021`,
+    `${config.mnaCatalog.endpoint}/v1/entity/formations`,
     {
       query: JSON.stringify(query),
       select: JSON.stringify({
@@ -78,6 +78,8 @@ const getFormations = async (query, page = 1, limit = 500, enableCache = true) =
         localite: 1,
         email: 1,
         published: 1,
+        parcoursup_id: 1,
+        cle_ministere_educatif: 1,
       }),
       page,
       limit,

@@ -1,20 +1,30 @@
 const express = require("express");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
-const { idParcoursupCatalogueList } = require("../../utils/parcoursup");
+const { referrers } = require("../../../common/model/constants/referrers");
 
 /**
  * @description Partners router.
  */
-module.exports = () => {
+module.exports = ({ widgetParameters }) => {
   const router = express.Router();
 
   /**
-   * @description Proxify catalogue's requests.
+   * @description Returns all available parcoursup ids.
    */
   router.get(
     "/parcoursup/formations",
     tryCatch(async (req, res) => {
-      return res.send({ ids: idParcoursupCatalogueList });
+      const ids = await widgetParameters.find(
+        {
+          id_parcoursup: {
+            $ne: null,
+          },
+          referrers: { $in: [referrers.PARCOURSUP.code] },
+        },
+        { id_parcoursup: 1 }
+      );
+
+      return res.send({ ids: ids.map((widgetParameter) => widgetParameter.id_parcoursup) });
     })
   );
 

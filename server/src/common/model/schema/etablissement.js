@@ -36,6 +36,21 @@ const etablissementSchema = {
     default: null,
     description: "Email du decisionnaire de l'établissement",
   },
+  premium_invited_at: {
+    type: Date,
+    default: null,
+    description: "Date d'invitation au Premium (Publication sur Parcoursup)",
+  },
+  premium_activated_at: {
+    type: Date,
+    default: null,
+    description: "Date d'acceptation de l'offre Premium",
+  },
+  premium_refused_at: {
+    type: Date,
+    default: null,
+    description: "Date de refus de l'offre Premium",
+  },
   opt_mode: {
     type: String,
     enum: Object.values(optMode),
