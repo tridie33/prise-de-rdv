@@ -1,5 +1,6 @@
 const express = require("express");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
+const { referrers } = require("../../../common/model/constants/referrers");
 
 /**
  * @description Partners router.
@@ -18,6 +19,7 @@ module.exports = ({ widgetParameters }) => {
           id_parcoursup: {
             $ne: null,
           },
+          referrers: { $in: [referrers.PARCOURSUP.code] },
         },
         { id_parcoursup: 1 }
       );
