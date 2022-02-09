@@ -29,7 +29,7 @@ const constantsRoute = require("./routes/public/constants");
 const { administrator } = require("./../common/roles");
 const { syncEtablissementsAndFormations } = require("../cron/syncEtablissementsAndFormations");
 const { activateOptOutEtablissementFormations } = require("../cron/activateOptOutEtablissementFormations");
-const { candidatHaveYouBeenContacted } = require("../cron/candidatHaveYouBeenContacted");
+// const { candidatHaveYouBeenContacted } = require("../cron/candidatHaveYouBeenContacted");
 const { inviteEtablissementToOptOut } = require("../cron/inviteEtablissementToOptOut");
 // const { inviteEtablissementToPremium } = require("../cron/inviteEtablissementToPremium");
 
@@ -110,9 +110,9 @@ module.exports = async (components) => {
   );
 
   // Everyday, every minutes: Send an email to candidats to know if they were contacted by the CFA
-  cron.schedule("* * * * *", () =>
-    candidatHaveYouBeenContacted({ mailer, appointments, widgetParameters, users, etablissements })
-  );
+  // cron.schedule("* * * * *", () =>
+  //   candidatHaveYouBeenContacted({ mailer, appointments, widgetParameters, users, etablissements })
+  // );
 
   // Everyday, every minutes: Premium invite
   // cron.schedule("* * * * *", () => inviteEtablissementToPremium({ mailer, widgetParameters, etablissements }));
