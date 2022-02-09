@@ -39,7 +39,7 @@ const { inviteEtablissementToOptOut } = require("../cron/inviteEtablissementToOp
  * @returns {Promise<*|Express>}
  */
 module.exports = async (components) => {
-  const { db, etablissements, widgetParameters, mailer, appointments, users } = components;
+  const { db, etablissements, widgetParameters, mailer } = components;
   const app = express();
   const checkJwtToken = authMiddleware(components);
   const adminOnly = permissionsMiddleware(administrator);
