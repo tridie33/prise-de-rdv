@@ -25,6 +25,7 @@ const sampleParameter = {
   formation_cfd: "26033206",
   email_rdv: "testContact@prdv.fr",
   id_rco_formation: "14_AF_0000091719|14_SE_0000494236|18894",
+  id_parcoursup: "12345",
   referrers: [referrers.LBA.code, referrers.PARCOURSUP.code],
 };
 
