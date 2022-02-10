@@ -27,7 +27,7 @@ const partnersRoute = require("./routes/public/partners");
 const emailsRoute = require("./routes/auth/emails");
 const constantsRoute = require("./routes/public/constants");
 const { administrator } = require("./../common/roles");
-const { syncEtablissementsAndFormations } = require("../cron/syncEtablissementsAndFormations");
+// const { syncEtablissementsAndFormations } = require("../cron/syncEtablissementsAndFormations");
 const { activateOptOutEtablissementFormations } = require("../cron/activateOptOutEtablissementFormations");
 // const { candidatHaveYouBeenContacted } = require("../cron/candidatHaveYouBeenContacted");
 const { inviteEtablissementToOptOut } = require("../cron/inviteEtablissementToOptOut");
@@ -102,7 +102,7 @@ module.exports = async (components) => {
   cron.schedule("0 14 * * *", () => inviteEtablissementToOptOut({ mailer, widgetParameters, etablissements }));
 
   // Everyday at 05:00 AM: Copy catalogue formations
-  cron.schedule("0 5 * * *", () => syncEtablissementsAndFormations({ etablissements, widgetParameters }));
+  // cron.schedule("0 5 * * *", () => syncEtablissementsAndFormations({ etablissements, widgetParameters }));
 
   // Everyday, every 5 minutes: Opt-out activation
   cron.schedule("*/5 * * * *", () =>
