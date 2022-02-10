@@ -13,6 +13,7 @@ module.exports = async () => ({
    * @param {String} id_rco_formation
    * @param {String} catalogue_published
    * @param {Date} last_catalogue_sync
+   * @param {String} id_parcoursup
    * @returns {Promise<*>}
    */
   createParameter: async ({
@@ -26,6 +27,7 @@ module.exports = async () => ({
     id_rco_formation,
     catalogue_published,
     last_catalogue_sync,
+    id_parcoursup,
   }) => {
     const widgetParameter = new WidgetParameter({
       etablissement_siret,
@@ -38,6 +40,7 @@ module.exports = async () => ({
       id_rco_formation,
       catalogue_published,
       last_catalogue_sync,
+      id_parcoursup,
     });
     await widgetParameter.save();
 

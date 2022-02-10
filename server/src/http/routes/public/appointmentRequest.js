@@ -6,7 +6,6 @@ const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const config = require("../../../../config");
 const { getReferrerById, getReferrerByKeyName, referrers } = require("../../../common/model/constants/referrers");
 const { candidatFollowUpType, mailType } = require("../../../common/model/constants/appointments");
-const { getFormationsByIdRcoFormations, getFormationsByIdParcoursup } = require("../../utils/catalogue");
 const { candidat } = require("../../../common/roles");
 const { getIdRcoFormationThroughIdActionFormation } = require("../../utils/mappings/onisep");
 const { dayjs } = require("../../utils/dayjs");
@@ -124,12 +123,11 @@ module.exports = ({ users, appointments, mailer, widgetParameters, etablissement
 
       const referrerObj = getReferrerByKeyName(referrer);
 
-      let formation;
-      let catalogueResponse;
+      let widgetParameter;
       if (idRcoFormation) {
-        catalogueResponse = await getFormationsByIdRcoFormations({ idRcoFormations: idRcoFormation });
+        widgetParameter = await widgetParameters.findOne({ id_rco_formation: idRcoFormation });
       } else if (idParcoursup) {
-        catalogueResponse = await getFormationsByIdParcoursup({ idParcoursup });
+        widgetParameter = await widgetParameters.findOne({ id_parcoursup: idParcoursup });
       } else if (idActionFormation) {
         const idRcoFormationFound = getIdRcoFormationThroughIdActionFormation(idActionFormation);
 
@@ -137,19 +135,17 @@ module.exports = ({ users, appointments, mailer, widgetParameters, etablissement
           throw Boom.notFound("Formation introuvable.");
         }
 
-        catalogueResponse = await getFormationsByIdRcoFormations({ idRcoFormations: idRcoFormationFound });
+        widgetParameter = await widgetParameters.findOne({ id_rco_formation: idRcoFormationFound });
       } else {
         throw new Error("Critère de recherche non conforme.");
       }
 
-      [formation] = catalogueResponse.formations;
-
-      if (!formation) {
+      if (!widgetParameter) {
         throw Boom.notFound("Formation introuvable.");
       }
 
       const isWidgetVisible = await widgetParameters.isWidgetVisible({
-        idRcoFormation: formation.id_rco_formation,
+        idRcoFormation: widgetParameter.id_rco_formation,
         referrer: referrerObj.code,
       });
 
@@ -158,16 +154,16 @@ module.exports = ({ users, appointments, mailer, widgetParameters, etablissement
       }
 
       res.send({
-        etablissement_formateur_entreprise_raison_sociale: formation.etablissement_formateur_entreprise_raison_sociale,
-        intitule_long: formation.intitule_long,
-        lieu_formation_adresse: formation.lieu_formation_adresse,
-        code_postal: formation.code_postal,
-        etablissement_formateur_siret: formation.etablissement_formateur_siret,
-        cfd: formation.cfd,
-        localite: formation.localite,
-        id_rco_formation: formation.id_rco_formation,
+        etablissement_formateur_entreprise_raison_sociale: widgetParameter.etablissement_raison_sociale,
+        intitule_long: widgetParameter.formation_intitule,
+        lieu_formation_adresse: widgetParameter.lieu_formation_adresse,
+        code_postal: widgetParameter.code_postal,
+        etablissement_formateur_siret: widgetParameter.etablissement_siret,
+        cfd: widgetParameter.formation_cfd,
+        localite: widgetParameter.localite,
+        id_rco_formation: widgetParameter.id_rco_formation,
         form_url: `${config.publicUrl}/form?referrer=${referrer}&idRcoFormation=${encodeURIComponent(
-          formation.id_rco_formation
+          widgetParameter.id_rco_formation
         )}`,
       });
     })
@@ -208,20 +204,19 @@ module.exports = ({ users, appointments, mailer, widgetParameters, etablissement
         });
       }
 
-      const [catalogueResponse, widgetParameter] = await Promise.all([
-        getFormationsByIdRcoFormations({ idRcoFormations: idRcoFormation }),
-        widgetParameters.getParameterByIdRcoFormationReferrer({ idRcoFormation, referrer: referrerObj.code }),
-      ]);
+      const widgetParameter = await widgetParameters.getParameterByIdRcoFormationReferrer({
+        idRcoFormation,
+        referrer: referrerObj.code,
+      });
 
-      const [formation] = catalogueResponse.formations;
-
-      if (!formation) {
+      if (!widgetParameter) {
         throw Boom.badRequest("Etablissement et formation introuvable.");
       }
+
       const createdAppointement = await appointments.createAppointment({
         candidat_id: user._id,
-        etablissement_id: formation.etablissement_formateur_siret,
-        formation_id: formation.cfd,
+        etablissement_id: widgetParameter.etablissement_formateur_siret,
+        formation_id: widgetParameter.formation_cfd,
         motivations,
         referrer: referrerObj.code,
         id_rco_formation: idRcoFormation,
@@ -237,14 +232,14 @@ module.exports = ({ users, appointments, mailer, widgetParameters, etablissement
           motivations: createdAppointement.motivations,
         },
         etablissement: {
-          name: formation.etablissement_formateur_entreprise_raison_sociale,
-          address: formation.lieu_formation_adresse,
-          postalCode: formation.code_postal,
-          ville: formation.localite,
+          name: widgetParameter.etablissement_raison_sociale,
+          address: widgetParameter.lieu_formation_adresse,
+          postalCode: widgetParameter.code_postal,
+          ville: widgetParameter.localite,
           email: widgetParameter.email_rdv,
         },
         formation: {
-          intitule: formation.intitule_long,
+          intitule: widgetParameter.formation_intitule,
         },
         appointment: {
           referrerLink: referrerObj.url,
@@ -309,13 +304,10 @@ module.exports = ({ users, appointments, mailer, widgetParameters, etablissement
 
       const appointment = await appointments.getAppointmentById(appointmentId);
 
-      const [widgetParameter, user, catalogueFormations] = await Promise.all([
+      const [widgetParameter, user] = await Promise.all([
         widgetParameters.getParameterByIdRcoFormation({ idRcoFormation: appointment.id_rco_formation }),
         users.getUserById(appointment.candidat_id),
-        getFormationsByIdRcoFormations({ idRcoFormations: appointment.id_rco_formation }),
       ]);
-
-      const [formationCatalogue] = catalogueFormations.formations;
 
       res.json({
         appointment: {
@@ -325,9 +317,8 @@ module.exports = ({ users, appointments, mailer, widgetParameters, etablissement
         user: user._doc,
         etablissement: {
           email: widgetParameter.email_rdv,
-          intitule_long: formationCatalogue.intitule_long,
-          etablissement_formateur_entreprise_raison_sociale:
-            formationCatalogue.etablissement_formateur_entreprise_raison_sociale,
+          intitule_long: widgetParameter.formation_intitule,
+          etablissement_formateur_entreprise_raison_sociale: widgetParameter.etablissement_raison_sociale,
         },
       });
     })
@@ -384,10 +375,9 @@ module.exports = ({ users, appointments, mailer, widgetParameters, etablissement
         return res.sendStatus(400);
       }
 
-      const [user, widgetParameter, catalogueResponse] = await Promise.all([
+      const [user, widgetParameter] = await Promise.all([
         users.findOne({ _id: appointment.candidat_id }),
         widgetParameters.findOne({ id_rco_formation: appointment.id_rco_formation }),
-        getFormationsByIdRcoFormations({ idRcoFormations: appointment.id_rco_formation }),
       ]);
 
       if (action === candidatFollowUpType.CONFIRM) {
@@ -396,8 +386,6 @@ module.exports = ({ users, appointments, mailer, widgetParameters, etablissement
 
       if (action === candidatFollowUpType.RESEND) {
         const referrerObj = getReferrerById(appointment.referrer);
-
-        const [formation] = catalogueResponse.formations;
 
         const { messageId } = await mailer.sendEmail(
           widgetParameter.email_rdv,
@@ -412,13 +400,13 @@ module.exports = ({ users, appointments, mailer, widgetParameters, etablissement
               motivations: appointment.motivations,
             },
             etablissement: {
-              name: formation.etablissement_formateur_entreprise_raison_sociale,
-              address: formation.lieu_formation_adresse,
-              postalCode: formation.code_postal,
-              ville: formation.localite,
+              name: widgetParameter.etablissement_raison_sociale,
+              address: widgetParameter.lieu_formation_adresse,
+              postalCode: widgetParameter.code_postal,
+              ville: widgetParameter.localite,
             },
             formation: {
-              intitule: formation.intitule_long,
+              intitule: widgetParameter.formation_intitule,
             },
             appointment: {
               referrerLink: referrerObj.url,
