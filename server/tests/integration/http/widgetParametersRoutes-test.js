@@ -1,4 +1,5 @@
 const assert = require("assert");
+const { omit } = require("lodash");
 const httpTests = require("../../utils/httpTests");
 const { administrator } = require("../../../src/common/roles");
 const { sampleParameter, sampleUpdateParameter } = require("../../data/samples");
@@ -6,16 +7,18 @@ const { WidgetParameter } = require("../../../src/common/model");
 const { referrers } = require("../../../src/common/model/constants/referrers");
 
 httpTests(__filename, ({ startServer }) => {
+  const sampleWidgetParameter = omit(sampleParameter, ["id_parcoursup"]);
+
   it("Vérifie qu'on peut consulter la liste des parametres de widget en tant qu'admin via la Route", async () => {
     const { httpClient, createAndLogUser, components } = await startServer();
 
     // Add parameter
     await components.widgetParameters.createParameter({
-      etablissement_siret: sampleParameter.etablissement_siret,
-      formation_intitule: sampleParameter.formation_intitule,
-      formation_cfd: sampleParameter.formation_cfd,
-      email_rdv: sampleParameter.email_rdv,
-      referrers: sampleParameter.referrers,
+      etablissement_siret: sampleWidgetParameter.etablissement_siret,
+      formation_intitule: sampleWidgetParameter.formation_intitule,
+      formation_cfd: sampleWidgetParameter.formation_cfd,
+      email_rdv: sampleWidgetParameter.email_rdv,
+      referrers: sampleWidgetParameter.referrers,
     });
 
     const bearerToken = await createAndLogUser("userAdmin", "password", { role: administrator });
@@ -33,11 +36,11 @@ httpTests(__filename, ({ startServer }) => {
 
     // Add parameter
     await components.widgetParameters.createParameter({
-      etablissement_siret: sampleParameter.etablissement_siret,
-      formation_intitule: sampleParameter.formation_intitule,
-      formation_cfd: sampleParameter.formation_cfd,
-      email_rdv: sampleParameter.email_rdv,
-      referrers: sampleParameter.referrers,
+      etablissement_siret: sampleWidgetParameter.etablissement_siret,
+      formation_intitule: sampleWidgetParameter.formation_intitule,
+      formation_cfd: sampleWidgetParameter.formation_cfd,
+      email_rdv: sampleWidgetParameter.email_rdv,
+      referrers: sampleWidgetParameter.referrers,
     });
 
     const bearerToken = await createAndLogUser("userAdmin", "password", { role: administrator });
@@ -56,8 +59,8 @@ httpTests(__filename, ({ startServer }) => {
       {
         parameters: [
           {
-            siret_formateur: sampleParameter.etablissement_siret,
-            email: sampleParameter.email_rdv,
+            siret_formateur: sampleWidgetParameter.etablissement_siret,
+            email: sampleWidgetParameter.email_rdv,
             referrers: [referrers.LBA.code],
           },
         ],
@@ -67,33 +70,33 @@ httpTests(__filename, ({ startServer }) => {
 
     // Check API Response
     assert.deepStrictEqual(response.status, 200);
-    assert.deepStrictEqual(response.data.result[0].siret_formateur, sampleParameter.etablissement_siret);
-    assert.deepStrictEqual(response.data.result[0].email, sampleParameter.email_rdv);
+    assert.deepStrictEqual(response.data.result[0].siret_formateur, sampleWidgetParameter.etablissement_siret);
+    assert.deepStrictEqual(response.data.result[0].email, sampleWidgetParameter.email_rdv);
     assert.deepStrictEqual(response.data.result[0].referrers, [referrers.LBA.code]);
-    assert.deepStrictEqual(response.data.result[0].formations[0].email_rdv, sampleParameter.email_rdv);
+    assert.deepStrictEqual(response.data.result[0].formations[0].email_rdv, sampleWidgetParameter.email_rdv);
     assert.deepStrictEqual(response.data.result[0].formations[0].referrers, [referrers.LBA.code]);
   });
 
   it("Vérifie qu'on peut ajouter un parametre de widget en tant qu'admin via la Route", async () => {
     const { httpClient, createAndLogUser } = await startServer();
     const bearerToken = await createAndLogUser("userAdmin", "password", { role: administrator });
-    const response = await httpClient.post("/api/widget-parameters/", sampleParameter, { headers: bearerToken });
+    const response = await httpClient.post("/api/widget-parameters/", sampleWidgetParameter, { headers: bearerToken });
 
     // Check API Response
     assert.deepStrictEqual(response.status, 200);
     assert.ok(response.data._id);
-    assert.deepStrictEqual(response.data.etablissement_siret, sampleParameter.etablissement_siret);
-    assert.deepStrictEqual(response.data.formation_intitule, sampleParameter.formation_intitule);
-    assert.deepStrictEqual(response.data.formation_cfd, sampleParameter.formation_cfd);
-    assert.deepStrictEqual(response.data.email_rdv, sampleParameter.email_rdv);
+    assert.deepStrictEqual(response.data.etablissement_siret, sampleWidgetParameter.etablissement_siret);
+    assert.deepStrictEqual(response.data.formation_intitule, sampleWidgetParameter.formation_intitule);
+    assert.deepStrictEqual(response.data.formation_cfd, sampleWidgetParameter.formation_cfd);
+    assert.deepStrictEqual(response.data.email_rdv, sampleWidgetParameter.email_rdv);
     assert.deepStrictEqual(response.data.referrers.includes(referrers.LBA.code), true);
 
     // Check query db
     const found = await WidgetParameter.findById(response.data._id);
-    assert.deepStrictEqual(found.etablissement_siret, sampleParameter.etablissement_siret);
-    assert.deepStrictEqual(found.formation_intitule, sampleParameter.formation_intitule);
-    assert.deepStrictEqual(found.formation_cfd, sampleParameter.formation_cfd);
-    assert.deepStrictEqual(found.email_rdv, sampleParameter.email_rdv);
+    assert.deepStrictEqual(found.etablissement_siret, sampleWidgetParameter.etablissement_siret);
+    assert.deepStrictEqual(found.formation_intitule, sampleWidgetParameter.formation_intitule);
+    assert.deepStrictEqual(found.formation_cfd, sampleWidgetParameter.formation_cfd);
+    assert.deepStrictEqual(found.email_rdv, sampleWidgetParameter.email_rdv);
     assert.deepStrictEqual(found.referrers.includes(referrers.LBA.code), true);
   });
 
@@ -102,42 +105,44 @@ httpTests(__filename, ({ startServer }) => {
 
     // Add parameter
     await components.widgetParameters.createParameter({
-      etablissement_siret: sampleParameter.etablissement_siret,
-      formation_intitule: sampleParameter.formation_intitule,
-      formation_cfd: sampleParameter.formation_cfd,
-      email_rdv: sampleParameter.email_rdv,
-      referrers: sampleParameter.referrers,
+      etablissement_siret: sampleWidgetParameter.etablissement_siret,
+      formation_intitule: sampleWidgetParameter.formation_intitule,
+      formation_cfd: sampleWidgetParameter.formation_cfd,
+      email_rdv: sampleWidgetParameter.email_rdv,
+      referrers: sampleWidgetParameter.referrers,
     });
 
     const bearerToken = await createAndLogUser("userAdmin", "password", { role: administrator });
     const response = await httpClient.get(
       "/api/widget-parameters/",
       { headers: bearerToken },
-      { data: { etablissement_siret: sampleParameter.etablissement_siret } }
+      { data: { etablissement_siret: sampleWidgetParameter.etablissement_siret } }
     );
 
     // Check API Response
     assert.deepStrictEqual(response.status, 200);
     assert.ok(response.data._id);
-    assert.deepStrictEqual(response.data.etablissement_siret, sampleParameter.etablissement_siret);
-    assert.deepStrictEqual(response.data.formation_intitule, sampleParameter.formation_intitule);
-    assert.deepStrictEqual(response.data.formation_cfd, sampleParameter.formation_cfd);
-    assert.deepStrictEqual(response.data.email_rdv, sampleParameter.email_rdv);
+    assert.deepStrictEqual(response.data.etablissement_siret, sampleWidgetParameter.etablissement_siret);
+    assert.deepStrictEqual(response.data.formation_intitule, sampleWidgetParameter.formation_intitule);
+    assert.deepStrictEqual(response.data.formation_cfd, sampleWidgetParameter.formation_cfd);
+    assert.deepStrictEqual(response.data.email_rdv, sampleWidgetParameter.email_rdv);
     assert.deepStrictEqual(response.data.referrers.includes(referrers.LBA.code), true);
   });
 
   it("Vérifie qu'on peut récupérer un parametre de widget par son id en tant qu'admin via la Route", async () => {
     const { httpClient, createAndLogUser } = await startServer();
     const bearerToken = await createAndLogUser("userAdmin", "password", { role: administrator });
-    const addedResponse = await httpClient.post("/api/widget-parameters/", sampleParameter, { headers: bearerToken });
+    const addedResponse = await httpClient.post("/api/widget-parameters/", sampleWidgetParameter, {
+      headers: bearerToken,
+    });
 
     // Check API Response
     assert.deepStrictEqual(addedResponse.status, 200);
     assert.ok(addedResponse.data._id);
-    assert.deepStrictEqual(addedResponse.data.etablissement_siret, sampleParameter.etablissement_siret);
-    assert.deepStrictEqual(addedResponse.data.formation_intitule, sampleParameter.formation_intitule);
-    assert.deepStrictEqual(addedResponse.data.formation_cfd, sampleParameter.formation_cfd);
-    assert.deepStrictEqual(addedResponse.data.email_rdv, sampleParameter.email_rdv);
+    assert.deepStrictEqual(addedResponse.data.etablissement_siret, sampleWidgetParameter.etablissement_siret);
+    assert.deepStrictEqual(addedResponse.data.formation_intitule, sampleWidgetParameter.formation_intitule);
+    assert.deepStrictEqual(addedResponse.data.formation_cfd, sampleWidgetParameter.formation_cfd);
+    assert.deepStrictEqual(addedResponse.data.email_rdv, sampleWidgetParameter.email_rdv);
     assert.deepStrictEqual(addedResponse.data.referrers.includes(referrers.LBA.code), true);
 
     // Check query db
@@ -145,25 +150,27 @@ httpTests(__filename, ({ startServer }) => {
       headers: bearerToken,
     });
     assert.deepStrictEqual(getByIdResponse.status, 200);
-    assert.deepStrictEqual(getByIdResponse.data.etablissement_siret, sampleParameter.etablissement_siret);
-    assert.deepStrictEqual(getByIdResponse.data.formation_intitule, sampleParameter.formation_intitule);
-    assert.deepStrictEqual(getByIdResponse.data.formation_cfd, sampleParameter.formation_cfd);
-    assert.deepStrictEqual(getByIdResponse.data.email_rdv, sampleParameter.email_rdv);
+    assert.deepStrictEqual(getByIdResponse.data.etablissement_siret, sampleWidgetParameter.etablissement_siret);
+    assert.deepStrictEqual(getByIdResponse.data.formation_intitule, sampleWidgetParameter.formation_intitule);
+    assert.deepStrictEqual(getByIdResponse.data.formation_cfd, sampleWidgetParameter.formation_cfd);
+    assert.deepStrictEqual(getByIdResponse.data.email_rdv, sampleWidgetParameter.email_rdv);
     assert.deepStrictEqual(getByIdResponse.data.referrers.includes(referrers.LBA.code), true);
   });
 
   it("Vérifie qu'on peut mettre à jour un parametre de widget par son id en tant qu'admin via la Route", async () => {
     const { httpClient, createAndLogUser } = await startServer();
     const bearerToken = await createAndLogUser("userAdmin", "password", { role: administrator });
-    const addedResponse = await httpClient.post("/api/widget-parameters/", sampleParameter, { headers: bearerToken });
+    const addedResponse = await httpClient.post("/api/widget-parameters/", sampleWidgetParameter, {
+      headers: bearerToken,
+    });
 
     // Check API Response
     assert.deepStrictEqual(addedResponse.status, 200);
     assert.ok(addedResponse.data._id);
-    assert.deepStrictEqual(addedResponse.data.etablissement_siret, sampleParameter.etablissement_siret);
-    assert.deepStrictEqual(addedResponse.data.formation_intitule, sampleParameter.formation_intitule);
-    assert.deepStrictEqual(addedResponse.data.formation_cfd, sampleParameter.formation_cfd);
-    assert.deepStrictEqual(addedResponse.data.email_rdv, sampleParameter.email_rdv);
+    assert.deepStrictEqual(addedResponse.data.etablissement_siret, sampleWidgetParameter.etablissement_siret);
+    assert.deepStrictEqual(addedResponse.data.formation_intitule, sampleWidgetParameter.formation_intitule);
+    assert.deepStrictEqual(addedResponse.data.formation_cfd, sampleWidgetParameter.formation_cfd);
+    assert.deepStrictEqual(addedResponse.data.email_rdv, sampleWidgetParameter.email_rdv);
     assert.deepStrictEqual(addedResponse.data.referrers.includes(referrers.LBA.code), true);
 
     // Check query db
@@ -185,15 +192,17 @@ httpTests(__filename, ({ startServer }) => {
   it("Vérifie qu'on peut supprimer un parametre de widget par son id en tant qu'admin via la Route", async () => {
     const { httpClient, createAndLogUser } = await startServer();
     const bearerToken = await createAndLogUser("userAdmin", "password", { role: administrator });
-    const addedResponse = await httpClient.post("/api/widget-parameters/", sampleParameter, { headers: bearerToken });
+    const addedResponse = await httpClient.post("/api/widget-parameters/", sampleWidgetParameter, {
+      headers: bearerToken,
+    });
 
     // Check API Response
     assert.deepStrictEqual(addedResponse.status, 200);
     assert.ok(addedResponse.data._id);
-    assert.deepStrictEqual(addedResponse.data.etablissement_siret, sampleParameter.etablissement_siret);
-    assert.deepStrictEqual(addedResponse.data.formation_intitule, sampleParameter.formation_intitule);
-    assert.deepStrictEqual(addedResponse.data.formation_cfd, sampleParameter.formation_cfd);
-    assert.deepStrictEqual(addedResponse.data.email_rdv, sampleParameter.email_rdv);
+    assert.deepStrictEqual(addedResponse.data.etablissement_siret, sampleWidgetParameter.etablissement_siret);
+    assert.deepStrictEqual(addedResponse.data.formation_intitule, sampleWidgetParameter.formation_intitule);
+    assert.deepStrictEqual(addedResponse.data.formation_cfd, sampleWidgetParameter.formation_cfd);
+    assert.deepStrictEqual(addedResponse.data.email_rdv, sampleWidgetParameter.email_rdv);
     assert.deepStrictEqual(addedResponse.data.referrers.includes(referrers.LBA.code), true);
 
     // Check query db
@@ -211,11 +220,11 @@ httpTests(__filename, ({ startServer }) => {
     const { httpClient, createAndLogUser, components } = await startServer();
 
     await components.widgetParameters.createParameter({
-      etablissement_siret: sampleParameter.etablissement_siret,
-      formation_intitule: sampleParameter.formation_intitule,
-      formation_cfd: sampleParameter.formation_cfd,
-      email_rdv: sampleParameter.email_rdv,
-      referrers: sampleParameter.referrers,
+      etablissement_siret: sampleWidgetParameter.etablissement_siret,
+      formation_intitule: sampleWidgetParameter.formation_intitule,
+      formation_cfd: sampleWidgetParameter.formation_cfd,
+      email_rdv: sampleWidgetParameter.email_rdv,
+      referrers: sampleWidgetParameter.referrers,
     });
 
     const bearerToken = await createAndLogUser("userAdmin", "password", { role: administrator });
@@ -248,11 +257,11 @@ httpTests(__filename, ({ startServer }) => {
     const { httpClient, createAndLogUser, components } = await startServer();
 
     await components.widgetParameters.createParameter({
-      etablissement_siret: sampleParameter.etablissement_siret,
-      formation_intitule: sampleParameter.formation_intitule,
-      formation_cfd: sampleParameter.formation_cfd,
-      email_rdv: sampleParameter.email_rdv,
-      referrers: sampleParameter.referrers,
+      etablissement_siret: sampleWidgetParameter.etablissement_siret,
+      formation_intitule: sampleWidgetParameter.formation_intitule,
+      formation_cfd: sampleWidgetParameter.formation_cfd,
+      email_rdv: sampleWidgetParameter.email_rdv,
+      referrers: sampleWidgetParameter.referrers,
     });
 
     const bearerToken = await createAndLogUser("userAdmin", "password", { role: administrator });
