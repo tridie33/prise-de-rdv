@@ -102,7 +102,7 @@ module.exports = async (components) => {
   cron.schedule("0 14 * * *", () => inviteEtablissementToOptOut({ mailer, widgetParameters, etablissements }));
 
   // Everyday at 05:00 AM: Copy catalogue formations
-  // cron.schedule("* * * * *", () => syncEtablissementsAndFormations({ etablissements, widgetParameters }));
+  // cron.schedule("0 5 * * *", () => syncEtablissementsAndFormations({ etablissements, widgetParameters }));
 
   // Everyday, every 5 minutes: Opt-out activation
   cron.schedule("*/5 * * * *", () =>
@@ -114,8 +114,8 @@ module.exports = async (components) => {
   //   candidatHaveYouBeenContacted({ mailer, appointments, widgetParameters, users, etablissements })
   // );
 
-  // Everyday, every minutes: Premium invite
-  cron.schedule("* 1 * * *", () => inviteEtablissementToPremium({ mailer, widgetParameters, etablissements }));
+  // Everyday hours: Invite to Premium mode
+  cron.schedule("0 * * * *", () => inviteEtablissementToPremium({ mailer, widgetParameters, etablissements }));
 
   return app;
 };
