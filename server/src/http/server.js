@@ -114,7 +114,7 @@ module.exports = async (components) => {
   //   candidatHaveYouBeenContacted({ mailer, appointments, widgetParameters, users, etablissements })
   // );
 
-  // Everyday hours: Invite to Premium mode
+  // Every hours: Invite to Premium mode
   cron.schedule("0 * * * *", () => inviteEtablissementToPremium({ mailer, widgetParameters, etablissements }));
 
   return app;
