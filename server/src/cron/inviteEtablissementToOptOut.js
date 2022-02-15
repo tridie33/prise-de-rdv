@@ -17,6 +17,9 @@ const inviteEtablissementToOptOut = async ({ etablissements, widgetParameters, m
   // Opt-out etablissement to activate
   const etablissementsWithouOptMode = await etablissements.find({
     opt_mode: null,
+    email_decisionnaire: {
+      $ne: null,
+    },
   });
 
   for (const etablissement of etablissementsWithouOptMode) {
