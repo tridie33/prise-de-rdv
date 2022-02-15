@@ -27,9 +27,9 @@ const partnersRoute = require("./routes/public/partners");
 const emailsRoute = require("./routes/auth/emails");
 const constantsRoute = require("./routes/public/constants");
 const { administrator } = require("./../common/roles");
-const { syncEtablissementsAndFormations } = require("../cron/syncEtablissementsAndFormations");
+// const { syncEtablissementsAndFormations } = require("../cron/syncEtablissementsAndFormations");
 const { activateOptOutEtablissementFormations } = require("../cron/activateOptOutEtablissementFormations");
-const { candidatHaveYouBeenContacted } = require("../cron/candidatHaveYouBeenContacted");
+// const { candidatHaveYouBeenContacted } = require("../cron/candidatHaveYouBeenContacted");
 const { inviteEtablissementToOptOut } = require("../cron/inviteEtablissementToOptOut");
 const { inviteEtablissementToPremium } = require("../cron/inviteEtablissementToPremium");
 
@@ -39,7 +39,7 @@ const { inviteEtablissementToPremium } = require("../cron/inviteEtablissementToP
  * @returns {Promise<*|Express>}
  */
 module.exports = async (components) => {
-  const { db, etablissements, widgetParameters, mailer, appointments, users } = components;
+  const { db, etablissements, widgetParameters, mailer } = components;
   const app = express();
   const checkJwtToken = authMiddleware(components);
   const adminOnly = permissionsMiddleware(administrator);
@@ -102,20 +102,20 @@ module.exports = async (components) => {
   cron.schedule("0 14 * * *", () => inviteEtablissementToOptOut({ mailer, widgetParameters, etablissements }));
 
   // Everyday at 05:00 AM: Copy catalogue formations
-  cron.schedule("0 5 * * *", () => syncEtablissementsAndFormations({ etablissements, widgetParameters }));
+  // cron.schedule("* * * * *", () => syncEtablissementsAndFormations({ etablissements, widgetParameters }));
 
   // Everyday, every 5 minutes: Opt-out activation
   cron.schedule("*/5 * * * *", () =>
     activateOptOutEtablissementFormations({ etablissements, widgetParameters, mailer })
   );
 
-  // Everyday, every minutes: Send an email to candidats to know if they were contacted by the CFA
-  cron.schedule("* * * * *", () =>
-    candidatHaveYouBeenContacted({ mailer, appointments, widgetParameters, users, etablissements })
-  );
+  // // Everyday, every minutes: Send an email to candidats to know if they were contacted by the CFA
+  // cron.schedule("* * * * *", () =>
+  //   candidatHaveYouBeenContacted({ mailer, appointments, widgetParameters, users, etablissements })
+  // );
 
   // Everyday, every minutes: Premium invite
-  cron.schedule("* * * * *", () => inviteEtablissementToPremium({ mailer, widgetParameters, etablissements }));
+  cron.schedule("* 1 * * *", () => inviteEtablissementToPremium({ mailer, widgetParameters, etablissements }));
 
   return app;
 };
