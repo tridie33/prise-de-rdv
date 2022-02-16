@@ -22,7 +22,7 @@ const inviteEtablissementToPremium = async ({ etablissements, mailer }) => {
       },
       "mailing.campaign": { $ne: mailType.PREMIUM_INVITE },
     })
-    .limit(165);
+    .limit(255);
 
   for (const etablissement of etablissementsActivated) {
     // Invite all etablissements only in production environment
