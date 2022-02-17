@@ -194,6 +194,23 @@ module.exports = ({ users, appointments, mailer, widgetParameters, etablissement
       // Updates firstname and last name if the user already exists
       if (user) {
         user = await users.update(user._id, { firstname, lastname, phone });
+        const appointment = await appointments.findOne({
+          candidat_id: user._id,
+          id_rco_formation: idRcoFormation,
+          created_at: {
+            $gte: dayjs().subtract(4, "days").toDate(),
+          },
+        });
+
+        if (appointment) {
+          return res.send({
+            error: {
+              message: `Une demande de prise de RDV en date du ${dayjs(appointment.createdAt).format(
+                "DD/MM/YYYY"
+              )} est actuellement est cours de traitement.`,
+            },
+          });
+        }
       } else {
         user = await users.createUser(email, "NA", {
           firstname,

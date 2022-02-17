@@ -96,11 +96,15 @@ export const FormCreatePage = (props) => {
   const sendNewRequest = async (values, { setStatus }) => {
     try {
       setSubmitLoading(true);
-      const { appointment } = await _post("/api/appointment-request/validate", {
+      const { appointment, error } = await _post("/api/appointment-request/validate", {
         ...values,
         idRcoFormation,
         referrer,
       });
+
+      if (error) {
+        setStatus({ error: error.message });
+      }
 
       history.push(`/form/confirm/${appointment._id}`);
       setTimeout(() => window.scroll({ top: 0, behavior: "smooth" }), 500);
@@ -247,7 +251,11 @@ export const FormCreatePage = (props) => {
                   >
                     Envoyer ma demande
                   </Button>
-                  {status.error && <Text color="#cd201f">{status.error}</Text>}
+                  {status.error && (
+                    <Text color="#cd201f" textAlign="center" mt={8}>
+                      {status.error}
+                    </Text>
+                  )}
                 </Form>
               );
             }}
