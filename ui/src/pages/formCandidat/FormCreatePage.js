@@ -104,6 +104,7 @@ export const FormCreatePage = (props) => {
 
       if (error) {
         setStatus({ error: error.message });
+        return;
       }
 
       history.push(`/form/confirm/${appointment._id}`);
