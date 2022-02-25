@@ -1,6 +1,9 @@
+const joi = require("joi");
 const logger = require("../common/logger");
 const { dayjs } = require("../http/utils/dayjs");
 const { getFormations } = require("../http/utils/catalogue");
+
+const emailJoiSchema = joi.string().email();
 
 /**
  * @description Gets Catalogue etablissments informations and insert in etablissement collection.
@@ -25,18 +28,24 @@ const syncEtablissementsAndFormations = async ({ etablissements, widgetParameter
         });
 
         if (widgetParameter) {
-          // Doesn't update "email_rdv" (if exists) if etablissement has opt_mode == OPT_IN flag
+          let emailRdv = widgetParameter.email_rdv;
+
+          // Don't override "email_rdv" if this field is true
+          if (!widgetParameter?.is_custom_email_rdv) {
+            emailRdv = emailJoiSchema.validate(formation.email) ? formation.email : widgetParameter.email_rdv;
+          }
+
           await widgetParameters.updateMany(
             { id_rco_formation: formation.id_rco_formation },
             {
-              email_rdv: formation.email || widgetParameter.email_rdv,
+              email_rdv: emailJoiSchema.validate(emailRdv) ? emailRdv : null,
               id_parcoursup: formation.parcoursup_id,
               cle_ministere_educatif: formation.cle_ministere_educatif,
               etablissement_raison_sociale: formation.etablissement_formateur_entreprise_raison_sociale,
               formation_cfd: formation.cfd,
               code_postal: formation.code_postal,
               formation_intitule: formation.intitule_long,
-              referrers: widgetParameter.referrers,
+              referrers: emailJoiSchema.validate(emailRdv) ? widgetParameter.referrers : [],
               etablissement_siret: formation.etablissement_formateur_siret,
               catalogue_published: formation.published,
               id_rco_formation: formation.id_rco_formation,
@@ -54,7 +63,7 @@ const syncEtablissementsAndFormations = async ({ etablissements, widgetParameter
           );
         } else {
           await widgetParameters.createParameter({
-            email_rdv: formation.email,
+            email_rdv: formation.email || null,
             id_parcoursup: formation.parcoursup_id,
             cle_ministere_educatif: formation.cle_ministere_educatif,
             etablissement_raison_sociale: formation.etablissement_formateur_entreprise_raison_sociale,

@@ -24,6 +24,11 @@ const widgetParameterSchema = {
     default: null,
     description: "Adresse email pour la prise de RDV",
   },
+  is_custom_email_rdv: {
+    type: Boolean,
+    default: null,
+    description: "Spécifie si la synchronisation avec le catalogue ne doit pas écraser l'email_rdv",
+  },
   referrers: {
     type: [Object],
     default: [],
