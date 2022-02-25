@@ -19,7 +19,7 @@ import {
   EditableInput,
   EditablePreview,
 } from "@chakra-ui/react";
-import { _get, _post, _put } from "../../../../common/httpClient";
+import { _get, _post, _put, _patch } from "../../../../common/httpClient";
 import EtablissementComponent from "../components/EtablissementComponent";
 import downloadFile from "../../../../common/utils/downloadFile";
 import { Check, Disquette, Download } from "../../../../theme/components/icons";
@@ -204,6 +204,16 @@ const EditPage = () => {
   };
 
   /**
+   * @description Patch parameters.
+   * @param {string} id
+   * @param {Object} body
+   * @returns {Promise<void>}
+   */
+  const patchParameter = async (id, body) => {
+    await _patch(`/api/widget-parameters/${id}`, body);
+  };
+
+  /**
    * @description Downloads CSV file.
    * @param {string} siret
    * @returns {Promise<void>}
@@ -213,9 +223,11 @@ const EditPage = () => {
       `/api/widget-parameters/parameters/export?query={"etablissement_siret":"${siret}"}`,
       `parametres-${siret}.csv`
     );
+
   if (!parametersResult && !catalogueResult) {
     return <Spinner display="block" mx="auto" mt="10rem" />;
   }
+
   return (
     <Box mx={["1rem", "1rem", "10rem", "10rem"]}>
       {parametersResult && catalogueResult && etablissement && !loading && (
@@ -245,7 +257,9 @@ const EditPage = () => {
                 <Td textStyle="sm">LOCALITE</Td>
                 <Td textStyle="sm">EMAIL</Td>
                 <Td textStyle="sm">EMAIL CATALOGUE</Td>
+                <Td textStyle="sm">DESACTIVER L'ECRASEMENT DU MAIL VIA LA SYNCHRONISATION CATALOGUE</Td>
                 <Td textStyle="sm">PUBLIE SUR LE CATALOGUE</Td>
+                <Td textStyle="sm">PARCOURSUP ID</Td>
                 <Td textStyle="sm">DERNIERE SYNCHRONISATION CATALOGUE</Td>
                 <Td textStyle="sm">
                   SOURCE <br />
@@ -288,7 +302,18 @@ const EditPage = () => {
                         </Editable>
                       </Td>
                       <Td>{formation.email || "N/C"}</Td>
+                      <Td align="center">
+                        <Checkbox
+                          checked={parameter?.is_custom_email_rdv}
+                          icon={<Check w="20px" h="18px" />}
+                          defaultIsChecked={parameter?.is_custom_email_rdv}
+                          onChange={(event) =>
+                            patchParameter(parameter._id, { is_custom_email_rdv: event.target.checked })
+                          }
+                        />
+                      </Td>
                       <Td>{parameter?.catalogue_published ? "Oui" : "Non"}</Td>
+                      <Td>{parameter?.id_parcoursup || "N/C"}</Td>
                       <Td>{parameter?.last_catalogue_sync ? formatDate(parameter?.last_catalogue_sync) : "N/A"}</Td>
                       <Td>
                         {formationPermissions.map((permission) => (

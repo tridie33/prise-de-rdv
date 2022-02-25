@@ -13,10 +13,6 @@ const inviteEtablissementToPremium = async ({ etablissements, mailer }) => {
 
   const etablissementsActivated = await etablissements
     .find({
-      opt_out_will_be_activated_at: {
-        $ne: null,
-        $lte: dayjs().subtract(1, "day").toDate(),
-      },
       email_decisionnaire: {
         $ne: null,
       },
