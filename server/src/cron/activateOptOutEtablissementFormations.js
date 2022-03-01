@@ -2,7 +2,6 @@ const path = require("path");
 const logger = require("../common/logger");
 const config = require("../../config");
 const { dayjs } = require("../http/utils/dayjs");
-const { optMode } = require("../common/model/constants/etablissement");
 const { referrers } = require("../common/model/constants/referrers");
 const { mailType } = require("../common/model/constants/etablissement");
 
@@ -20,7 +19,6 @@ const activateOptOutEtablissementFormations = async ({ etablissements, widgetPar
     },
     opt_out_refused_at: null,
     opt_out_activated_at: null,
-    opt_mode: optMode.OPT_OUT,
   });
 
   // Activate all formations, for all referrers that have a mail
