@@ -10,6 +10,10 @@ const { optMode } = require("../../../common/model/constants/etablissement");
 const { getFormationsBySiretFormateur, getFormationsByIdRcoFormationsRaw } = require("../../utils/catalogue");
 const { dayjs } = require("../../utils/dayjs");
 
+const widgetParameterIdPatchSchema = Joi.object({
+  is_custom_email_rdv: Joi.boolean(),
+});
+
 const widgetParameterSchema = Joi.object({
   etablissement_siret: Joi.string().required(),
   etablissement_raison_sociale: Joi.string().required(),
@@ -113,6 +117,7 @@ module.exports = ({ widgetParameters, etablissements }) => {
           formation: parameter.formation_intitule,
           cfd: parameter.formation_cfd,
           email: parameter.email_rdv,
+          localite: parameter.localite,
           email_catalogue: catalogueResponse?.formations.length ? catalogueResponse?.formations[0].email : "",
           code_postal: parameter.code_postal,
           sources: parameter.referrers.map((referrer) => getReferrerById(referrer).full_name).join(", "),
@@ -273,6 +278,20 @@ module.exports = ({ widgetParameters, etablissements }) => {
       await widgetParameterSchema.validateAsync(body, { abortEarly: false });
       logger.info("Updating new item: ", body);
       const result = await widgetParameters.updateParameter(params.id, body);
+      res.send(result);
+    })
+  );
+
+  /**
+   * Patch parameter.
+   */
+  router.patch(
+    "/:id",
+    tryCatch(async ({ body, params }, res) => {
+      await widgetParameterIdPatchSchema.validateAsync(body, { abortEarly: false });
+
+      const result = await widgetParameters.updateParameter(params.id, body);
+
       res.send(result);
     })
   );
