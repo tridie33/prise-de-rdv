@@ -12,10 +12,14 @@ const optOutUnsubscribeSchema = Joi.object({
   opt_out_question: Joi.string().optional(),
 });
 
+const patchEtablissementIdAppointmentIdReadAppointSchema = Joi.object({
+  has_been_read: Joi.boolean().required(),
+});
+
 /**
  * @description Etablissement Router.
  */
-module.exports = ({ etablissements, mailer, widgetParameters }) => {
+module.exports = ({ etablissements, mailer, widgetParameters, appointments }) => {
   const router = express.Router();
 
   /**
@@ -165,6 +169,44 @@ module.exports = ({ etablissements, mailer, widgetParameters }) => {
       const etablissementUpdated = await etablissements.findById(req.params.id);
 
       return res.send(etablissementUpdated);
+    })
+  );
+
+  /**
+   * Patch etablissement appointment.
+   */
+  router.patch(
+    "/:id/appointments/:appointmentId",
+    tryCatch(async ({ body, params }, res) => {
+      const { has_been_read } = await patchEtablissementIdAppointmentIdReadAppointSchema.validateAsync(body, {
+        abortEarly: false,
+      });
+
+      const { id, appointmentId } = params;
+
+      let [etablissement, appointment] = await Promise.all([
+        etablissements.findById(id),
+        appointments.findById(appointmentId),
+      ]);
+
+      console.log({ etablissement, appointment });
+
+      if (!etablissement) {
+        throw Boom.badRequest("Etablissement not found.");
+      }
+
+      if (!appointment || appointment.etablissement_id !== etablissement.siret_formateur) {
+        throw Boom.badRequest("Appointment not found.");
+      }
+
+      // Save current date
+      if (!appointment.cfa_read_appointment_details_at && has_been_read) {
+        await appointment.update({ cfa_read_appointment_details_at: dayjs().toDate() });
+      }
+
+      appointment = await appointments.findById(appointmentId);
+
+      res.send(appointment);
     })
   );
 

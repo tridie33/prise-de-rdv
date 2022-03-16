@@ -8,7 +8,17 @@ export const FormRecapPage = () => {
   const [data, loading] = useFetch(`/api/appointment-request/context/recap?appointmentId=${appointmentId}`);
 
   return (
-    <FormLayoutComponent>
+    <FormLayoutComponent
+      headerText={
+        <>
+          Envoyer <br />
+          une demande de contact <br />
+          <Text textStyle="h2" as="span" color="grey.700">
+            au centre de formation
+          </Text>
+        </>
+      }
+    >
       {loading && <span>Chargement des données...</span>}
       {data && (
         <>

@@ -29,6 +29,13 @@ module.exports = async () => ({
   },
 
   /**
+   * @description Returns an appointment from its id.
+   * @param {string} id
+   * @returns {Promise<Appointment>}
+   */
+  findById: (id) => Appointment.findById(id),
+
+  /**
    * @description Returns appoint from its id.
    * @param {ObjectId} id
    * @returns {Promise<*>}
@@ -53,7 +60,7 @@ module.exports = async () => ({
    * @param {Object} conditions
    * @returns {Promise<Appointment>}
    */
-  findOne: async (conditions) => Appointment.findOne(conditions),
+  findOne: (conditions) => Appointment.findOne(conditions),
 
   /**
    * @description Updates an appointment from its conditions.

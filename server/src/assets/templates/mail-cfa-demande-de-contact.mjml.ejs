@@ -29,9 +29,11 @@
                     Bonjour,
                 </mj-text>
                 <mj-text font-size="16px" line-height="20px" font-weight="700">
-                    Le ou la candidate <%= data.user.firstname %> <%= data.user.lastname %> souhaite être contacté(e)
-                    au <a href="tel:<%= data.user.phone %>" class="purple"><%= data.user.phone %></a>
-                    ou par mail à l'adresse <a href="mailto:<%= data.user.email %>" class="purple"><%= data.user.email %></a> dès que possible.</mj-text>
+                    Le ou la candidate <%= data.user.firstname %> <%= data.user.lastname %> souhaite être contacté(e).
+                </mj-text>
+                <mj-button color="#FFFFFF" width="100%" border-radius="8px" background-color="#3A55D1" border="0.5px solid #3A55D1" font-size="16px" href="<%= data.appointment.link %>">
+                    Voir les coordonnées du candidat
+                </mj-button>
                 <mj-text font-size="16px" line-height="20px" padding-top="20px">
                     Il ou elle souhaite aborder avec vous le(s) sujet(s) suivant :
                 </mj-text>
