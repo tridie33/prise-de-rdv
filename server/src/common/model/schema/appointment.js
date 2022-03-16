@@ -35,11 +35,6 @@ const appointmentSchema = {
     default: null,
     description: "L'url du site parent",
   },
-  date_de_reponse_cfa: {
-    type: Date,
-    default: null,
-    description: "La date de réponse du cfa au candidat",
-  },
   statut_general: {
     type: String,
     default: "ouverte",
@@ -64,6 +59,11 @@ const appointmentSchema = {
     type: Date,
     default: null,
     description: "La date de la première prise de contact du cfa vers le candidat",
+  },
+  cfa_read_appointment_details_at: {
+    type: Date,
+    default: null,
+    description: "Date à laquelle le CFA à consulté la page contenant les informations du rendez et du candidat",
   },
   candidat_contacted_at: {
     type: Date,

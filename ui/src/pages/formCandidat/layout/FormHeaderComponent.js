@@ -1,22 +1,20 @@
 import { Box, Text, Flex } from "@chakra-ui/react";
+import PropTypes from "prop-types";
 import { IconeLogo } from "../../../theme/components/icons";
 
 /**
  * @description Form header component.
+ * @param {JSX.Element} children - Component
  * @returns {JSX.Element}
  */
-export const FormHeaderComponent = () => {
+export const FormHeaderComponent = ({ children }) => {
   return (
     <Box bg="#F9F8F6">
       <Flex alignItems="center" flexDirection={["column", "column", "row"]}>
         <Box flex="1" ml={["0", "0", "6em"]}>
           <Flex flexDirection={["column", "column", "row"]} mt={[7, 0, 0]}>
             <Text textStyle="h2" color="info">
-              Envoyer <br />
-              une demande de contact <br />
-              <Text textStyle="h2" as="span" color="grey.700">
-                au centre de formation
-              </Text>
+              {children}
             </Text>
           </Flex>
         </Box>
@@ -26,4 +24,8 @@ export const FormHeaderComponent = () => {
       </Flex>
     </Box>
   );
+};
+
+FormHeaderComponent.propTypes = {
+  children: PropTypes.node,
 };
