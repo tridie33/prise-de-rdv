@@ -126,7 +126,18 @@ export const FormCreatePage = (props) => {
   };
 
   return (
-    <FormLayoutComponent bg="white">
+    <FormLayoutComponent
+      headerText={
+        <>
+          Envoyer <br />
+          une demande de contact <br />
+          <Text textStyle="h2" as="span" color="grey.700">
+            au centre de formation
+          </Text>
+        </>
+      }
+      bg="white"
+    >
       {loading && <Spinner display="block" mx="auto" size="xl" mt="10rem" />}
       {error && (
         <Box mt="5rem" textAlign="center">

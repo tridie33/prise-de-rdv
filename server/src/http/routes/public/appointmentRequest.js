@@ -230,14 +230,19 @@ module.exports = ({ users, appointments, mailer, widgetParameters, etablissement
         throw Boom.badRequest("Etablissement et formation introuvable.");
       }
 
-      const createdAppointement = await appointments.createAppointment({
-        candidat_id: user._id,
-        etablissement_id: widgetParameter.etablissement_formateur_siret,
-        formation_id: widgetParameter.formation_cfd,
-        motivations,
-        referrer: referrerObj.code,
-        id_rco_formation: idRcoFormation,
-      });
+      const [createdAppointement, etablissement] = await Promise.all([
+        appointments.createAppointment({
+          candidat_id: user._id,
+          etablissement_id: widgetParameter.etablissement_formateur_siret,
+          formation_id: widgetParameter.formation_cfd,
+          motivations,
+          referrer: referrerObj.code,
+          id_rco_formation: idRcoFormation,
+        }),
+        etablissements.findOne({
+          siret_formateur: widgetParameter.etablissement_formateur_siret,
+        }),
+      ]);
 
       const mailData = {
         appointmentId: createdAppointement._id,
@@ -261,6 +266,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters, etablissement
         appointment: {
           referrerLink: referrerObj.url,
           referrer: referrerObj.full_name,
+          link: `${config.publicUrl}/establishment/${etablissement._id}/appointments/${createdAppointement._id}?utm_source=mail`,
         },
         images: {
           peopleLaptop: `${config.publicUrl}/assets/girl_laptop.png?raw=true`,

@@ -17,9 +17,16 @@ import OptOutUnsubscribe from "./pages/OptOutUnsubscribe";
 import PremiumForm from "./pages/PremiumForm";
 import AppointmentFollowUpPage from "./pages/AppointmentFollowUpPage";
 import WidgetTutorial from "./pages/widget/Tutorial";
+import { CfaCandidatInformationPage } from "./pages/CfaCandidatInformationPage";
 
+/**
+ * @description Handle private routes.
+ * @param children
+ * @param rest
+ * @returns {JSX.Element}
+ */
 function PrivateRoute({ children, ...rest }) {
-  let [auth] = useAuth();
+  const [auth] = useAuth();
 
   return (
     <Route
@@ -31,6 +38,10 @@ function PrivateRoute({ children, ...rest }) {
   );
 }
 
+/**
+ * @description Highest component.
+ * @returns {JSX.Element}
+ */
 const App = () => {
   const [auth] = useAuth();
   const isAdmin = isUserAdmin(auth);
@@ -70,6 +81,11 @@ const App = () => {
             component={AppointmentFollowUpPage}
           />
           <Route exact path="/widget/tutorial" component={WidgetTutorial} />
+          <Route
+            exact
+            path="/establishment/:establishmentId/appointments/:appointmentId"
+            component={CfaCandidatInformationPage}
+          />
         </Switch>
       </Router>
     </div>
