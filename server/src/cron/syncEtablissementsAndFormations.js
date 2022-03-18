@@ -87,7 +87,14 @@ const syncEtablissementsAndFormations = async ({ etablissements, widgetParameter
           });
         }
 
-        // Update etablissement model
+        const etablissement = await etablissements.find({ siret_formateur: formation.etablissement_formateur_siret });
+
+        let emailDecisionnaire = etablissement?.email_decisionnaire;
+        if (emailJoiSchema.validate(formation.etablissement_gestionnaire_courriel)) {
+          emailDecisionnaire = formation.etablissement_gestionnaire_courriel;
+        }
+
+        // Update etablissement model (upsert)
         return etablissements.updateMany(
           {
             siret_formateur: formation.etablissement_formateur_siret,
@@ -95,7 +102,9 @@ const syncEtablissementsAndFormations = async ({ etablissements, widgetParameter
           {
             siret_formateur: formation.etablissement_formateur_siret,
             siret_gestionnaire: formation.etablissement_gestionnaire_siret,
+            email_decisionnaire: emailDecisionnaire,
             raison_sociale: formation.etablissement_formateur_entreprise_raison_sociale,
+            etablissement_formateur_courriel: formation.etablissement_formateur_courriel,
             adresse: formation.etablissement_formateur_adresse,
             code_postal: formation.etablissement_formateur_code_postal,
             localite: formation.etablissement_formateur_localite,
