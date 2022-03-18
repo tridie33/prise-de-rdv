@@ -32,6 +32,7 @@ const { activateOptOutEtablissementFormations } = require("../cron/activateOptOu
 // const { candidatHaveYouBeenContacted } = require("../cron/candidatHaveYouBeenContacted");
 const { inviteEtablissementToOptOut } = require("../cron/inviteEtablissementToOptOut");
 const { inviteEtablissementToPremium } = require("../cron/inviteEtablissementToPremium");
+// const { inviteEtablissementToPremiumFollowUp } = require("../cron/inviteEtablissementToPremiumFollowUp");
 
 /**
  * @description Express function that embed components in routes.
@@ -116,6 +117,9 @@ module.exports = async (components) => {
 
   // Every hours: Invite to Premium mode
   cron.schedule("0 * * * *", () => inviteEtablissementToPremium({ mailer, widgetParameters, etablissements }));
+
+  // Every hours: Invite to Premium mode (follow up)
+  // cron.schedule("0 * * * *", () => inviteEtablissementToPremiumFollowUp({ mailer, etablissements }));
 
   return app;
 };
