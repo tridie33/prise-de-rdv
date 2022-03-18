@@ -36,6 +36,11 @@ const etablissementSchema = {
     default: null,
     description: "Email du decisionnaire de l'établissement",
   },
+  etablissement_formateur_courriel: {
+    type: String,
+    default: null,
+    description: "Email du formateur",
+  },
   premium_invited_at: {
     type: Date,
     default: null,
