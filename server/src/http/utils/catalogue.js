@@ -66,6 +66,8 @@ const getFormations = async (query, page = 1, limit = 500, enableCache = true) =
         code_postal: 1,
         id_rco_formation: 1,
         etablissement_formateur_entreprise_raison_sociale: 1,
+        etablissement_gestionnaire_courriel: 1,
+        etablissement_formateur_courriel: 1,
         intitule_long: 1,
         etablissement_formateur_adresse: 1,
         etablissement_formateur_code_postal: 1,
