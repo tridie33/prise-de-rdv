@@ -87,7 +87,9 @@ const syncEtablissementsAndFormations = async ({ etablissements, widgetParameter
           });
         }
 
-        const etablissement = await etablissements.find({ siret_formateur: formation.etablissement_formateur_siret });
+        const etablissement = await etablissements.findOne({
+          siret_formateur: formation.etablissement_formateur_siret,
+        });
 
         let emailDecisionnaire = etablissement?.email_decisionnaire;
         if (emailJoiSchema.validate(formation.etablissement_gestionnaire_courriel)) {
