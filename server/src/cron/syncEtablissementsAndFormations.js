@@ -92,7 +92,10 @@ const syncEtablissementsAndFormations = async ({ etablissements, widgetParameter
         });
 
         let emailDecisionnaire = etablissement?.email_decisionnaire;
-        if (emailJoiSchema.validate(formation.etablissement_gestionnaire_courriel)) {
+        if (
+          formation.etablissement_gestionnaire_courriel &&
+          emailJoiSchema.validate(formation.etablissement_gestionnaire_courriel)
+        ) {
           emailDecisionnaire = formation.etablissement_gestionnaire_courriel.toLowerCase();
         }
 

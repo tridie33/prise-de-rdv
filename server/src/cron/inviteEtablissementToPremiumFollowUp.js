@@ -20,28 +20,21 @@ const inviteEtablissementToPremiumFollowUp = async ({ etablissements, mailer }) 
     },
     opt_mode: optMode.OPT_OUT,
     opt_out_will_be_activated_at: {
-      $lte: dayjs().toDate(),
+      $ne: null,
     },
     premium_activated_at: null,
     premium_refused_at: null,
+    premium_invited_at: {
+      $ne: null,
+      $lte: dayjs().subtract(10, "days").toDate(),
+    },
     "mailing.campaign": {
-      $eq: mailType.PREMIUM_INVITE,
       $ne: mailType.PREMIUM_INVITE_FOLLOW_UP,
     },
   });
 
   for (const etablissement of etablissementsFound) {
-    if (!emailJoiSchema.validate(etablissement.email_decisionnaire)) {
-      continue;
-    }
-
-    const skip = etablissement.mailing.find(
-      (mail) =>
-        mail.campaign === mailType.PREMIUM_INVITE && dayjs(mail.email_sent_at).add(10, "days").isAfter(dayjs(), "day")
-    );
-
-    // Wait 10 days after having sent PREMIUM_INVITE mail
-    if (skip) {
+    if (!etablissement.email_decisionnaire || !emailJoiSchema.validate(etablissement.email_decisionnaire)) {
       continue;
     }
 
