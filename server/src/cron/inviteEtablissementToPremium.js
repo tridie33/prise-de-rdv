@@ -11,14 +11,16 @@ const { mailType } = require("../common/model/constants/etablissement");
 const inviteEtablissementToPremium = async ({ etablissements, mailer }) => {
   logger.info("Cron #inviteEtablissementToPremium started.");
 
-  const etablissementsActivated = await etablissements
-    .find({
-      email_decisionnaire: {
-        $ne: null,
-      },
-      "mailing.campaign": { $ne: mailType.PREMIUM_INVITE },
-    })
-    .limit(255);
+  const etablissementsActivated = await etablissements.find({
+    email_decisionnaire: {
+      $ne: null,
+    },
+    opt_out_will_be_activated_at: {
+      $ne: null,
+      $lte: dayjs().subtract(1, "day").toDate(),
+    },
+    "mailing.campaign": { $ne: mailType.PREMIUM_INVITE },
+  });
 
   for (const etablissement of etablissementsActivated) {
     // Invite all etablissements only in production environment
