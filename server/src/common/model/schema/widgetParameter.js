@@ -1,4 +1,9 @@
 const widgetParameterSchema = {
+  id_catalogue: {
+    type: String,
+    default: null,
+    description: "Identifiant d'une formation Catalogue",
+  },
   etablissement_siret: {
     type: String,
     default: null,

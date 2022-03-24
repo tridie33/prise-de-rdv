@@ -12,7 +12,7 @@ const { formatDate, formatDatetime, dayjs } = require("../../utils/dayjs");
 /**
  * Sample entity route module for GET
  */
-module.exports = ({ cache, etablissements }) => {
+module.exports = ({ cache, etablissements, appointments, users }) => {
   const router = express.Router();
 
   /**
@@ -127,80 +127,29 @@ module.exports = ({ cache, etablissements }) => {
   router.get(
     "/appointments/details/export",
     tryCatch(async (req, res) => {
-      const allData = await Appointment.find().sort({ created_at: -1 });
+      const [appointmentList, usersList] = await Promise.all([appointments.find({}), users.find({ role: "candidat" })]);
 
-      const idRcoFormations = [...new Set(allData.map((document) => document.id_rco_formation))];
-
-      // Split array by chunk to avoid sending unit calls to the catalogue
-      const idRcoFormationsChunks = lodash.chunk(idRcoFormations, 40);
-
-      let formations = [];
-      for (const idRcoFormations of idRcoFormationsChunks) {
-        const data = await getFormationsByIdRcoFormationsRaw({ idRcoFormations });
-
-        formations.push(data.formations);
-      }
-
-      formations = formations.flat();
-
-      const appointmentsPromises = allData.map(async (document) => {
-        const user = await User.findById(document.candidat_id);
-
-        // Get right formation from dataset
-        const catalogueFormation = formations.find((item) => item.id_rco_formation === document.id_rco_formation);
-        const etablissement = await etablissements.findOne({ siret_formateur: document.etablissement_id });
-
-        let formation = {};
-        if (catalogueFormation) {
-          formation = {
-            etablissement_formateur_entreprise_raison_sociale:
-              catalogueFormation.etablissement_formateur_entreprise_raison_sociale,
-            intitule_long: catalogueFormation.intitule_long,
-            etablissement_formateur_adresse: catalogueFormation.etablissement_formateur_adresse,
-            etablissement_formateur_code_postal: catalogueFormation.etablissement_formateur_code_postal,
-            etablissement_formateur_nom_departement: catalogueFormation.etablissement_formateur_nom_departement,
-          };
-        }
-
+      const output = appointmentList.map((appointment) => {
+        const candidat = usersList.find((user) => user.id === appointment.candidat_id);
         return {
-          date: formatDatetime(document.created_at),
-          candidat: `${user.firstname} ${user.lastname}`,
-          phone: user.phone,
-          email: user.email,
-          email_cfa: document.email_cfa,
-          etablissement: formation.etablissement_formateur_entreprise_raison_sociale,
-          siret: document.etablissement_id,
-          opt_mode: etablissement?.opt_mode || "N/C",
-          opt_in_activated_at: formatDate(etablissement?.opt_in_activated_at) || "N/C",
-          opt_out_invited_at: formatDate(etablissement?.opt_out_invited_at) || "N/C",
-          opt_out_activated_at: formatDate(etablissement?.opt_out_activated_at) || "N/C",
-          opt_out_refused_at: formatDatetime(etablissement?.opt_out_refused_at) || "N/C",
-          formation: formation.intitule_long,
-          cfd: document.formation_id,
-          email_premiere_demande_candidat_date: formatDatetime(document.email_premiere_demande_candidat_date) || "N/C",
-          email_premiere_demande_candidat_statut: getEmailStatus(document?.email_premiere_demande_candidat_statut),
-          email_premiere_demande_candidat_statut_date: document.email_premiere_demande_candidat_statut_date
-            ? dayjs.utc(document.email_premiere_demande_candidat_statut_date).format("DD/MM/YYYY HH:mm:ss")
-            : "N/C",
-          email_premiere_demande_cfa_date: document.email_premiere_demande_cfa_date
-            ? formatDatetime(document.email_premiere_demande_cfa_date)
-            : "N/C",
-          email_premiere_demande_cfa_statut: getEmailStatus(document?.email_premiere_demande_cfa_statut),
-          email_premiere_demande_cfa_statut_date: document.email_premiere_demande_cfa_statut_date
-            ? dayjs.utc(document.email_premiere_demande_cfa_statut_date).format("DD/MM/YYYY HH:mm:ss")
-            : "N/C",
-          cfa_pris_contact_candidat_date: formatDatetime(document.cfa_pris_contact_candidat_date) || "N/C",
-          source: getReferrerById(document.referrer).full_name,
-          motivation: document.motivations,
-          champs_libre_statut: document.champs_libre_status || "",
-          champs_libre_commentaire: document.champs_libre_commentaire || "",
+          ...lodash.omit(appointment._doc, [
+            "__v",
+            "numero_de_la_demande",
+            "referrer_link",
+            "candidat_mailing",
+            "cfa_mailing",
+            "etablissement_id",
+            "candidat_id",
+          ]),
+          candidat_firstname: candidat.firstname,
+          candidat_lastname: candidat.lastname,
+          candidat_email: candidat.email,
+          candidat_phone: candidat.phone,
         };
       });
 
-      const appointments = await Promise.all(appointmentsPromises);
-
       const json2csvParser = new Parser();
-      const csv = json2csvParser.parse(appointments);
+      const csv = json2csvParser.parse(output);
 
       res.setHeader("Content-disposition", "attachment; filename=rendez-vous.csv");
       res.set("Content-Type", "text/csv");
