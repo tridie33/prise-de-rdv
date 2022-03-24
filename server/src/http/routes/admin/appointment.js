@@ -1,13 +1,11 @@
 const express = require("express");
 const lodash = require("lodash");
-const { Parser } = require("json2csv");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const { Appointment, User } = require("../../../common/model");
 const logger = require("../../../common/logger");
 const { getReferrerById } = require("../../../common/model/constants/referrers");
 const { getEmailStatus } = require("../../../common/model/constants/emails");
 const { getFormationsByIdRcoFormationsRaw } = require("../../utils/catalogue");
-const { formatDate, formatDatetime, dayjs } = require("../../utils/dayjs");
 
 /**
  * Sample entity route module for GET
@@ -148,13 +146,7 @@ module.exports = ({ cache, etablissements, appointments, users }) => {
         };
       });
 
-      const json2csvParser = new Parser();
-      const csv = json2csvParser.parse(output);
-
-      res.setHeader("Content-disposition", "attachment; filename=rendez-vous.csv");
-      res.set("Content-Type", "text/csv");
-
-      return res.send(csv);
+      return res.send(output);
     })
   );
 
