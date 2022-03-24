@@ -38,6 +38,7 @@ const syncEtablissementsAndFormations = async ({ etablissements, widgetParameter
           await widgetParameters.updateMany(
             { id_rco_formation: formation.id_rco_formation },
             {
+              id_catalogue: formation._id,
               email_rdv: emailJoiSchema.validate(emailRdv) ? emailRdv : null,
               id_parcoursup: formation.parcoursup_id,
               cle_ministere_educatif: formation.cle_ministere_educatif,
@@ -63,6 +64,7 @@ const syncEtablissementsAndFormations = async ({ etablissements, widgetParameter
           );
         } else {
           await widgetParameters.createParameter({
+            id_catalogue: formation._id,
             email_rdv: formation.email || null,
             id_parcoursup: formation.parcoursup_id,
             cle_ministere_educatif: formation.cle_ministere_educatif,
