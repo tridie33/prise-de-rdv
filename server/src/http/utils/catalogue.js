@@ -63,6 +63,7 @@ const getFormations = async (query, page = 1, limit = 500, enableCache = true) =
     {
       query: JSON.stringify(query),
       select: JSON.stringify({
+        _id: 1,
         code_postal: 1,
         id_rco_formation: 1,
         etablissement_formateur_entreprise_raison_sociale: 1,
