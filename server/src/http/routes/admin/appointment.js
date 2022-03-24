@@ -11,7 +11,7 @@ const { getFormationsByIdRcoFormationsRaw } = require("../../utils/catalogue");
 /**
  * Sample entity route module for GET
  */
-module.exports = ({ cache, etablissements, appointments, users }) => {
+module.exports = ({ cache, etablissements, appointments, users, widgetParameters }) => {
   const router = express.Router();
 
   /**
@@ -126,7 +126,11 @@ module.exports = ({ cache, etablissements, appointments, users }) => {
     "/appointments/details/export",
     tryCatch(async (req, res) => {
       const appointmentList = await appointments.find(
-        {},
+        {
+          id_rco_formation: {
+            $ne: null,
+          },
+        },
         {
           id_rco_formation: 1,
           candidat_id: 1,
@@ -136,13 +140,19 @@ module.exports = ({ cache, etablissements, appointments, users }) => {
         }
       );
 
-      let output = [];
+      const output = [];
       for (const appointmentListChunck of lodash.chunk(appointmentList, 100)) {
         const result = await Promise.all(
           appointmentListChunck.map(async (appointment) => {
-            const candidat = await users.getUserById(appointment.candidat_id);
+            const [candidat, widgetParameter] = await Promise.all([
+              users.getUserById(appointment.candidat_id),
+              widgetParameters.findOne({ id_rco_formation: appointment.id_rco_formation }),
+            ]);
 
             return {
+              cle_ministere_educatif: widgetParameter.cle_ministere_educatif,
+              etablissement_formateur_siret: widgetParameter.etablissement_formateur_siret,
+              etablissement_gestionnaire_siret: widgetParameter.etablissement_gestionnaire_siret,
               rendez_vous_id_rco_formation: appointment.id_rco_formation,
               rendez_vous_created_at: appointment.created_at,
               rendez_vous_email_cfa: appointment.email_cfa,
@@ -157,13 +167,7 @@ module.exports = ({ cache, etablissements, appointments, users }) => {
         output.push(result);
       }
 
-      const json2csvParser = new Parser();
-      const csv = json2csvParser.parse(output.flat());
-
-      res.setHeader("Content-disposition", "attachment; filename=rendez-vous.csv");
-      res.set("Content-Type", "text/csv");
-
-      return res.send(csv);
+      return res.send(output);
     })
   );
 
