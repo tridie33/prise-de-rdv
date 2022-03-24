@@ -149,12 +149,12 @@ module.exports = ({ cache, etablissements, appointments, users }) => {
       });
 
       const json2csvParser = new Parser();
-      const csv = json2csvParser.parse(output);
+      json2csvParser.parse(output);
 
       res.setHeader("Content-disposition", "attachment; filename=rendez-vous.csv");
       res.set("Content-Type", "text/csv");
 
-      return res.send(csv);
+      return res.send(output);
     })
   );
 
