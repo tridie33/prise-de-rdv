@@ -1,5 +1,6 @@
 const express = require("express");
 const lodash = require("lodash");
+const { Parser } = require("json2csv");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const { Appointment, User } = require("../../../common/model");
 const logger = require("../../../common/logger");
@@ -156,7 +157,13 @@ module.exports = ({ cache, etablissements, appointments, users }) => {
         output.push(result);
       }
 
-      return res.send(output.flat());
+      const json2csvParser = new Parser();
+      const csv = json2csvParser.parse(output.flat());
+
+      res.setHeader("Content-disposition", "attachment; filename=rendez-vous.csv");
+      res.set("Content-Type", "text/csv");
+
+      return res.send(csv);
     })
   );
 
