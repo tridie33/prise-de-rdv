@@ -120,33 +120,43 @@ module.exports = ({ cache, etablissements, appointments, users }) => {
 
   /**
    * Export appointments in csv.
-   *
    */
   router.get(
     "/appointments/details/export",
     tryCatch(async (req, res) => {
-      const [appointmentList, usersList] = await Promise.all([appointments.find({}), users.find({ role: "candidat" })]);
+      const appointmentList = await appointments.find(
+        {},
+        {
+          id_rco_formation: 1,
+          candidat_id: 1,
+          created_at: 1,
+          email_cfa: 1,
+          motivations: 1,
+        }
+      );
 
-      const output = appointmentList.map((appointment) => {
-        const candidat = usersList.find((user) => user.id === appointment.candidat_id);
-        return {
-          ...lodash.omit(appointment._doc, [
-            "__v",
-            "numero_de_la_demande",
-            "referrer_link",
-            "candidat_mailing",
-            "cfa_mailing",
-            "etablissement_id",
-            "candidat_id",
-          ]),
-          candidat_firstname: candidat.firstname,
-          candidat_lastname: candidat.lastname,
-          candidat_email: candidat.email,
-          candidat_phone: candidat.phone,
-        };
-      });
+      let output = [];
+      for (const appointmentListChunck of lodash.chunk(appointmentList, 100)) {
+        const result = await Promise.all(
+          appointmentListChunck.map(async (appointment) => {
+            const candidat = await users.getUserById(appointment.candidat_id);
 
-      return res.send(output);
+            return {
+              rendez_vous_id_rco_formation: appointment.id_rco_formation,
+              rendez_vous_created_at: appointment.created_at,
+              rendez_vous_email_cfa: appointment.email_cfa,
+              rendez_vous_motivations: appointment.motivations,
+              candidat_firstname: candidat.firstname,
+              candidat_lastname: candidat.lastname,
+              candidat_email: candidat.email,
+              candidat_phone: candidat.phone,
+            };
+          })
+        );
+        output.push(result);
+      }
+
+      return res.send(output.flat());
     })
   );
 
