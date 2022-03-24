@@ -148,11 +148,11 @@ module.exports = ({ cache, etablissements, appointments, users }) => {
         };
       });
 
-      const json2csvParser = new Parser();
-      json2csvParser.parse(output);
+      // const json2csvParser = new Parser();
+      // json2csvParser.parse(output);
 
-      res.setHeader("Content-disposition", "attachment; filename=rendez-vous.csv");
-      res.set("Content-Type", "text/csv");
+      // res.setHeader("Content-disposition", "attachment; filename=rendez-vous.csv");
+      // res.set("Content-Type", "text/csv");
 
       return res.send(output);
     })
