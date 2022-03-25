@@ -1,6 +1,5 @@
 const express = require("express");
 const lodash = require("lodash");
-const { Parser } = require("json2csv");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const { Appointment, User } = require("../../../common/model");
 const logger = require("../../../common/logger");
@@ -11,7 +10,7 @@ const { getFormationsByIdRcoFormationsRaw } = require("../../utils/catalogue");
 /**
  * Sample entity route module for GET
  */
-module.exports = ({ cache, etablissements, appointments, users, widgetParameters }) => {
+module.exports = ({ cache, etablissements, appointments, users }) => {
   const router = express.Router();
 
   /**
@@ -144,18 +143,11 @@ module.exports = ({ cache, etablissements, appointments, users, widgetParameters
       for (const appointmentListChunck of lodash.chunk(appointmentList, 100)) {
         const result = await Promise.all(
           appointmentListChunck.map(async (appointment) => {
-            const [candidat, widgetParameter] = await Promise.all([
-              users.getUserById(appointment.candidat_id),
-              widgetParameters.findOne({ id_rco_formation: appointment.id_rco_formation }),
-            ]);
+            const candidat = await users.getUserById(appointment.candidat_id);
 
             return {
-              cle_ministere_educatif: widgetParameter.cle_ministere_educatif,
-              etablissement_formateur_siret: widgetParameter.etablissement_formateur_siret,
-              etablissement_gestionnaire_siret: widgetParameter.etablissement_gestionnaire_siret,
               id_rco_formation: appointment.id_rco_formation,
               created_at: appointment.created_at,
-              email_cfa: widgetParameter.email_rdv,
               motivations: appointment.motivations,
               candidat_firstname: candidat.firstname,
               candidat_lastname: candidat.lastname,
