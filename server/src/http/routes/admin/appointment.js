@@ -3,7 +3,7 @@ const lodash = require("lodash");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const { Appointment, User } = require("../../../common/model");
 const logger = require("../../../common/logger");
-const { getReferrerById } = require("../../../common/model/constants/referrers");
+const { getReferrerById, referrers } = require("../../../common/model/constants/referrers");
 const { getEmailStatus } = require("../../../common/model/constants/emails");
 const { getFormationsByIdRcoFormationsRaw } = require("../../utils/catalogue");
 
@@ -129,10 +129,12 @@ module.exports = ({ cache, etablissements, appointments, users }) => {
           id_rco_formation: {
             $ne: null,
           },
+          referrer: referrers.PARCOURSUP.code,
         },
         {
           id_rco_formation: 1,
           candidat_id: 1,
+          referrer: 1,
           created_at: 1,
           email_cfa: 1,
           motivations: 1,

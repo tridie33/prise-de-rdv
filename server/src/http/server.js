@@ -57,7 +57,7 @@ module.exports = async (components) => {
   app.use("/api/admin", checkJwtToken, adminOnly, admin());
 
   // Logic route
-  app.use("/api/appointment", checkJwtToken, adminOnly, appointmentRoute(components));
+  app.use("/api/appointment", appointmentRoute(components));
   app.use("/api/admin/etablissements", checkJwtToken, adminOnly, adminEtablissementRoute(components));
   app.use("/api/etablissements", etablissementRoute(components));
   app.use("/api/appointment-request", appointmentRequestRoute(components));
