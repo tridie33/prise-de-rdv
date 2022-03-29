@@ -2,6 +2,7 @@ import { createRef, useEffect, useState } from "react";
 import _ from "lodash";
 import { useParams } from "react-router";
 import * as emailValidator from "email-validator";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 import {
   Tbody,
   Button,
@@ -250,6 +251,7 @@ const EditPage = () => {
           <Box border="1px solid #E0E5ED" overflow="auto" cursor="pointer">
             <Table w="150rem" bg="white">
               <Thead color="#ADB2BC">
+                <Td textStyle="sm">Catalogue</Td>
                 <Td textStyle="sm">ID RCO</Td>
                 <Td textStyle="sm">INTITULE</Td>
                 <Td textStyle="sm">CFD</Td>
@@ -281,6 +283,15 @@ const EditPage = () => {
 
                   return (
                     <Tr key={formation._id} _hover={{ bg: "#f4f4f4", transition: "0.5s" }} transition="0.5s">
+                      <Td>
+                        <a
+                          href={`https://catalogue.apprentissage.beta.gouv.fr/formation/${parameter.id_catalogue}`}
+                          title="Lien vers la formation du Catalogue"
+                          target="_blank"
+                        >
+                          <ExternalLinkIcon w={6} h={6} />
+                        </a>
+                      </Td>
                       <Td>{formation.id_rco_formation}</Td>
                       <Td>{formation.intitule_long}</Td>
                       <Td>{formation.cfd}</Td>
