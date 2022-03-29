@@ -1,13 +1,11 @@
 const express = require("express");
 const lodash = require("lodash");
-const { Parser } = require("json2csv");
 const tryCatch = require("../../middlewares/tryCatchMiddleware");
 const { Appointment, User } = require("../../../common/model");
 const logger = require("../../../common/logger");
 const { getReferrerById } = require("../../../common/model/constants/referrers");
 const { getEmailStatus } = require("../../../common/model/constants/emails");
 const { getFormationsByIdRcoFormationsRaw } = require("../../utils/catalogue");
-const { formatDate, formatDatetime, dayjs } = require("../../utils/dayjs");
 
 /**
  * Sample entity route module for GET
@@ -122,37 +120,44 @@ module.exports = ({ cache, etablissements, appointments, users }) => {
 
   /**
    * Export appointments in csv.
-   *
    */
   router.get(
     "/appointments/details/export",
     tryCatch(async (req, res) => {
-      const [appointmentList, usersList] = await Promise.all([appointments.find({}), users.find({ role: "candidat" })]);
+      const appointmentList = await appointments.find(
+        {
+          id_rco_formation: {
+            $ne: null,
+          },
+        },
+        {
+          id_rco_formation: 1,
+          candidat_id: 1,
+          created_at: 1,
+          email_cfa: 1,
+          motivations: 1,
+        }
+      );
 
-      const output = appointmentList.map((appointment) => {
-        const candidat = usersList.find((user) => user.id === appointment.candidat_id);
-        return {
-          ...lodash.omit(appointment._doc, [
-            "__v",
-            "numero_de_la_demande",
-            "referrer_link",
-            "candidat_mailing",
-            "cfa_mailing",
-            "etablissement_id",
-            "candidat_id",
-          ]),
-          candidat_firstname: candidat.firstname,
-          candidat_lastname: candidat.lastname,
-          candidat_email: candidat.email,
-          candidat_phone: candidat.phone,
-        };
-      });
+      const output = [];
+      for (const appointmentListChunck of lodash.chunk(appointmentList, 100)) {
+        const result = await Promise.all(
+          appointmentListChunck.map(async (appointment) => {
+            const candidat = await users.getUserById(appointment.candidat_id);
 
-      // const json2csvParser = new Parser();
-      // json2csvParser.parse(output);
-
-      // res.setHeader("Content-disposition", "attachment; filename=rendez-vous.csv");
-      // res.set("Content-Type", "text/csv");
+            return {
+              id_rco_formation: appointment.id_rco_formation,
+              created_at: appointment.created_at,
+              motivations: appointment.motivations,
+              candidat_firstname: candidat.firstname,
+              candidat_lastname: candidat.lastname,
+              candidat_email: candidat.email,
+              candidat_phone: candidat.phone,
+            };
+          })
+        );
+        output.push(result);
+      }
 
       return res.send(output);
     })
