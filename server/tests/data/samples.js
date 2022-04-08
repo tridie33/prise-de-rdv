@@ -25,6 +25,7 @@ const sampleParameter = {
   formation_cfd: "26033206",
   email_rdv: "testContact@prdv.fr",
   id_rco_formation: "14_AF_0000091719|14_SE_0000494236|18894",
+  cle_ministere_educatif: "064256P01111968000310005219680003100052-68287#L01",
   id_parcoursup: "12345",
   referrers: [referrers.LBA.code, referrers.PARCOURSUP.code],
 };
@@ -37,6 +38,7 @@ const sampleUpdateParameter = {
   formation_cfd: "260999999",
   email_rdv: "updateMail@prdv.fr",
   id_rco_formation: "15_554095|15_1117617|106339",
+  cle_ministere_educatif: "064256P01111968000310005219680001100052-68287#L01",
   referrers: [referrers.PARCOURSUP.code],
 };
 
@@ -48,6 +50,7 @@ const sampleParameters = [
     formation_cfd: "26033206",
     email_rdv: "testContact@prdv.fr",
     id_rco_formation: "15_554095|15_1117617|106339",
+    cle_ministere_educatif: "064256P01211968000110005219680001100052-68287#L01",
     referrers: [referrers.LBA.code],
   },
   {
@@ -57,6 +60,7 @@ const sampleParameters = [
     formation_cfd: "26033205",
     email_rdv: "testContact2@prdv.fr",
     id_rco_formation: "15_554095|15_1117617|12345",
+    cle_ministere_educatif: "06434P01211968000110005219680001100052-68287#L01",
     referrers: [referrers.PARCOURSUP.code],
   },
 ];

@@ -14,6 +14,7 @@ module.exports = async () => ({
    * @param {String} catalogue_published
    * @param {Date} last_catalogue_sync
    * @param {String} id_parcoursup
+   * @param {String} cle_ministere_educatif
    * @returns {Promise<*>}
    */
   createParameter: async ({
@@ -28,6 +29,7 @@ module.exports = async () => ({
     catalogue_published,
     last_catalogue_sync,
     id_parcoursup,
+    cle_ministere_educatif,
   }) => {
     const widgetParameter = new WidgetParameter({
       etablissement_siret,
@@ -41,6 +43,7 @@ module.exports = async () => ({
       catalogue_published,
       last_catalogue_sync,
       id_parcoursup,
+      cle_ministere_educatif,
     });
     await widgetParameter.save();
 
@@ -49,15 +52,16 @@ module.exports = async () => ({
 
   /**
    * @description Finds or creates a parameter.
-   * @param etablissement_siret
-   * @param etablissement_raison_sociale
-   * @param formation_intitule
-   * @param formation_cfd
-   * @param email_rdv
-   * @param email_decisionnaire
-   * @param code_postal
-   * @param id_rco_formation
-   * @param referrers
+   * @param {String} etablissement_siret
+   * @param {String} etablissement_raison_sociale
+   * @param {String} formation_intitule
+   * @param {String} formation_cfd
+   * @param {String} email_rdv
+   * @param {String} email_decisionnaire
+   * @param {String} code_postal
+   * @param {String} id_rco_formation
+   * @param {String} referrers
+   * @param {String} cle_ministere_educatif
    * @returns {Promise<WidgetParameter>}
    */
   findUpdateOrCreate: async ({
@@ -70,6 +74,7 @@ module.exports = async () => ({
     code_postal,
     id_rco_formation,
     referrers,
+    cle_ministere_educatif,
   }) => {
     const parameter = {
       etablissement_siret,
@@ -81,6 +86,7 @@ module.exports = async () => ({
       code_postal,
       id_rco_formation,
       referrers,
+      cle_ministere_educatif,
     };
 
     const widgetParameterFind = await WidgetParameter.findOne({ id_rco_formation });
@@ -108,7 +114,7 @@ module.exports = async () => ({
    * @param {Object} conditions
    * @returns {Promise<WidgetParameter>}
    */
-  findOne: async (conditions) => WidgetParameter.findOne(conditions),
+  findOne: (conditions) => WidgetParameter.findOne(conditions),
 
   /**
    * @description Updates item.

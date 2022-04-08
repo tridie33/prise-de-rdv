@@ -109,6 +109,11 @@ const widgetParameterSchema = {
     default: null,
     description: "Localité de la formation",
   },
+  created_at: {
+    type: Date,
+    default: Date.now,
+    description: "Date de création du document",
+  },
 };
 
 module.exports = widgetParameterSchema;

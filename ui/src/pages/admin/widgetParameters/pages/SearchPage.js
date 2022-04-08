@@ -25,7 +25,7 @@ const SearchPage = () => {
     try {
       const keywordEncoded = encodeURIComponent(keyword);
       const catalogueResponse = await fetch(
-        `/api/catalogue/formations?query={ "$or": [ { "etablissement_formateur_siret": "${keywordEncoded}" }, { "etablissement_formateur_uai": "${keywordEncoded}"}, { "id_rco_formation": "${keywordEncoded}"} ] }`
+        `/api/catalogue/formations?query={ "$or": [ { "etablissement_formateur_siret": "${keywordEncoded}" }, { "etablissement_formateur_uai": "${keywordEncoded}"}, { "id_rco_formation": "${keywordEncoded}"}, {"cle_ministere_educatif": "${keywordEncoded}"} ] }`
       );
 
       const catalogueResult = await catalogueResponse.json();
@@ -64,7 +64,12 @@ const SearchPage = () => {
             <Box>
               <Field name="keyword">
                 {({ field }) => {
-                  return <Input placeholder="Siret formateur / UAI / Identifiant RCO formation" {...field} />;
+                  return (
+                    <Input
+                      placeholder="Siret formateur / Cle ministère educatif / UAI / Identifiant RCO formation"
+                      {...field}
+                    />
+                  );
                 }}
               </Field>
             </Box>
