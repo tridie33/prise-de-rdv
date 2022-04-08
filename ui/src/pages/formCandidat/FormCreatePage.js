@@ -24,7 +24,7 @@ export const FormCreatePage = (props) => {
   const [errorPhone, setErrorPhone] = useState();
   const [loading, setLoading] = useState(false);
 
-  const { idRcoFormation, referrer } = qs.parse(props.location.search);
+  const { cleMinistereEducatif, referrer } = qs.parse(props.location.search);
 
   /**
    * @description Initialize.
@@ -34,7 +34,10 @@ export const FormCreatePage = (props) => {
       try {
         setLoading(true);
 
-        const response = await _post(`/api/appointment-request/context/create`, { idRcoFormation, referrer });
+        const response = await _post(`/api/appointment-request/context/create`, {
+          idCleMinistereEducatif: cleMinistereEducatif,
+          referrer,
+        });
 
         if (response?.error) {
           throw new Error(response?.error);
@@ -49,7 +52,7 @@ export const FormCreatePage = (props) => {
     }
 
     fetchContext();
-  }, [idRcoFormation, referrer]);
+  }, [cleMinistereEducatif, referrer]);
 
   /**
    * @description Validate email.
@@ -98,7 +101,7 @@ export const FormCreatePage = (props) => {
       setSubmitLoading(true);
       const { appointment, error } = await _post("/api/appointment-request/validate", {
         ...values,
-        idRcoFormation,
+        cleMinistereEducatif,
         referrer,
       });
 

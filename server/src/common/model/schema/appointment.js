@@ -187,6 +187,11 @@ const appointmentSchema = {
     default: null,
     description: "Id RCO formation",
   },
+  cle_ministere_educatif: {
+    type: String,
+    default: null,
+    description: "Identifiant unique d'une formation",
+  },
   created_at: {
     type: Date,
     default: Date.now,

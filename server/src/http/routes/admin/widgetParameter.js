@@ -26,6 +26,7 @@ const widgetParameterSchema = Joi.object({
     .required(),
   referrers: Joi.array().items(Joi.number()),
   id_rco_formation: Joi.string().required(),
+  cle_ministere_educatif: Joi.string().required(),
 });
 
 const widgetParameterImportSchema = Joi.object({
