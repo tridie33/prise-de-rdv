@@ -4,9 +4,19 @@ const config = require("../../../config");
 const { axiosRedis } = require("../../common/redis");
 
 /**
+ * @description Get formations by its identifier.
+ * @param {String} id
+ * @returns {Promise<Object[]>}
+ */
+const getFormationsById = ({ id }) =>
+  getFormations({
+    $and: [{ _id: id }],
+  });
+
+/**
  * @description Get formations by "siret formateur" with "common conditions".
  * @param {String} siretFormateur
- * @returns {Promise<Object>}
+ * @returns {Promise<Object[]>}
  */
 const getFormationsBySiretFormateur = ({ siretFormateur }) =>
   getFormations({
@@ -16,7 +26,7 @@ const getFormationsBySiretFormateur = ({ siretFormateur }) =>
 /**
  * @description Get formations by idRcoFormations with "common conditions".
  * @param {String[]} idRcoFormations
- * @returns {Promise<Object>}
+ * @returns {Promise<Object[]>}
  */
 const getFormationsByIdRcoFormations = ({ idRcoFormations }) =>
   getFormations({
@@ -26,7 +36,7 @@ const getFormationsByIdRcoFormations = ({ idRcoFormations }) =>
 /**
  * @description Get formations by idRcoFormations.
  * @param {String[]} idRcoFormations
- * @returns {Promise<Object>}
+ * @returns {Promise<Object[]>}
  */
 const getFormationsByIdRcoFormationsRaw = ({ idRcoFormations }) =>
   getFormations({
@@ -36,7 +46,7 @@ const getFormationsByIdRcoFormationsRaw = ({ idRcoFormations }) =>
 /**
  * @description Get formations by its idParcoursup.
  * @param {String} idParcoursup
- * @returns {Promise<Object>}
+ * @returns {Promise<Object[]>}
  */
 const getFormationsByIdParcoursup = ({ idParcoursup }) =>
   getFormations({
@@ -98,5 +108,6 @@ module.exports = {
   getFormationsByIdRcoFormationsRaw,
   getFormationsByIdParcoursup,
   getFormationsBySiretFormateur,
+  getFormationsById,
   getFormations,
 };

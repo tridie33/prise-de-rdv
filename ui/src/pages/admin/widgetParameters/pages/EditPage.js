@@ -252,7 +252,7 @@ const EditPage = () => {
             <Table w="150rem" bg="white">
               <Thead color="#ADB2BC">
                 <Td textStyle="sm">Catalogue</Td>
-                <Td textStyle="sm">ID RCO</Td>
+                <Td textStyle="sm">CLE MINISTERE EDUCATIF</Td>
                 <Td textStyle="sm">INTITULE</Td>
                 <Td textStyle="sm">CFD</Td>
                 <Td textStyle="sm">CODE POSTAL</Td>
@@ -284,15 +284,20 @@ const EditPage = () => {
                   return (
                     <Tr key={formation._id} _hover={{ bg: "#f4f4f4", transition: "0.5s" }} transition="0.5s">
                       <Td>
-                        <a
-                          href={`https://catalogue.apprentissage.beta.gouv.fr/formation/${parameter.id_catalogue}`}
-                          title="Lien vers la formation du Catalogue"
-                          target="_blank"
-                        >
-                          <ExternalLinkIcon w={6} h={6} />
-                        </a>
+                        {parameter?.id_catalogue ? (
+                          <a
+                            href={`https://catalogue.apprentissage.beta.gouv.fr/formation/${parameter.id_catalogue}`}
+                            title="Lien vers la formation du Catalogue"
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            <ExternalLinkIcon w={6} h={6} />
+                          </a>
+                        ) : (
+                          "N/C"
+                        )}
                       </Td>
-                      <Td>{formation.id_rco_formation}</Td>
+                      <Td>{formation?.cle_ministere_educatif}</Td>
                       <Td>{formation.intitule_long}</Td>
                       <Td>{formation.cfd}</Td>
                       <Td>{formation.code_postal}</Td>

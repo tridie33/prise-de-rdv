@@ -10,10 +10,20 @@ module.exports = async () => ({
    * @param {String} options.formation_id
    * @param {String} options.motivations
    * @param {Number} options.referrer
+   * @param {String} options.id_rco_formation
+   * @param {String} options.cle_ministere_educatif
    * @returns {Promise<Appointment>}
    */
   createAppointment: async (options = {}) => {
-    const { candidat_id, etablissement_id, formation_id, motivations, referrer, id_rco_formation } = options;
+    const {
+      candidat_id,
+      etablissement_id,
+      formation_id,
+      motivations,
+      referrer,
+      id_rco_formation,
+      cle_ministere_educatif,
+    } = options;
 
     const appointment = new Appointment({
       candidat_id,
@@ -22,6 +32,7 @@ module.exports = async () => ({
       formation_id,
       referrer,
       id_rco_formation,
+      cle_ministere_educatif,
     });
     await appointment.save();
 

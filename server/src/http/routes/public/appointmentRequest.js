@@ -7,7 +7,7 @@ const config = require("../../../../config");
 const { getReferrerById, getReferrerByKeyName, referrers } = require("../../../common/model/constants/referrers");
 const { candidatFollowUpType, mailType } = require("../../../common/model/constants/appointments");
 const { candidat } = require("../../../common/roles");
-const { getIdRcoFormationThroughIdActionFormation } = require("../../utils/mappings/onisep");
+const { getCleMinistereEducatifFromIdActionFormation } = require("../../utils/mappings/onisep");
 const { dayjs } = require("../../utils/dayjs");
 
 const contextCreateSchema = Joi.alternatives().try(
@@ -90,7 +90,7 @@ const userRequestSchema = Joi.object({
   phone: Joi.string().required(),
   email: Joi.string().required(),
   motivations: Joi.string().allow(null, ""),
-  idRcoFormation: Joi.string().required(),
+  cleMinistereEducatif: Joi.string().required(),
   referrer: Joi.string().required(),
 });
 
@@ -119,23 +119,25 @@ module.exports = ({ users, appointments, mailer, widgetParameters, etablissement
     tryCatch(async (req, res) => {
       await contextCreateSchema.validateAsync(req.body, { abortEarly: false });
 
-      const { idRcoFormation, idParcoursup, idActionFormation, referrer } = req.body;
+      const { idRcoFormation, idParcoursup, idActionFormation, referrer, idCleMinistereEducatif } = req.body;
 
       const referrerObj = getReferrerByKeyName(referrer);
 
       let widgetParameter;
-      if (idRcoFormation) {
+      if (idCleMinistereEducatif) {
+        widgetParameter = await widgetParameters.findOne({ cle_ministere_educatif: idCleMinistereEducatif });
+      } else if (idRcoFormation) {
         widgetParameter = await widgetParameters.findOne({ id_rco_formation: idRcoFormation });
       } else if (idParcoursup) {
         widgetParameter = await widgetParameters.findOne({ id_parcoursup: idParcoursup });
       } else if (idActionFormation) {
-        const idRcoFormationFound = getIdRcoFormationThroughIdActionFormation(idActionFormation);
+        const cleMinistereEducatif = getCleMinistereEducatifFromIdActionFormation(idActionFormation);
 
-        if (!idRcoFormationFound) {
+        if (!cleMinistereEducatif) {
           throw Boom.notFound("Formation introuvable.");
         }
 
-        widgetParameter = await widgetParameters.findOne({ id_rco_formation: idRcoFormationFound });
+        widgetParameter = await widgetParameters.findOne({ cle_ministere_educatif: cleMinistereEducatif });
       } else {
         throw new Error("Critère de recherche non conforme.");
       }
@@ -144,12 +146,12 @@ module.exports = ({ users, appointments, mailer, widgetParameters, etablissement
         throw Boom.notFound("Formation introuvable.");
       }
 
-      const isWidgetVisible = await widgetParameters.isWidgetVisible({
-        idRcoFormation: widgetParameter.id_rco_formation,
-        referrer: referrerObj.code,
+      const isOpenForAppointments = await widgetParameters.findOne({
+        cle_ministere_educatif: widgetParameter.cle_ministere_educatif,
+        referrers: { $in: [referrerObj.code] },
       });
 
-      if (!isWidgetVisible) {
+      if (!isOpenForAppointments) {
         return res.send(notAllowedResponse);
       }
 
@@ -162,8 +164,8 @@ module.exports = ({ users, appointments, mailer, widgetParameters, etablissement
         cfd: widgetParameter.formation_cfd,
         localite: widgetParameter.localite,
         id_rco_formation: widgetParameter.id_rco_formation,
-        form_url: `${config.publicUrl}/form?referrer=${referrer}&idRcoFormation=${encodeURIComponent(
-          widgetParameter.id_rco_formation
+        form_url: `${config.publicUrl}/form?referrer=${referrer}&cleMinistereEducatif=${encodeURIComponent(
+          widgetParameter.cle_ministere_educatif
         )}`,
       });
     })
@@ -174,19 +176,19 @@ module.exports = ({ users, appointments, mailer, widgetParameters, etablissement
     tryCatch(async (req, res) => {
       await userRequestSchema.validateAsync(req.body, { abortEarly: false });
 
-      let { firstname, lastname, phone, email, motivations, referrer, idRcoFormation } = req.body;
+      let { firstname, lastname, phone, email, motivations, referrer, cleMinistereEducatif } = req.body;
 
       email = email.toLowerCase();
 
       const referrerObj = getReferrerByKeyName(referrer);
 
-      const isWidgetVisible = await widgetParameters.isWidgetVisible({
-        idRcoFormation,
-        referrer: referrerObj.code,
+      const widgetParameter = await widgetParameters.findOne({
+        cle_ministere_educatif: cleMinistereEducatif,
+        referrers: { $in: [referrerObj.code] },
       });
 
-      if (!isWidgetVisible) {
-        return res.send(notAllowedResponse);
+      if (!widgetParameter) {
+        throw Boom.badRequest("Formation introuvable.");
       }
 
       let user = await users.getUser(email);
@@ -196,7 +198,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters, etablissement
         user = await users.update(user._id, { firstname, lastname, phone });
         const appointment = await appointments.findOne({
           candidat_id: user._id,
-          id_rco_formation: idRcoFormation,
+          cle_ministere_educatif: widgetParameter.cle_ministere_educatif,
           created_at: {
             $gte: dayjs().subtract(4, "days").toDate(),
           },
@@ -221,15 +223,6 @@ module.exports = ({ users, appointments, mailer, widgetParameters, etablissement
         });
       }
 
-      const widgetParameter = await widgetParameters.getParameterByIdRcoFormationReferrer({
-        idRcoFormation,
-        referrer: referrerObj.code,
-      });
-
-      if (!widgetParameter) {
-        throw Boom.badRequest("Etablissement et formation introuvable.");
-      }
-
       const [createdAppointement, etablissement] = await Promise.all([
         appointments.createAppointment({
           candidat_id: user._id,
@@ -237,7 +230,8 @@ module.exports = ({ users, appointments, mailer, widgetParameters, etablissement
           formation_id: widgetParameter.formation_cfd,
           motivations,
           referrer: referrerObj.code,
-          id_rco_formation: idRcoFormation,
+          id_rco_formation: widgetParameter.id_rco_formation,
+          cle_ministere_educatif: widgetParameter.cle_ministere_educatif,
         }),
         etablissements.findOne({
           siret_formateur: widgetParameter.etablissement_formateur_siret,
