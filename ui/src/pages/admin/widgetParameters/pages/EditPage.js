@@ -184,6 +184,7 @@ const EditPage = () => {
       email_rdv: `${emailRdv}`.toLowerCase() || null,
       referrers: formationPermissions.filter((item) => item.checked).map((item) => item.referrerId),
       id_rco_formation: formation.id_rco_formation,
+      cle_ministere_educatif: formation.cle_ministere_educatif,
     };
 
     // Upsert document
