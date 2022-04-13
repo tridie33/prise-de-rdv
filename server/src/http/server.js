@@ -1,8 +1,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cron = require("node-cron");
-const config = require("../../config/index");
+const config = require("../../config");
 const logger = require("../common/logger");
+const { getSentry } = require("../common/sentry");
 const logMiddleware = require("./middlewares/logMiddleware");
 const errorMiddleware = require("./middlewares/errorMiddleware");
 const tryCatch = require("./middlewares/tryCatchMiddleware");
@@ -44,10 +45,13 @@ module.exports = async (components) => {
   const app = express();
   const checkJwtToken = authMiddleware(components);
   const adminOnly = permissionsMiddleware(administrator);
+  const sentry = getSentry(app);
 
   app.use(bodyParser.json());
   app.use(corsMiddleware());
   app.use(logMiddleware());
+  app.use(sentry.Handlers.requestHandler());
+  app.use(sentry.Handlers.tracingHandler());
 
   // Auth routes
   app.use("/api/login", login(components));
@@ -97,6 +101,7 @@ module.exports = async (components) => {
     })
   );
 
+  app.use(sentry.Handlers.errorHandler());
   app.use(errorMiddleware());
 
   // Everyday at 14:00: Opt-out invite

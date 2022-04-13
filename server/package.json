@@ -33,6 +33,8 @@
     "migration:down": "migrate-mongo down"
   },
   "dependencies": {
+    "@sentry/node": "6.19.6",
+    "@sentry/tracing": "6.19.6",
     "@tictactrip/axios-redis": "2.0.0",
     "apicache": "1.6.3",
     "axios": "0.21.0",
@@ -44,6 +46,7 @@
     "bunyan-slack": "0.0.10",
     "compose-middleware": "5.0.1",
     "config": "3.3.1",
+    "csvtojson": "2.0.10",
     "dayjs": "1.10.7",
     "ejs": "3.1.5",
     "email-validator": "2.0.4",
@@ -54,7 +57,6 @@
     "iconv-lite": "0.5.1",
     "joi": "17.2.1",
     "json2csv": "5.0.6",
-    "csvtojson": "2.0.10",
     "jsonwebtoken": "8.5.1",
     "lint-staged": "10.5.3",
     "lodash": "4.17.21",
