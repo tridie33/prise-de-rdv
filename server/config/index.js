@@ -32,6 +32,9 @@ module.exports = {
     type: env.get("PRISE_DE_RDV_LOG_TYPE").default("console").asString(),
     level: env.get("PRISE_DE_RDV_LOG_LEVEL").default("info").asString(),
   },
+  sentry: {
+    dsn: env.get("PRISE_DE_RDV_SENTRY_DSN").default("").asString(),
+  },
   slackWebhookUrl: env.get("PRISE_DE_RDV_SLACK_WEBHOOK_URL").asString(),
   outputDir: env.get("PRISE_DE_RDV_OUTPUT_DIR").required().asString(),
   users: {
