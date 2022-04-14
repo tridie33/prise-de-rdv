@@ -116,7 +116,7 @@ module.exports = ({ appointments, etablissements }) => {
       const [appointmentCfaFound] = await appointments.find({ "cfa_mailing.message_id": { $regex: messageId } });
 
       // If mail sent from appointment (to the CFA)
-      if (appointmentCfaFound) {
+      if (appointmentCfaFound && appointmentCfaFound?.mailing) {
         const previousEmail = appointmentCfaFound.mailing.find((mail) => mail.message_id.includes(messageId));
 
         await appointmentCfaFound.update({

@@ -100,7 +100,11 @@ export const FormCreatePage = (props) => {
     try {
       setSubmitLoading(true);
       const { appointment, error } = await _post("/api/appointment-request/validate", {
-        ...values,
+        firstname: values.firstname,
+        lastname: values.lastname,
+        phone: values.phone,
+        email: values.email,
+        motivations: values.motivations,
         cleMinistereEducatif,
         referrer,
       });
