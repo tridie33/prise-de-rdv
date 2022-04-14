@@ -149,6 +149,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters, etablissement
       const isOpenForAppointments = await widgetParameters.findOne({
         cle_ministere_educatif: widgetParameter.cle_ministere_educatif,
         referrers: { $in: [referrerObj.code] },
+        email_rdv: { $nin: [null, ""] },
       });
 
       if (!isOpenForAppointments) {
