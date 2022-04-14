@@ -1,4 +1,5 @@
 const joi = require("joi");
+const { referrers } = require("../common/model/constants/referrers");
 const logger = require("../common/logger");
 const { dayjs } = require("../http/utils/dayjs");
 const { getFormations } = require("../http/utils/catalogue");
@@ -23,9 +24,25 @@ const syncEtablissementsAndFormations = async ({ etablissements, widgetParameter
 
     await Promise.all(
       response.formations.map(async (formation) => {
-        const widgetParameter = await widgetParameters.getParameterByIdRcoFormation({
-          idRcoFormation: formation.id_rco_formation,
-        });
+        const [widgetParameter, etablissement] = await Promise.all([
+          widgetParameters.findOne({
+            cle_ministere_educatif: formation.cle_ministere_educatif,
+          }),
+          etablissements.findOne({ siret_formateur: formation.etablissement_formateur_siret }),
+        ]);
+
+        // Activate opt_out referrers
+        const referrersToActivate = [];
+        if (etablissement?.opt_out_activated_at) {
+          referrersToActivate.push(referrers.LBA.code);
+          referrersToActivate.push(referrers.ONISEP.code);
+          referrersToActivate.push(referrers.PFR_PAYS_DE_LA_LOIRE.code);
+        }
+
+        // Activate premium referrers
+        if (etablissement?.premium_activated_at) {
+          referrersToActivate.push(referrers.PARCOURSUP.code);
+        }
 
         if (widgetParameter) {
           let emailRdv = widgetParameter.email_rdv;
@@ -46,7 +63,7 @@ const syncEtablissementsAndFormations = async ({ etablissements, widgetParameter
               formation_cfd: formation.cfd,
               code_postal: formation.code_postal,
               formation_intitule: formation.intitule_long,
-              referrers: emailJoiSchema.validate(emailRdv) ? widgetParameter.referrers : [],
+              referrers: emailJoiSchema.validate(emailRdv) ? referrersToActivate : [],
               etablissement_siret: formation.etablissement_formateur_siret,
               catalogue_published: formation.published,
               id_rco_formation: formation.id_rco_formation,
@@ -72,7 +89,7 @@ const syncEtablissementsAndFormations = async ({ etablissements, widgetParameter
             formation_cfd: formation.cfd,
             code_postal: formation.code_postal,
             formation_intitule: formation.intitule_long,
-            referrers: [],
+            referrers: emailJoiSchema.validate(formation.email) ? referrersToActivate : [],
             etablissement_siret: formation.etablissement_formateur_siret,
             catalogue_published: formation.published,
             id_rco_formation: formation.id_rco_formation,
@@ -88,10 +105,6 @@ const syncEtablissementsAndFormations = async ({ etablissements, widgetParameter
             localite: formation.localite,
           });
         }
-
-        const etablissement = await etablissements.findOne({
-          siret_formateur: formation.etablissement_formateur_siret,
-        });
 
         let emailDecisionnaire = etablissement?.email_decisionnaire;
         if (
