@@ -9,6 +9,8 @@ const { candidatFollowUpType, mailType } = require("../../../common/model/consta
 const { candidat } = require("../../../common/roles");
 const { getCleMinistereEducatifFromIdActionFormation } = require("../../utils/mappings/onisep");
 const { dayjs } = require("../../utils/dayjs");
+const { isValidEmail } = require("../../../common/utils/isValidEmail");
+const { Sentry } = require("../../../common/sentry");
 
 const contextCreateSchema = Joi.alternatives().try(
   Joi.object().keys({
@@ -151,6 +153,12 @@ module.exports = ({ users, appointments, mailer, widgetParameters, etablissement
         referrers: { $in: [referrerObj.code] },
         email_rdv: { $nin: [null, ""] },
       });
+
+      if (!isValidEmail(isOpenForAppointments.email_rdv)) {
+        Sentry.captureException(
+          new Error(`Formation "${widgetParameter.cle_ministere_educatif}" sans email de contact.`)
+        );
+      }
 
       if (!isOpenForAppointments) {
         return res.send(notAllowedResponse);

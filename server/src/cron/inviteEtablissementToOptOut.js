@@ -1,11 +1,9 @@
 const path = require("path");
-const joi = require("joi");
 const logger = require("../common/logger");
 const config = require("../../config");
 const { dayjs } = require("../http/utils/dayjs");
 const { optMode, mailType } = require("../common/model/constants/etablissement");
-
-const emailJoiSchema = joi.string().email();
+const { isValidEmail } = require("../common/utils/isValidEmail");
 
 /**
  * @description Invite all "etablissements" without opt_mode to opt-out.
@@ -30,12 +28,12 @@ const inviteEtablissementToOptOut = async ({ etablissements, widgetParameters, m
     let emailDecisionaire = etablissement.email_decisionnaire;
 
     // If etablissement haven't a valid "email_decisionnaire"
-    if (!etablissement.email_decisionnaire || !emailJoiSchema.validate(emailDecisionaire)) {
+    if (!etablissement.email_decisionnaire || !isValidEmail(emailDecisionaire)) {
       // If "email_rdv" exists, add 1 occurrence, otherwise set counter to 1
       const emailCounter = {};
       formations.map(({ email_rdv }) => {
         // Ignore null, empty or not valid email
-        if (!email_rdv || !emailJoiSchema.validate(email_rdv)) {
+        if (!email_rdv || !isValidEmail(email_rdv)) {
           logger.info("Invalid email", { email: email_rdv, siret_formateur: etablissement.siret_formateur });
           return;
         }
