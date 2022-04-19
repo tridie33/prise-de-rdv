@@ -1,11 +1,9 @@
 const path = require("path");
-const joi = require("joi");
 const logger = require("../common/logger");
 const config = require("../../config");
 const { dayjs } = require("../http/utils/dayjs");
 const { mailType, optMode } = require("../common/model/constants/etablissement");
-
-const emailJoiSchema = joi.string().email();
+const { isValidEmail } = require("../common/utils/isValidEmail");
 
 /**
  * @description Invite all "etablissements" to Premium (followup).
@@ -34,7 +32,7 @@ const inviteEtablissementToPremiumFollowUp = async ({ etablissements, mailer }) 
   });
 
   for (const etablissement of etablissementsFound) {
-    if (!etablissement.email_decisionnaire || !emailJoiSchema.validate(etablissement.email_decisionnaire)) {
+    if (!etablissement.email_decisionnaire || !isValidEmail(etablissement.email_decisionnaire)) {
       continue;
     }
 

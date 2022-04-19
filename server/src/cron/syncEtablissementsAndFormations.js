@@ -1,10 +1,8 @@
-const joi = require("joi");
 const { referrers } = require("../common/model/constants/referrers");
 const logger = require("../common/logger");
 const { dayjs } = require("../http/utils/dayjs");
 const { getFormations } = require("../http/utils/catalogue");
-
-const emailJoiSchema = joi.string().email();
+const { isValidEmail } = require("../common/utils/isValidEmail");
 
 /**
  * @description Gets Catalogue etablissments informations and insert in etablissement collection.
@@ -49,21 +47,21 @@ const syncEtablissementsAndFormations = async ({ etablissements, widgetParameter
 
           // Don't override "email_rdv" if this field is true
           if (!widgetParameter?.is_custom_email_rdv) {
-            emailRdv = emailJoiSchema.validate(formation.email) ? formation.email : widgetParameter.email_rdv;
+            emailRdv = isValidEmail(formation.email) ? formation.email : widgetParameter.email_rdv;
           }
 
           await widgetParameters.updateMany(
             { id_rco_formation: formation.id_rco_formation },
             {
               id_catalogue: formation._id,
-              email_rdv: emailJoiSchema.validate(emailRdv) ? emailRdv : null,
+              email_rdv: isValidEmail(emailRdv) ? emailRdv : null,
               id_parcoursup: formation.parcoursup_id,
               cle_ministere_educatif: formation.cle_ministere_educatif,
               etablissement_raison_sociale: formation.etablissement_formateur_entreprise_raison_sociale,
               formation_cfd: formation.cfd,
               code_postal: formation.code_postal,
               formation_intitule: formation.intitule_long,
-              referrers: emailJoiSchema.validate(emailRdv) ? referrersToActivate : [],
+              referrers: isValidEmail(emailRdv) ? referrersToActivate : [],
               etablissement_siret: formation.etablissement_formateur_siret,
               catalogue_published: formation.published,
               id_rco_formation: formation.id_rco_formation,
@@ -89,7 +87,7 @@ const syncEtablissementsAndFormations = async ({ etablissements, widgetParameter
             formation_cfd: formation.cfd,
             code_postal: formation.code_postal,
             formation_intitule: formation.intitule_long,
-            referrers: emailJoiSchema.validate(formation.email) ? referrersToActivate : [],
+            referrers: isValidEmail(formation.email) ? referrersToActivate : [],
             etablissement_siret: formation.etablissement_formateur_siret,
             catalogue_published: formation.published,
             id_rco_formation: formation.id_rco_formation,
@@ -109,7 +107,7 @@ const syncEtablissementsAndFormations = async ({ etablissements, widgetParameter
         let emailDecisionnaire = etablissement?.email_decisionnaire;
         if (
           formation.etablissement_gestionnaire_courriel &&
-          emailJoiSchema.validate(formation.etablissement_gestionnaire_courriel)
+          isValidEmail(formation.etablissement_gestionnaire_courriel)
         ) {
           emailDecisionnaire = formation.etablissement_gestionnaire_courriel.toLowerCase();
         }
