@@ -1,4 +1,3 @@
-const joi = require("joi");
 const { referrers } = require("../common/model/constants/referrers");
 const logger = require("../common/logger");
 const { dayjs } = require("../http/utils/dayjs");
