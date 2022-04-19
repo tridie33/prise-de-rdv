@@ -30,4 +30,5 @@ const getSentry = (app) => {
 
 module.exports = {
   getSentry,
+  Sentry,
 };
