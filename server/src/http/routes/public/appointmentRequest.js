@@ -154,14 +154,14 @@ module.exports = ({ users, appointments, mailer, widgetParameters, etablissement
         email_rdv: { $nin: [null, ""] },
       });
 
-      if (!isValidEmail(isOpenForAppointments.email_rdv)) {
+      if (!isOpenForAppointments) {
+        return res.send(notAllowedResponse);
+      }
+
+      if (!isValidEmail(isOpenForAppointments?.email_rdv)) {
         Sentry.captureException(
           new Error(`Formation "${widgetParameter.cle_ministere_educatif}" sans email de contact.`)
         );
-      }
-
-      if (!isOpenForAppointments) {
-        return res.send(notAllowedResponse);
       }
 
       res.send({
