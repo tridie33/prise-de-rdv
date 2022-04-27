@@ -78,7 +78,8 @@
     "randexp": "0.5.3",
     "redis": "3.1.2",
     "sha512crypt-node": "0.1.0",
-    "xlsx": "0.16.1"
+    "xlsx": "0.16.1",
+    "notion-client": "4.12.0"
   },
   "lint-staged": {
     "*.js": [

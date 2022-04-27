@@ -27,6 +27,7 @@ const widgetParameterRoute = require("./routes/admin/widgetParameter");
 const partnersRoute = require("./routes/public/partners");
 const emailsRoute = require("./routes/auth/emails");
 const constantsRoute = require("./routes/public/constants");
+const supportRoute = require("./routes/public/support");
 const { administrator } = require("./../common/roles");
 const { syncEtablissementsAndFormations } = require("../cron/syncEtablissementsAndFormations");
 const { activateOptOutEtablissementFormations } = require("../cron/activateOptOutEtablissementFormations");
@@ -70,6 +71,7 @@ module.exports = async (components) => {
   app.use("/api/widget-parameters", checkJwtToken, adminOnly, widgetParameterRoute(components));
   app.use("/api/partners", partnersRoute(components));
   app.use("/api/emails", emailsRoute(components));
+  app.use("/api/support", supportRoute(components));
 
   // Config route
   app.use("/api/config", checkJwtToken, adminOnly, configRoute());
