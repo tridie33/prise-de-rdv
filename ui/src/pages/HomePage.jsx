@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Container, Heading, Text } from "@chakra-ui/react";
+import { Box, Container, Heading, Link, Text } from "@chakra-ui/react";
 import Layout from "../common/components/Layout";
 import { Breadcrumb } from "../common/components/Breadcrumb";
 import { setTitle } from "../common/utils/pageUtils";
@@ -37,8 +37,12 @@ export default () => {
               candidats à l’apprentissage. Il a pour première cible les jeunes intéressés par l’apprentissage mais qui,
               aujourd’hui, ne prennent pas contact avec les CFA de manière systématique et immédiate.
               <br />
-              Le service est disponible depuis janvier mars 2021. Le 1er septembre 2021, il comptait 200 organismes
-              utilisateurs.
+              Le service est ouvert à tous les CFA référencés au niveau du{" "}
+              <Link href={"https://catalogue.apprentissage.beta.gouv.fr"} textDecoration={"underline"} isExternal>
+                Catalogue des formations
+              </Link>
+              . Pour être référencé dans le Catalogue, merci de vous rapprocher de votre Carif-oref. Le service est
+              disponible depuis janvier 2021.
               <br />
               <br />
             </Text>
