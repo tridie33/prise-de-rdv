@@ -23,7 +23,8 @@ const contextCreateSchema = Joi.alternatives().try(
         referrers.PARCOURSUP.name.toLowerCase(),
         referrers.LBA.name.toLowerCase(),
         referrers.PFR_PAYS_DE_LA_LOIRE.name.toLowerCase(),
-        referrers.ONISEP.name.toLowerCase()
+        referrers.ONISEP.name.toLowerCase(),
+        referrers.JEUNE_1_SOLUTION.name.toLowerCase()
       )
       .required(),
   }),
@@ -37,7 +38,8 @@ const contextCreateSchema = Joi.alternatives().try(
         referrers.PARCOURSUP.name.toLowerCase(),
         referrers.LBA.name.toLowerCase(),
         referrers.PFR_PAYS_DE_LA_LOIRE.name.toLowerCase(),
-        referrers.ONISEP.name.toLowerCase()
+        referrers.ONISEP.name.toLowerCase(),
+        referrers.JEUNE_1_SOLUTION.name.toLowerCase()
       )
       .required(),
   }),
@@ -51,7 +53,8 @@ const contextCreateSchema = Joi.alternatives().try(
         referrers.PARCOURSUP.name.toLowerCase(),
         referrers.LBA.name.toLowerCase(),
         referrers.PFR_PAYS_DE_LA_LOIRE.name.toLowerCase(),
-        referrers.ONISEP.name.toLowerCase()
+        referrers.ONISEP.name.toLowerCase(),
+        referrers.JEUNE_1_SOLUTION.name.toLowerCase()
       )
       .required(),
   }),
@@ -65,7 +68,8 @@ const contextCreateSchema = Joi.alternatives().try(
         referrers.PARCOURSUP.name.toLowerCase(),
         referrers.LBA.name.toLowerCase(),
         referrers.PFR_PAYS_DE_LA_LOIRE.name.toLowerCase(),
-        referrers.ONISEP.name.toLowerCase()
+        referrers.ONISEP.name.toLowerCase(),
+        referrers.JEUNE_1_SOLUTION.name.toLowerCase()
       )
       .required(),
   }),
@@ -80,7 +84,23 @@ const contextCreateSchema = Joi.alternatives().try(
         referrers.PARCOURSUP.name.toLowerCase(),
         referrers.LBA.name.toLowerCase(),
         referrers.PFR_PAYS_DE_LA_LOIRE.name.toLowerCase(),
-        referrers.ONISEP.name.toLowerCase()
+        referrers.ONISEP.name.toLowerCase(),
+        referrers.JEUNE_1_SOLUTION.name.toLowerCase()
+      )
+      .required(),
+  }),
+  Joi.object().keys({
+    idCleMinistereEducatif: Joi.string().required(),
+    idRcoFormation: Joi.string().allow(""),
+    idActionFormation: Joi.string().allow(""),
+    idParcoursup: Joi.string().allow(""),
+    referrer: Joi.string()
+      .valid(
+        referrers.PARCOURSUP.name.toLowerCase(),
+        referrers.LBA.name.toLowerCase(),
+        referrers.PFR_PAYS_DE_LA_LOIRE.name.toLowerCase(),
+        referrers.ONISEP.name.toLowerCase(),
+        referrers.JEUNE_1_SOLUTION.name.toLowerCase()
       )
       .required(),
   })

@@ -26,6 +26,12 @@ const referrers = {
     full_name: "ONISEP",
     url: "https://www.onisep.fr",
   },
+  JEUNE_1_SOLUTION: {
+    code: 5,
+    name: "JEUNE_1_SOLUTION",
+    full_name: "1 jeune 1 solution",
+    url: "https://www.1jeune1solution.gouv.fr",
+  },
 };
 
 /**
