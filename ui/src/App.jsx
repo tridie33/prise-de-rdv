@@ -79,7 +79,7 @@ const App = () => {
             <script
               defer
               data-domain={window.location.hostname}
-              src="https://plausible.io/js/https://plausible.io/js/script.local.hash.outbound-links.js"
+              src="https://plausible.io/js/script.local.hash.outbound-links.js"
             />
           </Helmet>
           <Router>
