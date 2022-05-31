@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { startsWith } from "lodash";
 import { ChakraProvider } from "@chakra-ui/react";
+import { Helmet } from "react-helmet";
 import { BrowserRouter as Router, Switch, Route, Redirect, BrowserRouter } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import Layout from "./pages/Layout";
@@ -74,6 +75,13 @@ const App = () => {
       <BrowserRouter>
         <ScrollToTop />
         <div className="App">
+          <Helmet>
+            <script
+              defer
+              data-domain={window.location.hostname}
+              src="https://plausible.io/js/https://plausible.io/js/script.local.hash.outbound-links.js"
+            />
+          </Helmet>
           <Router>
             <Switch>
               <PrivateRoute exact path="/admin">
