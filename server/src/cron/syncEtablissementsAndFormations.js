@@ -11,7 +11,7 @@ const { isValidEmail } = require("../common/utils/isValidEmail");
 const syncEtablissementsAndFormations = async ({ etablissements, widgetParameters }) => {
   logger.info("Cron #syncEtablissementsAndFormations started.");
 
-  const batchSize = 300;
+  const batchSize = 50;
   let response;
 
   do {
