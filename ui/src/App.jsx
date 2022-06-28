@@ -116,7 +116,7 @@ const App = () => {
                 path="/appointment/candidat/follow-up/:id/:action(confirm|resend)"
                 component={AppointmentFollowUpPage}
               />
-              <Route exact path="/widget" component={Widget} />
+              <Route exact path="/widget/tutorial" component={Widget} />
               <Route
                 exact
                 path="/establishment/:establishmentId/appointments/:appointmentId"
