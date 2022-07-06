@@ -126,9 +126,19 @@ module.exports = ({ users, appointments, mailer, widgetParameters, etablissement
       if (idCleMinistereEducatif) {
         widgetParameter = await widgetParameters.findOne({ cle_ministere_educatif: idCleMinistereEducatif });
       } else if (idRcoFormation) {
-        widgetParameter = await widgetParameters.findOne({ id_rco_formation: idRcoFormation });
+        widgetParameter = await widgetParameters.findOne({
+          id_rco_formation: idRcoFormation,
+          cle_ministere_educatif: {
+            $ne: null,
+          },
+        });
       } else if (idParcoursup) {
-        widgetParameter = await widgetParameters.findOne({ id_parcoursup: idParcoursup });
+        widgetParameter = await widgetParameters.findOne({
+          id_parcoursup: idParcoursup,
+          cle_ministere_educatif: {
+            $ne: null,
+          },
+        });
       } else if (idActionFormation) {
         const cleMinistereEducatif = getCleMinistereEducatifFromIdActionFormation(idActionFormation);
 
@@ -170,6 +180,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters, etablissement
         cfd: widgetParameter.formation_cfd,
         localite: widgetParameter.localite,
         id_rco_formation: widgetParameter.id_rco_formation,
+        cle_ministere_educatif: widgetParameter?.cle_ministere_educatif,
         form_url: `${config.publicUrl}/form?referrer=${referrer}&cleMinistereEducatif=${encodeURIComponent(
           widgetParameter.cle_ministere_educatif
         )}`,
