@@ -25,6 +25,7 @@ httpTests(__filename, ({ startServer }) => {
       form_url:
         "http://localhost/form?referrer=lba&cleMinistereEducatif=064256P01111968000310005219680003100052-68287%23L01",
       id_rco_formation: "14_AF_0000091719|14_SE_0000494236|18894",
+      cle_ministere_educatif: "064256P01111968000310005219680003100052-68287#L01",
       intitule_long: "Test Formation",
       lieu_formation_adresse: null,
       localite: null,
@@ -51,6 +52,7 @@ httpTests(__filename, ({ startServer }) => {
       form_url:
         "http://localhost/form?referrer=lba&cleMinistereEducatif=064256P01111968000310005219680003100052-68287%23L01",
       id_rco_formation: "14_AF_0000091719|14_SE_0000494236|18894",
+      cle_ministere_educatif: "064256P01111968000310005219680003100052-68287#L01",
       intitule_long: "Test Formation",
       lieu_formation_adresse: null,
       localite: null,
@@ -77,6 +79,7 @@ httpTests(__filename, ({ startServer }) => {
       form_url:
         "http://localhost/form?referrer=lba&cleMinistereEducatif=064256P01111968000310005219680003100052-68287%23L01",
       id_rco_formation: "14_AF_0000091719|14_SE_0000494236|18894",
+      cle_ministere_educatif: "064256P01111968000310005219680003100052-68287#L01",
       intitule_long: "Test Formation",
       lieu_formation_adresse: null,
       localite: null,
@@ -102,6 +105,7 @@ httpTests(__filename, ({ startServer }) => {
     assert.ok(response.data.etablissement_formateur_siret);
     assert.ok(response.data.cfd);
     assert.ok(response.data.id_rco_formation);
+    assert.ok(response.data.cle_ministere_educatif);
     assert.ok(response.data.form_url);
   });
 
