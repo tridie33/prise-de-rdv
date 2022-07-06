@@ -51,7 +51,7 @@ const syncEtablissementsAndFormations = async ({ etablissements, widgetParameter
           }
 
           await widgetParameters.updateMany(
-            { id_rco_formation: formation.id_rco_formation },
+            { cle_ministere_educatif: formation.cle_ministere_educatif },
             {
               id_catalogue: formation._id,
               email_rdv: isValidEmail(emailRdv) ? emailRdv : null,

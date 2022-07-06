@@ -77,7 +77,7 @@ const Footer = () => {
                 </Link>
               </ListItem>
               <ListItem _after={{ content: "'|'", marginLeft: "0.5rem", marginRight: "0.5rem" }}>
-                <Link as={NavLink} to={"/widget"}>
+                <Link as={NavLink} to={"/widget/tutorial"}>
                   Intégration du Widget
                 </Link>
               </ListItem>
