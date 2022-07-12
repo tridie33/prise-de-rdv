@@ -338,10 +338,19 @@ module.exports = ({ users, appointments, mailer, widgetParameters, etablissement
 
       const appointment = await appointments.getAppointmentById(appointmentId);
 
-      const [widgetParameter, user] = await Promise.all([
-        widgetParameters.getParameterByIdRcoFormation({ idRcoFormation: appointment.id_rco_formation }),
+      let [widgetParameter, user] = await Promise.all([
+        widgetParameters.getParameterByCleMinistereEducatif({
+          cleMinistereEducatif: appointment.cle_ministere_educatif,
+        }),
         users.getUserById(appointment.candidat_id),
       ]);
+
+      // Note: id_rco_formation will be removed soon
+      if (!widgetParameter) {
+        widgetParameter = await widgetParameters.getParameterByIdRcoFormation({
+          idRcoFormation: appointment.id_rco_formation,
+        });
+      }
 
       res.json({
         appointment: {
@@ -350,7 +359,7 @@ module.exports = ({ users, appointments, mailer, widgetParameters, etablissement
         },
         user: user._doc,
         etablissement: {
-          email: widgetParameter.email_rdv,
+          email: widgetParameter.email_rdv || "",
           intitule_long: widgetParameter.formation_intitule,
           etablissement_formateur_entreprise_raison_sociale: widgetParameter.etablissement_raison_sociale,
         },
