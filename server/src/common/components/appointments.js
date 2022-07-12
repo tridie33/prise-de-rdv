@@ -3,28 +3,25 @@ const { Appointment } = require("../../common/model");
 module.exports = async () => ({
   /**
    * @description Crates an appointment.
-   * @param {Object} options
-   * @param {String} options.candidat_id
-   * @param {String} options.formation_id
-   * @param {String} options.etablissement_id
-   * @param {String} options.formation_id
-   * @param {String} options.motivations
-   * @param {Number} options.referrer
-   * @param {String} options.id_rco_formation
-   * @param {String} options.cle_ministere_educatif
+   * @param {String} candidat_id
+   * @param {String} formation_id
+   * @param {String} etablissement_id
+   * @param {String} formation_id
+   * @param {String} motivations
+   * @param {Number} referrer
+   * @param {String} id_rco_formation
+   * @param {String} cle_ministere_educatif
    * @returns {Promise<Appointment>}
    */
-  createAppointment: async (options = {}) => {
-    const {
-      candidat_id,
-      etablissement_id,
-      formation_id,
-      motivations,
-      referrer,
-      id_rco_formation,
-      cle_ministere_educatif,
-    } = options;
-
+  createAppointment: async ({
+    candidat_id,
+    etablissement_id,
+    formation_id,
+    motivations,
+    referrer,
+    id_rco_formation,
+    cle_ministere_educatif,
+  }) => {
     const appointment = new Appointment({
       candidat_id,
       motivations,

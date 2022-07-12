@@ -147,14 +147,22 @@ module.exports = async () => ({
   getParametersBySiret: ({ etablissement_siret }) => WidgetParameter.find({ etablissement_siret }),
 
   /**
-   * @description Returns item through its "id_rco_formation".
+   * @description Returns item from its "id_rco_formation".
    * @param {String} idRcoFormation
    * @returns {Promise<WidgetParameter>}
    */
   getParameterByIdRcoFormation: ({ idRcoFormation }) => WidgetParameter.findOne({ id_rco_formation: idRcoFormation }),
 
   /**
-   * @description Returns items through its "id_rco_formation" have referrer item.
+   * @description Returns item from its "cle_ministere_educatif".
+   * @param {String} cleMinistereEducatif
+   * @returns {Promise<WidgetParameter>}
+   */
+  getParameterByCleMinistereEducatif: ({ cleMinistereEducatif }) =>
+    WidgetParameter.findOne({ cle_ministere_educatif: cleMinistereEducatif }),
+
+  /**
+   * @description Returns items from its "id_rco_formation" have referrer item.
    * @param {String} idRcoFormation
    * @returns {Promise<WidgetParameter>}
    */
