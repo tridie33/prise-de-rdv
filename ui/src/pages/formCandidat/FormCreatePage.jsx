@@ -4,10 +4,11 @@ import * as Yup from "yup";
 import * as emailValidator from "email-validator";
 import * as qs from "query-string";
 import { useHistory } from "react-router-dom";
-import { Input, Button, Box, Spinner, Text } from "@chakra-ui/react";
+import { Input, Button, Box, Spinner, Text, Center, Flex } from "@chakra-ui/react";
 import { ContactCfaComponent } from "./layout/ContactCfaComponent";
 import { FormLayoutComponent } from "./layout/FormLayoutComponent";
 import { _post } from "../../common/httpClient";
+import { InfoCircle } from "../../theme-beta/components/icons/";
 
 /**
  * @description Form appointment page.
@@ -132,6 +133,17 @@ export const FormCreatePage = (props) => {
       : {};
   };
 
+  /**
+   * @description Sends Plausible Goal.
+   * @param {string} interested (Oui|Non)
+   * @return {void}
+   */
+  const sendPlausibleFeedback = (interested) => {
+    window.plausible("souhaitez-vous-recevoir-des-offres-en-lien-avec-cette-formation", {
+      props: { interessé: interested },
+    });
+  };
+
   return (
     <FormLayoutComponent
       headerText={
@@ -251,6 +263,36 @@ export const FormCreatePage = (props) => {
                       );
                     }}
                   </Field>
+                  <Flex mt={8}>
+                    <Box w="40px">
+                      <Box sx={{ position: "absolute" }}>
+                        <InfoCircle width="20px" />
+                      </Box>
+                    </Box>
+                    <Box>
+                      <Text pl={4} pt={1}>
+                        Ce centre de formation propose également des offres d’emploi en lien avec la formation qui vous
+                        intéresse.
+                        <Text as="span" fontWeight="600">
+                          Vous pouvez demander des renseignements sur la formation même si vous avez déjà trouvé votre
+                          entreprise par ailleurs.
+                        </Text>
+                      </Text>
+                    </Box>
+                  </Flex>
+                  <Flex mt={8} bg="#F6F6F6" py="9px" px="18px">
+                    <Box w="430px">
+                      <Text fontWeight="600">
+                        Souhaiteriez-vous recevoir des offres d’emploi en lien avec cette formation ?
+                      </Text>
+                    </Box>
+                    <Center w="150px" pl="20px">
+                      <Text as="span" pr="28px" sendPlausibleFeedback={() => sendPlausibleFeedback("Oui")}>
+                        👍 Oui
+                      </Text>
+                      <Text sendPlausibleFeedback={() => sendPlausibleFeedback("Non")}>👎 Non</Text>
+                    </Center>
+                  </Flex>
                   <Button
                     variant="unstyled"
                     type={"submit"}
