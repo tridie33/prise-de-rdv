@@ -17,9 +17,12 @@ import { InfoCircle } from "../../theme-beta/components/icons/";
  * @constructor
  */
 export const FormCreatePage = (props) => {
+  const plausibleFeebackEnum = { OUI: "Oui", NON: "Non" };
+
   const history = useHistory();
   const [data, setData] = useState();
   const [submitLoading, setSubmitLoading] = useState(false);
+  const [plausibleFeedback, setPlausibleFeedback] = useState(null);
 
   const [error, setError] = useState();
   const [errorPhone, setErrorPhone] = useState();
@@ -139,6 +142,7 @@ export const FormCreatePage = (props) => {
    * @return {void}
    */
   const sendPlausibleFeedback = (interested) => {
+    setPlausibleFeedback(interested);
     window.plausible("souhaitez-vous-recevoir-des-offres-en-lien-avec-cette-formation", {
       props: { interessé: interested },
     });
@@ -287,10 +291,22 @@ export const FormCreatePage = (props) => {
                       </Text>
                     </Box>
                     <Center w="150px" pl="20px">
-                      <Text as="span" pr="28px" sendPlausibleFeedback={() => sendPlausibleFeedback("Oui")}>
+                      <Text
+                        as="span"
+                        pr="28px"
+                        onClick={() => sendPlausibleFeedback(plausibleFeebackEnum.OUI)}
+                        fontWeight={plausibleFeedback === plausibleFeebackEnum.OUI ? "600" : "none"}
+                        sx={{ cursor: "pointer" }}
+                      >
                         👍 Oui
                       </Text>
-                      <Text sendPlausibleFeedback={() => sendPlausibleFeedback("Non")}>👎 Non</Text>
+                      <Text
+                        onClick={() => sendPlausibleFeedback(plausibleFeebackEnum.NON)}
+                        fontWeight={plausibleFeedback === plausibleFeebackEnum.NON ? "600" : "none"}
+                        sx={{ cursor: "pointer" }}
+                      >
+                        👎 Non
+                      </Text>
                     </Center>
                   </Flex>
                   <Button
