@@ -22,7 +22,7 @@ export const FormCreatePage = (props) => {
   const history = useHistory();
   const [data, setData] = useState();
   const [submitLoading, setSubmitLoading] = useState(false);
-  const [plausibleFeedback, setPlausibleFeedback] = useState(null);
+  const [plausibleFeedback, setPlausibleFeedback] = useState("Non renseigné");
 
   const [error, setError] = useState();
   const [errorPhone, setErrorPhone] = useState();
@@ -118,6 +118,7 @@ export const FormCreatePage = (props) => {
         return;
       }
 
+      sendPlausibleFeedback(plausibleFeedback);
       history.push(`/form/confirm/${appointment._id}`);
       setTimeout(() => window.scroll({ top: 0, behavior: "smooth" }), 500);
     } catch (e) {
@@ -137,12 +138,11 @@ export const FormCreatePage = (props) => {
   };
 
   /**
-   * @description Sends Plausible Goal.
+   * @description Sends Plausible goal.
    * @param {string} interested (Oui|Non)
    * @return {void}
    */
   const sendPlausibleFeedback = (interested) => {
-    setPlausibleFeedback(interested);
     window.plausible("souhaitez-vous-recevoir-des-offres-en-lien-avec-cette-formation", {
       props: { interessé: interested },
     });
@@ -294,14 +294,14 @@ export const FormCreatePage = (props) => {
                       <Text
                         as="span"
                         pr="28px"
-                        onClick={() => sendPlausibleFeedback(plausibleFeebackEnum.OUI)}
+                        onClick={() => setPlausibleFeedback(plausibleFeebackEnum.OUI)}
                         fontWeight={plausibleFeedback === plausibleFeebackEnum.OUI ? "600" : "none"}
                         sx={{ cursor: "pointer" }}
                       >
                         👍 Oui
                       </Text>
                       <Text
-                        onClick={() => sendPlausibleFeedback(plausibleFeebackEnum.NON)}
+                        onClick={() => setPlausibleFeedback(plausibleFeebackEnum.NON)}
                         fontWeight={plausibleFeedback === plausibleFeebackEnum.NON ? "600" : "none"}
                         sx={{ cursor: "pointer" }}
                       >
